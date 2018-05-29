@@ -15,10 +15,10 @@ def test_build():
     build_result = build_data(root=root, git=False)
     assert build_result
 
-    exp_dirs = ['comb', 'data', 'edges', 'headline', 'meta']
+    exp_dirs = set(['comb', 'data', 'edges', 'headline', 'meta'])
     act_dirs = os.listdir(_site)
 
-    assert all([a == b for a, b in zip(exp_dirs, act_dirs)])
+    assert all([a in exp_dirs for a in act_dirs])
 
     meta9 = json.load(open(output_path('9-3-1', ftype='meta', format='json', root=root)))
     assert meta9['indicator'] == '9.3.1'

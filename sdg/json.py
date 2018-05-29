@@ -124,7 +124,7 @@ def write_json(inid, obj, ftype='data', gz=False, root=''):
         out_json = pd.io.json.dumps(obj)
         out_json = out_json.replace("\\/", "/")  # why does it double escape?
         
-        json_dir = output_path(ftype=ftype, format='json')
+        json_dir = output_path(ftype=ftype, format='json', root=root)
         if not os.path.exists(json_dir):
             os.makedirs(json_dir, exist_ok=True)
 

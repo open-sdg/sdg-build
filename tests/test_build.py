@@ -1,15 +1,27 @@
 import pytest
 import os
 from sdg import build_data
+from sdg.path import output_path
+import json
+import shutil
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
+root = os.path.dirname(os.path.realpath(__file__))
 
 def test_build():
     """Check that output_path is as expected"""
-    build_result = build_data(root=os.path.realpath(dir_path), git=False)
+
+    _site = os.path.join(root, '_site')
+
+    build_result = build_data(root=root, git=False)
     assert build_result
 
     exp_dirs = ['comb', 'data', 'edges', 'headline', 'meta']
-    act_dirs = os.listdir(os.path.join(dir_path, '_site'))
+    act_dirs = os.listdir(_site)
 
     assert all([a == b for a, b in zip(exp_dirs, act_dirs)])
+
+    meta9 = json.load(open(output_path('9-3-1', ftype='meta', format='json', root=root)))
+    assert meta9['indicator'] == '9.3.1'
+
+    # poor man's teardown
+    shutil.rmtree(_site)

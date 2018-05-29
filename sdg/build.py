@@ -67,7 +67,7 @@ def build_data(root='', git=True):
         all_meta[inid] = meta
         all_headline[inid] = headline_dict
 
-    status = status & sdg.json.write_json('all', all_meta, ftype='meta')
-    status = status & sdg.json.write_json('all', all_headline, ftype='headline')
+    status = status & sdg.json.write_json('all', all_meta, ftype='meta', root=root)
+    status = status & sdg.json.write_json('all', all_headline, ftype='headline', root=root)
 
     return(status)

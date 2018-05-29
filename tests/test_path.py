@@ -1,6 +1,7 @@
+import sdg
 import pytest
 import os
-from sdg import output_path
+from sdg.path import output_path
 
 def test_out_path():
     """Check that output_path is as expected"""

@@ -9,7 +9,7 @@ Created on Thu May  4 13:53:01 2017
 
 import yaml
 import glob
-
+from sdg.path import input_path, get_ids
 
 # %% Checking a single item 
 def check_meta(meta, fname):
@@ -130,25 +130,27 @@ def check_reporting_status(meta, fname):
 
 # %% Read each yaml and run the checks
 
-def main():
+def check_all_meta(root=''):
+    """Run metadata checks for all indicators
+    
+    Args:
+        root: str. Base path for the project. Metadata 
+            files are found relative to this
+    """
 
     status = True
+
+    ids = get_ids(root=root)
+
+    if len(ids) == 0:
+        raise FileNotFoundError("No indicator IDs found")
     
-    metas = glob.glob("_indicators/*.md")
+    print("Checking " + str(len(ids)) + " metadata files...")
     
-    print("Checking " + str(len(metas)) + " metadata files...")
-    
-    for met in metas:
+    for inid in ids:
+        met = input_path(inid, ftype='meta', root=root, must_work=True)
         with open(met, encoding = "UTF-8") as stream:
             meta = next(yaml.safe_load_all(stream))
         status = status & check_meta(meta, fname = met)
     
-  
     return(status)
-
-if __name__ == '__main__':
-    status = main()
-    if(not status):
-        raise RuntimeError("Failed metadata checks")
-    else:
-        print("Success")

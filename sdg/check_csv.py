@@ -10,6 +10,7 @@ Created on 2017-10-04
 import glob
 import pandas as pd
 import numpy as np
+from sdg.path import input_path, get_ids
 
 # %% Utility
 
@@ -135,24 +136,28 @@ def check_empty_rows(df, csv):
 
 # %% Read each csv and run the checks
 
+def check_all_csv(root=''):
+    """Run csv checks on all indicator csvs in the data directory
+    
+    Args:
+        root: str. Base path for the project. Csv 
+            files are found relative to this
+    """
 
-def main():
-    """Run csv checks on all indicator csvs in the data directory"""
     status = True
-    csvs = glob.glob("data/indicator*.csv")
-    print("Checking " + str(len(csvs)) + " csv files...")
 
-    for csv in csvs:
+    ids = get_ids(root=root)
+
+    if len(ids) == 0:
+        raise FileNotFoundError("No indicator IDs found")
+    
+    print("Checking " + str(len(ids)) + " metadata files...")
+    
+    for inid in ids:
+        csv = input_path(inid, ftype='data', root=root, must_work=True)
         try:
             status = status & check_csv(csv)
         except Exception as e:
             status = False
-            print(csv, e)
+            print(csv, e)    
     return(status)
-
-if __name__ == '__main__':
-    status = main()
-    if(not status):
-        raise RuntimeError("Failed csv checks")
-    else:
-        print("Success")

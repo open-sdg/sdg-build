@@ -5,13 +5,15 @@ Created on Thu May  4 13:53:01 2017
 @author: dougashton
 """
 
-#%% setup
+# %% setup
 
 import yaml
 import glob
 from sdg.path import input_path, get_ids
 
-# %% Checking a single item 
+# %% Checking a single item
+
+
 def check_meta(meta, fname):
     """Check an individual metadata and return logical status"""
     
@@ -35,12 +37,13 @@ def check_meta(meta, fname):
 
 # %% Check required
 
+
 def check_required(meta, fname):
 
     required = ['reporting_status', 'published']
 
     status = True
-    
+
     for req in required:
           if(req not in meta):
               print(req + " missing in " + fname)
@@ -52,7 +55,6 @@ def check_required(meta, fname):
             status = False
         
     return status
-
 
 # %% Check for reporting status
 

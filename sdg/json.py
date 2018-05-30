@@ -19,7 +19,6 @@ version but I'm keeping it as it can be useful for nested json.
 # %% setup
 import pandas as pd
 import numpy as np
-import glob
 import os.path
 import math
 import json
@@ -106,7 +105,7 @@ def df_to_list_dict(df, orient='records'):
 # %% Write one data frame to JSON
     
 
-def write_json(inid, obj, ftype='data', gz=False, root=''):
+def write_json(inid, obj, ftype='data', gz=False, site_dir=''):
     """Write out the supplied object as a single json file. This can
     either be as records (orient='records') or as columns (orient='list').
 
@@ -124,11 +123,11 @@ def write_json(inid, obj, ftype='data', gz=False, root=''):
         out_json = pd.io.json.dumps(obj)
         out_json = out_json.replace("\\/", "/")  # why does it double escape?
         
-        json_dir = output_path(ftype=ftype, format='json', root=root)
+        json_dir = output_path(ftype=ftype, format='json', site_dir=site_dir)
         if not os.path.exists(json_dir):
             os.makedirs(json_dir, exist_ok=True)
 
-        json_path = output_path(inid,  ftype=ftype, format='json', root=root)
+        json_path = output_path(inid,  ftype=ftype, format='json', site_dir=site_dir)
 
         # Write out
         if gz:
@@ -143,73 +142,3 @@ def write_json(inid, obj, ftype='data', gz=False, root=''):
         return False
 
     return True
-
-
-
-# %% Compare reloads
-
-
-def isclose_df(df1, df2):
-    """A mix of np isclose and pandas equals that works across
-    python versions. So many api changes in pandas and numpy!"""
-    status = True
-    for col in df1:
-        if np.issubdtype(df1[col].dtype, np.number):
-            status = status & np.isclose(df1[col],
-                                         df2[col],
-                                         equal_nan=True).all()
-        else:
-            status = status & df1[col].equals(df2[col])
-    return status
-
-
-def compare_reload(inid, which='edges'):
-    """Load the original csv and compare to reloading the JSON you wrote out
-    which = 'edges' or 'data'
-    """
-    csv_path = indicator_path(inid, ftype=which, mode = 'w')
-
-    jsn = json.load(open(indicator_path(inid, 'json', mode = 'w')))
-
-    df_csv = pd.read_csv(csv_path, encoding='utf-8')
-    df_jsn = pd.DataFrame(jsn[which]).replace({None: np.nan})
-
-    # Account for empty data
-    if df_jsn.shape[0] == df_csv.shape[0] == 0:
-        return True
-
-    df_jsn = df_jsn[df_csv.columns.values]
-
-    status = isclose_df(df_csv, df_jsn)
-    if not status:
-        print("reload "+which+" error in "+inid)
-
-    return status
-
-# %% Read each csv and dump out to json
-
-def main():
-    """Read each csv and edge file and write out json. Then reload and 
-    check it's the same."""
-    status = True
-    # Create the place to put the files
-    os.makedirs("data/json", exist_ok=True)
-
-    ids = sdg.path.get_ids()
-    print("Building json for " + str(len(ids)) + " indicators...")
-
-    # For by record use orient='records'
-    # For column format use orient='list'
-    for inid in ids:
-        status = status & write_json(inid, orient='list', gz=False)
-        status = status & compare_reload(inid, 'data')
-        status = status & compare_reload(inid, 'edges')
-    return(status)
-
-
-if __name__ == '__main__':
-    status = main()
-    if(not status):
-        raise RuntimeError("Failed json dump")
-    else:
-        print("Success")

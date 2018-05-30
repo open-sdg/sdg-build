@@ -9,8 +9,8 @@ import os
 from sdg.path import output_path, input_path
 
 
-def get_inid_data(inid, root=''):
-    pth = input_path(inid, ftype='data', root=root, must_work=True)
+def get_inid_data(inid, src_dir=''):
+    pth = input_path(inid, ftype='data', src_dir=src_dir, must_work=True)
     df = pd.read_csv(pth)
     return df
 
@@ -36,7 +36,7 @@ def filter_headline(df):
     return headline
 
 
-def write_csv(inid, df, ftype='data', root=''):
+def write_csv(inid, df, ftype='data', site_dir=''):
     """
     For a given ID and data set, write out as csv
 
@@ -44,8 +44,7 @@ def write_csv(inid, df, ftype='data', root=''):
         inid: str. The indicator identifier
         df: DataFrame. The pandas data frame of the data
         ftype: Sets directory path
-        root: str. Project root path. Defaults to current
-            working directory.
+        site_dir: str. The site directory to build to.
 
     Returns:
         bool: Status
@@ -53,12 +52,12 @@ def write_csv(inid, df, ftype='data', root=''):
     status = True
 
     # If the csv dir isn't there, make it
-    csv_dir = output_path(ftype=ftype, format='csv', root=root)
+    csv_dir = output_path(ftype=ftype, format='csv', site_dir=site_dir)
     if not os.path.exists(csv_dir):
         os.makedirs(csv_dir, exist_ok=True)
 
     # The path within the csv dir
-    out_path = output_path(inid,  ftype=ftype, format='csv', root=root)
+    out_path = output_path(inid,  ftype=ftype, format='csv', site_dir=site_dir)
 
     try:
         df.to_csv(out_path, index=False)

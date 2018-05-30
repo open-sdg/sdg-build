@@ -7,7 +7,6 @@ Created on 2017-10-04
 
 # %% setup
 
-import glob
 import pandas as pd
 import numpy as np
 from sdg.path import input_path, get_ids
@@ -136,17 +135,17 @@ def check_empty_rows(df, csv):
 
 # %% Read each csv and run the checks
 
-def check_all_csv(root=''):
+def check_all_csv(src_dir=''):
     """Run csv checks on all indicator csvs in the data directory
     
     Args:
-        root: str. Base path for the project. Csv 
+        src_dir: str. Base path for the project. Csv 
             files are found relative to this
     """
 
     status = True
 
-    ids = get_ids(root=root)
+    ids = get_ids(src_dir=src_dir)
 
     if len(ids) == 0:
         raise FileNotFoundError("No indicator IDs found")
@@ -154,7 +153,7 @@ def check_all_csv(root=''):
     print("Checking " + str(len(ids)) + " metadata files...")
     
     for inid in ids:
-        csv = input_path(inid, ftype='data', root=root, must_work=True)
+        csv = input_path(inid, ftype='data', src_dir=src_dir, must_work=True)
         try:
             status = status & check_csv(csv)
         except Exception as e:

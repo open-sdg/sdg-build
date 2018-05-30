@@ -11,16 +11,16 @@ import yamlmd
 import sdg
 from sdg.path import input_path, output_path  # local package
 
-def read_meta(inid, git=True, root=''):
+def read_meta(inid, git=True, src_dir=''):
     """Perform pre-processing for the metadata files"""
     status = True
     # Read and write paths may be different
-    fr = input_path(inid, ftype='meta', root=root)
+    fr = input_path(inid, ftype='meta', src_dir=src_dir)
 
     meta_md = yamlmd.read_yamlmd(fr)
     meta = dict(meta_md[0])
     if git:
-        git_update = sdg.git.get_git_updates(inid, root=root)
+        git_update = sdg.git.get_git_updates(inid, src_dir=src_dir)
         for k in git_update.keys():
             meta[k] = git_update[k]
             

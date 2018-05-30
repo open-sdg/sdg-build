@@ -20,10 +20,8 @@ This is one of the more complicated scripts in the suite. It does he following\
 
 import pandas as pd
 import numpy as np
-import glob
 import itertools
 import os
-from sdg.path import output_path
 
 # %% Check correct columns - copied from csvcheck
 

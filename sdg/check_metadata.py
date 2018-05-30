@@ -107,28 +107,6 @@ def check_graph(meta, fname):
             status = False
         
     return status
-        
-
-def check_reporting_status(meta, fname):
-    """Check an individual metadata and return logical status"""
-    
-    status = True
-    
-    if("reporting_status" not in meta):
-        print("reporting_status missing in " + fname)
-        status = False
-    else:
-        valid_statuses = ['notstarted', 'inprogress', 'complete']
-        
-        if(meta["reporting_status"] not in valid_statuses):
-            err_str = "invalid reporting_status in " + fname + ": " \
-                      + meta["reporting_status"] + " must be one of " \
-                      + str(valid_statuses)
-            print(err_str)
-            status = False
-        
-    return status
-    
 
 # %% Read each yaml and run the checks
 

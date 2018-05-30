@@ -11,6 +11,8 @@ other than global & page metadata is removed, and reporting status is reset
 import yaml
 import glob
 import os
+import sys
+from sdg.path import get_ids, input_path
 
 # %% A dictionary of defaults to add
 
@@ -19,12 +21,12 @@ add_fields = {'reporting_status': 'notstarted', 'published': True, 'graph_type':
 # %% Which metadata items do we keep?
 
 
-def get_fields():
+def get_fields(prose_path):
     """Read the config file and decide which fields to save"""
-    with open('_config.yml', encoding="UTF-8") as stream:
+    with open(prose_path, encoding="UTF-8") as stream:
         config = next(yaml.safe_load_all(stream))
 
-    all_fields = config['prose']['metadata']['_indicators']
+    all_fields = config['prose']['metadata']['meta']
 
     # Using a list to preserve order
     all_scopes = [get_scope(field) for field in all_fields]
@@ -63,8 +65,9 @@ def reset_meta(meta, fname, keep_fields):
             }
 
     # Add the defaults
-    final_meta = {**keep_meta, **add_fields}
-
+    final_meta = keep_meta.copy()
+    final_meta.update(add_fields)
+    # final_meta = {**keep_meta, **add_fields} # this is python >=3.5
 
     # Write to a string first because I want to override trailing dots
     yaml_string = yaml.dump(final_meta,
@@ -79,32 +82,27 @@ def reset_meta(meta, fname, keep_fields):
 
 # %% Read each yaml and run the checks
 
-def main():
+def reset_all_meta(root=''):
 
     status = True
 
     # Read the config files
-    keep_fields = get_fields()
+    prose_path = os.path.join(root, '_prose.yml')
+    keep_fields = get_fields(prose_path)
 
-    metas = glob.glob("_indicators/*.md")
+    status = True
 
-    print("Resetting " + str(len(metas)) + " metadata files...")
+    ids = get_ids(root=root)
 
-    for met in metas:
+    if len(ids) == 0:
+        raise FileNotFoundError("No indicator IDs found")
+    
+    print("Resetting " + str(len(ids)) + " metadata files...")
+    
+    for inid in ids:
+        met = input_path(inid, ftype='meta', root=root)
         with open(met, encoding="UTF-8") as stream:
             meta = next(yaml.safe_load_all(stream))
         status = status & reset_meta(meta, fname=met, keep_fields=keep_fields)
 
     return(status)
-
-
-if __name__ == '__main__':
-    # Set the working directory to the project root (two below)
-    filepath = os.path.dirname(os.path.realpath(__file__))
-    os.chdir(filepath)
-    os.chdir(os.path.join('..'))  # two levels above scripts/reset
-    status = main()
-    if(not status):
-        raise RuntimeError("Failed to reset metadata")
-    else:
-        print("Success")

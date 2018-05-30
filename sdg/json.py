@@ -106,7 +106,7 @@ def df_to_list_dict(df, orient='records'):
 # %% Write one data frame to JSON
     
 
-def write_json(inid, obj, ftype='data', gz=False):
+def write_json(inid, obj, ftype='data', gz=False, root=''):
     """Write out the supplied object as a single json file. This can
     either be as records (orient='records') or as columns (orient='list').
 
@@ -124,11 +124,11 @@ def write_json(inid, obj, ftype='data', gz=False):
         out_json = pd.io.json.dumps(obj)
         out_json = out_json.replace("\\/", "/")  # why does it double escape?
         
-        json_dir = output_path(ftype=ftype, format='json')
+        json_dir = output_path(ftype=ftype, format='json', root=root)
         if not os.path.exists(json_dir):
             os.makedirs(json_dir, exist_ok=True)
 
-        json_path = output_path(inid,  ftype=ftype, format='json')
+        json_path = output_path(inid,  ftype=ftype, format='json', root=root)
 
         # Write out
         if gz:

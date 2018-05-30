@@ -27,10 +27,10 @@ from sdg.path import input_path  # local package
 # %% Get file updates
 
 
-def get_git_update(inid, ftype):
+def get_git_update(inid, ftype, root=''):
     """Change into the working directory of the file (it might be a submodule)
     and get the latest git history"""
-    f = input_path(inid, ftype=ftype)
+    f = input_path(inid, ftype=ftype, root=root)
     f_dir, f_name = os.path.split(f)
     
     repo = git.Repo(f_dir, search_parent_directories=True)
@@ -55,17 +55,18 @@ def get_git_update(inid, ftype):
 
 
 
-def get_git_updates(inid):
+def get_git_updates(inid, root=''):
     """
     
     Args:
         inid: str. The id of the indicator in short form. e.g. '2-1-2'.
+        root: str. Project root directory
         
     Returns:
         A dict with the required metadata fields
     """
-    meta_update = get_git_update(inid=inid, ftype='meta')
-    data_update = get_git_update(inid=inid, ftype='data')
+    meta_update = get_git_update(inid=inid, ftype='meta', root=root)
+    data_update = get_git_update(inid=inid, ftype='data', root=root)
     
     return {'national_data_update_url_text': data_update['date'] + ': see changes on GitHub',
             'national_data_update_url': data_update['commit_url'],

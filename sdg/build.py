@@ -34,6 +34,10 @@ def build_data(root='', git=True):
     all_meta = dict()
     all_headline = dict()
 
+    # Schema
+    schema = sdg.schema.get_schema(prose_file='_prose.yml', root=root)
+    status = status & write_json('schema', schema, ftype='meta', gz=False, root=root)
+
     for inid in ids:
         # Load the raw
         data = sdg.data.get_inid_data(inid, root=root)

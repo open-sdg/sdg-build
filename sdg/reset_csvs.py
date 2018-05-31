@@ -4,18 +4,18 @@ import pandas as pd
 
 # Define a function that identifies the list of indicators and generates
 # new indicator files for each of them
-def reset_all_csv(root=''):
+def reset_all_csv(src_dir=''):
     """
     Reset the csv files with test data
 
     Args:
-        root: str. Project root. Expect to find the data
+        src_dir: str. Project root. Expect to find the data
             directory here
     """
 
     status = True
 
-    ids = get_ids(root=root)
+    ids = get_ids(src_dir=src_dir)
 
     if len(ids) == 0:
         raise FileNotFoundError("No indicator IDs found")
@@ -33,5 +33,5 @@ def reset_all_csv(root=''):
     )
     # Overwrite the csvs
     for inid in ids:
-        csv_path = input_path(inid, ftype='data', root=root, must_work=True)
+        csv_path = input_path(inid, ftype='data', src_dir=src_dir, must_work=True)
         blank_df.to_csv(csv_path, index=False)

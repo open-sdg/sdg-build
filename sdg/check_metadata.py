@@ -8,7 +8,6 @@ Created on Thu May  4 13:53:01 2017
 # %% setup
 
 import yaml
-import glob
 from sdg.path import input_path, get_ids
 
 # %% Checking a single item
@@ -110,17 +109,17 @@ def check_graph(meta, fname):
 
 # %% Read each yaml and run the checks
 
-def check_all_meta(root=''):
+def check_all_meta(src_dir=''):
     """Run metadata checks for all indicators
     
     Args:
-        root: str. Base path for the project. Metadata 
+        src_dir: str. Base path for the project. Metadata 
             files are found relative to this
     """
 
     status = True
 
-    ids = get_ids(root=root)
+    ids = get_ids(src_dir=src_dir)
 
     if len(ids) == 0:
         raise FileNotFoundError("No indicator IDs found")
@@ -128,7 +127,7 @@ def check_all_meta(root=''):
     print("Checking " + str(len(ids)) + " metadata files...")
     
     for inid in ids:
-        met = input_path(inid, ftype='meta', root=root, must_work=True)
+        met = input_path(inid, ftype='meta', src_dir=src_dir, must_work=True)
         with open(met, encoding = "UTF-8") as stream:
             meta = next(yaml.safe_load_all(stream))
         status = status & check_meta(meta, fname = met)

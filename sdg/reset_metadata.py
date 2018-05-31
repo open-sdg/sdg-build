@@ -9,7 +9,6 @@ other than global & page metadata is removed, and reporting status is reset
 # %% setup
 
 import yaml
-import glob
 import os
 import sys
 from sdg.path import get_ids, input_path
@@ -82,17 +81,17 @@ def reset_meta(meta, fname, keep_fields):
 
 # %% Read each yaml and run the checks
 
-def reset_all_meta(root=''):
+def reset_all_meta(src_dir=''):
 
     status = True
 
     # Read the config files
-    prose_path = os.path.join(root, '_prose.yml')
+    prose_path = os.path.join(src_dir, '_prose.yml')
     keep_fields = get_fields(prose_path)
 
     status = True
 
-    ids = get_ids(root=root)
+    ids = get_ids(src_dir=src_dir)
 
     if len(ids) == 0:
         raise FileNotFoundError("No indicator IDs found")
@@ -100,7 +99,7 @@ def reset_all_meta(root=''):
     print("Resetting " + str(len(ids)) + " metadata files...")
     
     for inid in ids:
-        met = input_path(inid, ftype='meta', root=root)
+        met = input_path(inid, ftype='meta', src_dir=src_dir)
         with open(met, encoding="UTF-8") as stream:
             meta = next(yaml.safe_load_all(stream))
         status = status & reset_meta(meta, fname=met, keep_fields=keep_fields)

@@ -58,7 +58,7 @@ def build_data(src_dir='', site_dir='_site', git=True):
         # And JSON
         data_dict = df_to_list_dict(data, orient='list')
         edges_dict = df_to_list_dict(edges, orient='list')
-        headline_dict = df_to_list_dict(headline, orient='list')
+        headline_dict = df_to_list_dict(headline, orient='records')
 
         status = status & write_json(inid, data_dict, ftype='data', gz=False, site_dir=site_dir)
         status = status & write_json(inid, edges_dict, ftype='edges', gz=False, site_dir=site_dir)

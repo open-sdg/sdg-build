@@ -46,6 +46,7 @@ def input_path(inid=None, ftype='data', src_dir='', must_work=False, git_data_di
             Default is current working directory.
         must_work: bool. Should the input file exist? Throws error if not
             found.
+        git_data_dir: str. Alternate folder with versioned data files.
     """
 
     expected_ftypes = ['data', 'meta']

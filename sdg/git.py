@@ -61,6 +61,7 @@ def get_git_updates(inid, src_dir='', git_data_dir=None):
     Args:
         inid: str. The id of the indicator in short form. e.g. '2-1-2'.
         src_dir: str. Project root directory
+        git_data_dir: str. Alternate folder with versioned data files.
         
     Returns:
         A dict with the required metadata fields

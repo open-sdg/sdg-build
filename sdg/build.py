@@ -28,7 +28,7 @@ def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None):
             folders are
         site_dir: str. Directory to build the site to
         git: bool. Do you want to check git for last updated dates?
-        git_data_dir: str. Directory that contains the versioned data files"""
+        git_data_dir: str. Alternate folder with versioned data files."""
     status = True
 
     ids = sdg.path.get_ids(src_dir=src_dir)

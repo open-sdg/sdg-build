@@ -33,7 +33,7 @@ def get_ids(src_dir=''):
 # %% From ID get input path
 
 
-def input_path(inid=None, ftype='data', src_dir='', must_work=False):
+def input_path(inid=None, ftype='data', src_dir='', must_work=False, git_data_dir='data'):
     """Return path of input data and metadata for a given ID
     
     Args:
@@ -52,7 +52,11 @@ def input_path(inid=None, ftype='data', src_dir='', must_work=False):
     if ftype not in expected_ftypes:
         raise ValueError("ftype must be on of: " + ", ".join(expected_ftypes))
 
-    if ftype == 'data':
+    if ftype == 'data' and git_data_dir:
+        path = os.path.join(src_dir, git_data_dir)
+        if inid is not None:
+            path = os.path.join(path, 'indicator_' + inid + '.csv')
+    elif ftype == 'data':
         path = os.path.join(src_dir, 'data')
         if inid is not None:
             path = os.path.join(path, 'indicator_' + inid + '.csv')

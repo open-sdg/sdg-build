@@ -20,14 +20,15 @@ from sdg.json import write_json, df_to_list_dict
 
 # %% Read each csv and dump out to json and csv
 
-def build_data(src_dir='', site_dir='_site', git=True):
+def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None):
     """Read each input file and edge file and write out json.
     
     Args:
         src_dir: str. Directory root for the project where data and meta data
             folders are
         site_dir: str. Directory to build the site to
-        git: bool. Do you want to check git for last updated dates?"""
+        git: bool. Do you want to check git for last updated dates?
+        git_data_dir: str. Directory that contains the versioned data files"""
     status = True
 
     ids = sdg.path.get_ids(src_dir=src_dir)
@@ -69,7 +70,7 @@ def build_data(src_dir='', site_dir='_site', git=True):
         status = status & write_json(inid, comb, ftype='comb', gz=False, site_dir=site_dir)
         
         # Metadata
-        meta = sdg.meta.read_meta(inid, git=git, src_dir=src_dir)
+        meta = sdg.meta.read_meta(inid, git=git, src_dir=src_dir, git_data_dir=git_data_dir)
         status = status & sdg.json.write_json(inid, meta, ftype='meta', site_dir=site_dir)
         
         # Append to the build-time "all" output

@@ -26,4 +26,16 @@ def read_meta(inid, git=True, src_dir=''):
             
     meta['page_content'] = ''.join(meta_md[1])
 
+    # Now look for all subfolders of the meta folder, which may contain
+    # multilingual metadata, and add them as well.
+    meta_folder = input_path(None, ftype='meta', src_dir=src_dir)
+    languages = next(os.walk(meta_folder))[1]
+    for language in languages:
+        i18n_fr = os.path.join(meta_folder, language, inid + '.md')
+        if os.path.isfile(i18n_fr):
+            i18n_meta_md = yamlmd.read_yamlmd(i18n_fr)
+            i18n_meta = dict(i18n_meta_md[0])
+            meta[language] = i18n_meta
+            meta[language]['page_content'] = ''.join(i18n_meta_md[1])
+
     return meta

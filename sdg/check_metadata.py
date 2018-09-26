@@ -96,7 +96,7 @@ def check_graph(meta, fname):
             print('graph_type missing for published statistical indicator in ' + fname)
             return False
 
-        valid_graph_types = ['line', 'bar']
+        valid_graph_types = ['line', 'bar', 'binary']
 
         if(meta["graph_type"] not in valid_graph_types):
             err_str = "invalid graph_type in " + fname + ": " \

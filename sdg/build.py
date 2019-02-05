@@ -63,7 +63,7 @@ def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None):
 
         status = status & write_json(inid, data_dict, ftype='data', gz=False, site_dir=site_dir)
         status = status & write_json(inid, edges_dict, ftype='edges', gz=False, site_dir=site_dir)
-        status = status & write_json(inid, headline_dict, ftype='edges', gz=False, site_dir=site_dir)
+        status = status & write_json(inid, headline_dict, ftype='headline', gz=False, site_dir=site_dir)
 
         # combined
         comb = {'data': data_dict, 'edges': edges_dict}

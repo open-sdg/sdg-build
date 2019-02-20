@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='sdg',
-      version='0.2.0',
+      version='0.2.1',
       description='Build SDG data and metadata into output formats',
       url='https://github.com/ONSdigital/sdg-build',
       author='Doug Ashton',

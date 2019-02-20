@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """
 Created on 2017-10-04
+
 @author: dougashton
+
 This is one of the more complicated scripts in the suite. It does he following\
  for every csv file:
     1. For each column decide a parent child relationship with every other.
@@ -47,7 +49,6 @@ def x_without_y(x, y):
         the y column is empty (is a nan) and the corresponding element
         in the x column is not empty
     """
-
     return np.any(y.isnull() & x.notnull())
 
 
@@ -109,6 +110,7 @@ def prune_grand_parents(edges):
 
     Args:
         edges (DataFrame): The edges data frame
+
     Returns:
         The data frame with grand parent edges removed
     """
@@ -125,7 +127,6 @@ def prune_grand_parents(edges):
         # elements will be removed from parents0 inside the while loop - once
         # they have all been removed, end loop
         while len(parents0) > 0:
-
             # go through the list of parents
             for p in parents0:
 
@@ -151,10 +152,13 @@ def prune_grand_parents(edges):
 
 def edge_detection(inid, df):
     """Check dependencies between columns and write out the edges
+
     If there are any problems return False as this is part of the build.
+
     Args:
         inid (str): The indicator id for printing
         df (pandas DataFrame): The indicator data read from raw csv
+
     Returns:
         DataFrame: edge data frame
     """

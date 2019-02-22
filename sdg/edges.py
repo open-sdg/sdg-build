@@ -21,7 +21,6 @@ This is one of the more complicated scripts in the suite. It does he following\
 import pandas as pd
 import numpy as np
 import itertools
-import os
 
 # %% Check correct columns - copied from csvcheck
 
@@ -45,6 +44,10 @@ def x_without_y(x, y):
      Args:
         x (pandas Series): Left hand column
         y (pandas Series): Right hand column
+     Returns:
+        True if there are any cases where an element in
+        the y column is empty (is a nan) and the corresponding element
+        in the x column is not empty
     """
     return np.any(y.isnull() & x.notnull())
 
@@ -59,6 +62,11 @@ def detect_all_edges(inid, df):
 
     # Loop over all pairs
     for a, b in itertools.combinations(cols, 2):
+        # itertools.combinations returns pairs of columns in the order
+        # they appear without repeating elements, so:
+        # combinations('ABCD', 2)	produces AB AC AD BC BD CD
+        # but does not produce BA, CA, etc.
+
         # Check if a and b are ever present without each other
         a_without_b = x_without_y(df[a], df[b])
         b_without_a = x_without_y(df[b], df[a])
@@ -67,14 +75,24 @@ def detect_all_edges(inid, df):
         a_not_empty = not df[a].dropna().empty
         b_not_empty = not df[b].dropna().empty
 
+        # test if ab is an edge (at least one case where b has an empty
+        # elements where a does not)
         if a_without_b and not b_without_a and b_not_empty:
             # A is a parent of B
+            # so add to df of edges
             edges = edges.append(pd.DataFrame({'From': [a], 'To': [b]}))
+
+        # if ab is not an edge, test whether ba is an edge
+        # (at least one case where a has empty and b doesn't)
         elif b_without_a and not a_without_b and a_not_empty:
             # B is a parent of A
+            # so add to df of edges
             edges = edges.append(pd.DataFrame({'From': [b], 'To': [a]}))
+
+        # if ab not an edge and ba not an edge, then test that for every
+        # element in a there is an element in b and vice versa
         elif not a_without_b and not b_without_a and a_not_empty and b_not_empty:
-            # Co-Depedent. Choose A as left-most.
+            # co-depedent; choose A as left-most
             edges = edges.append(pd.DataFrame({'From': [a], 'To': [b]}))
 
     return edges
@@ -86,25 +104,43 @@ def detect_all_edges(inid, df):
 def prune_grand_parents(edges):
     """Prune edges that shortcut a parent-child relationship
 
+    if A is a parent of B and B is a parent of C, then the detect_all_edges
+    will return from A to C as an edge (see 'transitive relation')
+    this function removes the AC edge in those cases
+
     Args:
         edges (DataFrame): The edges data frame
 
     Returns:
         The data frame with grand parent edges removed
     """
+
+    # iterate over unique 'children' (those that have parents)
     for group in edges['To'].unique():
 
+        # list all the parents of the given child
         parents0 = list(edges['From'][edges['To'] == group])
 
+        # create an empty list to fill with grandparents
         grand_parents = list()
 
+        # elements will be removed from parents0 inside the while loop - once
+        # they have all been removed, end loop
         while len(parents0) > 0:
+            # go through the list of parents
             for p in parents0:
+
+                # define parents as the list of parents of p (a known parent)
                 parents = list(edges['From'][edges['To'] == p])
+                # if len(parents) > 0, then there are parents of the parent (p)
                 if len(parents) > 0:
+                    # so add them to the list of grand_parents
                     grand_parents = grand_parents + parents
+                # set parents0 to be the newly identified grand parents
                 parents0 = parents
 
+        # drop all edges where the 'from' is in grandparents AND where the 'to'
+        # is the child from the start of the outer for loop
         keep = ~(edges['From'].isin(grand_parents) & (edges['To'] == group))
 
         edges = edges[keep]
@@ -128,10 +164,9 @@ def edge_detection(inid, df):
     """
     # Run through the check functions
     check_headers(inid, df)
-    
+
     # Get the edges
     edges = detect_all_edges(inid, df)
     edges = prune_grand_parents(edges)
-    
-    return edges
 
+    return edges

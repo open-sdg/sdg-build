@@ -20,15 +20,23 @@ from sdg.json import write_json, df_to_list_dict
 
 # %% Read each csv and dump out to json and csv
 
-def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None):
+
+def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None,
+               schema_file='_prose.yml', schema_type='prose'):
     """Read each input file and edge file and write out json.
-    
+
     Args:
         src_dir: str. Directory root for the project where data and meta data
             folders are
         site_dir: str. Directory to build the site to
         git: bool. Do you want to check git for last updated dates?
-        git_data_dir: str. Alternate folder with versioned data files."""
+        git_data_dir: str. Alternate folder with versioned data files.
+        schema_file: Location of schema file relative to src_dir
+        schema_type: Format of schema file
+
+    Returns:
+        Boolean status of file writes
+    """
     status = True
 
     ids = sdg.path.get_ids(src_dir=src_dir)
@@ -41,8 +49,10 @@ def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None):
     all_headline = dict()
 
     # Schema
-    schema = sdg.schema.get_schema(prose_file='_prose.yml', src_dir=src_dir)
-    status = status & write_json('schema', schema, ftype='meta', gz=False, site_dir=site_dir)
+    schema = sdg.schema.Schema(schema_file=schema_file,
+                               schema_type=schema_type,
+                               src_dir=src_dir)
+    status = status & schema.write_schema('schema', ftype='meta', gz=False, site_dir=site_dir)
 
     for inid in ids:
         # Load the raw
@@ -80,4 +90,7 @@ def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None):
     status = status & sdg.json.write_json('all', all_meta, ftype='meta', site_dir=site_dir)
     status = status & sdg.json.write_json('all', all_headline, ftype='headline', site_dir=site_dir)
 
+    stats_reporting = sdg.stats.reporting_status(schema, all_meta)
+    status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
+    
     return(status)

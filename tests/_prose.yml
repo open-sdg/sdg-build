@@ -135,10 +135,13 @@ prose:
             options:
               - name: 'Exploring data sources'
                 value: 'notstarted'
+                translation_key: 'status.exploring_data_sources'
               - name: 'Stats in progress'
                 value: 'inprogress'
+                translation_key: 'status.statistics_in_progress'
               - name: 'Reported online'
                 value: 'complete'
+                translation_key: 'status.reported_online'
             scope: data
       - name: data_non_statistical
         field:

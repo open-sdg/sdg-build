@@ -24,6 +24,6 @@ def test_reporting():
 
     rep_stat = reporting_status(schema, all_meta)
 
-    assert set(rep_stat.keys()) == set(['status_values', 'goals', 'overall'])
+    assert set(rep_stat.keys()) == set(['statuses', 'goals', 'overall'])
 
     assert rep_stat['overall']['totals']['total'] == 15

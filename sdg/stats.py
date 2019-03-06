@@ -22,7 +22,7 @@ def reporting_status(schema, all_meta):
     fields = ['reporting_status', 'published', 'sdg_goal']
 
     status_values = schema.get_values('reporting_status')
-    value_names = schema.get_value_names('reporting_status')
+    value_translation = schema.get_value_translation('reporting_status')
 
     # Pick out only the fields we want from each indicators metadata
     rows = [
@@ -46,10 +46,10 @@ def reporting_status(schema, all_meta):
     # While we only have statuses sum across rows for the total
     goal_df['total'] = goal_df.sum(axis=1)
 
-    def status_report(g, status):
+    def one_status_report(g, status):
         count = g.get(status, 0)  # If status is missing use 0
         return {'status': status,
-                'status_label': value_names[status],
+                'translation_key': value_translation[status],
                 'count': count,
                 'percentage': round(100 * count / g['total'])}
 
@@ -59,7 +59,7 @@ def reporting_status(schema, all_meta):
         goal_report.append(
             {
                 'goal': g['sdg_goal'],
-                'statuses': [status_report(g, status)
+                'statuses': [one_status_report(g, status)
                              for status in status_values],
                 'totals': {'total': g['total']}
             })
@@ -68,11 +68,15 @@ def reporting_status(schema, all_meta):
     # Using apply over agg for pandas 0.19
     tot_series = goal_df.apply(lambda x: x.sum())
     total_report = {
-            'statuses': [status_report(tot_series, status)
+            'statuses': [one_status_report(tot_series, status)
                          for status in status_values],
             'totals': {'total': tot_series['total']}
     }
 
-    return {'status_values': status_values,
+    status_report = [{'value': status,
+                      'translation_key': value_translation[status]}
+                    for status in status_values]
+    
+    return {'statuses': status_report,
             'goals': goal_report,
             'overall': total_report}

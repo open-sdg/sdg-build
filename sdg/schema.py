@@ -84,24 +84,25 @@ class Schema:
 
         return values
 
-    def get_value_names(self, field):
+    def get_value_translation(self, field):
         """
-        For select elements we can retrieve the allowed values and their long
-        names. Use this if you want to replace values with names via a lookup
+        For select elements we can retrieve the allowed values and their
+        translation_key. Use this if you want to replace values with
+        translations via a lookup
 
         Args:
             field: The name of the metadata field you want
 
         Returns:
-            A value: name dictionary
+            A value: translation_key dictionary
         """
         f = self.get(field, must_exist=True)
         if 'options' not in f:
             raise ValueError(field + " field does not have options element")
 
-        value_names = {x['value']: x['name'] for x in f['options']}
+        value_translations = {x['value']: x['translation_key'] for x in f['options']}
 
-        return value_names
+        return value_translations
 
     def write_schema(self,
                      prefix='schema',

@@ -51,7 +51,7 @@ def reporting_status(schema, all_meta):
         return {'status': status,
                 'status_label': value_names[status],
                 'count': count,
-                'percentage': round(100 * count / g['total'], None)}
+                'percentage': round(100 * count / g['total'])}
 
     # Loop over rows and build our output
     goal_report = list()
@@ -65,8 +65,8 @@ def reporting_status(schema, all_meta):
             })
     goal_report
 
-    # Aggregate to get to the totals
-    tot_df = goal_df.agg('sum').to_frame().transpose()
+    # Using apply over agg for pandas 0.19
+    tot_df = goal_df.apply(lambda x: x.sum()).to_frame().transpose()
     row = tot_df.iloc[0]
     total_report = {
             'statuses': [status_report(g, status)

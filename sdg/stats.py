@@ -70,10 +70,8 @@ def reporting_status(schema, all_meta):
     row = tot_df.iloc[0]
     total_report = {
             'statuses': [status_report(g, status)
-                             for status in status_values],
+                         for status in status_values],
             'totals': {'total': row['total']}
     }
-
-    total_report
 
     return {'goals': goal_report, 'overall': total_report}

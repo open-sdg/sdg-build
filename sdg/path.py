@@ -24,7 +24,8 @@ def extract_id(md_path):
 
 
 def get_ids(src_dir=''):
-    mds = glob.glob(os.path.join(input_path(ftype='meta', src_dir=src_dir), '*-*.md'))
+    mds = glob.glob(os.path.join(input_path(ftype='meta', src_dir=src_dir),
+                                 '*-*.md'))
     ids = [extract_id(md) for md in mds]
 
     return ids
@@ -33,9 +34,10 @@ def get_ids(src_dir=''):
 # %% From ID get input path
 
 
-def input_path(inid=None, ftype='data', src_dir='', must_work=False, git_data_dir='data'):
+def input_path(inid=None, ftype='data', src_dir='', must_work=False,
+               git_data_dir='data'):
     """Return path of input data and metadata for a given ID
-    
+
     Args:
         inid: str. Indicator ID with no extensions of paths, eg '1-1-1'.
             If it is None then return the directory path for this ftype.
@@ -65,14 +67,15 @@ def input_path(inid=None, ftype='data', src_dir='', must_work=False, git_data_di
         path = os.path.join(src_dir, 'meta')
         if inid is not None:
             path = os.path.join(path, inid + '.md')
-    
+
     return path
 
 
 # %% From ID give file path
 
 
-def output_path(inid=None,  ftype='data', format='json', site_dir='_site', must_work=False):
+def output_path(inid=None,  ftype='data', format='json', site_dir='_site',
+                must_work=False):
     """Convert an ID into a data, edge, headline, json, or metadata path
 
     Args:
@@ -85,6 +88,7 @@ def output_path(inid=None,  ftype='data', format='json', site_dir='_site', must_
             3. edges: The edge file generated from data
             4. headline: The headline data generated from data
             5. comb: combined data and edge data
+            6. stats: Statistics on all indicators
         format: str. What data type. One of:
             1. json
             2. csv
@@ -96,7 +100,7 @@ def output_path(inid=None,  ftype='data', format='json', site_dir='_site', must_
     """
 
     # Check that the input makes sense
-    expected_ftypes = ['data', 'meta', 'edges', 'headline', 'comb']
+    expected_ftypes = ['data', 'meta', 'edges', 'headline', 'comb', 'stats']
     if ftype not in expected_ftypes:
         raise ValueError("ftype must be on of: " + ", ".join(expected_ftypes))
 
@@ -113,7 +117,7 @@ def output_path(inid=None,  ftype='data', format='json', site_dir='_site', must_
         f = path
     else:
         f = os.path.join(path, prefix + inid + ext)
-    
+
     if must_work:
         if not os.path.exists(f):
             raise IOError(f + ' not found.')

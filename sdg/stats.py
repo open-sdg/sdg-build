@@ -66,12 +66,11 @@ def reporting_status(schema, all_meta):
     goal_report
 
     # Using apply over agg for pandas 0.19
-    tot_df = goal_df.apply(lambda x: x.sum()).to_frame().transpose()
-    row = tot_df.iloc[0]
+    tot_series = goal_df.apply(lambda x: x.sum())
     total_report = {
-            'statuses': [status_report(g, status)
+            'statuses': [status_report(tot_series, status)
                          for status in status_values],
-            'totals': {'total': row['total']}
+            'totals': {'total': tot_series['total']}
     }
 
     return {'goals': goal_report, 'overall': total_report}

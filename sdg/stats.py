@@ -73,4 +73,6 @@ def reporting_status(schema, all_meta):
             'totals': {'total': tot_series['total']}
     }
 
-    return {'goals': goal_report, 'overall': total_report}
+    return {'status_values': status_values,
+            'goals': goal_report,
+            'overall': total_report}

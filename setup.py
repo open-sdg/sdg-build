@@ -12,7 +12,7 @@ setup(name='sdg',
       packages=find_packages(exclude=['contrib', 'docs', 'tests*', 'check', 'reset']),
       zip_safe=False,
       python_requires='>=3.4',
-      install_requires=['pyyaml', 'gitpython', 'pandas', 'yamlmd'],
+      install_requires=['pyyaml', 'gitpython', 'numpy', 'pandas', 'yamlmd'],
       dependency_links=[
         "git+ssh://git@github.com/dougmet/yamlmd.git@0.1.7"
     ])

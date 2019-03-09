@@ -6,6 +6,7 @@ Created on Tue Mar  5 14:24:13 2019
 """
 
 import yaml
+import json
 import os
 from sdg.json import write_json
 
@@ -44,6 +45,7 @@ class Schema:
     """
 
     schema = dict()
+    schema_defaults = dict()
 
     def __init__(self, schema_file='_prose.yml',
                  schema_type='prose', src_dir=''):
@@ -58,6 +60,17 @@ class Schema:
             self.schema = load_prose_schema(schema_file, src_dir)
         else:
             raise ValueError("Unknown schema type: " + schema_type)
+        
+        self.load_defaults()
+            
+    def load_defaults(self):
+        """Get default schema values from built in JSON"""
+        file_dir = os.path.dirname(os.path.realpath(__file__))
+        json_path = os.path.join(file_dir, 'schema_defaults.json')
+ 
+        with open(json_path, "r") as json_file:
+            self.schema_defaults = json.load(json_file)       
+        
 
     def get(self, field, default=None, must_exist=False):
         """Slightly safer get method for schema items"""

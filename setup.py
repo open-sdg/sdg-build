@@ -11,6 +11,8 @@ setup(name='sdg',
       license='MIT',
       packages=find_packages(exclude=['contrib', 'docs', 'tests*', 'check', 'reset']),
       zip_safe=False,
+      package_data={'sdg': ['schema_defaults.json']},
+      include_package_data=True,
       python_requires='>=3.4',
       install_requires=['pyyaml', 'gitpython', 'numpy', 'pandas', 'yamlmd'],
       dependency_links=[

@@ -41,3 +41,9 @@ def test_load_defaults(default_schema):
     test_option = schema_defaults['reporting_status']['options'][0]
     
     assert test_option['value']== 'complete'
+
+
+def test_merge_translations(old_schema):
+    """Check we can add translations with an old style schema"""
+    
+    assert False

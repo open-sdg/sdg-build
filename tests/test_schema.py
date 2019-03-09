@@ -38,4 +38,6 @@ def test_load_defaults(default_schema):
     
     schema_defaults = default_schema.get_defaults()
     
-    assert schema_defaults['reporting_status'][0]['name'] == 'complete'
+    test_option = schema_defaults['reporting_status']['options'][0]
+    
+    assert test_option['value']== 'complete'

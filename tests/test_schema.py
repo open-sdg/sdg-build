@@ -15,6 +15,7 @@ def test_init_schema(default_schema):
     """Check schema loaded OK"""
 
     assert hasattr(default_schema, 'schema')
+    assert hasattr(default_schema, 'schema_defaults')
 
 
 def test_allowed_values(default_schema):
@@ -31,3 +32,10 @@ def test_allowed_values(default_schema):
     # Check fails for non-options field
     with pytest.raises(ValueError):
         statuses = default_schema.get_values('title')
+
+def test_load_defaults(default_schema):
+    """Check we read in defaults"""
+    
+    schema_defaults = default_schema.get_defaults()
+    
+    assert schema_defaults['reporting_status'][0]['name'] == 'complete'

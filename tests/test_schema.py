@@ -10,6 +10,12 @@ def default_schema():
     """Get the standard testing schema from _prose.yml"""
     return Schema(schema_file='_prose.yml', src_dir=src_dir)
 
+@pytest.fixture
+def old_schema():
+    """Get the standard testing schema from _prose.yml"""
+    return Schema(schema_file='_prose-old.yml', src_dir=src_dir)
+
+
 
 def test_init_schema(default_schema):
     """Check schema loaded OK"""
@@ -46,4 +52,6 @@ def test_load_defaults(default_schema):
 def test_merge_translations(old_schema):
     """Check we can add translations with an old style schema"""
     
-    assert False
+    rep_opts = old_schema.get('reporting_status').get('options')
+    
+    assert rep_opts[1]['translation_key'] == 'status.statistics_in_progress'

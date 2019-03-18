@@ -11,7 +11,7 @@ class InputCsvData(InputFiles):
         inid = filename.replace('indicator_', '')
         return inid
 
-    def fetch(self):
+    def execute(self):
         """Get the data, edges, and headline from CSV, returning a list of indicators."""
         indicator_map = self.get_indicator_map()
         for inid in indicator_map:

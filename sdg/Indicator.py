@@ -16,3 +16,23 @@ class Indicator:
         self.meta = meta
         self.headline = headline
         self.edges = edges
+
+    def set_data(self, val):
+        """Set the indicator data if a value is passed."""
+        if val:
+            self.data = val
+
+    def set_meta(self, val):
+        """Set the indicator metadata if a value is passed."""
+        if val:
+            self.meta = val
+
+    def set_headline(self, val):
+        """Set the indicator headline if a value is passed."""
+        if val:
+            self.headline = val
+
+    def set_edges(self, val):
+        """Set the indicator edges if a value is passed."""
+        if val:
+            self.edges = val

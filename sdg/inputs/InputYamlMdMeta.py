@@ -16,9 +16,8 @@ class InputYamlMdMeta(InputFiles):
         self.git = git
         InputFiles.__init__(self, path_pattern)
 
-    def fetch(self):
+    def execute(self):
         """Get the metadata from the YAML/Markdown, returning a list of indicators."""
-
         indicator_map = self.get_indicator_map()
         for inid in indicator_map:
             # Need to get the folder of the folder of the indicator file.

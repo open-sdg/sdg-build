@@ -12,9 +12,8 @@ class OutputOpenSdg(OutputBase):
         self.schema_path = schema_path
         OutputBase.__init__(self, inputs, output_folder)
 
-    def write_output(self):
+    def execute(self):
         """Write the JSON output expected by Open SDG."""
-
         status = True
         all_meta = dict()
         all_headline = dict()

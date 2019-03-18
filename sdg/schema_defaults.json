@@ -15,6 +15,11 @@
                 "name": "notstarted",
                 "value": "notstarted",
                 "translation_key": "status.exploring_data_sources"
+            },
+            {
+                "name": "notapplicable",
+                "value": "notapplicable",
+                "translation_key": "status.not_applicable"
             }
         ]
     }

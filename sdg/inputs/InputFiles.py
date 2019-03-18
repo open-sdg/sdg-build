@@ -30,11 +30,6 @@ class InputFiles(InputBase):
         paths = glob.glob(os.path.join(self.path_pattern))
         return paths
 
-    def get_indicator_ids(self):
-        """Return a list of all the indicator IDs contained in the local files."""
-        ids = [self.convert_path_to_indicator_id(path) for path in self.get_file_paths()]
-        return ids
-
     def get_indicator_map(self):
         """Return a dict of indicator ids to file paths."""
         indicator_map = {}

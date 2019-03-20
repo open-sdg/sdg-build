@@ -20,6 +20,7 @@ from sdg.json import write_json, df_to_list_dict
 
 # %% Read each csv and dump out to json and csv
 
+
 def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None,
                schema_file='_prose.yml', schema_type='prose', outputs=[]):
     """Read each input file and edge file and write out json.
@@ -37,7 +38,6 @@ def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None,
     Returns:
         Boolean status of file writes
     """
-
     status = True
 
     # If using the "outputs" parameter, execute those and then exit.

@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='sdg',
-      version='0.2.1',
+      version='0.3.0',
       description='Build SDG data and metadata into output formats',
       url='https://github.com/ONSdigital/sdg-build',
       author='Doug Ashton',
@@ -11,8 +11,10 @@ setup(name='sdg',
       license='MIT',
       packages=find_packages(exclude=['contrib', 'docs', 'tests*', 'check', 'reset']),
       zip_safe=False,
+      package_data={'sdg': ['schema_defaults.json']},
+      include_package_data=True,
       python_requires='>=3.4',
-      install_requires=['pyyaml', 'gitpython', 'pandas', 'yamlmd'],
+      install_requires=['pyyaml', 'gitpython', 'numpy', 'pandas', 'yamlmd'],
       dependency_links=[
         "git+ssh://git@github.com/dougmet/yamlmd.git@0.1.7"
     ])

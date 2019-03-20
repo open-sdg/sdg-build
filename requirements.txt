@@ -1,5 +1,6 @@
 pyyaml
 pandas
+numpy
 gitpython
 git+git://github.com/dougmet/yamlmd
 

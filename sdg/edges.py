@@ -22,6 +22,12 @@ import pandas as pd
 import numpy as np
 import itertools
 
+# %% Keep a list of columns to ignore
+
+
+edge_ignore_cols = ['Year', 'Units', 'Value', 'GeoCode',
+                    'Observation status', 'Unit multiplier']
+
 # %% Check correct columns - copied from csvcheck
 
 
@@ -56,7 +62,7 @@ def detect_all_edges(inid, df):
     """Loop over the data frame and try all pairs"""
     cols = df.columns
     # Remove the protected columns
-    cols = cols[[x not in ['Year', 'Units', 'Value', 'GeoCode'] for x in cols]]
+    cols = cols[[x not in edge_ignore_cols for x in cols]]
 
     edges = pd.DataFrame(columns=['From', 'To'])
 

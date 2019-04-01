@@ -2,6 +2,10 @@
 
 Might become "release notes"
 
+### 0.3.1
+
+Minor release to ignore columns used in SDMX
+
 ## 0.3.0
 
 Adding the `stats` endpoint which is where reporting statistics will live. This

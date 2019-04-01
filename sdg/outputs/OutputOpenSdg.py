@@ -7,9 +7,10 @@ from sdg.json import write_json, df_to_list_dict
 class OutputOpenSdg(OutputBase):
     """Output SDG data/metadata in the formats expected by Open SDG."""
 
-    def __init__(self, inputs, output_folder='', schema_path=''):
+    def __init__(self, inputs, output_folder='', schema_path='', schema_type='prose'):
         """Constructor for OutputBase."""
         self.schema_path = schema_path
+        self.schema_type = schema_type
         OutputBase.__init__(self, inputs, output_folder)
 
     def execute(self):
@@ -22,8 +23,11 @@ class OutputOpenSdg(OutputBase):
         # Write the schema.
         schema_file = os.path.basename(self.schema_path)
         schema_folder = os.path.dirname(self.schema_path)
-        schema = sdg.schema.get_schema(prose_file=schema_file, src_dir=schema_folder)
-        status = status & write_json('schema', schema, ftype='meta', gz=False, site_dir=site_dir)
+        schema = sdg.schema.Schema(schema_file=schema_file,
+                                   schema_type=self.schema_type,
+                                   src_dir=schema_folder)
+        status = status & schema.write_schema('schema', ftype='meta', gz=False, site_dir=site_dir)
+
 
         for inid in self.indicators:
             indicator = self.indicators[inid]
@@ -53,5 +57,8 @@ class OutputOpenSdg(OutputBase):
 
         status = status & sdg.json.write_json('all', all_meta, ftype='meta', site_dir=site_dir)
         status = status & sdg.json.write_json('all', all_headline, ftype='headline', site_dir=site_dir)
+
+        stats_reporting = sdg.stats.reporting_status(schema, all_meta)
+        status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
 
         return(status)

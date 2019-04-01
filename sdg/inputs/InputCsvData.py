@@ -16,6 +16,4 @@ class InputCsvData(InputFiles):
         indicator_map = self.get_indicator_map()
         for inid in indicator_map:
             data = pd.read_csv(indicator_map[inid])
-            edges = sdg.edges.edge_detection(inid, data)
-            headline = sdg.data.filter_headline(data)
-            self.indicators[inid] = Indicator(inid, data=data, edges=edges, headline=headline)
+            self.indicators[inid] = Indicator(inid, data=data)

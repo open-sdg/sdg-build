@@ -22,7 +22,7 @@ from sdg.json import write_json, df_to_list_dict
 
 
 def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None,
-               schema_file='_prose.yml', schema_type='prose'):
+               schema_file='_prose.yml', schema_type='prose', outputs=[]):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -33,16 +33,23 @@ def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None,
         git_data_dir: str. Alternate folder with versioned data files.
         schema_file: Location of schema file relative to src_dir
         schema_type: Format of schema file
+        outputs: A list of output objects
 
     Returns:
         Boolean status of file writes
     """
     status = True
 
+    # If using the "outputs" parameter, execute those and then exit.
+    if len(outputs):
+        for output in outputs:
+            status = status & output.execute()
+        return status
+
     ids = sdg.path.get_ids(src_dir=src_dir)
     if len(ids) < 1:
         raise IOError('No ids found in src_dir: ' + src_dir)
-        
+
     print("Processing data for " + str(len(ids)) + " indicators...")
 
     all_meta = dict()
@@ -78,11 +85,11 @@ def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None,
         # combined
         comb = {'data': data_dict, 'edges': edges_dict}
         status = status & write_json(inid, comb, ftype='comb', gz=False, site_dir=site_dir)
-        
+
         # Metadata
         meta = sdg.meta.read_meta(inid, git=git, src_dir=src_dir, git_data_dir=git_data_dir)
         status = status & sdg.json.write_json(inid, meta, ftype='meta', site_dir=site_dir)
-        
+
         # Append to the build-time "all" output
         all_meta[inid] = meta
         all_headline[inid] = headline_dict
@@ -92,5 +99,5 @@ def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None,
 
     stats_reporting = sdg.stats.reporting_status(schema, all_meta)
     status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
-    
+
     return(status)

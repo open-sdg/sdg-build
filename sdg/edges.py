@@ -26,7 +26,7 @@ import itertools
 
 
 edge_ignore_cols = ['Year', 'Units', 'Value', 'GeoCode',
-                    'Observation status', 'Unit multiplier']
+                    'Observation status', 'Unit multiplier', 'Unit measure']
 
 # %% Check correct columns - copied from csvcheck
 

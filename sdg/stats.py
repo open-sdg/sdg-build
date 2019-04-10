@@ -51,7 +51,7 @@ def reporting_status(schema, all_meta):
         return {'status': status,
                 'translation_key': value_translation[status],
                 'count': count,
-                'percentage': int(round(100 * count / g['total']))}
+                'percentage': round(100 * count / g['total'],1)}
 
     # Loop over rows and build our output
     goal_report = list()

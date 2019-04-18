@@ -67,7 +67,7 @@ def check_reporting_status(meta, fname):
         print("reporting_status missing in " + fname)
         status = False
     else:
-        valid_statuses = ['notstarted', 'inprogress', 'complete']
+        valid_statuses = ['notstarted', 'inprogress', 'complete', 'notapplicable']
         
         if(meta["reporting_status"] not in valid_statuses):
             err_str = "invalid reporting_status in " + fname + ": " \

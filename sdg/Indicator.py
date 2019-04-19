@@ -56,4 +56,5 @@ class Indicator:
             self.meta = required
         else:
             for key in required:
-                self.meta[key] = required[key]
+                if key not in self.meta:
+                    self.meta[key] = required[key]

@@ -38,3 +38,18 @@ class Indicator:
 
     def set_edges(self):
         self.edges = sdg.edges.edge_detection(self.inid, self.data) if self.has_data() else None
+
+    def get_goal(self):
+        return self.inid.split('.')[0]
+
+    def require_meta(self):
+        """Ensure that the metadata for this indicator has the minimum required fields."""
+        required = {
+            "reporting_status": "notstarted",
+            "sdg_goal": self.get_goal()
+        }
+        if self.meta is None:
+            self.meta = required
+        else:
+            for key in required:
+                self.meta[key] = required[key]

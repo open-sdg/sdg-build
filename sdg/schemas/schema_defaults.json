@@ -1,0 +1,26 @@
+{
+    "reporting_status": {
+        "options": [
+            {
+                "name": "complete",
+                "value": "complete",
+                "translation_key": "status.reported_online"
+            },
+            {
+                "name": "inprogress",
+                "value": "inprogress",
+                "translation_key": "status.statistics_in_progress"
+            },
+            {
+                "name": "notstarted",
+                "value": "notstarted",
+                "translation_key": "status.exploring_data_sources"
+            },
+            {
+                "name": "notapplicable",
+                "value": "notapplicable",
+                "translation_key": "status.not_applicable"
+            }
+        ]
+    }
+}

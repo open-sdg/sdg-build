@@ -13,10 +13,8 @@ class SchemaInputOpenSdg(SchemaInputBase):
         with open(self.schema_path, encoding="UTF-8") as stream:
             config = next(yaml.safe_load_all(stream))
 
-        schema = {
-            "type": "object",
-            "properties": {}
-        }
+        # Start with whatever our defaults were.
+        schema = self.schema
 
         # Convert the Prose.io metadata into JSON Schema.
         for field in config['prose']['metadata']['meta']:

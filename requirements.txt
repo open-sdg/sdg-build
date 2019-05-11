@@ -2,5 +2,6 @@ pyyaml
 pandas
 numpy
 gitpython
+jsonschema
 git+git://github.com/dougmet/yamlmd
 

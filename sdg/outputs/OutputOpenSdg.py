@@ -22,7 +22,7 @@ class OutputOpenSdg(OutputBase):
         site_dir = self.output_folder
 
         # Write the schema.
-        status = status & self.schema.write_schema('schema', ftype='meta', gz=False, site_dir=site_dir)
+        status = status & self.schema.write_schema(output_folder='meta', filename='schema.json')
 
         for inid in self.indicators:
             indicator = self.indicators[inid]

@@ -43,11 +43,6 @@ class SchemaInputBase:
         self.load_validator()
 
 
-    def get_special_properties(self):
-        """A list of special properties which should always be imported/exported."""
-        return ['translation_key']
-
-
     def load_schema(self):
         """Load the schema. This should be overridden by a subclass."""
         raise NotImplementedError
@@ -77,3 +72,68 @@ class SchemaInputBase:
                     print(error.schema)
 
         return status
+
+
+    def get(self, field, default=None, must_exist=False):
+        f = self.schema['properties'].get(field, default)
+        if must_exist and f is None:
+            raise ValueError(field + " doesn't exist in schema")
+        return f
+
+
+    def get_values(self, field):
+        """For backwards compatibility, call renamed method."""
+        return self.get_allowed_values(field)
+
+
+    def get_allowed_options(self, field):
+        """Return a list of allowed options for a field from the schema."""
+
+        field = self.get(field)
+        field_type = field['type']
+        options = []
+
+        # Arrays should have options.
+        if field_type == 'array':
+            options = field['items']['anyOf']
+
+        # If 'anyOf' is set, there should be options.
+        elif 'anyOf' in field:
+            options = field['anyOf']
+
+        return options
+
+
+    def get_allowed_values(self, field):
+        """Return a list of allowed values for a field from the schema."""
+
+        options = self.get_allowed_options(field)
+
+        option_values = []
+        for option in options:
+            option_values.append(option['enum'][0])
+
+        return option_values
+
+
+    def get_value_translation(self, field):
+        """
+        For select elements we can retrieve the allowed values and their
+        translation_key. Use this if you want to replace values with
+        translations via a lookup
+
+        Args:
+            field: The name of the metadata field you want
+
+        Returns:
+            A value: translation_key dictionary
+        """
+
+        options = self.get_allowed_options(field)
+
+        if len(options) == 0:
+            raise ValueError(field + " field does not have options element")
+
+        value_translations = {x['enum'][0]: x['translation_key'] for x in options}
+
+        return value_translations

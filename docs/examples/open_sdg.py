@@ -5,6 +5,7 @@ suitable for the Open SDG reporting platform.
 
 import os
 import sdg
+from sdg.Validator import Validator
 
 # Input data from CSV files matching this pattern: tests/data/*-*.csv
 data_pattern = os.path.join('tests', 'data', '*-*.csv')
@@ -19,13 +20,18 @@ inputs = [data_input, meta_input]
 
 # Use a Prose.io file for the metadata schema.
 schema_path = os.path.join('tests', '_prose.yml')
-schema = sdg.schemas.SchemaProse(schema_path)
+schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
+
+# Validate the metadata. (This could also be done in a separate script.)
+validator = sdg.Validator(inputs=inputs, schema=schema)
+validation_successful = validator.execute()
+
+# Abort if validation failed.
+if not validation_successful:
+    raise Exception('Aborting build because validation failed.')
 
 # Create an "output" from these inputs and schema, for JSON for Open SDG.
 opensdg_output = sdg.outputs.OutputOpenSdg(inputs, schema, output_folder='_site')
 
-# Combine the outputs into one list. (Even though here we have only one output.)
-outputs = [opensdg_output]
-
 # Finally, perform the build.
-sdg.build_data(outputs=outputs)
+opensdg_output.execute()

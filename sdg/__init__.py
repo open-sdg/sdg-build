@@ -17,7 +17,6 @@ from . import inputs
 from . import outputs
 from . import schemas
 from .Indicator import Indicator
-from .Validator import Validator
 from .check_metadata import check_all_meta
 from .check_csv import check_all_csv
 from .build import build_data

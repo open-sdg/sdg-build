@@ -23,6 +23,35 @@ class SchemaInputOpenSdg(SchemaInputBase):
             jsonschema_field = self.prose_field_to_jsonschema(field['field'])
             schema['properties'][field['name']] = jsonschema_field
 
+        # For Open SDG, certain fields are required.
+        schema['required'] = ['published', 'reporting_status']
+
+        # And similarly, there are certain conditional validation checks.
+        schema['allOf'] = [
+            # If reporting_status is 'complete', require data_non_statistical.
+            {
+                'if': {
+                    'properties': { 'reporting_status': { 'enum': ['complete'] } }
+                },
+                'then': {
+                    'required': ['data_non_statistical']
+                }
+            },
+            # If graphs will display, require graph_title and graph_type.
+            {
+                'if': {
+                    'properties': {
+                        'reporting_status': { 'enum': ['complete'] },
+                        'published': { 'const': True },
+                        'data_non_statistical': { 'const': False }
+                    }
+                },
+                'then': {
+                    'required': ['graph_title', 'graph_type']
+                }
+            }
+        ]
+
         self.schema = schema
 
 

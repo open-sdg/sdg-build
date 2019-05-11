@@ -21,16 +21,12 @@ inputs = [data_input, meta_input]
 schema_path = os.path.join('tests', '_prose.yml')
 schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
 
-# Validate the metadata. (This could also be done in a separate script.)
-validator = sdg.Validator(inputs=inputs, schema=schema)
-validation_successful = validator.execute()
-
-# Abort if validation failed.
-if not validation_successful:
-    raise Exception('Aborting build because validation failed.')
-
 # Create an "output" from these inputs and schema, for JSON for Open SDG.
 opensdg_output = sdg.outputs.OutputOpenSdg(inputs, schema, output_folder='_site')
 
-# Finally, perform the build.
-opensdg_output.execute()
+# Validate the indicators.
+validation_successful = opensdg_output.validate()
+
+# If everything was valid, perform the build.
+if validation_successful:
+    opensdg_output.execute()

@@ -8,12 +8,6 @@ class OutputOpenSdg(OutputBase):
     """Output SDG data/metadata in the formats expected by Open SDG."""
 
 
-    def __init__(self, inputs, schema, output_folder=''):
-        """Constructor for OutputBase."""
-        self.schema = schema
-        OutputBase.__init__(self, inputs, output_folder)
-
-
     def execute(self):
         """Write the JSON output expected by Open SDG."""
         status = True

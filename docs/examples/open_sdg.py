@@ -5,7 +5,6 @@ suitable for the Open SDG reporting platform.
 
 import os
 import sdg
-from sdg.Validator import Validator
 
 # Input data from CSV files matching this pattern: tests/data/*-*.csv
 data_pattern = os.path.join('tests', 'data', '*-*.csv')

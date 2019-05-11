@@ -14,33 +14,9 @@ class SchemaInputBase:
         """Create a new SchemaBase object"""
 
         self.schema_path = schema_path
-        self.load_defaults()
         self.load_schema()
         self.load_validator()
 
-
-    def load_defaults(self):
-        """For backwards compatibility, load a minimum default schema."""
-        self.schema = {
-            'type': 'object',
-            'properties': {
-                'reporting_status': {
-                    'type': 'string',
-                    'anyOf': [
-                        {
-                            'title': 'complete',
-                            'value': 'complete',
-                            'translation_key': 'status.reported_online'
-                        },
-                        {
-                            'title': 'notstarted',
-                            'value': 'notstarted',
-                            'translation_key': 'status.exploring_data_sources'
-                        }
-                    ]
-                }
-            }
-        }
 
     def load_schema(self):
         """Load the schema. This should be overridden by a subclass."""

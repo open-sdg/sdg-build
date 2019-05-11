@@ -23,7 +23,10 @@ class SchemaInputOpenSdg(SchemaInputBase):
             jsonschema_field = self.prose_field_to_jsonschema(field['field'])
             schema['properties'][field['name']] = jsonschema_field
 
-        # For Open SDG, certain fields are required.
+        # For Open SDG, certain fields are required. We have to hardcode these
+        # here, because _prose.yml has no mechanism for requiring fields.
+        # TODO: Should we just add "required" properties in _prose.yml, purely
+        # for this purpose?
         schema['required'] = ['published', 'reporting_status']
 
         # And similarly, there are certain conditional validation checks.

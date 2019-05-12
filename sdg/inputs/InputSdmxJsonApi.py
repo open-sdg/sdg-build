@@ -13,14 +13,18 @@ class InputSdmxJsonApi(InputBase):
                  dimension_map={}):
         """Constructor for InputSdmxJsonApi.
 
-        Keyword arguments:
-        endpoint -- remote URL of the SDMX API endpoint
-        drop_dimensions -- a list of SDMX dimensions to ignore
-        drop_singleton_dimensions -- if True, drop dimensions with only 1 variation
-        dimension_map -- A dict for mapping SDMX codes to human-readable names.
-            For dimension names, the key is simply the dimension id.
-            For dimension value names, the key is the dimension id and value id,
-            separated by a pipe (|).
+        Parameters
+        ----------
+        endpoint : string
+            Remote URL of the SDMX API endpoint
+        drop_dimensions : list
+            List of SDMX dimensions to ignore
+        drop_singleton_dimensions : boolean
+            If True, drop dimensions with only 1 variation
+        dimension_map : dict
+            A dict for mapping SDMX ids to human-readable names. For dimension
+            names, the key is simply the dimension id. For dimension value names,
+            the key is the dimension id and value id, separated by a pipe (|).
         """
         self.endpoint = endpoint
         self.drop_dimensions = drop_dimensions
@@ -30,8 +34,18 @@ class InputSdmxJsonApi(InputBase):
 
 
     def series_name_to_id(self, name):
-        """Decipher from the series name what the indicator ID is."""
+        """Decipher from the series name what the indicator ID is.
 
+        Parameters
+        ----------
+        name : string
+            A string to interpret the indicator ID from
+
+        Returns
+        -------
+        string
+            A dash-delimited indicator id of the format: goal-target-indicator
+        """
         # For now assume the indicator id is what is in parenthesis.
         # TODO: This is probably specific to each endpoint, so we will want to
         # keep an eye on this when testing with more endpoints.
@@ -44,7 +58,18 @@ class InputSdmxJsonApi(InputBase):
 
 
     def get_dimension_name(self, dimension):
-        """Determine the human-readable name of a dimension."""
+        """Determine the human-readable name of a dimension.
+
+        Parameters
+        ----------
+        dimension : Dict
+            Information about an SDMX dimension pulled from an SDMX-JSON response
+
+        Returns
+        -------
+        string
+            The human-readable name for the dimension
+        """
         map_key = dimension['id']
         # First see if this is in our dimension map.
         if map_key in self.dimension_map:
@@ -54,7 +79,20 @@ class InputSdmxJsonApi(InputBase):
 
 
     def get_dimension_value_name(self, dimension, dimension_value):
-        """Determine the human-readable name of a dimension value."""
+        """Determine the human-readable name of a dimension value.
+
+        Parameters
+        ----------
+        dimension : Dict
+            Information about an SDMX dimension pulled from an SDMX-JSON response
+        dimension_value: Dict
+            Information about an SDMX dimenstion value, also from SDMX-JSON
+
+        Returns
+        -------
+        string
+            The human-readable name for the dimension_value
+        """
         map_key = dimension['id'] + '|' + dimension_value['id']
         # First see if this is in our dimension map.
         if map_key in self.dimension_map:
@@ -64,7 +102,7 @@ class InputSdmxJsonApi(InputBase):
 
 
     def execute(self):
-        """Get the data, edges, and headline from SDMX, returning a list of indicators."""
+        """Fetch the data from the SDMX endpoint and store the results."""
 
         headers = { 'Accept': 'application/json' }
         r = requests.get(self.endpoint, headers=headers)

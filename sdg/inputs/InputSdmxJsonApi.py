@@ -37,6 +37,7 @@ class InputSdmxJsonApi(InputBase):
         # keep an eye on this when testing with more endpoints.
         try:
             id = name[name.find("(")+1:name.find(")")]
+            id = id.replace('.', '-')
         except:
             id = None
         return id
@@ -52,7 +53,7 @@ class InputSdmxJsonApi(InputBase):
         return dimension['name']
 
 
-    def get_value_name(self, dimension, dimension_value):
+    def get_dimension_value_name(self, dimension, dimension_value):
         """Determine the human-readable name of a dimension value."""
         map_key = dimension['id'] + '|' + dimension_value['id']
         # First see if this is in our dimension map.
@@ -100,7 +101,7 @@ class InputSdmxJsonApi(InputBase):
                     else:
                         # Otherwise we will use this dimension/disaggregation.
                         dimension_name = self.get_dimension_name(dimension)
-                        value_name = self.get_value_name(dimension, dimension_value)
+                        value_name = self.get_dimension_value_name(dimension, dimension_value)
                         disaggregations[dimension_name] = value_name
 
                 # Did we not find the indicator ID?

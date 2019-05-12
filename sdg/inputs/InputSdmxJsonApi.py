@@ -6,13 +6,17 @@ from sdg.inputs import InputBase
 class InputSdmxJsonApi(InputBase):
     """Sources of SDG data that are remote SDMX JSON endpoint."""
 
-    def __init__(self, endpoint=''):
+    def __init__(self, endpoint='', drop_dimensions=[], drop_singleton_dimensions=True):
         """Constructor for InputSdmxJsonApi.
 
         Keyword arguments:
         endpoint -- remote URL of the SDMX API endpoint
+        drop_dimensions -- a list of SDMX dimensions to ignore
+        drop_singleton_dimensions -- if True, drop dimensions with only 1 variation
         """
         self.endpoint = endpoint
+        self.drop_dimensions = drop_dimensions
+        self.drop_singleton_dimensions = drop_singleton_dimensions
         InputBase.__init__(self)
 
     def series_name_to_id(self, name):
@@ -56,8 +60,14 @@ class InputSdmxJsonApi(InputBase):
                     # If this is the "SERIES" dimension, figure out the indicator ID.
                     if dimension['id'] == 'SERIES':
                         indicator_id = self.series_name_to_id(dimension_value['name'])
-                    elif len(dimension['values']) > 1:
-                        # We only care about dimensions with more than 1 possible value.
+                    elif dimension['id'] in self.drop_dimensions:
+                        # Ignore dimensions specifically set to drop.
+                        continue
+                    elif self.drop_singleton_dimensions and len(dimension['values']) < 2:
+                        # Ignore dimensions with only 1 variation.
+                        continue
+                    else:
+                        # Otherwise use save this dimension/disaggregation.
                         disaggregations[dimension['name']] = dimension_value['name']
 
                 # Did we not find the indicator ID?

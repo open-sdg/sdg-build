@@ -55,8 +55,14 @@ class OutputOpenSdg(OutputBase):
         return(status)
 
     def minimum_metadata(self, indicator):
-        """Specify minimum viable metadata for Open SDG."""
-        minimum = {
+        """Specify minimum viable metadata for Open SDG.
+
+        Parameters
+        ----------
+        indicator : Indicator
+            The indicator instance to set minimum metadata for
+        """
+        return {
             'indicator': indicator.get_indicator_id(),
             'target_id': indicator.get_target_id(),
             'sdg_goal': indicator.get_goal_id(),
@@ -66,4 +72,3 @@ class OutputOpenSdg(OutputBase):
             'graph_type': 'line',
             'graph_title': indicator.inid
         }
-        return minimum

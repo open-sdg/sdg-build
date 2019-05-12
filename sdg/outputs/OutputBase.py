@@ -27,8 +27,16 @@ class OutputBase:
                 else:
                     merged_indicators[inid].set_data(input.indicators[inid].data)
                     merged_indicators[inid].set_meta(input.indicators[inid].meta)
-                # Make sure minimum metadata is set.
-                merged_indicators[inid].require_meta()
+
+        for inid in merged_indicators:
+            # Now that everything has been merged, we have to make sure that
+            # minimum data and metadata is set.
+            merged_indicators[inid].require_data()
+            merged_indicators[inid].require_meta(self.minimum_metadata(merged_indicators[inid]))
+            # And because this may affect data, we have to re-do headlines and
+            # edges.
+            merged_indicators[inid].set_headline()
+            merged_indicators[inid].set_edges()
 
         return merged_indicators
 
@@ -41,3 +49,8 @@ class OutputBase:
             status = status & self.schema.validate(self.indicators[inid])
 
         return status
+
+
+    def minimum_metadata(self, indicator):
+        """Each subclass can specify it's own minimum viable metadata values."""
+        return {}

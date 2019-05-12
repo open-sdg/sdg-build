@@ -1,7 +1,6 @@
 import pandas as pd
 import sdg
 import requests
-from sdg.Indicator import Indicator
 from sdg.inputs import InputBase
 
 class InputSdmxJsonApi(InputBase):
@@ -20,6 +19,8 @@ class InputSdmxJsonApi(InputBase):
         """Decipher from the series name what the indicator ID is."""
 
         # For now assume the indicator id is what is in parenthesis.
+        # TODO: This is probably specific to each endpoint, so we will want to
+        # keep an eye on this when testing with more endpoints.
         try:
             id = name[name.find("(")+1:name.find(")")]
         except:
@@ -85,4 +86,4 @@ class InputSdmxJsonApi(InputBase):
             cols = ['Year'] + cols + ['Value']
             data = data[cols]
             # Create the Indicator object.
-            self.indicators[indicator_id] = Indicator(indicator_id, data=data)
+            self.indicators[indicator_id] = sdg.Indicator(indicator_id, data=data)

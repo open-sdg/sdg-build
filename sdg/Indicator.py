@@ -1,4 +1,5 @@
 import sdg
+import pandas as pd
 
 class Indicator:
     """Data model for SDG indicators."""
@@ -19,7 +20,11 @@ class Indicator:
 
     def has_data(self):
         """Check to see if this indicator has data."""
-        return False if self.data is None else True
+        if self.data is None:
+            # If data has not been set yet, return False.
+            return False
+        # Otherwise return False if there are no rows in the dataframe.
+        return False if len(self.data) < 1 else True
 
     def has_meta(self):
         """Check to see if this indicator has metadata."""
@@ -38,23 +43,26 @@ class Indicator:
             self.meta = val
 
     def set_headline(self):
-        self.headline = sdg.data.filter_headline(self.data) if self.has_data() else None
+        self.require_data()
+        self.headline = sdg.data.filter_headline(self.data)
 
     def set_edges(self):
-        self.edges = sdg.edges.edge_detection(self.inid, self.data) if self.has_data() else None
+        self.require_data()
+        self.edges = sdg.edges.edge_detection(self.inid, self.data)
 
     def get_goal(self):
         return self.inid.split('.')[0]
 
-    def require_meta(self):
+    def require_meta(self, minimum_metadata={}):
         """Ensure that the metadata for this indicator has the minimum required fields."""
-        required = {
-            "reporting_status": "notstarted",
-            "sdg_goal": self.get_goal()
-        }
         if self.meta is None:
-            self.meta = required
+            self.meta = minimum_metadata
         else:
-            for key in required:
+            for key in minimum_metadata:
                 if key not in self.meta:
-                    self.meta[key] = required[key]
+                    self.meta[key] = minimum_metadata[key]
+
+    def require_data(self):
+        """Ensure at least an empty dataset for this indicator."""
+        if self.data is None:
+            self.data = pd.DataFrame({'Year':[], 'Value':[]})

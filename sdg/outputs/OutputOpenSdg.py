@@ -53,3 +53,12 @@ class OutputOpenSdg(OutputBase):
         status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
 
         return(status)
+
+    def minimum_metadata(self, indicator):
+        """Specify minimum viable metadata for Open SDG."""
+        minimum = {
+            'reporting_status': 'notstarted',
+            'published': False,
+            'sdg_goal': indicator.get_goal()
+        }
+        return minimum

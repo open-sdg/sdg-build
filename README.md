@@ -43,12 +43,20 @@ Usage examples are available in `docs/examples`. In each of these examples, the 
 pip install -r docs/examples/requirements.txt
 ```
 
-### Example #1: CSV/YAML to Open SDG
+### Example #1: CSV + YAML to Open SDG
 
 An example conversion from CSV data and YAML metadata into JSON suitable for the Open SDG platform:
 
 ```
 python docs/examples/open_sdg.py
+```
+
+### Example #1: SDMX-JSON API to Open SDG
+
+An example conversion from SDMX-JSON (from an API endpoint) into JSON suitable for the Open SDG platform:
+
+```
+python docs/examples/open_sdg__sdgmx_json_api.py
 ```
 
 ## License

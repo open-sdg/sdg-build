@@ -6,18 +6,28 @@ from sdg.inputs import InputBase
 class InputSdmxJsonApi(InputBase):
     """Sources of SDG data that are remote SDMX JSON endpoint."""
 
-    def __init__(self, endpoint='', drop_dimensions=[], drop_singleton_dimensions=True):
+    def __init__(self,
+                 endpoint='',
+                 drop_dimensions=[],
+                 drop_singleton_dimensions=True,
+                 dimension_map={}):
         """Constructor for InputSdmxJsonApi.
 
         Keyword arguments:
         endpoint -- remote URL of the SDMX API endpoint
         drop_dimensions -- a list of SDMX dimensions to ignore
         drop_singleton_dimensions -- if True, drop dimensions with only 1 variation
+        dimension_map -- A dict for mapping SDMX codes to human-readable names.
+            For dimension names, the key is simply the dimension id.
+            For dimension value names, the key is the dimension id and value id,
+            separated by a pipe (|).
         """
         self.endpoint = endpoint
         self.drop_dimensions = drop_dimensions
         self.drop_singleton_dimensions = drop_singleton_dimensions
+        self.dimension_map = dimension_map
         InputBase.__init__(self)
+
 
     def series_name_to_id(self, name):
         """Decipher from the series name what the indicator ID is."""
@@ -30,6 +40,27 @@ class InputSdmxJsonApi(InputBase):
         except:
             id = None
         return id
+
+
+    def get_dimension_name(self, dimension):
+        """Determine the human-readable name of a dimension."""
+        map_key = dimension['id']
+        # First see if this is in our dimension map.
+        if map_key in self.dimension_map:
+            return self.dimension_map[map_key]
+        # Otherwise default to whatever is in the JSON.
+        return dimension['name']
+
+
+    def get_value_name(self, dimension, dimension_value):
+        """Determine the human-readable name of a dimension value."""
+        map_key = dimension['id'] + '|' + dimension_value['id']
+        # First see if this is in our dimension map.
+        if map_key in self.dimension_map:
+            return self.dimension_map[map_key]
+        # Otherwise default to whatever is in the JSON.
+        return dimension_value['name']
+
 
     def execute(self):
         """Get the data, edges, and headline from SDMX, returning a list of indicators."""
@@ -67,8 +98,10 @@ class InputSdmxJsonApi(InputBase):
                         # Ignore dimensions with only 1 variation.
                         continue
                     else:
-                        # Otherwise use save this dimension/disaggregation.
-                        disaggregations[dimension['name']] = dimension_value['name']
+                        # Otherwise we will use this dimension/disaggregation.
+                        dimension_name = self.get_dimension_name(dimension)
+                        value_name = self.get_value_name(dimension, dimension_value)
+                        disaggregations[dimension_name] = value_name
 
                 # Did we not find the indicator ID?
                 if indicator_id is None:

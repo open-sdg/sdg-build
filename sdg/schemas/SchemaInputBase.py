@@ -11,7 +11,13 @@ class SchemaInputBase:
 
 
     def __init__(self, schema_path=''):
-        """Create a new SchemaBase object"""
+        """Create a new SchemaBase object
+
+        Parameters
+        ----------
+        schema_path : string
+            A path to the schema file to input
+        """
 
         self.schema_path = schema_path
         self.load_schema()
@@ -24,6 +30,7 @@ class SchemaInputBase:
 
 
     def load_validator(self):
+        """Load the validator for this schema."""
         try:
             validator_class = jsonschema.validators.validator_for(self.schema)
             validator_class.check_schema(self.schema)
@@ -33,7 +40,18 @@ class SchemaInputBase:
 
 
     def validate(self, indicator):
-        """Validate the data and/or metadata for an Indicator object."""
+        """Validate the data and/or metadata for an Indicator object.
+
+        Parameters
+        ----------
+        indicator : Indicator
+            The instance of Indicator to validate
+
+        Returns
+        -------
+        boolean
+            True if validation passes, False otherwise
+        """
 
         status = True
         if indicator.has_meta():
@@ -49,7 +67,22 @@ class SchemaInputBase:
 
 
     def get(self, field, default=None, must_exist=False):
-        """Fetch a field from the schema by key."""
+        """Fetch a field from the schema by key.
+
+        Parameters
+        ----------
+        field : string
+            The name of a field to get
+        default : string or None
+            A default value if the field is not present
+        must_exist : boolean
+            If True, an exception will be raised if the field is not present
+
+        Return
+        ------
+        mixed or None
+            The value of the field if present, otherwise None
+        """
         f = self.schema['properties'].get(field, default)
         if must_exist and f is None:
             raise ValueError(field + " doesn't exist in schema")
@@ -57,14 +90,36 @@ class SchemaInputBase:
 
 
     def get_values(self, field):
-        """Get the allowed values for a select or multiselect field."""
+        """Get the allowed values for a select or multiselect field.
+
+        Parameters
+        ----------
+        field : string
+            The name of a field to get allowed values for
+
+        Returns
+        -------
+        list
+            List of allowed values
+        """
         options = self.get_allowed_options(field)
 
         return [x['enum'][0] for x in options]
 
 
     def get_allowed_options(self, field):
-        """Return a list of allowed options for a field from the schema."""
+        """Return a list of allowed options for a field from the schema.
+
+        Parameters
+        ----------
+        field : string
+            The name of a field to get allowed options for
+
+        Returns
+        -------
+        list
+            List of allowed options (dicts)
+        """
 
         field = self.get(field)
 
@@ -78,7 +133,18 @@ class SchemaInputBase:
 
 
     def get_value_translation(self, field):
-        """Get a map of values to 'translation_key' for schema field options."""
+        """Get a map of values to 'translation_key' for schema field options.
+
+        Parameters
+        ----------
+        field : string
+            The name of a field to get a value translation map for
+
+        Returns
+        -------
+        Dict
+            Dict of allowed values to translation keys for a particular field
+        """
 
         options = self.get_allowed_options(field)
 

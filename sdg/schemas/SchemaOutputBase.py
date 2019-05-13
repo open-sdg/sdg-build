@@ -7,8 +7,10 @@ class SchemaOutputBase:
     def __init__(self, schema):
         """Create a new SchemaBase object
 
-        Args:
-          schema: SchemaBase instance - the schema to output.
+        Paramters
+        ---------
+        schema : SchemaBase
+            SchemaBase (or subclass) to output
         """
 
         self.schema = schema

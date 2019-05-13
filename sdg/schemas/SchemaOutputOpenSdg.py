@@ -9,7 +9,15 @@ class SchemaOutputOpenSdg(SchemaOutputBase):
 
 
     def write_schema(self, output_folder='meta', filename='schema.json'):
-        """Write the Open SDG schema file to disk."""
+        """Write the Open SDG schema file to disk. Overrides parent.
+
+        Parameters
+        ----------
+        output_folder : string
+            The folder to write the schema output in
+        filename : string
+            The filename for writing the schema output
+        """
 
         # Make sure the folder exists.
         if not os.path.exists(output_folder):
@@ -33,7 +41,18 @@ class SchemaOutputOpenSdg(SchemaOutputBase):
 
 
     def jsonschema_field_to_prose(self, jsonschema_field):
-        """Convert a JSON Schema field to a Prose.io field."""
+        """Convert a JSON Schema field to a Prose.io field.
+
+        Parameters
+        ----------
+        jsonschema_field : Dict
+            A dict of information about a field, pulled from JSON Schema
+
+        Returns
+        -------
+        Dict
+            A Prose.io-style version of the field information
+        """
 
         prose_field = {}
         direct_mapping = {

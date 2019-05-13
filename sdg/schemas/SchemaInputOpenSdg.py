@@ -8,7 +8,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
 
 
     def load_schema(self):
-        """Import a _prose.yml schema into JSON Schema."""
+        """Import a _prose.yml schema into JSON Schema. Overrides parent."""
 
         with open(self.schema_path, encoding="UTF-8") as stream:
             config = next(yaml.safe_load_all(stream))
@@ -59,7 +59,18 @@ class SchemaInputOpenSdg(SchemaInputBase):
 
 
     def prose_field_to_jsonschema(self, prose_field):
-        """Convert a Prose.io field to a JSON Schema property."""
+        """Convert a Prose.io field to a JSON Schema property.
+
+        Parameters
+        ----------
+        prose_field : Dict
+            A dict of information about a field, pulled from Prose.io schema
+
+        Returns
+        -------
+        Dict
+            A JSON Schema version of the field information
+        """
 
         jsonschema_field = {}
         direct_mapping = {

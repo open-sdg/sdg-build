@@ -52,5 +52,16 @@ class OutputBase:
 
 
     def minimum_metadata(self, indicator):
-        """Each subclass can specify it's own minimum viable metadata values."""
+        """Each subclass can specify it's own minimum viable metadata values.
+
+        Parameters
+        ----------
+        indicator : Indicator
+            The indicator instance to set minimum metadata for
+
+        Returns
+        -------
+        dict
+            Key/value pairs for minimum required metadata
+        """
         return {}

@@ -9,7 +9,7 @@ class OutputOpenSdg(OutputBase):
 
 
     def execute(self):
-        """Write the JSON output expected by Open SDG."""
+        """Write the JSON output expected by Open SDG. Overrides parent."""
         status = True
         all_meta = dict()
         all_headline = dict()
@@ -54,14 +54,9 @@ class OutputOpenSdg(OutputBase):
 
         return(status)
 
-    def minimum_metadata(self, indicator):
-        """Specify minimum viable metadata for Open SDG.
 
-        Parameters
-        ----------
-        indicator : Indicator
-            The indicator instance to set minimum metadata for
-        """
+    def minimum_metadata(self, indicator):
+        """Provide minimum metadata for an indicator. Overrides parent."""
         return {
             'indicator': indicator.get_indicator_id(),
             'target_id': indicator.get_target_id(),

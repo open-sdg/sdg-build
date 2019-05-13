@@ -102,7 +102,7 @@ class InputSdmxJsonApi(InputBase):
 
 
     def execute(self):
-        """Fetch the data from the SDMX endpoint and store the results."""
+        """Fetch the data from the SDMX endpoint. Overrides parent."""
 
         headers = { 'Accept': 'application/json' }
         r = requests.get(self.endpoint, headers=headers)

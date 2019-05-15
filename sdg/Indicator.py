@@ -21,6 +21,10 @@ class Indicator:
         """Check to see if this indicator has data."""
         return False if self.data is None else True
 
+    def has_meta(self):
+        """Check to see if this indicator has metadata."""
+        return False if self.meta is None else True
+
     def set_data(self, val):
         """Set the indicator data if a value is passed."""
         if val:

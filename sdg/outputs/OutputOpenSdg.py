@@ -55,6 +55,27 @@ class OutputOpenSdg(OutputBase):
         return(status)
 
 
+    def generate_sort_order(self, indicator):
+        """Generate a sortable string from an indicator id.
+
+        Parameters
+        ----------
+        indicator : Indicator
+            An instance of the Indicator class.
+
+        Returns
+        -------
+        string
+            A string suitable for sorting indicators.
+        """
+        parts = indicator.get_indicator_id().split('.')
+        sorted = []
+        for part in parts:
+            padded_part = part if len(part > 1) else '0' + part
+            sorted.append(padded_part)
+        return '-'.join(sorted)
+
+
     def minimum_metadata(self, indicator):
         """Provide minimum metadata for an indicator. Overrides parent."""
         return {
@@ -66,5 +87,6 @@ class OutputOpenSdg(OutputBase):
             'data_non_statistical': False if indicator.has_data() else True,
             'graph_type': 'line',
             'indicator_name': indicator.get_name(),
-            'graph_title': indicator.get_name()
+            'graph_title': indicator.get_name(),
+            'indicator_sort_order': self.generate_sort_order(indicator)
         }

@@ -77,6 +77,9 @@ class InputSdmxJsonApi(InputBase):
         # First see if this is in our dimension map.
         if map_key in self.dimension_map:
             return self.dimension_map[map_key]
+        # Aggregate values are always "_T", these can be empty strings.
+        if dimension_value['id'] == '_T':
+            return ''
         # Otherwise default to whatever is in the JSON.
         return dimension_value['name']
 

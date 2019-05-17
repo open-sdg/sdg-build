@@ -4,23 +4,43 @@ import pandas as pd
 class Indicator:
     """Data model for SDG indicators."""
 
-    def __init__(self, inid, data=None, meta=None):
+    def __init__(self, inid, name=None, data=None, meta=None):
         """Constructor for the SDG indicator instances.
 
         Parameters
         ----------
         inid : string
             The three-part dash-delimited ID (eg, 1-1-1).
+        name : string
+            The name of the indicator.
         data : Dataframe
             Dataframe of all data, with at least "Year" and "Value" columns.
         meta : dict
             Dict of fielded metadata.
         """
         self.inid = inid
+        self.name = name
         self.data = data
         self.meta = meta
         self.set_headline()
         self.set_edges()
+
+
+    def get_name(self):
+        """Get the name of the indicator if known, or otherwise the id.
+
+        Returns
+        -------
+        string
+            The name (or id) of the indicator.
+        """
+        return self.name if self.name is not None else self.inid
+
+
+    def set_name(self, name=None):
+        """Set the name of the indicator."""
+        if name is not None:
+            self.name = name
 
 
     def has_data(self):

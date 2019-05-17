@@ -85,6 +85,14 @@ class InputSdmxJsonApi(InputBase):
         return dimension_value['name']
 
 
+    def fix_indicator_name(self, name, indicator_id):
+        """Clean/trim the indicator name by trying to remove the id."""
+        name = name.replace(indicator_id, '')
+        indicator_id = indicator_id.replace('-', '.')
+        name = name.replace(indicator_id, '')
+        return name.strip()
+
+
     def execute(self):
         """Fetch the data from the SDMX endpoint. Overrides parent."""
 
@@ -97,6 +105,7 @@ class InputSdmxJsonApi(InputBase):
         time_periods = data['structure']['dimensions']['observation'][0]['values']
 
         indicators = {}
+        indicator_names = {}
 
         for series_key in data['dataSets'][0]['series']:
             observations = data['dataSets'][0]['series'][series_key]['observations']
@@ -117,6 +126,7 @@ class InputSdmxJsonApi(InputBase):
                     if dimension['id'] == 'SERIES':
                         indicator_id = self.indicator_map[dimension_value['id']]
                         indicator_id = indicator_id.replace('.', '-')
+                        indicator_names[indicator_id] = self.fix_indicator_name(dimension_value['name'], indicator_id)
                     elif dimension['id'] in self.drop_dimensions:
                         # Ignore dimensions specifically set to drop.
                         continue
@@ -174,4 +184,5 @@ class InputSdmxJsonApi(InputBase):
             cols = ['Year'] + cols + ['Value']
             data = data[cols]
             # Create the Indicator object.
-            self.indicators[indicator_id] = sdg.Indicator(indicator_id, data=data)
+            name = indicator_names[indicator_id]
+            self.indicators[indicator_id] = sdg.Indicator(indicator_id, data=data, name=name)

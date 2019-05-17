@@ -23,10 +23,16 @@ class OutputBase:
             # Merge the results.
             for inid in input.indicators:
                 if inid not in merged_indicators:
+                    # If this indicator is new, simply use it.
                     merged_indicators[inid] = input.indicators[inid]
                 else:
+                    # Otherwise if this indicator was already there, it needs to
+                    # be "merged" in. To do this, we manually set data, metadata,
+                    # and name. Note that all of these "set" methods abort if
+                    # the value is None, so we don't need to check for None here.
                     merged_indicators[inid].set_data(input.indicators[inid].data)
                     merged_indicators[inid].set_meta(input.indicators[inid].meta)
+                    merged_indicators[inid].set_name(input.indicator[inid].name)
 
         for inid in merged_indicators:
             # Now that everything has been merged, we have to make sure that

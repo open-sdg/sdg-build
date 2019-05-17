@@ -65,5 +65,6 @@ class OutputOpenSdg(OutputBase):
             'published': True if indicator.has_data() else 'notstarted',
             'data_non_statistical': False if indicator.has_data() else True,
             'graph_type': 'line',
-            'graph_title': indicator.inid
+            'indicator_name': indicator.get_name(),
+            'graph_title': indicator.get_name()
         }

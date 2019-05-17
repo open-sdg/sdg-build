@@ -10,7 +10,8 @@ class InputSdmxJsonApi(InputBase):
                  endpoint='',
                  drop_dimensions=[],
                  drop_singleton_dimensions=True,
-                 dimension_map={}):
+                 dimension_map={},
+                 indicator_map={}):
         """Constructor for InputSdmxJsonApi.
 
         Parameters
@@ -25,36 +26,15 @@ class InputSdmxJsonApi(InputBase):
             A dict for mapping SDMX ids to human-readable names. For dimension
             names, the key is simply the dimension id. For dimension value names,
             the key is the dimension id and value id, separated by a pipe (|).
+        indicator_map : dict
+            A dict for mapping SDMX ids to indicator ids, dash-delimited.
         """
         self.endpoint = endpoint
         self.drop_dimensions = drop_dimensions
         self.drop_singleton_dimensions = drop_singleton_dimensions
         self.dimension_map = dimension_map
+        self.indicator_map = indicator_map
         InputBase.__init__(self)
-
-
-    def series_name_to_id(self, name):
-        """Decipher from the series name what the indicator ID is.
-
-        Parameters
-        ----------
-        name : string
-            A string to interpret the indicator ID from
-
-        Returns
-        -------
-        string
-            A dash-delimited indicator id of the format: goal-target-indicator
-        """
-        # For now assume the indicator id is what is in parenthesis.
-        # TODO: This is probably specific to each endpoint, so we will want to
-        # keep an eye on this when testing with more endpoints.
-        try:
-            id = name[name.find("(")+1:name.find(")")]
-            id = id.replace('.', '-')
-        except:
-            id = None
-        return id
 
 
     def get_dimension_name(self, dimension):
@@ -129,7 +109,8 @@ class InputSdmxJsonApi(InputBase):
 
                     # If this is the "SERIES" dimension, figure out the indicator ID.
                     if dimension['id'] == 'SERIES':
-                        indicator_id = self.series_name_to_id(dimension_value['name'])
+                        indicator_id = self.indicator_map[dimension_value['id']]
+                        indicator_id = indicator_id.replace('.', '-')
                     elif dimension['id'] in self.drop_dimensions:
                         # Ignore dimensions specifically set to drop.
                         continue

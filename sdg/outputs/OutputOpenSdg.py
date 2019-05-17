@@ -71,7 +71,7 @@ class OutputOpenSdg(OutputBase):
         parts = indicator.get_indicator_id().split('.')
         sorted = []
         for part in parts:
-            padded_part = part if len(part > 1) else '0' + part
+            padded_part = part if len(part) > 1 else '0' + part
             sorted.append(padded_part)
         return '-'.join(sorted)
 

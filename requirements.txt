@@ -3,5 +3,6 @@ pandas
 numpy
 gitpython
 jsonschema
+requests
 git+git://github.com/dougmet/yamlmd
 

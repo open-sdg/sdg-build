@@ -19,13 +19,14 @@ class InputSdmxJsonApi(InputBase):
         endpoint : string
             Remote URL of the SDMX API endpoint
         drop_dimensions : list
-            List of SDMX dimensions to ignore
+            List of SDMX dimensions/attributes to ignore
         drop_singleton_dimensions : boolean
-            If True, drop dimensions with only 1 variation
+            If True, drop dimensions/attributes with only 1 variation
         dimension_map : dict
             A dict for mapping SDMX ids to human-readable names. For dimension
             names, the key is simply the dimension id. For dimension value names,
             the key is the dimension id and value id, separated by a pipe (|).
+            This also includes attributes.
         indicator_map : dict
             A dict for mapping SDMX ids to indicator ids, dash-delimited.
         """
@@ -92,12 +93,14 @@ class InputSdmxJsonApi(InputBase):
         data = r.json()
 
         series_dimensions = data['structure']['dimensions']['series']
+        series_attributes = data['structure']['attributes']['series']
         time_periods = data['structure']['dimensions']['observation'][0]['values']
 
         indicators = {}
 
         for series_key in data['dataSets'][0]['series']:
             observations = data['dataSets'][0]['series'][series_key]['observations']
+            attributes = data['dataSets'][0]['series'][series_key]['attributes']
             for observation_key in observations:
                 observation = observations[observation_key]
                 year = time_periods[int(observation_key)]['name']
@@ -121,7 +124,7 @@ class InputSdmxJsonApi(InputBase):
                         # Ignore dimensions with only 1 variation.
                         continue
                     else:
-                        # Otherwise we will use this dimension/disaggregation.
+                        # Otherwise we will use this dimension as a disaggregation.
                         dimension_name = self.get_dimension_name(dimension)
                         value_name = self.get_dimension_value_name(dimension, dimension_value)
                         disaggregations[dimension_name] = value_name
@@ -129,6 +132,25 @@ class InputSdmxJsonApi(InputBase):
                 # Did we not find the indicator ID?
                 if indicator_id is None:
                     continue
+
+                # Also use attributes as disaggregations.
+                for attribute_index, attribute_value_index in enumerate(attributes):
+                    if attribute_value_index is None:
+                        continue
+                    attribute = series_attributes[attribute_index]
+                    attribute_value = attribute['values'][attribute_value_index]
+
+                    if attribute['id'] in self.drop_dimensions:
+                        # Ignore attributes specifically set to drop.
+                        continue
+                    elif self.drop_singleton_dimensions and len(attribute['values']) < 2:
+                        # Ignore attributes with only 1 variation.
+                        continue
+                    else:
+                        # Otherwise we will use this attribute as a disaggregation.
+                        attribute_name = self.get_dimension_name(attribute)
+                        value_name = self.get_dimension_value_name(attribute, attribute_value)
+                        disaggregations[attribute_name] = value_name
 
                 if indicator_id not in indicators:
                     indicators[indicator_id] = []

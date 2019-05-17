@@ -183,6 +183,8 @@ class InputSdmxJsonApi(InputBase):
             cols.pop(cols.index('Value'))
             cols = ['Year'] + cols + ['Value']
             data = data[cols]
+            # Remove empty columns, because they are not necessary.
+            data = data.dropna(axis='columns', how='all')
             # Create the Indicator object.
             name = indicator_names[indicator_id]
             self.indicators[indicator_id] = sdg.Indicator(indicator_id, data=data, name=name)

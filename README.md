@@ -52,7 +52,7 @@ An example conversion from CSV data and YAML metadata into JSON suitable for the
 python docs/examples/open_sdg.py
 ```
 
-### Example #1: SDMX-JSON API to Open SDG
+### Example #2: SDMX-JSON API to Open SDG
 
 An example conversion from SDMX-JSON (from an API endpoint) into JSON suitable for the Open SDG platform:
 

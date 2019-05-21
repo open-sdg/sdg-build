@@ -86,7 +86,15 @@ class InputSdmxJsonApi(InputBase):
 
 
     def fix_indicator_name(self, name, indicator_id):
-        """Clean/trim the indicator name by trying to remove the id."""
+        """Clean/trim the indicator name by trying to remove the id.
+
+        Parameters
+        ----------
+        name : string
+            A raw indicator name
+        indicator_id : string
+            The id for this indicator.
+        """
         name = name.replace(indicator_id, '')
         indicator_id = indicator_id.replace('-', '.')
         name = name.replace(indicator_id, '')
@@ -165,24 +173,14 @@ class InputSdmxJsonApi(InputBase):
                 if indicator_id not in indicators:
                     indicators[indicator_id] = []
 
-                # Construct the row for this series.
-                row = {}
-                row['Year'] = year
-                for disaggregation in disaggregations:
-                    row[disaggregation] = disaggregations[disaggregation]
-                row['Value'] = value
-
+                row = self.get_row(year, value, disaggregations)
                 indicators[indicator_id].append(row)
 
         # Convert the lists of dicts into dataframes.
         for indicator_id in indicators:
             data = pd.DataFrame(indicators[indicator_id])
             # Enforce position of "Year" and "Value".
-            cols = data.columns.tolist()
-            cols.pop(cols.index('Year'))
-            cols.pop(cols.index('Value'))
-            cols = ['Year'] + cols + ['Value']
-            data = data[cols]
+            data = self.fix_dataframe_columns(data)
             # Remove empty columns, because they are not necessary.
             data = data.dropna(axis='columns', how='all')
             # Create the Indicator object.

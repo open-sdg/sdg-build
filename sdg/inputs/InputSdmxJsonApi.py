@@ -12,7 +12,7 @@ class InputSdmxJsonApi(InputBase):
                  drop_singleton_dimensions=True,
                  dimension_map={},
                  indicator_map={},
-                 import_names=False):
+                 import_names=True):
         """Constructor for InputSdmxJsonApi.
 
         Parameters

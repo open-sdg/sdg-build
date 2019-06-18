@@ -88,9 +88,10 @@ class OutputOpenSdg(OutputBase):
             'graph_type': 'line',
             'indicator_sort_order': self.generate_sort_order(indicator)
         }
+
         # Add names only if the indicator has one.
         if indicator.has_name():
             minimum['indicator_name_national'] = indicator.get_name()
             minimum['graph_title'] = indicator.get_name()
-        ]
+
         return minimum

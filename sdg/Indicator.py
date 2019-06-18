@@ -26,6 +26,17 @@ class Indicator:
         self.set_edges()
 
 
+    def has_name(self):
+        """Check to see if the indicator has a name.
+
+        Returns
+        -------
+        boolean
+            True if the indicator has a name.
+        """
+        return self.name is not None
+
+
     def get_name(self):
         """Get the name of the indicator if known, or otherwise the id.
 

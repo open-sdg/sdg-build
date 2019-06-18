@@ -11,7 +11,8 @@ class InputSdmxJsonApi(InputBase):
                  drop_dimensions=[],
                  drop_singleton_dimensions=True,
                  dimension_map={},
-                 indicator_map={}):
+                 indicator_map={},
+                 import_names=False):
         """Constructor for InputSdmxJsonApi.
 
         Parameters
@@ -29,12 +30,15 @@ class InputSdmxJsonApi(InputBase):
             This also includes attributes.
         indicator_map : dict
             A dict for mapping SDMX ids to indicator ids, dash-delimited.
+        import_names : boolean
+            Whether to import names. Set to False to rely on global names.
         """
         self.endpoint = endpoint
         self.drop_dimensions = drop_dimensions
         self.drop_singleton_dimensions = drop_singleton_dimensions
         self.dimension_map = dimension_map
         self.indicator_map = indicator_map
+        self.import_names = import_names
         self.series_dimensions = {}
         InputBase.__init__(self)
 
@@ -84,7 +88,7 @@ class InputSdmxJsonApi(InputBase):
             return None
         # Otherwise default to whatever is in the JSON.
         return dimension_value['name']
-    
+
 
     def get_dimensions(self):
         """Get the full list of "dimensions" from the SDMX-JSON.
@@ -106,7 +110,7 @@ class InputSdmxJsonApi(InputBase):
             List of attribute dicts
         """
         return self.data['structure']['attributes']['series']
-    
+
 
     def get_years(self):
         """Get the full "time period" structure from the SDMX-JSON.
@@ -128,7 +132,7 @@ class InputSdmxJsonApi(InputBase):
             Series structure from SDMX-JSON
         """
         return self.data['dataSets'][0]['series']
- 
+
 
     def get_series(self, series_key):
         """Get a particular series, by key.
@@ -325,7 +329,7 @@ class InputSdmxJsonApi(InputBase):
             row = self.get_row(year, value, disaggregations)
             rows.append(row)
         return rows
-    
+
 
     def create_dataframe(self, rows):
         """Convert a list of rows into a dataframe.
@@ -376,7 +380,7 @@ class InputSdmxJsonApi(InputBase):
             # Skip any series if we cannot figure out the indicator id.
             if indicator_id is None:
                 continue
-            
+
             # Get the indicator name if needed.
             if indicator_id not in indicator_names:
                 indicator_names[indicator_id] = self.get_series_name(series_key)
@@ -389,6 +393,6 @@ class InputSdmxJsonApi(InputBase):
         # Create the Indicator objects.
         for indicator_id in indicator_data:
             data = self.create_dataframe(indicator_data[indicator_id])
-            name = indicator_names[indicator_id]
+            name = indicator_names[indicator_id] if self.import_names else None
             indicator = sdg.Indicator(indicator_id, data=data, name=name)
             self.indicators[indicator_id] = indicator

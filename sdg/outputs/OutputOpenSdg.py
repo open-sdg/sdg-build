@@ -78,7 +78,7 @@ class OutputOpenSdg(OutputBase):
 
     def minimum_metadata(self, indicator):
         """Provide minimum metadata for an indicator. Overrides parent."""
-        return {
+        minimum = {
             'indicator': indicator.get_indicator_id(),
             'target_id': indicator.get_target_id(),
             'sdg_goal': indicator.get_goal_id(),
@@ -86,7 +86,11 @@ class OutputOpenSdg(OutputBase):
             'published': True if indicator.has_data() else 'notstarted',
             'data_non_statistical': False if indicator.has_data() else True,
             'graph_type': 'line',
-            'indicator_name': indicator.get_name(),
-            'graph_title': indicator.get_name(),
             'indicator_sort_order': self.generate_sort_order(indicator)
         }
+        # Add names only if the indicator has one.
+        if indicator.has_name():
+            minimum['indicator_name_national'] = indicator.get_name()
+            minimum['graph_title'] = indicator.get_name()
+        ]
+        return minimum

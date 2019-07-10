@@ -13,8 +13,8 @@ setup(name='sdg',
       zip_safe=False,
       package_data={'sdg': ['schema_defaults.json']},
       include_package_data=True,
-      python_requires='>=3.4',
-      install_requires=['pyyaml', 'gitpython', 'numpy', 'pandas', 'yamlmd'],
+      python_requires='>=3.5',
+      install_requires=['pyyaml', 'gitpython', 'numpy', 'pandas', 'yamlmd', 'jsonschema'],
       dependency_links=[
         "git+ssh://git@github.com/dougmet/yamlmd.git@0.1.7"
     ])

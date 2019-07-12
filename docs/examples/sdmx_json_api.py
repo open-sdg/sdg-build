@@ -6,15 +6,6 @@ converting it into the JSON output suitable for the Open SDG reporting platform.
 import os
 import sdg
 
-# Map SDMX codes to SDG indicator ids. In practice this would be much longer,
-# but for this example we are only doing Goal 1.
-indicator_map = {
-    'SI_POV_NAHC':    '1.2.1',
-    'SI_POV_NMPI':    '1.2.2',
-    'N_KH_010301_01': '1.3.1',
-    'N_KH_010401_01': '1.4.1',
-}
-
 # Control how the SDMX dimensions are mapped to Open SDG output. Because the
 # Open SDG platform relies on a particular "Units" column, we control that here.
 dimension_map = {
@@ -26,10 +17,27 @@ dimension_map = {
 # that this script can be run as-is.
 endpoint = 'http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminateNSIService/rest/data/KH_NIS,DF_SDG_KH,1.1/all/?startPeriod=2008&endPeriod=2018'
 
+# Each SDMX source should have a DSD (data structure definition). If the SDMX
+# source uses the global DSD (https://unstats.un.org/sdgs/files/SDG_DSD.xml)
+# then the following optional settings are not needed. Otherwise you will need
+# to set the dsd, namespaces, series_xpath, and indicator_id_xpath.
+dsd = 'http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminateNSIService/rest/dataflow/KH_NIS/DF_SDG_KH/1.1/?references=all'
+namespaces = {
+    "message": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
+    "structure": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure",
+    "common": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
+}
+series_xpath = ".//structure:Codelist[@id='CL_SERIES']/structure:Code"
+indicator_id_xpath = ".//common:Name"
+
 # Create the input object.
 data_input = sdg.inputs.InputSdmxJsonApi(endpoint=endpoint,
                                          indicator_map=indicator_map,
-                                         dimension_map=dimension_map)
+                                         dimension_map=dimension_map,
+                                         dsd=dsd,
+                                         namespaces=namespaces,
+                                         series_xpath=series_xpath,
+                                         indicator_id_xpath=indicator_id_xpath)
 inputs = [data_input]
 
 # Use the Prose.io file for the metadata schema.

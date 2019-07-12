@@ -1,3 +1,5 @@
+from urllib.request import urlopen
+
 class InputBase:
     """Base class for sources of SDG data/metadata."""
 
@@ -56,3 +58,57 @@ class InputBase:
         cols.pop(cols.index('Value'))
         cols = ['Year'] + cols + ['Value']
         return df[cols]
+
+
+    def fetch_file(self, location):
+        """Fetch a file, either on disk, or on the Internet.
+
+        Parameters
+        ----------
+        location : String
+            Either an http address, or a path on disk
+        """
+        file = None
+        if location.startswith('http'):
+            file = urlopen(location)
+        else:
+            file = open(location)
+        data = file.read()
+        file.close()
+        return data
+
+
+    def normalize_indicator_id(self, indicator_id):
+        """Normalize an indicator id (1-1-1, 1-2-1, etc).
+
+        Parameters
+        ----------
+        indicator_id : string
+            The raw indicator ID
+        """
+        # If there are multiple words, assume the first word is the id.
+        words = indicator_id.split(" ")
+        indicator_id = words[0]
+        # Convert dots to dashes (ie, prefer 1-1-1 to 1.1.1).
+        indicator_id = indicator_id.replace('.', '-')
+        return indicator_id
+
+
+    def normalize_indicator_name(self, indicator_name, indicator_id):
+        """Normalize an indicator name.
+
+        Parameters
+        ----------
+        indicator_name : string
+            The raw indicator name
+        indicator_id : string
+            The indicator id (eg, 1.1.1, 1-1-1, etc.) for this indicator
+        """
+        # Sometimes the indicator names includes the indicator id, so
+        # remove it here. Both dash or dot-delimited.
+        dashes = indicator_id.replace('.', '-')
+        dots = indicator_id.replace('-', '.')
+        indicator_name = indicator_name.replace(dashes, '')
+        indicator_name = indicator_name.replace(dots, '')
+        # Trim any whitespace.
+        return indicator_name.strip()

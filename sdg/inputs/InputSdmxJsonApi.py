@@ -1,47 +1,10 @@
 import pandas as pd
 import sdg
 import requests
-from sdg.inputs import InputBase
+from sdg.inputs import InputSdmx
 
-class InputSdmxJsonApi(InputBase):
+class InputSdmxJsonApi(InputSdmx):
     """Sources of SDG data that are remote SDMX JSON endpoint."""
-
-    def __init__(self,
-                 endpoint='',
-                 drop_dimensions=[],
-                 drop_singleton_dimensions=True,
-                 dimension_map={},
-                 indicator_map={},
-                 import_names=True):
-        """Constructor for InputSdmxJsonApi.
-
-        Parameters
-        ----------
-        endpoint : string
-            Remote URL of the SDMX API endpoint
-        drop_dimensions : list
-            List of SDMX dimensions/attributes to ignore
-        drop_singleton_dimensions : boolean
-            If True, drop dimensions/attributes with only 1 variation
-        dimension_map : dict
-            A dict for mapping SDMX ids to human-readable names. For dimension
-            names, the key is simply the dimension id. For dimension value names,
-            the key is the dimension id and value id, separated by a pipe (|).
-            This also includes attributes.
-        indicator_map : dict
-            A dict for mapping SDMX ids to indicator ids, dash-delimited.
-        import_names : boolean
-            Whether to import names. Set to False to rely on global names.
-        """
-        self.endpoint = endpoint
-        self.drop_dimensions = drop_dimensions
-        self.drop_singleton_dimensions = drop_singleton_dimensions
-        self.dimension_map = dimension_map
-        self.indicator_map = indicator_map
-        self.import_names = import_names
-        self.series_dimensions = {}
-        InputBase.__init__(self)
-
 
     def get_dimension_name(self, dimension):
         """Determine the human-readable name of a dimension.
@@ -244,13 +207,10 @@ class InputSdmxJsonApi(InputBase):
         dimensions = self.get_series_dimensions(series_key)
         series_name = dimensions['SERIES']['value']['name']
         series_id = dimensions['SERIES']['value']['id']
-        if series_id in self.indicator_map:
-            indicator_id = self.indicator_map[series_id]
-            dashes = indicator_id.replace('.', '-')
-            dots = indicator_id.replace('-', '.')
-            series_name = series_name.replace(dashes, '')
-            series_name = series_name.replace(dots, '')
-        return series_name.strip()
+        indicator_ids = self.indicator_id_map[series_id]
+        for indicator_id in indicator_ids:
+            series_name = self.normalize_indicator_name(series_name, indicator_id)
+        return series_name
 
 
     def get_series_id(self, series_key):
@@ -268,11 +228,12 @@ class InputSdmxJsonApi(InputBase):
         """
         dimensions = self.get_series_dimensions(series_key)
         series_id = dimensions['SERIES']['value']['id']
-        if series_id not in self.indicator_map:
+        indicator_id_map = self.get_indicator_id_map()
+        if series_id not in indicator_id_map:
             return None
-        indicator_id = self.indicator_map[series_id]
-        indicator_id = indicator_id.replace('.', '-')
-        return indicator_id
+        indicator_ids = indicator_id_map[series_id]
+
+        return indicator_ids
 
 
     def get_series_disaggregations(self, series_key):
@@ -355,7 +316,7 @@ class InputSdmxJsonApi(InputBase):
     def fetch_data(self):
         """Fetch the data from the endpoint."""
         headers = { 'Accept': 'application/json' }
-        r = requests.get(self.endpoint, headers=headers)
+        r = requests.get(self.source, headers=headers)
         self.data = r.json()
 
 
@@ -374,21 +335,22 @@ class InputSdmxJsonApi(InputBase):
         # Loop through each "series" in the SDMX-JSON.
         for series_key in self.get_all_series():
 
-            # Get the indicator id.
-            indicator_id = self.get_series_id(series_key)
+            # Get the indicator ids (some series apply to multiple indicators).
+            indicator_ids = self.get_series_id(series_key)
 
             # Skip any series if we cannot figure out the indicator id.
-            if indicator_id is None:
+            if indicator_ids is None:
                 continue
 
-            # Get the indicator name if needed.
-            if indicator_id not in indicator_names:
-                indicator_names[indicator_id] = self.get_series_name(series_key)
-                # Also start off an empty list of rows.
-                indicator_data[indicator_id] = []
+            for indicator_id in indicator_ids:
+                # Get the indicator name if needed.
+                if indicator_id not in indicator_names:
+                    indicator_names[indicator_id] = self.get_series_name(series_key)
+                    # Also start off an empty list of rows.
+                    indicator_data[indicator_id] = []
 
-            # Get the rows of data for this series.
-            indicator_data[indicator_id].extend(self.get_series_data(series_key))
+                # Get the rows of data for this series.
+                indicator_data[indicator_id].extend(self.get_series_data(series_key))
 
         # Create the Indicator objects.
         for indicator_id in indicator_data:

@@ -15,28 +15,20 @@ dimension_map = {
 
 # The API endpoint where the source data is. A real-life example is provided so
 # that this script can be run as-is.
-endpoint = 'http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminateNSIService/rest/data/KH_NIS,DF_SDG_KH,1.1/all/?startPeriod=2008&endPeriod=2018'
+source = 'http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminateNSIService/rest/data/KH_NIS,DF_SDG_KH,1.1/all/?startPeriod=2008&endPeriod=2018'
 
-# Each SDMX source should have a DSD (data structure definition). If the SDMX
-# source uses the global DSD (https://unstats.un.org/sdgs/files/SDG_DSD.xml)
-# then the following optional settings are not needed. Otherwise you will need
-# to set the dsd, namespaces, series_xpath, and indicator_id_xpath.
+# Each SDMX source should have a DSD (data structure definition).
 dsd = 'http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminateNSIService/rest/dataflow/KH_NIS/DF_SDG_KH/1.1/?references=all'
-namespaces = {
-    "message": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
-    "structure": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure",
-    "common": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common"
-}
-series_xpath = ".//structure:Codelist[@id='CL_SERIES']/structure:Code"
-indicator_id_xpath = ".//common:Name"
+# The "indicator_id" (such as 1-1-1, 1-2-1, etc.) is not yet formalized in the
+# SDG DSD standard. It is typically there, but it's location is not predictable.
+# So, specify here the XPath query needed to find the indicator id inside each
+# series code. This is used to map series codes to indicator ids.
+indicator_id_xpath = ".//Name"
 
 # Create the input object.
-data_input = sdg.inputs.InputSdmxJsonApi(endpoint=endpoint,
-                                         indicator_map=indicator_map,
+data_input = sdg.inputs.InputSdmxJsonApi(source=source,
                                          dimension_map=dimension_map,
                                          dsd=dsd,
-                                         namespaces=namespaces,
-                                         series_xpath=series_xpath,
                                          indicator_id_xpath=indicator_id_xpath)
 inputs = [data_input]
 

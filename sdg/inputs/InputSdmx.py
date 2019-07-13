@@ -1,8 +1,6 @@
-
-
-
 from sdg.inputs import InputBase
 from xml.etree import ElementTree as ET
+from io import StringIO
 
 class InputSdmx(InputBase):
     """Sources of SDG data that are SDMX format."""
@@ -14,12 +12,6 @@ class InputSdmx(InputBase):
                  dimension_map={},
                  import_names=True,
                  dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
-                 namespaces = {
-                     "mes": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message",
-                     "str": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/structure",
-                     "com": "http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common",
-                 },
-                 series_xpath=".//str:Codelist[@id='CL_SERIES']/str:Code",
                  indicator_id_xpath=".//com:Annotation[com:AnnotationTitle='Indicator']/com:AnnotationText"):
         """Constructor for InputSdmx.
 
@@ -41,38 +33,38 @@ class InputSdmx(InputBase):
         dsd : string
             Remote URL of the SDMX DSD (data structure definition) or path to
             local file.
-        namespaces : dict
-            A dict of namespaces that are used in the SDMX
-        series_xpath : string
-            An xpath query to find the collection of Series codes in the DSD
         indicator_id_xpath : string
             An xpath query to find the indicator id within each Series code
         """
         self.source = source
-        self.dsd = self.parse_dsd(dsd)
-        self.namespaces = namespaces
+        self.dsd = self.parse_xml(dsd)
         self.drop_dimensions = drop_dimensions
         self.drop_singleton_dimensions = drop_singleton_dimensions
         self.dimension_map = dimension_map
         self.import_names = import_names
-        self.series_xpath = series_xpath
         self.indicator_id_xpath = indicator_id_xpath
         self.series_dimensions = {}
         InputBase.__init__(self)
 
 
-    def parse_dsd(self, location):
-        """Fetch and parse the XML DSD (data structure definition).
+    def parse_xml(self, location, strip_namespaces=True):
+        """Fetch and parse an XML file.
 
         Parameters
         ----------
         location : string
-            Remote URL of the SDMX DSD (data structure definition) or path to
-            local file.
+            Remote URL of the XML file or path to local file.
+        strip_namespaces : boolean
+            Whether or not to strip namespaces. This is helpful in cases where
+            different implementations may use different namespaces/prefixes.
         """
-        data = self.fetch_file(location)
-        tree = ET.fromstring(data)
-        return tree
+        xml = self.fetch_file(location)
+        it = ET.iterparse(StringIO(xml.decode('utf-8')))
+        if strip_namespaces:
+            for _, el in it:
+                if '}' in el.tag:
+                    el.tag = el.tag.split('}', 1)[1]
+        return it.root
 
 
     def get_indicator_id_map(self):
@@ -82,10 +74,10 @@ class InputSdmx(InputBase):
             return self.indicator_id_map
         # Otherwise calculate it.
         series_to_indicator_ids = {}
-        codes = self.dsd.findall(self.series_xpath, self.namespaces)
+        codes = self.dsd.findall(".//Codelist[@id='CL_SERIES']/Code")
         for code in codes:
             code_id = code.attrib['id']
-            indicator_ids = code.findall(self.indicator_id_xpath, self.namespaces)
+            indicator_ids = code.findall(self.indicator_id_xpath)
             indicator_ids = [indicator_id.text for indicator_id in indicator_ids]
             # Normalize the indicator ids.
             indicator_ids = [self.normalize_indicator_id(indicator_id) for indicator_id in indicator_ids]

@@ -27,9 +27,9 @@ indicator_id_xpath = ".//Name"
 
 # Create the input object.
 data_input = sdg.inputs.InputSdmxJson(source=source,
-                                         dimension_map=dimension_map,
-                                         dsd=dsd,
-                                         indicator_id_xpath=indicator_id_xpath)
+                                      dimension_map=dimension_map,
+                                      dsd=dsd,
+                                      indicator_id_xpath=indicator_id_xpath)
 inputs = [data_input]
 
 # Use the Prose.io file for the metadata schema.

@@ -4,7 +4,7 @@ import requests
 from sdg.inputs import InputSdmx
 
 class InputSdmxJson(InputSdmx):
-    """Sources of SDG data that are remote SDMX JSON endpoint."""
+    """Sources of SDG data that are SDMX-JSON format."""
 
     def get_dimension_name(self, dimension):
         """Determine the human-readable name of a dimension.
@@ -314,7 +314,7 @@ class InputSdmxJson(InputSdmx):
 
 
     def fetch_data(self):
-        """Fetch the data from the endpoint."""
+        """Fetch the data from the source."""
         if self.source.startswith('http'):
             # For remote sources, assume it is an API that requires a particular
             # "Accept" header in order to return JSON.
@@ -328,7 +328,7 @@ class InputSdmxJson(InputSdmx):
 
 
     def execute(self):
-        """Fetch the data from the SDMX endpoint. Overrides parent."""
+        """Execute this input. Overrides parent."""
 
         # Fetch the response from the SDMX endpoint.
         self.fetch_data()

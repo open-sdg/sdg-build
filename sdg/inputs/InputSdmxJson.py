@@ -3,7 +3,7 @@ import sdg
 import requests
 from sdg.inputs import InputSdmx
 
-class InputSdmxJsonApi(InputSdmx):
+class InputSdmxJson(InputSdmx):
     """Sources of SDG data that are remote SDMX JSON endpoint."""
 
     def get_dimension_name(self, dimension):
@@ -315,9 +315,16 @@ class InputSdmxJsonApi(InputSdmx):
 
     def fetch_data(self):
         """Fetch the data from the endpoint."""
-        headers = { 'Accept': 'application/json' }
-        r = requests.get(self.source, headers=headers)
-        self.data = r.json()
+        if self.source.startswith('http'):
+            # For remote sources, assume it is an API that requires a particular
+            # "Accept" header in order to return JSON.
+            headers = { 'Accept': 'application/json' }
+            r = requests.get(self.source, headers=headers)
+            self.data = r.json()
+        else:
+            # For local sources, just load the JSON file and parse it.
+            with open(self.source) as json_file:
+                self.data = json.load(json_file)
 
 
     def execute(self):

@@ -26,7 +26,7 @@ dsd = 'http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminate
 indicator_id_xpath = ".//Name"
 
 # Create the input object.
-data_input = sdg.inputs.InputSdmxJsonApi(source=source,
+data_input = sdg.inputs.InputSdmxJson(source=source,
                                          dimension_map=dimension_map,
                                          dsd=dsd,
                                          indicator_id_xpath=indicator_id_xpath)

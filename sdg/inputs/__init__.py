@@ -3,4 +3,4 @@ from .InputFiles import InputFiles
 from .InputCsvData import InputCsvData
 from .InputYamlMdMeta import InputYamlMdMeta
 from .InputSdmx import InputSdmx
-from .InputSdmxJsonApi import InputSdmxJsonApi
+from .InputSdmxJson import InputSdmxJson

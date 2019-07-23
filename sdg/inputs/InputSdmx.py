@@ -13,8 +13,8 @@ class InputSdmx(InputBase):
                  dimension_map={},
                  import_names=True,
                  dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
-                 indicator_id_xpath=".//com:Annotation[com:AnnotationTitle='Indicator']/com:AnnotationText",
-                 indicator_name_xpath=".//com:Annotation[com:AnnotationTitle='IndicatorTitle']/com:AnnotationText"):
+                 indicator_id_xpath=".//Annotation[AnnotationTitle='Indicator']/AnnotationText",
+                 indicator_name_xpath=".//Annotation[AnnotationTitle='IndicatorTitle']/AnnotationText"):
         """Constructor for InputSdmx.
 
         Parameters
@@ -72,6 +72,43 @@ class InputSdmx(InputBase):
         return it.root
 
 
+    def get_codes(self, codelist_id):
+        """Get all the SDMX Codes for a particular CodeList.
+
+        Parameters
+        ----------
+        string : codelist_id
+            The id of the CodeList to get Codes from
+
+        Returns
+        -------
+        list of Elements
+            The XML elements for each Code in the CodeList
+        """
+        xpath = ".//Codelist[@id='{}']/Code"
+        return self.dsd.findall(xpath.format(codelist_id))
+
+
+    def get_code(self, codelist_id, code_id):
+        """Get a particular SDMX Code in a particular CodeList.
+
+        Parameters
+        ----------
+        string : codelist_id
+            The id of the CodeList to look in
+
+        string : code_id
+            The id of the Code to get
+
+        Returns
+        -------
+        Element
+            The XML element for the Code
+        """
+        xpath = ".//Codelist[@id='{}']/Code[@id='{}']"
+        return self.dsd.find(xpath.format(codelist_id, code_id))
+
+
     def get_indicator_map(self):
         """Get a mapping of SDMX "SERIES" codes to indicator IDs and names.
 
@@ -89,7 +126,7 @@ class InputSdmx(InputBase):
             return self.indicator_map
         # Otherwise calculate it.
         series_to_indicators = {}
-        codes = self.dsd.findall(".//Codelist[@id='CL_SERIES']/Code")
+        codes = self.get_codes('CL_SERIES')
         for code in codes:
             code_map = {}
             code_id = code.attrib['id']

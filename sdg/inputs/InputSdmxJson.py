@@ -191,27 +191,6 @@ class InputSdmxJson(InputSdmx):
         return dimension_values
 
 
-    def get_series_name(self, series_key):
-        """Get the name for a series.
-
-        Parameters
-        ----------
-        series_key : string
-            The colon-delimited series key
-
-        Returns
-        -------
-        string
-            Name for this series
-        """
-        dimensions = self.get_series_dimensions(series_key)
-        series_id = dimensions['SERIES']['value']['id']
-        indicator_map = self.get_indicator_map()
-        indicators = indicator_map[series_id]
-        # There could be multiple names, but we just pick the first value.
-        return next(iter(indicators.values()))
-
-
     def get_series_id(self, series_key):
         """Get the id for the Series.
 
@@ -224,8 +203,8 @@ class InputSdmxJson(InputSdmx):
         return dimensions['SERIES']['value']['id']
 
 
-    def get_indicator_ids(self, series_key):
-        """Get the "indicator id" for a series.
+    def get_indicators(self, series_key):
+        """Get a the indicator ids/names for a Series.
 
         Parameters
         ----------
@@ -234,16 +213,14 @@ class InputSdmxJson(InputSdmx):
 
         Returns
         -------
-        list
-            Indicator ids for this series
+        dict
+            Indicator ids keyed to indicator names
         """
         series_id = self.get_series_id(series_key)
         indicator_map = self.get_indicator_map()
         if series_id not in indicator_map:
             return None
-        indicator_ids = indicator_map[series_id].keys()
-
-        return indicator_ids
+        return indicator_map[series_id]
 
 
     def get_series_disaggregations(self, series_key):
@@ -353,16 +330,16 @@ class InputSdmxJson(InputSdmx):
         for series_key in self.get_all_series():
 
             # Get the indicator ids (some series apply to multiple indicators).
-            indicator_ids = self.get_indicator_ids(series_key)
+            indicators = self.get_indicators(series_key)
 
             # Skip any series if we cannot figure out the indicator id.
-            if indicator_ids is None:
+            if indicators is None:
                 continue
 
-            for indicator_id in indicator_ids:
+            for indicator_id in indicators:
                 # Get the indicator name if needed.
                 if indicator_id not in indicator_names:
-                    indicator_names[indicator_id] = self.get_series_name(series_key)
+                    indicator_names[indicator_id] = indicators[indicator_id]
                     # Also start off an empty list of rows.
                     indicator_data[indicator_id] = []
 

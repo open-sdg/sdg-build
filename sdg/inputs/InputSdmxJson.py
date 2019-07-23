@@ -206,13 +206,26 @@ class InputSdmxJson(InputSdmx):
         """
         dimensions = self.get_series_dimensions(series_key)
         series_id = dimensions['SERIES']['value']['id']
-        indicators = self.indicator_map[series_id]
+        indicator_map = self.get_indicator_map()
+        indicators = indicator_map[series_id]
         # There could be multiple names, but we just pick the first value.
         return next(iter(indicators.values()))
 
 
     def get_series_id(self, series_key):
-        """Get the id for a series ("indicator id").
+        """Get the id for the Series.
+
+        Parameters
+        ----------
+        series_key : string
+            The colon-delimited series key
+        """
+        dimensions = self.get_series_dimensions(series_key)
+        return dimensions['SERIES']['value']['id']
+
+
+    def get_indicator_ids(self, series_key):
+        """Get the "indicator id" for a series.
 
         Parameters
         ----------
@@ -221,11 +234,10 @@ class InputSdmxJson(InputSdmx):
 
         Returns
         -------
-        string
-            Indicator id for this series
+        list
+            Indicator ids for this series
         """
-        dimensions = self.get_series_dimensions(series_key)
-        series_id = dimensions['SERIES']['value']['id']
+        series_id = self.get_series_id(series_key)
         indicator_map = self.get_indicator_map()
         if series_id not in indicator_map:
             return None
@@ -341,7 +353,7 @@ class InputSdmxJson(InputSdmx):
         for series_key in self.get_all_series():
 
             # Get the indicator ids (some series apply to multiple indicators).
-            indicator_ids = self.get_series_id(series_key)
+            indicator_ids = self.get_indicator_ids(series_key)
 
             # Skip any series if we cannot figure out the indicator id.
             if indicator_ids is None:

@@ -1,3 +1,4 @@
+import sdg
 from sdg.inputs import InputBase
 from xml.etree import ElementTree as ET
 from io import StringIO
@@ -103,3 +104,43 @@ class InputSdmx(InputBase):
         # Cache it for later.
         self.indicator_map = series_to_indicators
         return series_to_indicators
+
+
+    def execute(self):
+        """Execute this input. Overrides parent."""
+
+        # Fetch the response from the SDMX endpoint.
+        self.fetch_data()
+
+        # SDMX divides the data into series, but we want to divide
+        # the data into indicators. Indicators contain multiple series,
+        # so we need to loop through the series and build up indicators.
+        indicator_data = {}
+        indicator_names = {}
+
+        # Loop through each "series" in the SDMX-JSON.
+        for series in self.get_all_series():
+
+            # Get the indicator ids (some series apply to multiple indicators).
+            indicators = self.get_indicators(series)
+
+            # Skip any series if we cannot figure out the indicator id.
+            if indicators is None:
+                continue
+
+            for indicator_id in indicators:
+                # Get the indicator name if needed.
+                if indicator_id not in indicator_names:
+                    indicator_names[indicator_id] = indicators[indicator_id]
+                    # Also start off an empty list of rows.
+                    indicator_data[indicator_id] = []
+
+                # Get the rows of data for this series.
+                indicator_data[indicator_id].extend(self.get_series_data(series))
+
+        # Create the Indicator objects.
+        for indicator_id in indicator_data:
+            data = self.create_dataframe(indicator_data[indicator_id])
+            name = indicator_names[indicator_id] if self.import_names else None
+            indicator = sdg.Indicator(indicator_id, data=data, name=name)
+            self.indicators[indicator_id] = indicator

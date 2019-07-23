@@ -205,12 +205,10 @@ class InputSdmxJson(InputSdmx):
             Name for this series
         """
         dimensions = self.get_series_dimensions(series_key)
-        series_name = dimensions['SERIES']['value']['name']
         series_id = dimensions['SERIES']['value']['id']
-        indicator_ids = self.indicator_id_map[series_id]
-        for indicator_id in indicator_ids:
-            series_name = self.normalize_indicator_name(series_name, indicator_id)
-        return series_name
+        indicators = self.indicator_map[series_id]
+        # There could be multiple names, but we just pick the first value.
+        return next(iter(indicators.values()))
 
 
     def get_series_id(self, series_key):
@@ -228,10 +226,10 @@ class InputSdmxJson(InputSdmx):
         """
         dimensions = self.get_series_dimensions(series_key)
         series_id = dimensions['SERIES']['value']['id']
-        indicator_id_map = self.get_indicator_id_map()
-        if series_id not in indicator_id_map:
+        indicator_map = self.get_indicator_map()
+        if series_id not in indicator_map:
             return None
-        indicator_ids = indicator_id_map[series_id]
+        indicator_ids = indicator_map[series_id].keys()
 
         return indicator_ids
 

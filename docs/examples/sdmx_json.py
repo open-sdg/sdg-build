@@ -24,12 +24,14 @@ dsd = 'http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminate
 # So, specify here the XPath query needed to find the indicator id inside each
 # series code. This is used to map series codes to indicator ids.
 indicator_id_xpath = ".//Name"
+indicator_name_xpath = ".//Name"
 
 # Create the input object.
 data_input = sdg.inputs.InputSdmxJson(source=source,
                                       dimension_map=dimension_map,
                                       dsd=dsd,
-                                      indicator_id_xpath=indicator_id_xpath)
+                                      indicator_id_xpath=indicator_id_xpath,
+                                      indicator_name_xpath=indicator_name_xpath)
 inputs = [data_input]
 
 # Use the Prose.io file for the metadata schema.

@@ -244,9 +244,6 @@ class InputSdmxJson(InputSdmx):
             if series_id == 'SERIES' or series_id in self.drop_dimensions:
                 # Skip "SERIES" and anything set to be dropped.
                 continue
-            elif self.drop_singleton_dimensions and len(dimension['dimension']['values']) < 2:
-                # Ignore dimensions with only 1 variation.
-                continue
             else:
                 # Otherwise we will use this dimension as a disaggregation.
                 dimension_name = self.get_dimension_name(dimension['dimension'])
@@ -277,27 +274,6 @@ class InputSdmxJson(InputSdmx):
             row = self.get_row(year, value, disaggregations)
             rows.append(row)
         return rows
-
-
-    def create_dataframe(self, rows):
-        """Convert a list of rows into a dataframe.
-
-        Parameters
-        ----------
-        rows : List
-            A list of row dicts
-
-        Returns
-        -------
-        Dataframe
-            The dataframe of rows of data for this indicator.
-        """
-        df = pd.DataFrame(rows)
-        # Enforce position of "Year" and "Value".
-        df = self.fix_dataframe_columns(df)
-        # Remove empty columns, because they are not necessary.
-        df = df.dropna(axis='columns', how='all')
-        return df
 
 
     def fetch_data(self):

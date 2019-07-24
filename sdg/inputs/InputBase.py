@@ -1,4 +1,5 @@
 from urllib.request import urlopen
+import pandas as pd
 
 class InputBase:
     """Base class for sources of SDG data/metadata."""
@@ -112,3 +113,24 @@ class InputBase:
         indicator_name = indicator_name.replace(dots, '')
         # Trim any whitespace.
         return indicator_name.strip()
+
+
+    def create_dataframe(self, rows):
+        """Convert a list of rows into a dataframe.
+
+        Parameters
+        ----------
+        rows : List
+            A list of row dicts
+
+        Returns
+        -------
+        Dataframe
+            The dataframe of rows of data for this indicator.
+        """
+        df = pd.DataFrame(rows)
+        # Enforce position of "Year" and "Value".
+        df = self.fix_dataframe_columns(df)
+        # Remove empty columns, because they are not necessary.
+        df = df.dropna(axis='columns', how='all')
+        return df

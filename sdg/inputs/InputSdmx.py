@@ -72,6 +72,20 @@ class InputSdmx(InputBase):
         return it.root
 
 
+    def dimension_id_to_codelist_id(self, dimension_id):
+        xpath = ".//DimensionList/Dimension[@id='{}']"
+        dimension = self.dsd.find(xpath.format(dimension_id))
+        return dimension.find(".//Enumeration/Ref").attrib['id']
+
+
+
+    def attribute_id_to_codelist_id(self, attribute_id):
+        xpath = ".//AttributeList/Attribute[@id='{}']"
+        attribute = self.dsd.find(xpath.format(attribute_id))
+        ref_element = attribute.find(".//Enumeration/Ref")
+        return ref_element.attrib['id'] if ref_element is not None else None
+
+
     def get_codes(self, codelist_id):
         """Get all the SDMX Codes for a particular CodeList.
 
@@ -109,6 +123,40 @@ class InputSdmx(InputBase):
         return self.dsd.find(xpath.format(codelist_id, code_id))
 
 
+    def get_concept(self, concept_id):
+        """Get the Concept from the SDMX DSD.
+
+        Parameters
+        ----------
+        string : concept_id
+            The SDMX ID for the Concept
+
+        Returns
+        -------
+        Element
+            The Concept XML element
+        """
+        xpath = ".//Concept[@id='{}']"
+        return self.dsd.find(xpath.format(concept_id))
+
+
+    def get_concept_name(self, concept_id):
+        """Get the human-readable Concept name from the SDMX DSD.
+
+        Parameters
+        ----------
+        string : concept_id
+            The SDMX ID for the Concept
+
+        Returns
+        -------
+        string
+            The human-readable SDMX Concept name
+        """
+        concept = self.get_concept(concept_id)
+        return concept.find(".//Name").text
+
+
     def get_indicator_map(self):
         """Get a mapping of SDMX "SERIES" codes to indicator IDs and names.
 
@@ -141,6 +189,17 @@ class InputSdmx(InputBase):
         # Cache it for later.
         self.indicator_map = series_to_indicators
         return series_to_indicators
+
+
+    def drop_singleton_columns(self, df):
+        if self.drop_singleton_dimensions:
+            special_cols = ['Year', 'Value']
+            for col in df.columns:
+                if col in special_cols:
+                    continue
+                if len(df[col].unique()) == 1:
+                    df.drop(col, inplace=True, axis=1)
+        return df
 
 
     def execute(self):
@@ -178,6 +237,7 @@ class InputSdmx(InputBase):
         # Create the Indicator objects.
         for indicator_id in indicator_data:
             data = self.create_dataframe(indicator_data[indicator_id])
+            data = self.drop_singleton_columns(data)
             name = indicator_names[indicator_id] if self.import_names else None
             indicator = sdg.Indicator(indicator_id, data=data, name=name)
             self.indicators[indicator_id] = indicator

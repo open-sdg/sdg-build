@@ -4,4 +4,5 @@ from .InputCsvData import InputCsvData
 from .InputYamlMdMeta import InputYamlMdMeta
 from .InputSdmx import InputSdmx
 from .InputSdmxJson import InputSdmxJson
-from .InputSdmxMl import InputSdmxMl
+from .InputSdmxMl_Structure import InputSdmxMl_Structure
+from .InputSdmxMl_StructureSpecific import InputSdmxMl_StructureSpecific

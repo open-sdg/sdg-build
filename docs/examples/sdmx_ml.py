@@ -29,12 +29,14 @@ indicator_id_xpath = ".//Name"
 indicator_name_xpath = ".//Name"
 
 # Create the input object.
-data_input = sdg.inputs.InputSdmxMl(source=source,
-                                    dimension_map=dimension_map,
-                                    dsd=dsd,
-                                    drop_dimensions=drop_dimensions,
-                                    indicator_id_xpath=indicator_id_xpath,
-                                    indicator_name_xpath=indicator_name_xpath)
+data_input = sdg.inputs.InputSdmxMl_Structure(
+    source=source,
+    dimension_map=dimension_map,
+    dsd=dsd,
+    drop_dimensions=drop_dimensions,
+    indicator_id_xpath=indicator_id_xpath,
+    indicator_name_xpath=indicator_name_xpath
+)
 inputs = [data_input]
 
 # Use the Prose.io file for the metadata schema.

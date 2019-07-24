@@ -6,74 +6,6 @@ from sdg.inputs import InputSdmx
 class InputSdmxJson(InputSdmx):
     """Sources of SDG data that are SDMX-JSON format."""
 
-    def get_dimension_name(self, dimension):
-        """Determine the human-readable name of a dimension.
-
-        Parameters
-        ----------
-        dimension : Dict
-            Information about an SDMX dimension pulled from an SDMX-JSON response
-
-        Returns
-        -------
-        string
-            The human-readable name for the dimension
-        """
-        map_key = dimension['id']
-        # First see if this is in our dimension map.
-        if map_key in self.dimension_map:
-            return self.dimension_map[map_key]
-        # Otherwise default to whatever is in the JSON.
-        return dimension['name']
-
-
-    def get_dimension_value_name(self, dimension, dimension_value):
-        """Determine the human-readable name of a dimension value.
-
-        Parameters
-        ----------
-        dimension : Dict
-            Information about an SDMX dimension pulled from an SDMX-JSON response
-        dimension_value: Dict
-            Information about an SDMX dimenstion value, also from SDMX-JSON
-
-        Returns
-        -------
-        string
-            The human-readable name for the dimension_value
-        """
-        map_key = dimension['id'] + '|' + dimension_value['id']
-        # First see if this is in our dimension map.
-        if map_key in self.dimension_map:
-            return self.dimension_map[map_key]
-        # Aggregate values are always "_T", these can be empty strings.
-        if dimension_value['id'] == '_T':
-            return None
-        # Otherwise default to whatever is in the JSON.
-        return dimension_value['name']
-
-
-    def get_dimensions(self):
-        """Get the full list of "dimensions" from the SDMX-JSON.
-
-        Returns
-        -------
-        list
-            List of dimension dicts
-        """
-        return self.data['structure']['dimensions']['series']
-
-
-    def get_attributes(self):
-        """Get the full list of "attributes" from SDMX-JSON.
-
-        Returns
-        -------
-        list
-            List of attribute dicts
-        """
-        return self.data['structure']['attributes']['series']
-
 
     def get_years(self):
         """Get the full "time period" structure from the SDMX-JSON.
@@ -179,11 +111,11 @@ class InputSdmxJson(InputSdmx):
             return self.series_dimensions[series_key]
         # Gather the dimension values for this series key.
         value_list = series_key.split(':')
-        dimension_list = self.get_dimensions()
+        dimension_list = self.data['structure']['dimensions']['series']
         dimension_values = self.get_dimension_values(value_list, dimension_list)
         # Also gether the attribute values for this series key.
         value_list = self.get_series(series_key)['attributes']
-        dimension_list = self.get_attributes()
+        dimension_list = self.data['structure']['attributes']['series']
         attribute_values = self.get_dimension_values(value_list, dimension_list)
         # Combine and save the results.
         dimension_values.update(attribute_values)
@@ -203,26 +135,6 @@ class InputSdmxJson(InputSdmx):
         return dimensions['SERIES']['value']['id']
 
 
-    def get_indicators(self, series_key):
-        """Get a the indicator ids/names for a Series.
-
-        Parameters
-        ----------
-        series_key : string
-            The colon-delimited series key
-
-        Returns
-        -------
-        dict
-            Indicator ids keyed to indicator names
-        """
-        series_id = self.get_series_id(series_key)
-        indicator_map = self.get_indicator_map()
-        if series_id not in indicator_map:
-            return None
-        return indicator_map[series_id]
-
-
     def get_series_disaggregations(self, series_key):
         """Get the disaggregation categories/values for a series.
 
@@ -240,14 +152,15 @@ class InputSdmxJson(InputSdmx):
         dimensions = self.get_series_dimensions(series_key)
         for key in dimensions:
             dimension = dimensions[key]
-            series_id = dimension['dimension']['id']
-            if series_id == 'SERIES' or series_id in self.drop_dimensions:
+            dimension_id = dimension['dimension']['id']
+            if dimension_id == 'SERIES' or dimension_id in self.drop_dimensions:
                 # Skip "SERIES" and anything set to be dropped.
                 continue
             else:
                 # Otherwise we will use this dimension as a disaggregation.
-                dimension_name = self.get_dimension_name(dimension['dimension'])
-                value_name = self.get_dimension_value_name(dimension['dimension'], dimension['value'])
+                dimension_name = self.get_dimension_name(dimension_id)
+                dimension_value_id = dimension['value']['id']
+                value_name = self.get_dimension_value_name(dimension_id, dimension_value_id)
                 disaggregations[dimension_name] = value_name
         return disaggregations
 

@@ -75,14 +75,11 @@ class InputSdmx(InputBase):
     def dimension_id_to_codelist_id(self, dimension_id):
         xpath = ".//DimensionList/Dimension[@id='{}']"
         dimension = self.dsd.find(xpath.format(dimension_id))
-        return dimension.find(".//Enumeration/Ref").attrib['id']
-
-
-
-    def attribute_id_to_codelist_id(self, attribute_id):
-        xpath = ".//AttributeList/Attribute[@id='{}']"
-        attribute = self.dsd.find(xpath.format(attribute_id))
-        ref_element = attribute.find(".//Enumeration/Ref")
+        # If not found, maybe it is an Attribute.
+        if dimension is None:
+            xpath = ".//AttributeList/Attribute[@id='{}']"
+            dimension = self.dsd.find(xpath.format(dimension_id))
+        ref_element = dimension.find(".//Enumeration/Ref")
         return ref_element.attrib['id'] if ref_element is not None else None
 
 
@@ -200,6 +197,78 @@ class InputSdmx(InputBase):
                 if len(df[col].unique()) == 1:
                     df.drop(col, inplace=True, axis=1)
         return df
+
+
+    def get_dimension_name(self, dimension_id):
+        """Determine the human-readable name of a dimension.
+
+        Parameters
+        ----------
+        dimension_id : string
+            The SDMX id of the dimension
+
+        Returns
+        -------
+        string
+            The human-readable name for the dimension
+        """
+        # First see if this is in our dimension map.
+        if dimension_id in self.dimension_map:
+            return self.dimension_map[dimension_id]
+        # Otherwise default to whatever is in the DSD.
+        return self.get_concept_name(dimension_id)
+
+
+    def get_dimension_value_name(self, dimension_id, dimension_value_id):
+        """Determine the human-readable name of a dimension value.
+
+        Parameters
+        ----------
+        dimension_id : string
+            SDMX id of the Dimension
+        dimension_value_id: string
+            SDMX id of the Dimension value
+
+        Returns
+        -------
+        string
+            The human-readable name for the dimension_value
+        """
+        map_key = dimension_id + '|' + dimension_value_id
+        # First see if this is in our dimension map.
+        if map_key in self.dimension_map:
+            return self.dimension_map[map_key]
+        # Aggregate values are always "_T", these can be empty strings.
+        if dimension_value_id == '_T':
+            return None
+        # Otherwise default to whatever is in the SDMX.
+        codelist_id = self.dimension_id_to_codelist_id(dimension_id)
+        if codelist_id:
+            code = self.get_code(codelist_id, dimension_value_id)
+            if code is not None:
+                return code.find(".//Name").text
+        # If still here, just return the SDMX ID.
+        return dimension_value_id
+
+
+    def get_indicators(self, series):
+        """Get the indicator ids/names for a series.
+
+        Parameters
+        ----------
+        series : mixed
+            The variable for the series, depending on the needs of the subclass
+
+        Returns
+        -------
+        list
+            Indicator ids for this series
+        """
+        series_id = self.get_series_id(series)
+        indicator_map = self.get_indicator_map()
+        if series_id not in indicator_map:
+            return None
+        return indicator_map[series_id]
 
 
     def execute(self):

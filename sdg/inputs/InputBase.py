@@ -92,6 +92,8 @@ class InputBase:
         indicator_id = words[0]
         # Convert dots to dashes (ie, prefer 1-1-1 to 1.1.1).
         indicator_id = indicator_id.replace('.', '-')
+        # Make sure there are no preceding/trailing dashes.
+        indicator_id = indicator_id.strip('-')
         return indicator_id
 
 

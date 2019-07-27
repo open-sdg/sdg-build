@@ -11,6 +11,7 @@ class InputSdmx(InputBase):
                  drop_dimensions=[],
                  drop_singleton_dimensions=True,
                  dimension_map={},
+                 indicator_id_map={},
                  import_names=True,
                  dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
                  indicator_id_xpath=".//Annotation[AnnotationTitle='Indicator']/AnnotationText",
@@ -30,6 +31,10 @@ class InputSdmx(InputBase):
             names, the key is simply the dimension id. For dimension value names,
             the key is the dimension id and value id, separated by a pipe (|).
             This also includes attributes.
+        indicator_id_map : dict
+            A dict for mapping SDMX series codes to indicator ids. Normally this
+            is not needed, but sometimes the DSD may contain typos or mistakes.
+            This need not contain all indicator ids, only those that need it.
         import_names : boolean
             Whether to import names. Set to False to rely on global names
         dsd : string
@@ -45,11 +50,30 @@ class InputSdmx(InputBase):
         self.drop_dimensions = drop_dimensions
         self.drop_singleton_dimensions = drop_singleton_dimensions
         self.dimension_map = dimension_map
+        self.indicator_id_map = indicator_id_map
         self.import_names = import_names
         self.indicator_id_xpath = indicator_id_xpath
         self.indicator_name_xpath = indicator_name_xpath
         self.series_dimensions = {}
         InputBase.__init__(self)
+
+
+    def normalize_indicator_id(self, indicator_id, series_id):
+        """Normalize an indicator id (1-1-1, 1-2-1, etc).
+
+        Parameters
+        ----------
+        indicator_id : string
+            The raw indicator ID
+
+        series_id : string
+            The SDMX series id
+        """
+        # Look in our custom map.
+        if series_id in self.indicator_id_map:
+            return self.indicator_id_map[series_id]
+        # Otherwise use the method from the base class.
+        return super().normalize_indicator_id(indicator_id)
 
 
     def parse_xml(self, location, strip_namespaces=True):
@@ -176,7 +200,7 @@ class InputSdmx(InputBase):
             code_map = {}
             code_id = code.attrib['id']
             indicator_ids = code.findall(self.indicator_id_xpath)
-            indicator_ids = [self.normalize_indicator_id(element.text) for element in indicator_ids]
+            indicator_ids = [self.normalize_indicator_id(element.text, code_id) for element in indicator_ids]
             indicator_names = code.findall(self.indicator_name_xpath)
             for index, element in enumerate(indicator_names):
                 indicator_id = indicator_ids[index]

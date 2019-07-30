@@ -14,6 +14,7 @@ SDG Build can **input** SDG data in the following formats:
 
 * Data in CSV files (long/tidy format)
 * Metadata in YAML files
+* Data (and minimal metadata) from SDMX-JSON and SDMX-ML
 
 ## Ouputs
 
@@ -43,12 +44,28 @@ Usage examples are available in `docs/examples`. In each of these examples, the 
 pip install -r docs/examples/requirements.txt
 ```
 
-### Example #1: CSV/YAML to Open SDG
+### Example #1: CSV + YAML to Open SDG
 
 An example conversion from CSV data and YAML metadata into JSON suitable for the Open SDG platform:
 
 ```
 python docs/examples/open_sdg.py
+```
+
+### Example #2: SDMX-JSON to Open SDG
+
+An example conversion from SDMX-JSON (from an API endpoint) into JSON suitable for the Open SDG platform:
+
+```
+python docs/examples/sdmx_json.py
+```
+
+### Example #3: SDMX-ML to Open SDG
+
+An example conversion from SDMX-ML into JSON suitable for the Open SDG platform:
+
+```
+python docs/examples/sdmx_ml.py
 ```
 
 ## License

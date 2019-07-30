@@ -9,7 +9,7 @@ class OutputOpenSdg(OutputBase):
 
 
     def execute(self):
-        """Write the JSON output expected by Open SDG."""
+        """Write the JSON output expected by Open SDG. Overrides parent."""
         status = True
         all_meta = dict()
         all_headline = dict()
@@ -53,3 +53,45 @@ class OutputOpenSdg(OutputBase):
         status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
 
         return(status)
+
+
+    def generate_sort_order(self, indicator):
+        """Generate a sortable string from an indicator id.
+
+        Parameters
+        ----------
+        indicator : Indicator
+            An instance of the Indicator class.
+
+        Returns
+        -------
+        string
+            A string suitable for sorting indicators.
+        """
+        parts = indicator.get_indicator_id().split('.')
+        sorted = []
+        for part in parts:
+            padded_part = part if len(part) > 1 else '0' + part
+            sorted.append(padded_part)
+        return '-'.join(sorted)
+
+
+    def minimum_metadata(self, indicator):
+        """Provide minimum metadata for an indicator. Overrides parent."""
+        minimum = {
+            'indicator': indicator.get_indicator_id(),
+            'target_id': indicator.get_target_id(),
+            'sdg_goal': indicator.get_goal_id(),
+            'reporting_status': 'complete' if indicator.has_data() else 'notstarted',
+            'published': True if indicator.has_data() else 'notstarted',
+            'data_non_statistical': False if indicator.has_data() else True,
+            'graph_type': 'line',
+            'indicator_sort_order': self.generate_sort_order(indicator)
+        }
+
+        # Add names only if the indicator has one.
+        if indicator.has_name():
+            minimum['indicator_name_national'] = indicator.get_name()
+            minimum['graph_title'] = indicator.get_name()
+
+        return minimum

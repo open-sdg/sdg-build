@@ -88,7 +88,7 @@ class InputSdmx(InputBase):
             different implementations may use different namespaces/prefixes.
         """
         xml = self.fetch_file(location)
-        it = ET.iterparse(StringIO(xml.decode('utf-8')))
+        it = ET.iterparse(StringIO(xml))
         if strip_namespaces:
             for _, el in it:
                 if '}' in el.tag:

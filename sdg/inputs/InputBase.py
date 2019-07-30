@@ -70,11 +70,13 @@ class InputBase:
             Either an http address, or a path on disk
         """
         file = None
+        data = None
         if location.startswith('http'):
             file = urlopen(location)
+            data = file.read().decode('utf-8')
         else:
             file = open(location)
-        data = file.read()
+            data = file.read()
         file.close()
         return data
 

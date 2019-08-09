@@ -198,7 +198,8 @@ class InputSdmx(InputBase):
             # Before going further, make sure there is an indicator name for
             # each indicator id. If not, something is wrong, so abort.
             if len(indicator_ids) != len(indicator_names):
-                raise Exception(f'Error: there were {len(indicator_ids)} indicator ids but {len(indicator_names)} indicator names, for series {code_id}.')
+                raise Exception('Error: there were {} indicator ids but {} indicator names, for series {}.'
+                    .format(len(indicator_ids), len(indicator_names), code_id))
             # Now loop through, normalize and store the ids and names per series id.
             for index, element in enumerate(indicator_names):
                 indicator_id = indicator_ids[index]

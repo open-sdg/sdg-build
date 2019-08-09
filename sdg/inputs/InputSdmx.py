@@ -58,24 +58,6 @@ class InputSdmx(InputBase):
         InputBase.__init__(self)
 
 
-    def normalize_indicator_id(self, indicator_id, series_id):
-        """Normalize an indicator id (1-1-1, 1-2-1, etc).
-
-        Parameters
-        ----------
-        indicator_id : string
-            The raw indicator ID
-
-        series_id : string
-            The SDMX series id
-        """
-        # Look in our custom map.
-        if series_id in self.indicator_id_map:
-            return self.indicator_id_map[series_id]
-        # Otherwise use the method from the base class.
-        return super().normalize_indicator_id(indicator_id)
-
-
     def parse_xml(self, location, strip_namespaces=True):
         """Fetch and parse an XML file.
 
@@ -199,9 +181,25 @@ class InputSdmx(InputBase):
         for code in codes:
             code_map = {}
             code_id = code.attrib['id']
-            indicator_ids = code.findall(self.indicator_id_xpath)
-            indicator_ids = [self.normalize_indicator_id(element.text, code_id) for element in indicator_ids]
+            # First check to see if the indicator ids are hardcoded.
+            if code_id in self.indicator_id_map:
+                indicator_ids = self.indicator_id_map[code_id]
+                # Make sure it is a list, even if only one.
+                if not isinstance(indicator_ids, list):
+                    indicator_ids = [indicator_ids]
+            else:
+                # If indicator_ids are not hardcoded, try to get them from the DSD.
+                indicator_ids = code.findall(self.indicator_id_xpath)
+                indicator_ids = [element.text for element in indicator_ids]
+            # Normalize the indicator ids.
+            indicator_ids = [self.normalize_indicator_id(inid) for inid in indicator_ids]
+            # Now get the indicator names from the DSD.
             indicator_names = code.findall(self.indicator_name_xpath)
+            # Before going further, make sure there is an indicator name for
+            # each indicator id. If not, something is wrong, so abort.
+            if len(indicator_ids) != len(indicator_names):
+                raise Exception(f'Error: there were {len(indicator_ids)} indicator ids but {len(indicator_names)} indicator names, for series {code_id}.')
+            # Now loop through, normalize and store the ids and names per series id.
             for index, element in enumerate(indicator_names):
                 indicator_id = indicator_ids[index]
                 indicator_name = self.normalize_indicator_name(element.text, indicator_id)

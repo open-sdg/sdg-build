@@ -33,8 +33,16 @@ class InputSdmx(InputBase):
             This also includes attributes.
         indicator_id_map : dict
             A dict for mapping SDMX series codes to indicator ids. Normally this
-            is not needed, but sometimes the DSD may contain typos or mistakes.
+            is not needed, but sometimes the DSD may contain typos or mistakes,
+            or the DSD may not contain any reference to the indicator ID numbers.
             This need not contain all indicator ids, only those that need it.
+            If a particular series should be mapped to multiple indicators, then
+            they can be a list of strings. Otherwise each indicator is a string.
+            For example:
+            {
+                'AB_CD_EF_1': '1-2-1',
+                'UV_WX_YZ_1': ['1-3-1', '5-1-1'],
+            }
         import_names : boolean
             Whether to import names. Set to False to rely on global names
         dsd : string

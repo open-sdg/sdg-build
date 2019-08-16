@@ -33,8 +33,16 @@ class InputSdmx(InputBase):
             This also includes attributes.
         indicator_id_map : dict
             A dict for mapping SDMX series codes to indicator ids. Normally this
-            is not needed, but sometimes the DSD may contain typos or mistakes.
+            is not needed, but sometimes the DSD may contain typos or mistakes,
+            or the DSD may not contain any reference to the indicator ID numbers.
             This need not contain all indicator ids, only those that need it.
+            If a particular series should be mapped to multiple indicators, then
+            they can be a list of strings. Otherwise each indicator is a string.
+            For example:
+            {
+                'AB_CD_EF_1': '1-2-1',
+                'UV_WX_YZ_1': ['1-3-1', '5-1-1'],
+            }
         import_names : boolean
             Whether to import names. Set to False to rely on global names
         dsd : string
@@ -56,24 +64,6 @@ class InputSdmx(InputBase):
         self.indicator_name_xpath = indicator_name_xpath
         self.series_dimensions = {}
         InputBase.__init__(self)
-
-
-    def normalize_indicator_id(self, indicator_id, series_id):
-        """Normalize an indicator id (1-1-1, 1-2-1, etc).
-
-        Parameters
-        ----------
-        indicator_id : string
-            The raw indicator ID
-
-        series_id : string
-            The SDMX series id
-        """
-        # Look in our custom map.
-        if series_id in self.indicator_id_map:
-            return self.indicator_id_map[series_id]
-        # Otherwise use the method from the base class.
-        return super().normalize_indicator_id(indicator_id)
 
 
     def parse_xml(self, location, strip_namespaces=True):
@@ -199,9 +189,27 @@ class InputSdmx(InputBase):
         for code in codes:
             code_map = {}
             code_id = code.attrib['id']
-            indicator_ids = code.findall(self.indicator_id_xpath)
-            indicator_ids = [self.normalize_indicator_id(element.text, code_id) for element in indicator_ids]
+            # First check to see if the indicator ids are hardcoded.
+            if code_id in self.indicator_id_map:
+                indicator_ids = self.indicator_id_map[code_id]
+                # Make sure it is a list, even if only one.
+                if not isinstance(indicator_ids, list):
+                    indicator_ids = [indicator_ids]
+            else:
+                # If indicator_ids are not hardcoded, try to get them from the DSD.
+                indicator_ids = code.findall(self.indicator_id_xpath)
+                indicator_ids = [element.text for element in indicator_ids]
+            # Normalize the indicator ids.
+            indicator_ids = [self.normalize_indicator_id(inid) for inid in indicator_ids]
+            # Now get the indicator names from the DSD.
             indicator_names = code.findall(self.indicator_name_xpath)
+            # Before going further, make sure there is an indicator name for
+            # each indicator id.
+            if len(indicator_ids) > len(indicator_names):
+                for i in range(len(indicator_ids) - len(indicator_names)):
+                    # Just pad the list of names with the first one.
+                    indicator_names.append(indicator_names[0])
+            # Now loop through, normalize and store the ids and names per series id.
             for index, element in enumerate(indicator_names):
                 indicator_id = indicator_ids[index]
                 indicator_name = self.normalize_indicator_name(element.text, indicator_id)

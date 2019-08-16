@@ -196,10 +196,11 @@ class InputSdmx(InputBase):
             # Now get the indicator names from the DSD.
             indicator_names = code.findall(self.indicator_name_xpath)
             # Before going further, make sure there is an indicator name for
-            # each indicator id. If not, something is wrong, so abort.
-            if len(indicator_ids) != len(indicator_names):
-                raise Exception('Error: there were {} indicator ids but {} indicator names, for series {}.'
-                    .format(len(indicator_ids), len(indicator_names), code_id))
+            # each indicator id.
+            if len(indicator_ids) > len(indicator_names):
+                for i in range(len(indicator_ids) - len(indicator_names)):
+                    # Just pad the list of names with the first one.
+                    indicator_names.append(indicator_names[0])
             # Now loop through, normalize and store the ids and names per series id.
             for index, element in enumerate(indicator_names):
                 indicator_id = indicator_ids[index]

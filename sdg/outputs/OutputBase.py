@@ -32,7 +32,7 @@ class OutputBase:
                     # the value is None, so we don't need to check for None here.
                     merged_indicators[inid].set_data(input.indicators[inid].data)
                     merged_indicators[inid].set_meta(input.indicators[inid].meta)
-                    merged_indicators[inid].set_name(input.indicator[inid].name)
+                    merged_indicators[inid].set_name(input.indicators[inid].name)
 
         for inid in merged_indicators:
             # Now that everything has been merged, we have to make sure that

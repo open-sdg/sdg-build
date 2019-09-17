@@ -2,6 +2,11 @@
 
 Might become "release notes"
 
+### 0.4.0
+
+* Add support for SDMX-ML and SDMX-JSON input
+* Drop support for Python 3.4
+
 ### 0.3.1
 
 Minor release to ignore columns used in SDMX

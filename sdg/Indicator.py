@@ -87,7 +87,12 @@ class Indicator:
         ----------
         val : Dataframe or None
         """
-        if val is not None:
+        proceed = True
+        if val is None:
+            proceed = False
+        if isinstance(val, pd.DataFrame) and val.empty:
+            proceed = False
+        if proceed:
             self.data = val
             self.set_headline()
             self.set_edges()
@@ -100,7 +105,7 @@ class Indicator:
         ----------
         val : Dict or None
         """
-        if val is not None:
+        if val is not None and val:
             self.meta = val
 
 

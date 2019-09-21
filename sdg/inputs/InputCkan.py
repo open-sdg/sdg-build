@@ -11,7 +11,7 @@ class InputCkan(InputBase):
     https://open-sdg.readthedocs.io/en/latest/data-format/
     """
 
-    def __init__(self, resource_map, resource_endpoint):
+    def __init__(self, resource_map, resource_endpoint, alter_function):
         """Constructor for InputCkan input.
 
         Parameters
@@ -20,10 +20,14 @@ class InputCkan(InputBase):
             Map of CKAN resource ids to indicator ids.
         resource_endpoint : string
             The remote URL of the CKAN endpoint for fetching resources.
+        alter_function : function
+            An optional function that takes and returns a DataFrame for each
+            indicator, allowing a chance to make any necessary alterations.
 
         """
         self.resource_map = resource_map
         self.resource_endpoint = resource_endpoint
+        self.alter_function = alter_function
         InputBase.__init__(self)
 
 
@@ -43,8 +47,12 @@ class InputCkan(InputBase):
         df = pd.DataFrame(records)
         # Drop the "_id" column.
         df = df.drop('_id', axis='columns')
+        # Alter the data if necessary.
+        if self.alter_function:
+            df = self.alter_function(df)
         # Fix the order of the columns.
-        return self.fix_dataframe_columns(df)
+        df = self.fix_dataframe_columns(df)
+        return df
 
 
     def execute(self):

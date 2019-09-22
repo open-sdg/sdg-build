@@ -1,71 +1,24 @@
 import sdg
 import pandas as pd
-import requests
-from sdg.inputs import InputBase
-from sdg.Indicator import Indicator
+from sdg.inputs import InputApi
 
-class InputCkan(InputBase):
-    """Sources of SDG data that are in a CKAN service.
-
-    Note that this class expects input data of the format described here:
-    https://open-sdg.readthedocs.io/en/latest/data-format/
-    """
-
-    def __init__(self, resource_map, resource_endpoint, alter_function):
-        """Constructor for InputCkan input.
-
-        Parameters
-        ----------
-        resource_map : dict
-            Map of CKAN resource ids to indicator ids.
-        resource_endpoint : string
-            The remote URL of the CKAN endpoint for fetching resources.
-        alter_function : function
-            An optional function that takes and returns a DataFrame for each
-            indicator, allowing a chance to make any necessary alterations.
-
-        """
-        self.resource_map = resource_map
-        self.resource_endpoint = resource_endpoint
-        self.alter_function = alter_function
-        InputBase.__init__(self)
+class InputCkan(InputApi):
+    """Sources of SDG data that are in a CKAN service."""
 
 
-    def records_to_dataframe(self, records):
-        """Convert a list of CKAN records into a DataFrame.
+    def generate_api_call(self, resource_id):
+        """Given a resource id, generate the URL for the API call."""
+        return self.endpoint + '?resource_id=' + resource_id
 
-        Parameters
-        ----------
-        records : list
-            List of record dicts as returned from the CKAN API call.
 
-        Returns
-        -------
-        DataFrame
-            DataFrame ready for inputting into sdg-build.
-        """
-        df = pd.DataFrame(records)
+    def get_indicator_name(self, indicator_id, resource_id):
+        # TODO: Figure out how to get actual indicator names here.
+        return 'Indicator ' + indicator_id.replace('-', '.')
+
+
+    def indicator_data_from_json(self, json):
+        """Convert a CKAN response into a DataFrame for an indicator."""
+        df = pd.DataFrame(json['result']['records'])
         # Drop the "_id" column.
         df = df.drop('_id', axis='columns')
-        # Alter the data if necessary.
-        if self.alter_function:
-            df = self.alter_function(df)
-        # Fix the order of the columns.
-        df = self.fix_dataframe_columns(df)
         return df
-
-
-    def execute(self):
-        """Fetch the resource data from the CKAN API for each indicator."""
-        headers = { 'Accept': 'application/json' }
-        for resource_id in self.resource_map:
-            # Fetch the data.
-            endpoint = self.resource_endpoint + '?resource_id=' + resource_id
-            r = requests.get(endpoint, headers=headers)
-            json = r.json()
-
-            # Create the indicator.
-            inid = self.resource_map[resource_id]
-            data = self.records_to_dataframe(json['result']['records'])
-            name = 'Indicator ' + inid.replace('-', '.')
-            self.indicators[inid] = Indicator(inid, data=data, name=name)

@@ -340,5 +340,4 @@ class InputSdmx(InputBase):
             data = self.create_dataframe(indicator_data[indicator_id])
             data = self.drop_singleton_columns(data)
             name = indicator_names[indicator_id] if self.import_names else None
-            indicator = sdg.Indicator(indicator_id, data=data, name=name)
-            self.indicators[indicator_id] = indicator
+            self.add_indicator(indicator_id, data=data, name=name)

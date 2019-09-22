@@ -16,4 +16,4 @@ class InputCsvData(InputFiles):
         indicator_map = self.get_indicator_map()
         for inid in indicator_map:
             data = pd.read_csv(indicator_map[inid])
-            self.indicators[inid] = Indicator(inid, data=data)
+            self.add_indicator(inid, data=data)

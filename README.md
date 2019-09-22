@@ -15,12 +15,30 @@ SDG Build can **input** SDG data in the following formats:
 * Data in CSV files (long/tidy format)
 * Metadata in YAML files
 * Data (and minimal metadata) from SDMX-JSON and SDMX-ML
+* Data from a CKAN instance
 
 ## Ouputs
 
 SDG Build can **output** SDG data in the following formats:
 
 * A particular JSON structure for data and metadata, expected by the [Open SDG](https://github.com/open-sdg/open-sdg) reporting platform.
+
+## Alterations of data and metadata
+
+Sometimes you may need to alter data and/or metadata before importing into this library. This can be done after instantiating the input objects, with `add_data_alteration` and `add_meta_alteration`. For example:
+
+```
+def my_data_alteration(df):
+    # Drop an unnecessary column in the data.
+    df = df.drop('unnecessary_column', axis='columns')
+    return df
+def my_meta_alteration(meta):
+    # Drop an unecessary field in the metadata.
+    del meta['unnecessary_field']
+    return meta
+my_data_input.add_data_alteration(my_data_alteration)
+my_meta_input.add_meta_alteration(my_meta_alteration)
+```
 
 ## Schemas
 
@@ -32,7 +50,7 @@ SDG Build requires a schema for any metadata. Currently the following formats ar
 
 Other inputs and outputs are either under development or planned for the future:
 
-* Input and output from/to SDMX, both SDMX-JSON and SDMX-ML
+* Output to SDMX, both SDMX-JSON and SDMX-ML
 * Input and output from/to CSV-W
 * Input and output from/to GeoJSON
 

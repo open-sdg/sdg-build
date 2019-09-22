@@ -87,15 +87,13 @@ class Indicator:
         ----------
         val : Dataframe or None
         """
-        proceed = True
-        if val is None:
-            proceed = False
-        if isinstance(val, pd.DataFrame) and val.empty:
-            proceed = False
-        if proceed:
-            self.data = val
-            self.set_headline()
-            self.set_edges()
+        # If empty or None, do nothing.
+        if val is None or not isinstance(val, pd.DataFrame) or val.empty:
+            return
+
+        self.data = val
+        self.set_headline()
+        self.set_edges()
 
 
     def set_meta(self, val):

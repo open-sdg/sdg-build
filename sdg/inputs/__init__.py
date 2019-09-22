@@ -6,3 +6,5 @@ from .InputSdmx import InputSdmx
 from .InputSdmxJson import InputSdmxJson
 from .InputSdmxMl_Structure import InputSdmxMl_Structure
 from .InputSdmxMl_StructureSpecific import InputSdmxMl_StructureSpecific
+from .InputApi import InputApi
+from .InputCkan import InputCkan

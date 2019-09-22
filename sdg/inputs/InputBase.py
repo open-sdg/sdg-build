@@ -1,5 +1,6 @@
 from urllib.request import urlopen
 import pandas as pd
+from sdg.Indicator import Indicator
 
 class InputBase:
     """Base class for sources of SDG data/metadata."""
@@ -7,6 +8,8 @@ class InputBase:
     def __init__(self):
         """Constructor for InputBase."""
         self.indicators = {}
+        self.data_alterations = []
+        self.meta_alterations = []
 
 
     def execute(self):
@@ -138,3 +141,79 @@ class InputBase:
         # Remove empty columns, because they are not necessary.
         df = df.dropna(axis='columns', how='all')
         return df
+
+
+    def add_indicator(self, indicator_id, name=None, data=None, meta=None):
+        """Add an indicator to this input.
+
+        Parameters
+        ----------
+        indicator_id : string
+            The indicator ID
+        name : string or None
+            The indicator name
+        data : DataFrame or None
+            The indicator data
+        meta : dict or None
+            The indicator metadata
+        """
+        data = self.alter_data(data)
+        meta = self.alter_meta(meta)
+        indicator = Indicator(indicator_id, name=name, data=data, meta=meta)
+        self.indicators[indicator_id] = indicator
+
+
+    def alter_data(self, data):
+        """Perform any alterations on some data.
+
+        Parameters
+        ---------
+        data : DataFrame or None
+        """
+        # If empty or None, do nothing.
+        if data is None or not isinstance(data, pd.DataFrame) or data.empty:
+            return data
+        # Perform any alterations on the data.
+        for alteration in self.data_alterations:
+            data = alteration(data)
+        # Always do these hardcoded steps.
+        data = self.fix_dataframe_columns(data)
+
+        return data
+
+
+    def alter_meta(self, meta):
+        """Perform any alterations on some metadata.
+
+        Parameters
+        ---------
+        meta : dict or None
+        """
+        # If empty or None, do nothing.
+        if not meta or meta is None:
+            return meta
+        for alteration in self.meta_alterations:
+            meta = alteration(meta)
+        return meta
+
+
+    def add_data_alteration(self, alteration):
+        """Add an alteration for data.
+
+        Parameters
+        ----------
+        alteration : function
+            The alteration function.
+        """
+        self.data_alterations.append(alteration)
+
+
+    def add_meta_alteration(self, alteration):
+        """Add an alteration for meta.
+
+        Parameters
+        ----------
+        alteration : function
+            The alteration function.
+        """
+        self.meta_alterations.append(alteration)

@@ -1,6 +1,6 @@
 """
-This is an example of converting CSV data and YAML metadata into the JSON output
-suitable for the Open SDG reporting platform.
+This is an example of importing data from a CKAN instance and converting it
+into the JSON output suitable for the Open SDG reporting platform.
 """
 
 import os

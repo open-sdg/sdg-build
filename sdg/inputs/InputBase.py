@@ -1,5 +1,6 @@
 from urllib.request import urlopen
 import pandas as pd
+import numpy as np
 from sdg.Indicator import Indicator
 
 class InputBase:
@@ -62,6 +63,21 @@ class InputBase:
         cols.pop(cols.index('Value'))
         cols = ['Year'] + cols + ['Value']
         return df[cols]
+
+    def fix_empty_values(self, df):
+        """Ensure that empty values are np.NaN rather than None or "".
+
+        Parameters
+        ----------
+        df : Dataframe
+            The Pandas dataframe to fix
+
+        Returns
+        -------
+        Dataframe
+            The same dataframe with rearranged columns
+        """
+        return df.replace([None, ""], np.NaN)
 
 
     def fetch_file(self, location):
@@ -178,6 +194,7 @@ class InputBase:
             data = alteration(data)
         # Always do these hardcoded steps.
         data = self.fix_dataframe_columns(data)
+        data = self.fix_empty_values(data)
 
         return data
 

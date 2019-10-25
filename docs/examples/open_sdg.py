@@ -30,3 +30,5 @@ validation_successful = opensdg_output.validate()
 # If everything was valid, perform the build.
 if validation_successful:
     opensdg_output.execute()
+else
+    raise Exception('There were validation errors. See output above.')

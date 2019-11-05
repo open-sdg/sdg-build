@@ -21,7 +21,7 @@ class TranslationOutputBase:
         self.output_folder = output_folder
 
 
-    def execute():
+    def write_translations(self, output_folder='translations', filename='translations.json'):
         """Write the translation output to disk."""
         raise NotImplementedError
 

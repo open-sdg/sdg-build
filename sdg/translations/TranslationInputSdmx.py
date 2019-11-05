@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-from urllib.request import urlopen
 import pandas as pd
 import numpy as np
 from xml.etree import ElementTree as ET
@@ -9,48 +8,7 @@ from io import StringIO
 from sdg.translations import TranslationInputBase
 
 class TranslationInputSdmx(TranslationInputBase):
-    """A class for outputing translations in JSON format."""
-
-    def __init__(self, dsd=''):
-        self.dsd = dsd
-        self.translations = {}
-
-
-    def add_language(self, language):
-        if language not in self.translations:
-            self.translations[language] = {}
-
-
-    def add_group(self, language, group):
-        self.add_language(language)
-        if group not in self.translations[language]:
-            self.translations[language][group] = {}
-
-
-    def add_translation(self, language, group, key, value):
-        self.add_group(language, group)
-        if key not in self.translations[language][group]:
-            self.translations[language][group][key] = value
-
-
-    def fetch_file(self, location):
-        """Fetch a file, either on disk, or on the Internet.
-
-        Parameters
-        ----------
-        location : String
-            Either an http address, or a path on disk
-        """
-        file = None
-        data = None
-        if location.startswith('http'):
-            file = urlopen(location)
-            data = file.read().decode('utf-8')
-        else:
-            file = open(location)
-            data = file.read()
-        file.close()
-        return data
+    """A class for importing translations from an SDMX DSD."""
 
 
     def parse_xml(self, location, strip_namespaces=True):
@@ -81,7 +39,7 @@ class TranslationInputSdmx(TranslationInputBase):
 
 
     def execute(self):
-        dsd = self.parse_xml(self.dsd)
+        dsd = self.parse_xml(self.source)
         groups = {
             'category': {
                 'xpath': './/Category',

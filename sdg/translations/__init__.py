@@ -3,3 +3,4 @@ from .TranslationInputSdmx import TranslationInputSdmx
 from .TranslationInputSdgTranslations import TranslationInputSdgTranslations
 from .TranslationOutputBase import TranslationOutputBase
 from .TranslationOutputJson import TranslationOutputJson
+from .TranslationHelper import TranslationHelper

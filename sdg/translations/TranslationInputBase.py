@@ -50,8 +50,8 @@ class TranslationInputBase:
         return data
 
 
-    def clone_repo(self, git_url):
-        repo = Repo.clone_from(git_url, 'temp')
+    def clone_repo(self, git_url, folder):
+        repo = Repo.clone_from(git_url, folder)
 
 
     def execute(self):

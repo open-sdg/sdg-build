@@ -16,6 +16,7 @@ from . import stats
 from . import inputs
 from . import outputs
 from . import schemas
+from . import translations
 from .Indicator import Indicator
 from .check_metadata import check_all_meta
 from .check_csv import check_all_csv

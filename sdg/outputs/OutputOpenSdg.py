@@ -20,6 +20,11 @@ class OutputOpenSdg(OutputBase):
         schema_output_folder = os.path.join(site_dir, 'meta')
         schema_output.write_schema(output_folder=schema_output_folder, filename='schema.json')
 
+        # Write the translations.
+        translation_output = sdg.translations.TranslationOutputJson(self.translations)
+        translation_folder = os.path.join(site_dir, 'translations')
+        translation_output.write_translations(output_folder=translation_folder, filename='translations.json')
+
         for inid in self.indicators:
             indicator = self.indicators[inid]
             # Output all the csvs

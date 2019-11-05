@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
+
 import os
 import shutil
-import sdg
-import json
 import yaml
 from sdg.translations import TranslationInputBase
 

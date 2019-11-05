@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import os
-import pandas as pd
-import numpy as np
 from xml.etree import ElementTree as ET
 from io import StringIO
 from sdg.translations import TranslationInputBase
@@ -41,33 +38,19 @@ class TranslationInputSdmx(TranslationInputBase):
     def execute(self):
         dsd = self.parse_xml(self.source)
         groups = {
-            'category': {
-                'xpath': './/Category',
-                'translations': './/Name'
-            },
-            'codelist': {
-                'xpath': './/Codelist',
-                'translations': './/Name'
-            },
-            'code': {
-                'xpath': './/Code',
-                'translations': './/Name'
-            },
-            'concept': {
-                'xpath': './/Concept',
-                'translations': './/Name'
-            }
+            'category': './/Category',
+            'codelist': './/Codelist',
+            'code': './/Code',
+            'concept': './/Concept',
         }
         for group in groups:
-            tags = dsd.findall(groups[group]['xpath'])
+            tags = dsd.findall(groups[group])
             for tag in tags:
                 key = tag.attrib['id']
-                translations = tag.findall(groups[group]['translations'])
+                translations = tag.findall('.//Name')
                 for translation in translations:
                     if 'lang' not in translation.attrib:
                         continue
                     language = translation.attrib['lang']
-                    self.add_translation(language, group, key, translation.text)
-
-        print(self.translations)
-
+                    value = translation.text
+                    self.add_translation(language, group, key, value)

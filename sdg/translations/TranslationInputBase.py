@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from git import Repo
 from urllib.request import urlopen
 
 class TranslationInputBase:
@@ -88,6 +89,28 @@ class TranslationInputBase:
             data = file.read()
         file.close()
         return data
+
+
+    def clone_repo(self, repo_url, folder='temp', tag=None, branch=None):
+        """Clone a Git repository and optionally switch to a branch/tag.
+
+        Parameters
+        ----------
+        repo_url : string
+            The Git URL for the repository (usually ends in .git)
+        folder : string
+            The name of the folder to put the files in
+        branch : string
+            The name of a Git branch to use
+        tag : string
+            The name of a Git tag to use (overrides "branch")
+        """
+
+        repo = Repo.clone_from(repo_url, folder)
+        if branch:
+            repo.git.checkout(branch)
+        if tag:
+            repo.git.checkout(tag)
 
 
     def execute(self):

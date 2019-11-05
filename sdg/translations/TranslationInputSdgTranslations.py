@@ -3,7 +3,6 @@
 import os
 import shutil
 import yaml
-from git import Repo
 from sdg.translations import TranslationInputBase
 
 class TranslationInputSdgTranslations(TranslationInputBase):
@@ -18,17 +17,27 @@ class TranslationInputSdgTranslations(TranslationInputBase):
     When importing, this class treats the YAML filename as the "group".
     """
 
+    def __init__(self, tag=None, branch=None, source='https://github.com/open-sdg/sdg-translations.git'):
+        """Constructor for the TranslationInputBase class.
+
+        Parameters
+        ----------
+        source : string
+            The source of the translations (see subclass for details)
+        """
+        self.source = source
+        self.tag = tag
+        self.branch = branch
+        self.translations = {}
+
 
     def execute(self):
-        # For convenience, default to the official SDG Translations repository.
-        if self.source == '':
-            self.source = 'https://github.com/open-sdg/sdg-translations.git'
         # Clean up from past runs.
         self.clean_up()
         # Clone the repository.
-        Repo.clone_from(self.source, 'sdg-translations')
+        self.clone_repo(repo_url=self.source, tag=self.tag, branch=self.branch)
         # Walk through the translation folder.
-        translation_folder = os.path.join('sdg-translations', 'translations')
+        translation_folder = os.path.join('temp', 'translations')
         for root, dirs, files in os.walk(translation_folder):
             # Each subfolder is a language code.
             language = os.path.basename(root)
@@ -57,6 +66,6 @@ class TranslationInputSdgTranslations(TranslationInputBase):
     def clean_up(self):
         # Remove the folder if it is there.
         try:
-            shutil.rmtree('sdg-translations')
+            shutil.rmtree('temp')
         except OSError as e:
             pass

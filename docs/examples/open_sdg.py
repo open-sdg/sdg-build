@@ -22,7 +22,8 @@ schema_path = os.path.join('tests', '_prose.yml')
 schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
 
 # Use SDG Translations for translations
-translations = sdg.translations.TranslationInputSdgTranslations()
+tag = '0.8.1'
+translations = sdg.translations.TranslationInputSdgTranslations(tag=tag)
 
 # Create an "output" from these inputs/schema/translations, for Open SDG output.
 opensdg_output = sdg.outputs.OutputOpenSdg(

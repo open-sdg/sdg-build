@@ -7,18 +7,15 @@ class TranslationOutputBase:
     """A base class for exporting translations."""
 
 
-    def __init__(self, inputs, output_folder='_site'):
+    def __init__(self, inputs):
         """Constructor for TranslationOutputBase.
 
         Parameters
         ----------
         inputs : list
             A list of TranslationInputBase objects
-        output_folder : string
-            A folder to put the output in
         """
         self.input = self.merge_inputs(inputs)
-        self.output_folder = output_folder
 
 
     def write_translations(self, output_folder='translations', filename='translations.json'):

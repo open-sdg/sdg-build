@@ -20,6 +20,10 @@ class TranslationInputSdgTranslations(TranslationInputBase):
 
 
     def execute(self):
+        # For convenience, default to the official SDG Translations repository.
+        if self.source == '':
+            self.source = 'https://github.com/open-sdg/sdg-translations.git'
+        # Clean up from past runs.
         self.clean_up()
         # Clone the repository.
         Repo.clone_from(self.source, 'sdg-translations')

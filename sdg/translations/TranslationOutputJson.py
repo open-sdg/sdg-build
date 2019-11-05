@@ -16,6 +16,6 @@ class TranslationOutputJson(TranslationOutputBase):
             os.makedirs(output_folder, exist_ok=True)
         output_path = os.path.join(output_folder, filename)
 
-        output_json = json.dumps(self.input.get_translations())
+        output_json = self.input.get_translations()
         with open(output_path, 'w') as outfile:
             json.dump(output_json, outfile, sort_keys=True)

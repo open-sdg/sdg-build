@@ -3,14 +3,15 @@
 import os
 import shutil
 import yaml
+from git import Repo
 from sdg.translations import TranslationInputBase
 
 class TranslationInputSdgTranslations(TranslationInputBase):
     """This class imports translations from SDG Translations (or similar) repos.
 
     The "SDG Translations" style can be described like this:
-    1. A Git repository
-    2. Contians a folder called "translations"
+    1. A Git repository (passed as the "source" parameter)
+    2. Repo contains a folder called "translations"
     3. Each subfolder of "translations" is a language code (eg, "en")
     4. Within each subfolder are YAML files containing translations.
 
@@ -19,13 +20,9 @@ class TranslationInputSdgTranslations(TranslationInputBase):
 
 
     def execute(self):
-        # Remove the folder if it is there.
-        try:
-            shutil.rmtree('sdg-translations')
-        except OSError as e:
-            pass
+        self.clean_up()
         # Clone the repository.
-        self.clone_repo(self.source, 'sdg-translations')
+        Repo.clone_from(self.source, 'sdg-translations')
         # Walk through the translation folder.
         translation_folder = os.path.join('sdg-translations', 'translations')
         for root, dirs, files in os.walk(translation_folder):
@@ -50,3 +47,12 @@ class TranslationInputSdgTranslations(TranslationInputBase):
                             self.add_translation(language, group, key, value)
                     except Exception as exc:
                         print(exc)
+        self.clean_up()
+
+
+    def clean_up(self):
+        # Remove the folder if it is there.
+        try:
+            shutil.rmtree('sdg-translations')
+        except OSError as e:
+            pass

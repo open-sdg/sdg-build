@@ -1,12 +1,18 @@
+from sdg.translations import TranslationInputBase
+
 class OutputBase:
     """Base class for destinations of SDG data/metadata."""
 
 
-    def __init__(self, inputs, schema, output_folder=''):
+    def __init__(self, inputs, schema, output_folder='', translations=None):
         """Constructor for OutputBase."""
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
         self.output_folder = output_folder
+        self.translations = translations
+        # Safety code to ensure translations are a list of inputs.
+        if isinstance(self.translations, TranslationInputBase):
+            self.translations = [translations]
 
 
     def execute():

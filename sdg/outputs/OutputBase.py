@@ -1,4 +1,5 @@
 import copy
+import os
 from sdg.translations import TranslationInputBase
 from sdg.translations import TranslationHelper
 
@@ -6,13 +7,12 @@ class OutputBase:
     """Base class for destinations of SDG data/metadata."""
 
 
-    def __init__(self, inputs, schema, output_folder='', translations=[], languages=[]):
+    def __init__(self, inputs, schema, output_folder='', translations=[]):
         """Constructor for OutputBase."""
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
         self.output_folder = output_folder
         self.translations = translations
-        self.languages = languages
         # Safety code to ensure translations are a list of inputs.
         if isinstance(self.translations, TranslationInputBase):
             self.translations = [translations]
@@ -83,7 +83,7 @@ class OutputBase:
             self.originals[inid] = copy.deepcopy(self.indicators[inid])
 
 
-    def execute_with_translation(self):
+    def execute_per_language(self, languages):
         """This triggers calls to execute() for each language - once each."""
         # Make sure we keep a copy of the originals before doing any translations.
         original_indicators = {}
@@ -92,7 +92,7 @@ class OutputBase:
         # Also keep a backup of the output folder.
         original_output_folder = self.output_folder
         # Now loop through each language.
-        for language in self.languages:
+        for language in languages:
             # Temporarily change the output folder.
             self.output_folder = os.path.join(original_output_folder, language)
             # And within each language, each indicator.

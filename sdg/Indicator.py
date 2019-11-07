@@ -207,4 +207,6 @@ class Indicator:
             self.data[column] = self.data[column].apply(translate_data)
         # Translate the data column headers.
         self.data.rename(mapper=translate_meta, axis='columns', inplace=True)
-        # TODO: Translate the edges and headline.
+        # Translate the edges.
+        for column in self.edges:
+            self.edges[column] = self.edges[column].apply(translate_data)

@@ -1,18 +1,23 @@
+import copy
 from sdg.translations import TranslationInputBase
+from sdg.translations import TranslationHelper
 
 class OutputBase:
     """Base class for destinations of SDG data/metadata."""
 
 
-    def __init__(self, inputs, schema, output_folder='', translations=[]):
+    def __init__(self, inputs, schema, output_folder='', translations=[], languages=[]):
         """Constructor for OutputBase."""
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
         self.output_folder = output_folder
         self.translations = translations
+        self.languages = languages
         # Safety code to ensure translations are a list of inputs.
         if isinstance(self.translations, TranslationInputBase):
             self.translations = [translations]
+        # Create a translation helper.
+        self.translation_helper = TranslationHelper(self.translations)
 
 
     def execute():
@@ -61,6 +66,47 @@ class OutputBase:
             status = status & self.schema.validate(self.indicators[inid])
 
         return status
+
+
+    def get_translation_helper(self):
+        """Get this output's translation helper."""
+
+
+    def backup_indicators(self):
+        """Store a backup version of the indicators."""
+        if hasattr(self, 'originals'):
+            # We've already done this, abort.
+            return
+
+        self.originals = {}
+        for inid in self.indicators:
+            self.originals[inid] = copy.deepcopy(self.indicators[inid])
+
+
+    def execute_with_translation(self):
+        """This triggers calls to execute() for each language - once each."""
+        # Make sure we keep a copy of the originals before doing any translations.
+        original_indicators = {}
+        for inid in self.indicators:
+            original_indicators[inid] = copy.deepcopy(self.indicators[inid])
+        # Also keep a backup of the output folder.
+        original_output_folder = self.output_folder
+        # Now loop through each language.
+        for language in self.languages:
+            # Temporarily change the output folder.
+            self.output_folder = os.path.join(original_output_folder, language)
+            # And within each language, each indicator.
+            for inid in self.indicators:
+                # Start with the original.
+                self.indicators[inid] = copy.deepcopy(original_indicators[inid])
+                # Translate it.
+                self.indicators[inid].translate(language, self.translation_helper)
+            # Now perform the build.
+            self.execute()
+
+        # Cleanup afterwards.
+        self.indicators = original_indicators
+        self.output_folder = original_output_folder
 
 
     def minimum_metadata(self, indicator):

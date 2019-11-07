@@ -1,5 +1,6 @@
 import sdg
 import pandas as pd
+from sdg.translations import TranslationHelper
 
 class Indicator:
     """Data model for SDG indicators."""
@@ -176,3 +177,14 @@ class Indicator:
             cols = ['Year', 'Value']
             df = df[cols]
             self.data = df
+
+
+    def translate(self, language, translation_helper):
+        # Translate the name.
+        self.name = translation_helper.translate(self.name, language)
+        # Translate the metadata.
+        for key in self.meta:
+            value = self.meta[key]
+            self.meta[key] = translation_helper.translate(value, language)
+        # Translate the data.
+        # TODO

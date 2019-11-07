@@ -38,9 +38,14 @@ class TranslationHelper(TranslationOutputBase):
         return key in self.translation_keys
 
 
-    def translate(self, text, language):
-        if not is_translation_key(text):
+    def translate(self, text, language, default_group=None):
+        # Add the default_group if necessary.
+        key = text
+        if not is_translation_key(key):
+            if default_group:
+                key = default_group + "." + key
+        if not is_translation_key(key):
             return text
-        if not language in self.translation_keys[text]:
+        if not language in self.translation_keys[key]:
             return text
         return self.translation_keys[text][language]

@@ -68,10 +68,6 @@ class OutputBase:
         return status
 
 
-    def get_translation_helper(self):
-        """Get this output's translation helper."""
-
-
     def backup_indicators(self):
         """Store a backup version of the indicators."""
         if hasattr(self, 'originals'):

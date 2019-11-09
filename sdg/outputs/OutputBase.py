@@ -105,7 +105,7 @@ class OutputBase:
                 # Translate it.
                 self.indicators[inid].translate(language, self.translation_helper)
             # Now perform the build.
-            self.execute()
+            self.execute(language)
 
         # Cleanup afterwards.
         self.indicators = original_indicators

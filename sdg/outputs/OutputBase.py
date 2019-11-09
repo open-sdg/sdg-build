@@ -20,8 +20,15 @@ class OutputBase:
         self.translation_helper = TranslationHelper(self.translations)
 
 
-    def execute():
-        """Write the SDG output to disk."""
+    def execute(language=None):
+        """Write the SDG output to disk.
+
+        Parameters
+        ----------
+        language : string
+            If specified, a particular language that this build is using. If
+            not specified, it is assumed the build is not translated.
+        """
         raise NotImplementedError
 
 

@@ -8,7 +8,7 @@ class OutputOpenSdg(OutputBase):
     """Output SDG data/metadata in the formats expected by Open SDG."""
 
 
-    def execute(self):
+    def execute(self, language=None):
         """Write the JSON output expected by Open SDG. Overrides parent."""
         status = True
         all_meta = dict()
@@ -23,7 +23,11 @@ class OutputOpenSdg(OutputBase):
         # Write the translations.
         translation_output = sdg.translations.TranslationOutputJson(self.translations)
         translation_folder = os.path.join(site_dir, 'translations')
-        translation_output.write_translations(output_folder=translation_folder, filename='translations.json')
+        translation_output.write_translations(
+            language=language,
+            output_folder=translation_folder,
+            filename='translations.json'
+        )
 
         for inid in self.indicators:
             indicator = self.indicators[inid]

@@ -12,6 +12,7 @@ output the main data, edges, and headline in csv and json format.
 import sdg
 from sdg.data import write_csv
 from sdg.json import write_json, df_to_list_dict
+from sdg.IndicatorExportService import IndicatorExportService
 
 # load each csv in and compute derivatives (edges, headline etc)
 # hold onto the derivatives
@@ -99,5 +100,8 @@ def build_data(src_dir='', site_dir='_site', git=True, git_data_dir=None,
 
     stats_reporting = sdg.stats.reporting_status(schema, all_meta)
     status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
+
+    indicator_export_service = IndicatorExportService(site_dir)
+    indicator_export_service.export_all_indicator_data_as_zip_archive()
 
     return(status)

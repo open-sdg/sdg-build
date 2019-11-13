@@ -22,7 +22,7 @@ def test_build(test_site_dir):
     build_result = build_data(src_dir=src_dir, site_dir=site_dir, git=False)
     assert build_result
 
-    exp_dirs = set(['comb', 'data', 'edges', 'headline', 'meta', 'stats'])
+    exp_dirs = set(['comb', 'data', 'edges', 'headline', 'meta', 'stats', 'zip'])
     act_dirs = os.listdir(site_dir)
 
     assert all([a in exp_dirs for a in act_dirs])

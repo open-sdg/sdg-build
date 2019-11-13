@@ -57,6 +57,9 @@ class OutputOpenSdg(OutputBase):
         stats_reporting = sdg.stats.reporting_status(self.schema, all_meta)
         status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
 
+        indicator_export_service = sdg.IndicatorExportService(site_dir)
+        indicator_export_service.export_all_indicator_data_as_zip_archive()
+
         return(status)
 
 

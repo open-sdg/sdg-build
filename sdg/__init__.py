@@ -21,3 +21,4 @@ from .Indicator import Indicator
 from .check_metadata import check_all_meta
 from .check_csv import check_all_csv
 from .build import build_data
+from .IndicatorExportService import IndicatorExportService

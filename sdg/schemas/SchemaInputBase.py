@@ -61,7 +61,13 @@ class SchemaInputBase:
                 status = False
                 print('Validation errors for indicator ' + indicator.inid)
                 for error in self.validator.iter_errors(indicator.meta):
-                    print(error.message)
+                    ignore = ['properties', 'type']
+                    things = []
+                    for thing in error.schema_path:
+                        if thing not in ignore:
+                            things.append(thing)
+                    things = '/'.join(things)
+                    print('- ' + error.schema['title'] + ' (' + things + '): ' + error.message)
 
         return status
 

@@ -75,17 +75,6 @@ class OutputBase:
         return status
 
 
-    def backup_indicators(self):
-        """Store a backup version of the indicators."""
-        if hasattr(self, 'originals'):
-            # We've already done this, abort.
-            return
-
-        self.originals = {}
-        for inid in self.indicators:
-            self.originals[inid] = copy.deepcopy(self.indicators[inid])
-
-
     def execute_per_language(self, languages):
         """This triggers calls to execute() for each language - once each."""
         # Make sure we keep a copy of the originals before doing any translations.

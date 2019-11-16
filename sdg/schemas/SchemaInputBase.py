@@ -62,8 +62,10 @@ class SchemaInputBase:
                 print('Validation errors for indicator ' + indicator.inid)
                 for error in self.validator.iter_errors(indicator.meta):
                     print(error.message)
-                    print(error.context)
-                    print(error.cause)
+                    print(error.schema)
+                    print(error.schema_path)
+                    print(error.validator)
+                    print(error.validator_value)
 
         return status
 

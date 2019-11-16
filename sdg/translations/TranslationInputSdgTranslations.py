@@ -10,24 +10,34 @@ class TranslationInputSdgTranslations(TranslationInputBase):
 
     The "SDG Translations" style can be described like this:
     1. A Git repository (passed as the "source" parameter)
-    2. Repo contains a folder called "translations"
-    3. Each subfolder of "translations" is a language code (eg, "en")
-    4. Within each subfolder are YAML files containing translations.
+    2. Repo contains subfolders for each language code (eg, "en")
+    3. Within each subfolder are YAML files containing translations keyed to
+       translation keys. For example, this might be the beginning of es/color.yml:
+        color_red: roja
+        color_green: verde
+        color_blue: azul
 
     When importing, this class treats the YAML filename as the "group".
     """
 
-    def __init__(self, tag=None, branch=None, source='https://github.com/open-sdg/sdg-translations.git'):
+    def __init__(self, tag=None, branch=None, subfolder='translations', source='https://github.com/open-sdg/sdg-translations.git'):
         """Constructor for the TranslationInputBase class.
 
         Parameters
         ----------
         source : string
             The source of the translations (see subclass for details)
+        tag : string
+            A particular tag to use in the Git repository
+        branch : string
+            A particular branch to use in the Git repository
+        subfolder : string
+            A subfolder within the Git repository containing the translations
         """
         self.source = source
         self.tag = tag
         self.branch = branch
+        self.subfolder = subfolder
         self.translations = {}
 
 
@@ -37,11 +47,11 @@ class TranslationInputSdgTranslations(TranslationInputBase):
         # Clone the repository.
         self.clone_repo(repo_url=self.source, tag=self.tag, branch=self.branch)
         # Walk through the translation folder.
-        translation_folder = os.path.join('temp', 'translations')
+        translation_folder = os.path.join('temp', self.subfolder)
         for root, dirs, files in os.walk(translation_folder):
             # Each subfolder is a language code.
             language = os.path.basename(root)
-            if language == 'translations':
+            if language == self.subfolder:
                 continue
             # Loop through the YAML files.
             for file in files:

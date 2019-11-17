@@ -108,8 +108,10 @@ class SchemaInputOpenSdg(SchemaInputBase):
                     'enum': [prose_option['value']],
                     'translation_key': prose_option['translation_key']
                 }
-
                 any_of.append(jsonschema_option)
+            # Allow null if not required.
+            if not is_required:
+                any_of.append({'type': 'null'})
             if el == 'select':
                 jsonschema_field['anyOf'] = any_of
             elif el == 'multiselect':

@@ -89,6 +89,7 @@ def output_path(inid=None,  ftype='data', format='json', site_dir='_site',
             4. headline: The headline data generated from data
             5. comb: combined data and edge data
             6. stats: Statistics on all indicators
+            7. translations: Translations by language and group
         format: str. What data type. One of:
             1. json
             2. csv
@@ -100,7 +101,7 @@ def output_path(inid=None,  ftype='data', format='json', site_dir='_site',
     """
 
     # Check that the input makes sense
-    expected_ftypes = ['data', 'meta', 'edges', 'headline', 'comb', 'stats']
+    expected_ftypes = ['data', 'meta', 'edges', 'headline', 'comb', 'stats', 'translations']
     if ftype not in expected_ftypes:
         raise ValueError("ftype must be on of: " + ", ".join(expected_ftypes))
 

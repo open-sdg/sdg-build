@@ -19,7 +19,7 @@ class OutputBase:
         # Create a translation helper.
         self.translation_helper = TranslationHelper(self.translations)
         # Prepare here for translated builds later.
-        self.untranslated_indicators = copy_indicators()
+        self.untranslated_indicators = self.copy_indicators()
 
 
     def copy_indicators(self):

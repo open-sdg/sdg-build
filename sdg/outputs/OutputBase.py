@@ -29,7 +29,7 @@ class OutputBase:
         return copies
 
 
-    def execute(language=None):
+    def execute(self, language=None):
         """Write the SDG output to disk.
 
         Parameters
@@ -59,7 +59,7 @@ class OutputBase:
         self.output_folder = original_output_folder
 
 
-    def build(language=None):
+    def build(self, language=None):
         """Write the SDG output to disk.
 
         Parameters

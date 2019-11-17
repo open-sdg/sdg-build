@@ -52,11 +52,13 @@ class OutputBase:
                 self.indicators[inid].translate(language, self.translation_helper)
 
         # Now perform the build.
-        self.build(language)
+        status = self.build(language)
 
         # Cleanup afterwards.
         self.indicators = self.untranslated_indicators
         self.output_folder = original_output_folder
+
+        return status
 
 
     def build(self, language=None):
@@ -117,8 +119,11 @@ class OutputBase:
     def execute_per_language(self, languages):
         """This helper triggers calls to execute() for each language."""
         # Make sure we keep a copy of the originals before doing any translations.
+        status = True
         for language in languages:
-            self.execute(language)
+            status = status & self.execute(language)
+
+        return status
 
 
     def minimum_metadata(self, indicator):

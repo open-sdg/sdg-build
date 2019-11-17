@@ -96,6 +96,14 @@ class SchemaInputOpenSdg(SchemaInputBase):
         if el == 'checkbox':
             jsonschema_field['type'] = 'boolean'
 
+        # For non-required fields, also allow 'null'.
+        if not is_required:
+            # Make sure it is a list.
+            if not isinstance(jsonschema_field['type'], list):
+                jsonschema_field['type'] = [jsonschema_field['type']]
+            # Add 'null' to the list.
+            jsonschema_field['type'].append('null')
+
         # Selects and multiselects are a little complex.
         elif el == 'select' or el == 'multiselect':
             any_of = []
@@ -111,7 +119,11 @@ class SchemaInputOpenSdg(SchemaInputBase):
                 any_of.append(jsonschema_option)
             # Allow null if not required.
             if not is_required:
-                any_of.append({'type': 'null'})
+                any_of.append({
+                    'type': 'null',
+                    'title': 'Null',
+                    'enum': [None]
+                })
             if el == 'select':
                 jsonschema_field['anyOf'] = any_of
             elif el == 'multiselect':
@@ -120,13 +132,5 @@ class SchemaInputOpenSdg(SchemaInputBase):
                     'type': 'string',
                     'anyOf': any_of
                 }
-
-        # For non-required fields, also allow 'null'.
-        if not is_required:
-            # Make sure it is a list.
-            if not isinstance(jsonschema_field['type'], list):
-                jsonschema_field['type'] = [jsonschema_field['type']]
-            # Add 'null' to the list.
-            jsonschema_field['type'].append('null')
 
         return jsonschema_field

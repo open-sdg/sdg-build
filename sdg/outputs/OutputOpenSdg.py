@@ -8,7 +8,7 @@ class OutputOpenSdg(OutputBase):
     """Output SDG data/metadata in the formats expected by Open SDG."""
 
 
-    def execute(self, language=None):
+    def build(self, language=None):
         """Write the JSON output expected by Open SDG. Overrides parent."""
         status = True
         all_meta = dict()

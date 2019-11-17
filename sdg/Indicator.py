@@ -171,4 +171,8 @@ class Indicator:
     def require_data(self):
         """Ensure at least an empty dataset for this indicator."""
         if self.data is None:
-            self.data = pd.DataFrame({'Year':[], 'Value':[]})
+            df = pd.DataFrame({'Year':[], 'Value':[]})
+            # Enforce the order of columns.
+            cols = ['Year', 'Value']
+            df = df[cols]
+            self.data = df

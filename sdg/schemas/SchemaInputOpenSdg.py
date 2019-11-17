@@ -18,16 +18,17 @@ class SchemaInputOpenSdg(SchemaInputBase):
             "properties": {}
         }
 
-        # Convert the Prose.io metadata into JSON Schema.
-        for field in config['prose']['metadata']['meta']:
-            jsonschema_field = self.prose_field_to_jsonschema(field['field'])
-            schema['properties'][field['name']] = jsonschema_field
-
         # For Open SDG, certain fields are required. We have to hardcode these
         # here, because _prose.yml has no mechanism for requiring fields.
         # TODO: Should we just add "required" properties in _prose.yml, purely
         # for this purpose?
         schema['required'] = ['published', 'reporting_status']
+
+        # Convert the Prose.io metadata into JSON Schema.
+        for field in config['prose']['metadata']['meta']:
+            is_required = field in schema['required']
+            jsonschema_field = self.prose_field_to_jsonschema(field['field'], is_required)
+            schema['properties'][field['name']] = jsonschema_field
 
         # And similarly, there are certain conditional validation checks.
         schema['allOf'] = [
@@ -58,7 +59,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
         self.schema = schema
 
 
-    def prose_field_to_jsonschema(self, prose_field):
+    def prose_field_to_jsonschema(self, prose_field, is_required=False):
         """Convert a Prose.io field to a JSON Schema property.
 
         Parameters
@@ -117,5 +118,13 @@ class SchemaInputOpenSdg(SchemaInputBase):
                     'type': 'string',
                     'anyOf': any_of
                 }
+
+        # For non-required fields, also allow 'null'.
+        if not is_required:
+            # Make sure it is a list.
+            if not isinstance(jsonschema_field['type'], list):
+                jsonschema_field['type'] = [jsonschema_field['type']]
+            # Add 'null' to the list.
+            jsonschema_field['type'].append('null')
 
         return jsonschema_field

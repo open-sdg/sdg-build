@@ -84,4 +84,4 @@ class TranslationHelper(TranslationOutputBase):
         if not language in self.translation_keys[key]:
             return text
         # If still here, return the translation.
-        return self.translation_keys[text][language]
+        return self.translation_keys[key][language]

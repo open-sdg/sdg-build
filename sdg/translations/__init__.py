@@ -1,6 +1,7 @@
 from .TranslationInputBase import TranslationInputBase
 from .TranslationInputSdmx import TranslationInputSdmx
 from .TranslationInputSdgTranslations import TranslationInputSdgTranslations
+from .TranslationInputYaml import TranslationInputYaml
 from .TranslationOutputBase import TranslationOutputBase
 from .TranslationOutputJson import TranslationOutputJson
 from .TranslationHelper import TranslationHelper

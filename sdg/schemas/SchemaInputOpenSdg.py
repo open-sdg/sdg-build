@@ -26,7 +26,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
 
         # Convert the Prose.io metadata into JSON Schema.
         for field in config['prose']['metadata']['meta']:
-            is_required = field in schema['required']
+            is_required = field['name'] in schema['required']
             jsonschema_field = self.prose_field_to_jsonschema(field['field'], is_required)
             schema['properties'][field['name']] = jsonschema_field
 
@@ -59,7 +59,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
         self.schema = schema
 
 
-    def prose_field_to_jsonschema(self, prose_field, is_required=False):
+    def prose_field_to_jsonschema(self, prose_field, is_required):
         """Convert a Prose.io field to a JSON Schema property.
 
         Parameters

@@ -26,7 +26,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
 
         # Convert the Prose.io metadata into JSON Schema.
         for field in config['prose']['metadata']['meta']:
-            is_required = field in schema['required']
+            is_required = field['name'] in schema['required']
             jsonschema_field = self.prose_field_to_jsonschema(field['field'], is_required)
             schema['properties'][field['name']] = jsonschema_field
 
@@ -59,7 +59,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
         self.schema = schema
 
 
-    def prose_field_to_jsonschema(self, prose_field, is_required=False):
+    def prose_field_to_jsonschema(self, prose_field, is_required):
         """Convert a Prose.io field to a JSON Schema property.
 
         Parameters
@@ -96,6 +96,14 @@ class SchemaInputOpenSdg(SchemaInputBase):
         if el == 'checkbox':
             jsonschema_field['type'] = 'boolean'
 
+        # For non-required fields, also allow 'null'.
+        if not is_required:
+            # Make sure it is a list.
+            if not isinstance(jsonschema_field['type'], list):
+                jsonschema_field['type'] = [jsonschema_field['type']]
+            # Add 'null' to the list.
+            jsonschema_field['type'].append('null')
+
         # Selects and multiselects are a little complex.
         elif el == 'select' or el == 'multiselect':
             any_of = []
@@ -108,8 +116,14 @@ class SchemaInputOpenSdg(SchemaInputBase):
                     'enum': [prose_option['value']],
                     'translation_key': prose_option['translation_key']
                 }
-
                 any_of.append(jsonschema_option)
+            # Allow null if not required.
+            if not is_required:
+                any_of.append({
+                    'type': 'null',
+                    'title': 'Null',
+                    'enum': [None]
+                })
             if el == 'select':
                 jsonschema_field['anyOf'] = any_of
             elif el == 'multiselect':
@@ -118,13 +132,5 @@ class SchemaInputOpenSdg(SchemaInputBase):
                     'type': 'string',
                     'anyOf': any_of
                 }
-
-        # For non-required fields, also allow 'null'.
-        if not is_required:
-            # Make sure it is a list.
-            if not isinstance(jsonschema_field['type'], list):
-                jsonschema_field['type'] = [jsonschema_field['type']]
-            # Add 'null' to the list.
-            jsonschema_field['type'].append('null')
 
         return jsonschema_field

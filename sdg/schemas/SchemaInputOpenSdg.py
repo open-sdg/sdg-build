@@ -86,8 +86,8 @@ class SchemaInputOpenSdg(SchemaInputBase):
                 jsonschema_key = direct_mapping[prose_key]
                 jsonschema_field[jsonschema_key] = prose_field[prose_key]
 
-        # Most Prose.io fields would be "string" or "integer" type in JSON Schema.
-        jsonschema_field['type'] = ['string', 'integer']
+        # Most Prose.io fields are general text or numbers.
+        jsonschema_field['type'] = ['string', 'integer', 'number']
 
         # Everything else depends on what kind of element it is.
         el = prose_field['element']

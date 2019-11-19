@@ -13,7 +13,9 @@ class IndicatorExportService:
         self.__create_zip_file("all_indicators.zip", csv_files)
 
     def __create_zip_folder_at_site_directory(self):
-        os.mkdir("%s/zip" % self.__site_directory)
+        directory = "%s/zip" % self.__site_directory
+        if not os.path.exists(directory):
+            os.mkdir(directory)
 
     def __get_all_indicator_csv_files(self):
         all_data_file_names = os.listdir(self.__data_directory)

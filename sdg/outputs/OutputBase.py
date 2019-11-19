@@ -1,4 +1,3 @@
-import copy
 import os
 from sdg.translations import TranslationInputBase
 from sdg.translations import TranslationHelper
@@ -18,15 +17,6 @@ class OutputBase:
             self.translations = [translations]
         # Create a translation helper.
         self.translation_helper = TranslationHelper(self.translations)
-        # Prepare here for translated builds later.
-        self.untranslated_indicators = self.copy_indicators()
-
-
-    def copy_indicators(self):
-        copies = {}
-        for inid in self.indicators:
-            copies[inid] = copy.deepcopy(self.indicators[inid])
-        return copies
 
 
     def execute(self, language=None):
@@ -46,16 +36,12 @@ class OutputBase:
             self.output_folder = os.path.join(original_output_folder, language)
             # Translate each indicator.
             for inid in self.indicators:
-                # Start with the original.
-                self.indicators[inid] = copy.deepcopy(self.untranslated_indicators[inid])
-                # Translate it.
                 self.indicators[inid].translate(language, self.translation_helper)
 
         # Now perform the build.
         status = self.build(language)
 
         # Cleanup afterwards.
-        self.indicators = self.untranslated_indicators
         self.output_folder = original_output_folder
 
         return status

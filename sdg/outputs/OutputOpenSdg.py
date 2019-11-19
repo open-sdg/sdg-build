@@ -30,7 +30,7 @@ class OutputOpenSdg(OutputBase):
         )
 
         for inid in self.indicators:
-            indicator = self.indicators[inid]
+            indicator = self.indicators[inid].language(language)
             # Output all the csvs
             status = status & write_csv(inid, indicator.data, ftype='data', site_dir=site_dir)
             status = status & write_csv(inid, indicator.edges, ftype='edges', site_dir=site_dir)

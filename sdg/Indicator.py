@@ -1,3 +1,4 @@
+import copy
 import sdg
 import pandas as pd
 from sdg.translations import TranslationHelper
@@ -25,6 +26,7 @@ class Indicator:
         self.meta = meta
         self.set_headline()
         self.set_edges()
+        self.translations = {}
 
 
     def has_name(self):
@@ -179,6 +181,18 @@ class Indicator:
             self.data = df
 
 
+    def language(self, language=None):
+        """Return a translated copy of this indicator.
+
+        Requires that the translate() method be run first.
+        """
+        if language is None:
+            return self
+        if language in self.translations:
+            return self.translations[language]
+        raise ValueError('Language ' + language + ' has not been translated.')
+
+
     def translate(self, language, translation_helper):
         """Translate the entire indicator into a particular language.
 
@@ -189,24 +203,34 @@ class Indicator:
         translation_helper : TranslationHelper
             The instance of TranslationHelper to perform the translations.
         """
-        # Callback function for translating some metadata.
+        # Already done? Abort now.
+        if language in self.translations:
+            return
+
+        # Start with an empty indicator.
+        indicator = Indicator(inid=self.inid)
+
+        # Translation callbacks for below.
         def translate_meta(text):
             return translation_helper.translate(text, language)
         def translate_data(text):
-            # Here we use a "default group" of "data". This is for backwards-
-            # compatibility reasons specific to Open SDG. This may need to be
-            # configurable if it is kept at all.
-            return translation_helper.translate(text, language, 'data')
+            return translation_helper.translate(text, language, default_group='data')
+
         # Translate the name.
-        self.name = translate_meta(self.name)
+        indicator.set_name(translate_meta(self.name))
+
         # Translate the metadata.
-        for key in self.meta:
-            self.meta[key] = translate_meta(self.meta[key])
-        # Translate the data cells.
-        for column in self.data:
-            self.data[column] = self.data[column].apply(translate_data)
-        # Translate the data column headers.
-        self.data.rename(mapper=translate_meta, axis='columns', inplace=True)
-        # Translate the edges.
-        for column in self.edges:
-            self.edges[column] = self.edges[column].apply(translate_data)
+        meta_copy = copy.deepcopy(self.meta)
+        for key in meta_copy:
+            meta_copy[key] = translate_meta(meta_copy[key])
+        indicator.set_meta(meta_copy)
+
+        # Translate the data cells and headers.
+        data_copy = copy.deepcopy(self.data)
+        for column in data_copy:
+            data_copy[column] = data_copy[column].apply(translate_data)
+        data_copy.rename(mapper=translate_data, axis='columns', inplace=True)
+        indicator.set_data(data_copy)
+
+        # Finally place the translation for later access.
+        self.translations[language] = indicator

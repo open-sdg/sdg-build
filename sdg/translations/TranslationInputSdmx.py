@@ -5,7 +5,13 @@ from io import StringIO
 from sdg.translations import TranslationInputBase
 
 class TranslationInputSdmx(TranslationInputBase):
-    """A class for importing translations from an SDMX DSD."""
+    """A class for importing translations from an SDMX DSD.
+
+    This assumes that the "keys" of the translations will be the SDMX ids. So,
+    if this is to be used with this library's SDMX import functionality, the
+    import needs to import SDMX ids rather than text values. This is not yet
+    implemented, so this is only a preliminary example class.
+    """
 
 
     def parse_xml(self, location, strip_namespaces=True):

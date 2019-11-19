@@ -18,8 +18,18 @@ class TranslationOutputBase:
         self.input = self.merge_inputs(inputs)
 
 
-    def write_translations(self, output_folder='translations', filename='translations.json'):
-        """Write the translation output to disk."""
+    def write_translations(self, language=None, output_folder='translations', filename='translations.json'):
+        """Write the translation output to disk.
+
+        Parameters
+        ----------
+        language : string
+            If specified, limit the output to a particular language only.
+        output_folder : string
+            The folder to put the file in.
+        filename : string
+            The name of the file to create.
+        """
         raise NotImplementedError
 
 

@@ -1,5 +1,7 @@
+import copy
 import sdg
 import pandas as pd
+from sdg.translations import TranslationHelper
 
 class Indicator:
     """Data model for SDG indicators."""
@@ -24,6 +26,7 @@ class Indicator:
         self.meta = meta
         self.set_headline()
         self.set_edges()
+        self.translations = {}
 
 
     def has_name(self):
@@ -176,3 +179,58 @@ class Indicator:
             cols = ['Year', 'Value']
             df = df[cols]
             self.data = df
+
+
+    def language(self, language=None):
+        """Return a translated copy of this indicator.
+
+        Requires that the translate() method be run first.
+        """
+        if language is None:
+            return self
+        if language in self.translations:
+            return self.translations[language]
+        raise ValueError('Language ' + language + ' has not been translated.')
+
+
+    def translate(self, language, translation_helper):
+        """Translate the entire indicator into a particular language.
+
+        Parameters
+        ----------
+        language : string
+            The language code to translate into.
+        translation_helper : TranslationHelper
+            The instance of TranslationHelper to perform the translations.
+        """
+        # Already done? Abort now.
+        if language in self.translations:
+            return
+
+        # Start with an empty indicator.
+        indicator = Indicator(inid=self.inid)
+
+        # Translation callbacks for below.
+        def translate_meta(text):
+            return translation_helper.translate(text, language)
+        def translate_data(text):
+            return translation_helper.translate(text, language, default_group='data')
+
+        # Translate the name.
+        indicator.set_name(translate_meta(self.name))
+
+        # Translate the metadata.
+        meta_copy = copy.deepcopy(self.meta)
+        for key in meta_copy:
+            meta_copy[key] = translate_meta(meta_copy[key])
+        indicator.set_meta(meta_copy)
+
+        # Translate the data cells and headers.
+        data_copy = copy.deepcopy(self.data)
+        for column in data_copy:
+            data_copy[column] = data_copy[column].apply(translate_data)
+        data_copy.rename(mapper=translate_data, axis='columns', inplace=True)
+        indicator.set_data(data_copy)
+
+        # Finally place the translation for later access.
+        self.translations[language] = indicator

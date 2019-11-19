@@ -36,14 +36,29 @@ inputs = [data_input]
 schema_path = os.path.join('tests', '_prose.yml')
 schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
 
+# Use SDG Translations for translations
+tag = '0.8.1'
+translations = sdg.translations.TranslationInputSdgTranslations(tag=tag)
+
 # Create an "output" from these inputs and schema, for JSON for Open SDG.
-opensdg_output = sdg.outputs.OutputOpenSdg(inputs, schema, output_folder='_site')
+opensdg_output = sdg.outputs.OutputOpenSdg(
+    inputs=inputs,
+    schema=schema,
+    output_folder='_site',
+    translations=translations)
 
 # Validate the indicators.
 validation_successful = opensdg_output.validate()
 
 # If everything was valid, perform the build.
 if validation_successful:
+    # Here are several ways you can generate the build:
+    # 1. Translated into a single language, like English: opensdg_output.execute('en')
+    #    (the build will appear in '_site/en')
+    # 2. Translated into several languages: opensdg_output.execute_per_language(['es', 'ru', 'en'])
+    #    (three builds will appear in '_site/es', '_site/ru', and '_site/en')
+    # 3. Untranslated: opensdg_output.execute()
+    #    (the build will appear in '_site')
     opensdg_output.execute()
 else:
     raise Exception('There were validation errors. See output above.')

@@ -1,4 +1,6 @@
+import os
 from sdg.translations import TranslationInputBase
+from sdg.translations import TranslationHelper
 
 class OutputBase:
     """Base class for destinations of SDG data/metadata."""
@@ -13,10 +15,47 @@ class OutputBase:
         # Safety code to ensure translations are a list of inputs.
         if isinstance(self.translations, TranslationInputBase):
             self.translations = [translations]
+        # Create a translation helper.
+        self.translation_helper = TranslationHelper(self.translations)
 
 
-    def execute():
-        """Write the SDG output to disk."""
+    def execute(self, language=None):
+        """Write the SDG output to disk.
+
+        Parameters
+        ----------
+        language : string
+            If specified, a particular language that this build is using. If
+            not specified, it is assumed the build is not translated.
+        """
+        # Keep a backup of the output folder.
+        original_output_folder = self.output_folder
+
+        if language:
+            # Temporarily change the output folder.
+            self.output_folder = os.path.join(original_output_folder, language)
+            # Translate each indicator.
+            for inid in self.indicators:
+                self.indicators[inid].translate(language, self.translation_helper)
+
+        # Now perform the build.
+        status = self.build(language)
+
+        # Cleanup afterwards.
+        self.output_folder = original_output_folder
+
+        return status
+
+
+    def build(self, language=None):
+        """Write the SDG output to disk.
+
+        Parameters
+        ----------
+        language : string
+            If specified, a particular language that this build is using. If
+            not specified, it is assumed the build is not translated.
+        """
         raise NotImplementedError
 
 
@@ -59,6 +98,16 @@ class OutputBase:
         status = True
         for inid in self.indicators:
             status = status & self.schema.validate(self.indicators[inid])
+
+        return status
+
+
+    def execute_per_language(self, languages):
+        """This helper triggers calls to execute() for each language."""
+        # Make sure we keep a copy of the originals before doing any translations.
+        status = True
+        for language in languages:
+            status = status & self.execute(language)
 
         return status
 

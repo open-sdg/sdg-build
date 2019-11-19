@@ -2,6 +2,17 @@
 
 Might become "release notes"
 
+### 0.5.0
+
+* Add an input for CKAN instances (#51)
+* Add ability to alter data and metadata during input (#51)
+* Add inputs for YAML/SDMX translation data and JSON output (#60)
+* Add optional fully-translated builds (#63)
+* Add zips of data to builds (#64)
+* More helpful validation errors (#66)
+* Automated tests for object-oriented builds (#67)
+* More lenient validation rules (#69, #70, #71)
+
 ### 0.4.0
 
 * Add support for SDMX-ML and SDMX-JSON input

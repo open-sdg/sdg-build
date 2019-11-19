@@ -46,6 +46,18 @@ SDG Build requires a schema for any metadata. Currently the following formats ar
 
 * YAML schema intended for Prose.io
 
+## Translations
+
+SDG Build can also import translations and use them to produce fully-translated builds. The translations can also be exported as well. Input formats include:
+
+* SDMX DSD
+* YAML local files
+* YAML Git repository
+
+The export formats include:
+
+* JSON
+
 ## Upcoming integrations
 
 Other inputs and outputs are either under development or planned for the future:
@@ -84,6 +96,14 @@ An example conversion from SDMX-ML into JSON suitable for the Open SDG platform:
 
 ```
 python docs/examples/sdmx_ml.py
+```
+
+### Example #4: CKAN instance to Open SDG
+
+An example conversion from CKAN data to JSON suitable for the Open SDG platform:
+
+```
+python docs/examples/ckan.py
 ```
 
 ## License

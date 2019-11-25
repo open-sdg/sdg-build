@@ -4,6 +4,7 @@ import json
 import shutil
 import numpy as np
 import pandas as pd
+import sdg
 from sdg import build_data
 from sdg.path import output_path, input_path, get_ids
 
@@ -15,14 +16,28 @@ def test_site_dir(tmpdir_factory):
     return str(site_dir)
 
 def test_build(test_site_dir):
-    """Check that output_path is as expected"""
+    """Test the build with the object-oriented approach"""
 
     site_dir = test_site_dir
 
-    build_result = build_data(src_dir=src_dir, site_dir=site_dir, git=False)
-    assert build_result
+    data_pattern = os.path.join('tests', 'data', '*-*.csv')
+    data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
+    meta_pattern = os.path.join('tests', 'meta', '*-*.md')
+    meta_input = sdg.inputs.InputYamlMdMeta(path_pattern=meta_pattern)
+    inputs = [data_input, meta_input]
+    schema_path = os.path.join('tests', '_prose.yml')
+    schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
+    translations = sdg.translations.TranslationInputSdgTranslations(tag='0.8.1')
+    opensdg_output = sdg.outputs.OutputOpenSdg(
+        inputs=inputs,
+        schema=schema,
+        output_folder=site_dir,
+        translations=translations)
 
-    exp_dirs = set(['comb', 'data', 'edges', 'headline', 'meta', 'stats', 'zip'])
+    assert opensdg_output.validate()
+    assert opensdg_output.execute()
+
+    exp_dirs = set(['comb', 'data', 'edges', 'headline', 'meta', 'stats', 'zip', 'translations'])
     act_dirs = os.listdir(site_dir)
 
     assert all([a in exp_dirs for a in act_dirs])
@@ -67,7 +82,7 @@ def compare_reload_data(inid, src_dir, site_dir):
 
     csv_path = input_path(inid, ftype='data', src_dir=src_dir)
     jsn_path = output_path(inid, ftype='comb', format='json', site_dir=site_dir)
-    
+
     jsn = json.load(open(jsn_path))
 
     df_csv = pd.read_csv(csv_path, encoding='utf-8')
@@ -89,3 +104,12 @@ def test_built_comb_data(test_site_dir):
     ids = get_ids(src_dir=src_dir)
     for inid in ids:
         assert compare_reload_data(inid, src_dir=src_dir, site_dir=test_site_dir)
+
+def test_build_translations(test_site_dir):
+    translations = json.load(
+        open(
+            output_path('translations', ftype='translations', format='json',
+                        site_dir=test_site_dir)
+        )
+    )
+    assert translations['de']['general']['goal'] == 'Ziel'

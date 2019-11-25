@@ -95,7 +95,6 @@ class OutputOpenSdg(OutputBase):
             'target_id': indicator.get_target_id(),
             'sdg_goal': indicator.get_goal_id(),
             'reporting_status': 'complete' if indicator.has_data() else 'notstarted',
-            'published': True if indicator.has_data() else 'notstarted',
             'data_non_statistical': False if indicator.has_data() else True,
             'graph_type': 'line',
             'indicator_sort_order': self.generate_sort_order(indicator)

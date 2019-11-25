@@ -22,7 +22,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
         # here, because _prose.yml has no mechanism for requiring fields.
         # TODO: Should we just add "required" properties in _prose.yml, purely
         # for this purpose?
-        schema['required'] = ['published', 'reporting_status']
+        schema['required'] = ['reporting_status']
 
         # Convert the Prose.io metadata into JSON Schema.
         for field in config['prose']['metadata']['meta']:
@@ -46,7 +46,6 @@ class SchemaInputOpenSdg(SchemaInputBase):
                 'if': {
                     'properties': {
                         'reporting_status': { 'enum': ['complete'] },
-                        'published': { 'const': True },
                         'data_non_statistical': { 'const': False }
                     }
                 },

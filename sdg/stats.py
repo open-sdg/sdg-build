@@ -19,7 +19,7 @@ def reporting_status(schema, all_meta):
         Dictionary of reporting statuses at goal and total level
     """
 
-    fields = ['reporting_status', 'published', 'sdg_goal']
+    fields = ['reporting_status', 'sdg_goal']
 
     status_values = schema.get_values('reporting_status')
     value_translation = schema.get_value_translation('reporting_status')

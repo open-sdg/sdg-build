@@ -15,19 +15,20 @@ from sdg.legacy import opensdg_prep
 
 # %% Read each yaml and run the checks
 
-def check_all_meta(src_dir='', translation_tag='0.8.1',
+def check_all_meta(src_dir='', schema_file='_prose.yml', translation_tag='0.8.1',
                    translation_repo='https://github.com/open-sdg/sdg-translations.git'):
     """Run metadata checks for all indicators
 
     Args:
         src_dir: str. Directory root for the project where data and meta data
             folders are
+        schema_file: Location of schema file relative to src_dir
         translation_repo: str. A git repository to pull translations from
         translation_tag: str. Tag/branch to use in the translation repo
     """
 
     opensdg_output = opensdg_prep(src_dir=src_dir, site_dir='_site',
-        schema_file='_prose.yml', translation_repo=translation_repo,
+        schema_file=schema_file, translation_repo=translation_repo,
         translation_tag=translation_tag)
 
     return opensdg_output.validate()

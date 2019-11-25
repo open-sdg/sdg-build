@@ -17,6 +17,7 @@ from . import inputs
 from . import outputs
 from . import schemas
 from . import translations
+from .legacy import opensdg_prep
 from .Indicator import Indicator
 from .check_metadata import check_all_meta
 from .check_csv import check_all_csv

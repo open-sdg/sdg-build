@@ -8,7 +8,15 @@ file.
 import os
 import sdg
 
-config = os.path.join('tests', 'config.yml')
+# Assumes that this config file exists. For an example of the possible options,
+# see docs/examples/open_sdg_config.yml.
+config = 'open_sdg_config.yml'
 
-sdg.check_data(config=config)
-sdg.build_data(config=config)
+# Validate the indicators.
+validation_successful = sdg.check_data(config=config)
+
+# If everything was valid, perform the build.
+if validation_successful:
+    sdg.build_data(config=config)
+else:
+    raise Exception('There were validation errors. See output above.')

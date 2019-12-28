@@ -27,7 +27,7 @@ def test_build(test_site_dir):
     inputs = [data_input, meta_input]
     schema_path = os.path.join('tests', '_prose.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
-    translations = sdg.translations.TranslationInputSdgTranslations(tag='0.8.1')
+    translations = sdg.translations.TranslationInputSdgTranslations()
     opensdg_output = sdg.outputs.OutputOpenSdg(
         inputs=inputs,
         schema=schema,
@@ -112,4 +112,4 @@ def test_build_translations(test_site_dir):
                         site_dir=test_site_dir)
         )
     )
-    assert translations['de']['general']['goal'] == 'Ziel'
+    assert translations['de']['global_goals']['1-short'] == 'Keine Armut'

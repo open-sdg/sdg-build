@@ -132,31 +132,3 @@ def check_empty_rows(df, csv):
         status = False
         print(csv, ': Empty row on rows: ', np.where(empty_rows)[0])
     return status
-
-# %% Read each csv and run the checks
-
-def check_all_csv(src_dir=''):
-    """Run csv checks on all indicator csvs in the data directory
-    
-    Args:
-        src_dir: str. Base path for the project. Csv 
-            files are found relative to this
-    """
-
-    status = True
-
-    ids = get_ids(src_dir=src_dir)
-
-    if len(ids) == 0:
-        raise FileNotFoundError("No indicator IDs found")
-    
-    print("Checking " + str(len(ids)) + " metadata files...")
-    
-    for inid in ids:
-        csv = input_path(inid, ftype='data', src_dir=src_dir, must_work=True)
-        try:
-            status = status & check_csv(csv)
-        except Exception as e:
-            status = False
-            print(csv, e)    
-    return(status)

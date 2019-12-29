@@ -6,17 +6,18 @@ file.
 """
 
 import os
-import sdg
+from sdg.open_sdg import open_sdg_build
+from sdg.open_sdg import open_sdg_check
 
 # Assumes that this config file exists. For an example of the possible options,
 # see docs/examples/open_sdg_config.yml.
 config = 'open_sdg_config.yml'
 
 # Validate the indicators.
-validation_successful = sdg.check_data(config=config)
+validation_successful = open_sdg_check(config=config)
 
 # If everything was valid, perform the build.
 if validation_successful:
-    sdg.build_data(config=config)
+    open_sdg_build(config=config)
 else:
     raise Exception('There were validation errors. See output above.')

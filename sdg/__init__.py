@@ -18,6 +18,8 @@ from . import schemas
 from . import translations
 from .Indicator import Indicator
 from .IndicatorExportService import IndicatorExportService
-from .open_sdg import build_data
-from .open_sdg import check_all_csv
-from .open_sdg import check_all_meta
+from .build import build_data
+from .check_csv import check_all_csv
+from .check_metadata import check_all_meta
+from .open_sdg import open_sdg_build
+from .open_sdg import open_sdg_check

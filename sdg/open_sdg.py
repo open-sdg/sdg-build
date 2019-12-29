@@ -2,12 +2,11 @@
 Historically this library has mainly served to create builds for the Open SDG
 platform. Consequently it has functions dedicated to this purpose. While in
 theory the library is more general-purpose, it remains primarily used by the
-Open SDG platform. So these helper functions are here to provide the backwards-
-compatibility and simplicity of the following legacy functions:
+Open SDG platform. So these helper functions are here to provide the
+functionality of the following legacy functions:
 * build_data
 * check_all_csv
 * check_all_meta
-Note that 'check_all_csv' and 'check_all_meta' merely call 'check_data'.
 """
 
 import os
@@ -15,8 +14,8 @@ import sdg
 import yaml
 
 
-def build_data(src_dir='', site_dir='_site', schema_file='_prose.yml',
-               languages=None, translations=None, config='config.yml'):
+def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
+                   languages=None, translations=None, config='config.yml'):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -47,7 +46,7 @@ def build_data(src_dir='', site_dir='_site', schema_file='_prose.yml',
     return status
 
 
-def check_data(src_dir='', schema_file='_prose.yml', config='config.yml'):
+def open_sdg_check(src_dir='', schema_file='_prose.yml', config='config.yml'):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -63,20 +62,6 @@ def check_data(src_dir='', schema_file='_prose.yml', config='config.yml'):
         schema_file=schema_file, config=config)
 
     return opensdg_output.validate()
-
-
-def check_all_csv(src_dir='', schema_file='_prose.yml', config='config.yml'):
-    """This function is deprecated but left in for backwards compatibility."""
-
-    print('The check_all_csv function is deprecated. Use check_data instead.')
-    return check_data(src_dir=src_dir, schema_file=schema_file, config=config)
-
-
-def check_all_meta(src_dir='', schema_file='_prose.yml', config='config.yml'):
-    """This function is deprecated but left in for backwards compatibility."""
-
-    print('The check_all_meta function is deprecated. Use check_data instead.')
-    return check_data(src_dir=src_dir, schema_file=schema_file, config=config)
 
 
 def opensdg_prep(src_dir='', site_dir='_site', schema_file='_prose.yml',

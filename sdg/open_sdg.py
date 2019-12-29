@@ -22,7 +22,7 @@ def open_sdg_config(config_file, defaults):
         defaults: dict. Set of options to default to.
 
     Returns:
-        Dict of options, or None if no config file is found.
+        Dict of options.
     """
     options = {}
     try:

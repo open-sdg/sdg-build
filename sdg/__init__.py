@@ -10,7 +10,6 @@ from . import git
 from . import edges
 from . import json
 from . import meta
-from . import schema
 from . import stats
 from . import open_sdg
 from . import inputs

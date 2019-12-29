@@ -11,7 +11,7 @@ from sdg.open_sdg import open_sdg_check
 
 # Assumes that this config file exists. For an example of the possible options,
 # see docs/examples/open_sdg_config.yml.
-config = 'open_sdg_config.yml'
+config = os.path.join('docs', 'examples', 'open_sdg_config.yml')
 
 # Validate the indicators.
 validation_successful = open_sdg_check(config=config)

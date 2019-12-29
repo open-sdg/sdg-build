@@ -117,9 +117,9 @@ def open_sdg_prep(options):
     """
 
     # Set defaults for the mutable parameters.
-    if options['languages'] is None:
+    if 'languages' in options and options['languages'] is None:
         options['languages'] = []
-    if options['translations'] is None:
+    if 'translations' in options and options['translations'] is None:
         options['translations'] = [
             'https://github.com/open-sdg/translations-un-sdg.git@1.0.0-rc1',
             'https://github.com/open-sdg/translations-open-sdg.git@1.0.0-rc1'

@@ -66,7 +66,7 @@ class SchemaInputBase:
                     things = []
                     for thing in error.schema_path:
                         if thing not in ignore:
-                            things.append(thing)
+                            things.append(str(thing))
                     things = '/'.join(things)
                     print('- ' + error.schema['title'] + ' (' + things + '): ' + error.message)
         if indicator.has_data():

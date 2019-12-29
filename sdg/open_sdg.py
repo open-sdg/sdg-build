@@ -33,7 +33,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
 
     status = True
 
-    opensdg_output = opensdg_prep(src_dir=src_dir, site_dir=site_dir,
+    opensdg_output = open_sdg_prep(src_dir=src_dir, site_dir=site_dir,
         schema_file=schema_file, translations=translations, config=config)
 
     if languages:
@@ -58,13 +58,13 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='config.yml'):
         config: str. Location of config file relative to src_dir
     """
 
-    opensdg_output = opensdg_prep(src_dir=src_dir, site_dir='_site',
+    opensdg_output = open_sdg_prep(src_dir=src_dir, site_dir='_site',
         schema_file=schema_file, config=config)
 
     return opensdg_output.validate()
 
 
-def opensdg_prep(src_dir='', site_dir='_site', schema_file='_prose.yml',
+def open_sdg_prep(src_dir='', site_dir='_site', schema_file='_prose.yml',
                  translations=None, languages=None, config='config.yml'):
     """Prepare Open SDG output for validation and builds.
 

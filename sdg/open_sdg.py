@@ -3,7 +3,7 @@ Historically this library has mainly served to create builds for the Open SDG
 platform. Consequently it has functions dedicated to this purpose. While in
 theory the library is more general-purpose, it remains primarily used by the
 Open SDG platform. So these helper functions are here to provide the
-functionality of the following legacy functions:
+functionality of the following legacy functions that were specific to Open SDG:
 * build_data
 * check_all_csv
 * check_all_meta
@@ -96,6 +96,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
     # Build a dict of options for open_sdg_prep().
     defaults = {
         'src_dir': src_dir,
+        'site_dir': '_site',
         'schema_file': schema_file,
     }
     # Allow for a config file to update these.

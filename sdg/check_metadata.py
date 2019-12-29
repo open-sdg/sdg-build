@@ -10,7 +10,7 @@ import yaml
 from sdg.open_sdg import open_sdg_check
 
 
-def check_all_meta(src_dir='', schema_file='_prose.yml', config='config.yml'):
+def check_all_meta(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml'):
     """This function is deprecated but left in for backwards compatibility."""
 
     print('The check_all_meta function is deprecated. Use open_sdg_check instead.')

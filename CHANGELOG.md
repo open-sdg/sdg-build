@@ -1,6 +1,12 @@
 # Changes
 
-Might become "release notes"
+### 1.0.0-rc1
+
+* Allow decimals in metadata (#72)
+* Remove references to 'published' field (#76)
+* Default to the object-oriented API (#77)
+* Support configuration via a "config.yml" file for Open SDG usage (#77)
+* Add dataframe checks to object-oriented validation (#79)
 
 ### 0.5.0
 

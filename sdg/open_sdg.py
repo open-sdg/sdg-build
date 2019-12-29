@@ -142,7 +142,7 @@ def open_sdg_prep(options):
 
     # Pull in remote translations if needed.
     all_translations = []
-    if options['translations']:
+    if 'translations' in options:
         for repo in options['translations']:
             # Support an "@" syntax for pinning to a git tag/branch/commit.
             parts = repo.split('@')

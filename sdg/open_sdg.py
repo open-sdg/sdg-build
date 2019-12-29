@@ -26,7 +26,7 @@ def open_sdg_config(config_file, defaults):
     """
     options = {}
     try:
-        with open(config_path) as file:
+        with open(config_file) as file:
             options = yaml.load(file, Loader=yaml.FullLoader)
     except:
         pass

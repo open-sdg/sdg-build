@@ -3,6 +3,7 @@
 import os
 import json
 import jsonschema
+from sdg import check_csv
 
 class SchemaInputBase:
     """A base class for importing a schema, querying it, and validating with it.
@@ -68,6 +69,16 @@ class SchemaInputBase:
                             things.append(thing)
                     things = '/'.join(things)
                     print('- ' + error.schema['title'] + ' (' + things + '): ' + error.message)
+        if indicator.has_data():
+            df = indicator.data
+            inid = indicator.inid
+            # Apply these checks on the dataframe. These are common issues that
+            # can happen with CSVs, but are important regardless of the source.
+            status = status & check_csv.check_headers(df, inid)
+            status = status & check_csv.check_data_types(df, inid)
+            status = status & check_csv.check_leading_whitespace(df, inid)
+            status = status & check_csv.check_trailing_whitespace(df, inid)
+            status = status & check_csv.check_empty_rows(df, inid)
 
         return status
 

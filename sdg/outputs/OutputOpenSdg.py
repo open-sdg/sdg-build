@@ -8,6 +8,24 @@ class OutputOpenSdg(OutputBase):
     """Output SDG data/metadata in the formats expected by Open SDG."""
 
 
+    def __init__(self, inputs, schema, output_folder='', translations=[],
+        reporting_status_grouping_fields=None):
+        """Constructor for OutputOpenSdg.
+
+        Parameters
+        ----------
+
+        Inherits all the parameters from OutputBase, plus the following:
+
+        reporting_status_grouping_fields : string
+            To be passed as "grouping_fields" to sdg.stats.reporting_status.
+
+
+        """
+        OutputBase.__init__(self, inputs, schema, output_folder, translations)
+        self.reporting_status_grouping_fields = reporting_status_grouping_fields
+
+
     def build(self, language=None):
         """Write the JSON output expected by Open SDG. Overrides parent."""
         status = True
@@ -58,7 +76,7 @@ class OutputOpenSdg(OutputBase):
         status = status & sdg.json.write_json('all', all_meta, ftype='meta', site_dir=site_dir)
         status = status & sdg.json.write_json('all', all_headline, ftype='headline', site_dir=site_dir)
 
-        stats_reporting = sdg.stats.reporting_status(self.schema, all_meta)
+        stats_reporting = sdg.stats.reporting_status(self.schema, all_meta, self.reporting_status_grouping_fields)
         status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
 
         indicator_export_service = sdg.IndicatorExportService(site_dir)

@@ -7,7 +7,17 @@ class OutputBase:
 
 
     def __init__(self, inputs, schema, output_folder='', translations=[]):
-        """Constructor for OutputBase."""
+        """Constructor for OutputBase.
+
+        inputs: list
+            A list of InputBase (or descendent) classes.
+        schema: SchemaInputBase
+            An instance of SchemaInputBase (or descendant).
+        output_folder: string
+            The path to where the output files should be created.
+        translations: list
+            A list of TranslationInputBase (or descendant) classes.
+        """
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
         self.output_folder = output_folder

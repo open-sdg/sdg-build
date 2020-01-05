@@ -79,7 +79,7 @@ def reporting_status(schema, all_meta, extra_fields=None):
     output = {
         'statuses': status_report,
         'overall': total_report,
-        'fields': {},
+        'extra_fields': {},
     }
 
     # Add on a report for each of our grouping fields.
@@ -93,9 +93,10 @@ def reporting_status(schema, all_meta, extra_fields=None):
                                 for status in status_values],
                     'totals': {'total': g['total']}
                 })
-        output['fields'][field] = grouped_report
+        output['extra_fields'][field] = grouped_report
 
-    # Backwards compatibility.
-    output['goals'] = output['fields']['sdg_goal']
+    # Treat goals specially, by putting it outside of "extra_fields".
+    output['goals'] = output['extra_fields']['sdg_goal']
+    del output['extra_fields']['sdg_goal']
 
     return output

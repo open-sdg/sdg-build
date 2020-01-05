@@ -86,9 +86,12 @@ def reporting_status(schema, all_meta, extra_fields=None):
     for field in grouped_dfs:
         grouped_report = list()
         for index, g in grouped_dfs[field].reset_index().iterrows():
+            # Because the goals report is treated differently, standardize on
+            # the key of "goal" instead of "sdg_goals".
+            fixed_field_name = field.replace('sdg_goal', 'goal')
             grouped_report.append(
                 {
-                    field: g[field],
+                    fixed_field_name: g[field],
                     'statuses': [one_status_report(g, status)
                                 for status in status_values],
                     'totals': {'total': g['total']}

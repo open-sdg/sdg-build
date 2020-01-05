@@ -9,7 +9,7 @@ class OutputOpenSdg(OutputBase):
 
 
     def __init__(self, inputs, schema, output_folder='', translations=[],
-        reporting_status_grouping_fields=None):
+        reporting_status_extra_fields=None):
         """Constructor for OutputOpenSdg.
 
         Parameters
@@ -17,13 +17,13 @@ class OutputOpenSdg(OutputBase):
 
         Inherits all the parameters from OutputBase, plus the following:
 
-        reporting_status_grouping_fields : string
-            To be passed as "grouping_fields" to sdg.stats.reporting_status.
+        reporting_status_extra_fields : string
+            To be passed as "extra_fields" to sdg.stats.reporting_status.
 
 
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations)
-        self.reporting_status_grouping_fields = reporting_status_grouping_fields
+        self.reporting_status_grouping_fields = reporting_status_extra_fields
 
 
     def build(self, language=None):

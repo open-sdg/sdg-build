@@ -17,7 +17,8 @@ def reporting_status(schema, all_meta, extra_fields=None):
         extra_fields: List of fields to group stats by, in addition to goal
 
     Returns:
-        Dictionary of reporting statuses at group_by_field and total level
+        Dictionary of reporting statuses at goal (plus any extra fields) and
+        total level
     """
 
     # Make sure 'sdg_goal' is in the list of fields.

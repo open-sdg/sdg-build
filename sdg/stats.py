@@ -9,20 +9,21 @@ Aggregate information for reporting statistics
 import pandas as pd
 
 
-def reporting_status(schema, all_meta, grouping_fields=None):
+def reporting_status(schema, all_meta, extra_fields=None):
     """
     Args:
         schema: An object of class "Schema" containing the metadata schema
         all_meta: A dictionary containing all metadata items
-        grouping_fields: List of fields to group stats by (default: ['sdg_goal'])
+        extra_fields: List of fields to group stats by, in addition to goal
 
     Returns:
         Dictionary of reporting statuses at group_by_field and total level
     """
 
-    # For backwards compatibility, use a default grouping field of 'sdg_goal'.
-    if grouping_fields is None:
-        grouping_fields = ['sdg_goal']
+    # Make sure 'sdg_goal' is in the list of fields.
+    grouping_fields = extra_fields if extra_fields is not None else []
+    if 'sdg_goal' not in grouping_fields:
+        grouping_fields.append('sdg_goal')
 
     # Generate a report of the possible statuses, both value and translations.
     status_values = schema.get_values('reporting_status')
@@ -78,7 +79,7 @@ def reporting_status(schema, all_meta, grouping_fields=None):
     output = {
         'statuses': status_report,
         'overall': total_report,
-        'grouping_fields': grouping_fields,
+        'fields': {},
     }
 
     # Add on a report for each of our grouping fields.
@@ -92,6 +93,9 @@ def reporting_status(schema, all_meta, grouping_fields=None):
                                 for status in status_values],
                     'totals': {'total': g['total']}
                 })
-        output[field] = grouped_report
+        output['fields'][field] = grouped_report
+
+    # Backwards compatibility.
+    output['goals'] = output['fields']['sdg_goal']
 
     return output

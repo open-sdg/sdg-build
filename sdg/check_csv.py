@@ -10,6 +10,7 @@ Created on 2017-10-04
 import pandas as pd
 import numpy as np
 from sdg.path import input_path, get_ids
+from sdg.open_sdg import open_sdg_check
 
 # %% Utility
 
@@ -133,30 +134,9 @@ def check_empty_rows(df, csv):
         print(csv, ': Empty row on rows: ', np.where(empty_rows)[0])
     return status
 
-# %% Read each csv and run the checks
 
-def check_all_csv(src_dir=''):
-    """Run csv checks on all indicator csvs in the data directory
-    
-    Args:
-        src_dir: str. Base path for the project. Csv 
-            files are found relative to this
-    """
+def check_all_csv(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml'):
+    """This function is deprecated but left in for backwards compatibility."""
 
-    status = True
-
-    ids = get_ids(src_dir=src_dir)
-
-    if len(ids) == 0:
-        raise FileNotFoundError("No indicator IDs found")
-    
-    print("Checking " + str(len(ids)) + " metadata files...")
-    
-    for inid in ids:
-        csv = input_path(inid, ftype='data', src_dir=src_dir, must_work=True)
-        try:
-            status = status & check_csv(csv)
-        except Exception as e:
-            status = False
-            print(csv, e)    
-    return(status)
+    print('The check_all_csv function is deprecated. Use open_sdg_check instead.')
+    return open_sdg_check(src_dir=src_dir, schema_file=schema_file, config=config)

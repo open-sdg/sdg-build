@@ -1,134 +1,17 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu May  4 13:53:01 2017
+This deprecated file is left in for backwards compatibility.
 
-@author: dougashton
+See open_sdg.py for a replacement.
 """
 
-# %% setup
-
+import os
+import sdg
 import yaml
-from sdg.path import input_path, get_ids
-
-# %% Checking a single item
+from sdg.open_sdg import open_sdg_check
 
 
-def check_meta(meta, fname):
-    """Check an individual metadata and return logical status"""
+def check_all_meta(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml'):
+    """This function is deprecated but left in for backwards compatibility."""
 
-    # As the number of checks increase you may want to think of a more scalable way to do this
-
-    status = True
-
-    status = status & check_required(meta, fname)
-    status = status & check_reporting_status(meta, fname)
-
-    # Should this indicator have a chart?
-    meta['check_graph'] = (
-      meta['reporting_status'] == 'complete' and
-      not meta['data_non_statistical']
-    )
-
-    status = status & check_graph(meta, fname)
-
-    return status
-
-# %% Check required
-
-
-def check_required(meta, fname):
-
-    required = ['reporting_status']
-
-    status = True
-
-    for req in required:
-          if(req not in meta):
-              print(req + " missing in " + fname)
-              status = False
-
-    if (meta['reporting_status'] == 'complete'):
-        if('data_non_statistical' not in meta):
-            print("data_non_statistical" + " missing in " + fname + " for reported indicator")
-            status = False
-
-    return status
-
-# %% Check for reporting status
-
-
-def check_reporting_status(meta, fname):
-    """Check an individual metadata and return logical status"""
-
-    status = True
-
-    if("reporting_status" not in meta):
-        print("reporting_status missing in " + fname)
-        status = False
-    else:
-        valid_statuses = ['notstarted', 'inprogress', 'complete', 'notapplicable']
-
-        if(meta["reporting_status"] not in valid_statuses):
-            err_str = "invalid reporting_status in " + fname + ": " \
-                      + meta["reporting_status"] + " must be one of " \
-                      + str(valid_statuses)
-            print(err_str)
-            status = False
-
-    return status
-
-# %% Check graph type
-
-
-def check_graph(meta, fname):
-    """Check that the graph_type field is valid"""
-
-    status = True
-
-    if(meta['check_graph']):
-
-        if ('graph_title' not in meta):
-            print('graph_title missing for statistical indicator in ' + fname)
-            status = False
-
-        if ('graph_type' not in meta):
-            print('graph_type missing for statistical indicator in ' + fname)
-            return False
-
-        valid_graph_types = ['line', 'bar', 'binary']
-
-        if(meta["graph_type"] not in valid_graph_types):
-            err_str = "invalid graph_type in " + fname + ": " \
-                      + meta["graph_type"] + " must be one of " \
-                      + str(valid_graph_types)
-            print(err_str)
-            status = False
-
-    return status
-
-# %% Read each yaml and run the checks
-
-def check_all_meta(src_dir=''):
-    """Run metadata checks for all indicators
-
-    Args:
-        src_dir: str. Base path for the project. Metadata
-            files are found relative to this
-    """
-
-    status = True
-
-    ids = get_ids(src_dir=src_dir)
-
-    if len(ids) == 0:
-        raise FileNotFoundError("No indicator IDs found")
-
-    print("Checking " + str(len(ids)) + " metadata files...")
-
-    for inid in ids:
-        met = input_path(inid, ftype='meta', src_dir=src_dir, must_work=True)
-        with open(met, encoding = "UTF-8") as stream:
-            meta = next(yaml.safe_load_all(stream))
-        status = status & check_meta(meta, fname = met)
-
-    return(status)
+    print('The check_all_meta function is deprecated. Use open_sdg_check instead.')
+    return open_sdg_check(src_dir=src_dir, schema_file=schema_file, config=config)

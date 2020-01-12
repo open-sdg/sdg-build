@@ -1,0 +1,37 @@
+# This config file is for use with the `build_data` and `check_data` functions,
+# which are helpers for implementations of Open SDG. This file allows easy use
+# of those functions without altering Python code.
+
+# Languages
+# ---------
+# This tells sdg-build to perform "translated builds" for each of the specified
+# languages. Each build is in its own subfolder - one for each language.
+languages:
+  - en
+  - es
+
+# Translation repositories
+# ------------------------
+# This tells sdg-build to import translations from Git repositories. Specific
+# tags or branches should be indicated after an "@" symbol. The default is the
+# two GitHub repositories 'translations-un-sdg' and 'translations-open-sdg'.
+translations:
+  - https://github.com/open-sdg/translations-un-sdg.git@1.0.0-rc1
+  - https://github.com/open-sdg/translations-open-sdg.git@1.0.0-rc1
+
+# Source directory
+# ----------------
+# This identifies the directory that holds the 'data' and 'meta' folders.
+# The default, '', points to the root of this repository.
+src_dir: 'tests'
+
+# Destination directory
+# ---------------------
+# This identifies a directory to hold the "built" files. The default is '_site'.
+site_dir: _site
+
+# Schema file
+# -----------
+# This identifies a file containing the schema (possible fields) for metadata.
+# Currently this needs to be a prose.io config, and defaults to '_prose.yml'.
+schema_file: _prose.yml

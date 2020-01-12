@@ -74,15 +74,23 @@ Usage examples are available in `docs/examples`. In each of these examples, the 
 pip install -r docs/examples/requirements.txt
 ```
 
-### Example #1: CSV + YAML to Open SDG
+### Example #1: CSV + YAML to Open SDG - simple
 
-An example conversion from CSV data and YAML metadata into JSON suitable for the Open SDG platform:
+An example conversion from CSV data and YAML metadata into JSON suitable for the Open SDG platform. This example uses a [configuration file](https://github.com/open-sdg/sdg-build/blob/master/docs/examples/open_sdg_config.yml) and helper functions (`open_sdg_check` and `open_sdg_build`) for the greatest simplicity:
+
+```
+python docs/examples/open_sdg_simple.py
+```
+
+### Example #2: CSV + YAML to Open SDG
+
+An example conversion from CSV data and YAML metadata into JSON suitable for the Open SDG platform. This example (in contrast to the "simple" example above) uses no helper functions, in order to demonstrate how to use the various Python classes:
 
 ```
 python docs/examples/open_sdg.py
 ```
 
-### Example #2: SDMX-JSON to Open SDG
+### Example #3: SDMX-JSON to Open SDG
 
 An example conversion from SDMX-JSON (from an API endpoint) into JSON suitable for the Open SDG platform:
 
@@ -90,7 +98,7 @@ An example conversion from SDMX-JSON (from an API endpoint) into JSON suitable f
 python docs/examples/sdmx_json.py
 ```
 
-### Example #3: SDMX-ML to Open SDG
+### Example #4: SDMX-ML to Open SDG
 
 An example conversion from SDMX-ML into JSON suitable for the Open SDG platform:
 
@@ -98,13 +106,17 @@ An example conversion from SDMX-ML into JSON suitable for the Open SDG platform:
 python docs/examples/sdmx_ml.py
 ```
 
-### Example #4: CKAN instance to Open SDG
+### Example #5: CKAN instance to Open SDG
 
 An example conversion from CKAN data to JSON suitable for the Open SDG platform:
 
 ```
 python docs/examples/ckan.py
 ```
+
+## Additional documentation
+
+See the `docs` folder for additional documentation.
 
 ## License
 

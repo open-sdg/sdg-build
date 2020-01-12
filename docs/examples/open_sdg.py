@@ -21,9 +21,11 @@ inputs = [data_input, meta_input]
 schema_path = os.path.join('tests', '_prose.yml')
 schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
 
-# Use SDG Translations for translations
-tag = '0.8.1'
-translations = sdg.translations.TranslationInputSdgTranslations(tag=tag)
+# Use two repos containing translations
+translations = [
+    sdg.translations.TranslationInputSdgTranslations(source='https://github.com/open-sdg/translations-un-sdg.git', tag='1.0.0-rc1'),
+    sdg.translations.TranslationInputSdgTranslations(source='https://github.com/open-sdg/translations-open-sdg.git', tag='1.0.0-rc1'),
+]
 
 # Create an "output" from these inputs/schema/translations, for Open SDG output.
 opensdg_output = sdg.outputs.OutputOpenSdg(

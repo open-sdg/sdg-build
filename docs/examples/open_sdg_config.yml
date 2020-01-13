@@ -35,3 +35,9 @@ site_dir: _site
 # This identifies a file containing the schema (possible fields) for metadata.
 # Currently this needs to be a prose.io config, and defaults to '_prose.yml'.
 schema_file: _prose.yml
+
+# Reporting status extra fields
+# -----------------------------
+# This allows the build to generate stats for reporting status by additional
+# fields, beyond the default "status by goal" report.
+reporting_status_extra_fields: []

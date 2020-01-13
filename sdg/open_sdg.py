@@ -36,7 +36,8 @@ def open_sdg_config(config_file, defaults):
 
 
 def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
-                   languages=None, translations=None, config='open_sdg_config.yml'):
+                   languages=None, translations=None,
+                   reporting_status_extra_fields=None, config='open_sdg_config.yml'):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -46,6 +47,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         schema_file: str. Location of schema file relative to src_dir
         languages: list. A list of language codes, for translated builds
         translations: list. A list of git repositories to pull translations from
+        reporting_status_extra_fields: list. A list of extra fields to generate
+          reporting stats for.
         config: str. Path to a YAML config file that overrides other parameters
 
     Returns:
@@ -60,7 +63,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'site_dir': site_dir,
         'schema_file': schema_file,
         'languages': languages,
-        'translations': translations
+        'translations': translations,
+        'reporting_status_extra_fields': reporting_status_extra_fields
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -159,9 +163,15 @@ def open_sdg_prep(options):
     if os.path.isdir(translation_dir):
         all_translations.append(sdg.translations.TranslationInputYaml(source=translation_dir))
 
+    # Indicate any extra fields for the reporting stats, if needed.
+    reporting_status_extra_fields = []
+    if 'reporting_status_extra_fields' in options:
+        reporting_status_extra_fields = options['reporting_status_extra_fields']
+
     # Create an "output" from these inputs/schema/translations, for Open SDG output.
     return sdg.outputs.OutputOpenSdg(
         inputs=inputs,
         schema=schema,
         output_folder=options['site_dir'],
-        translations=all_translations)
+        translations=all_translations,
+        reporting_status_extra_fields=reporting_status_extra_fields)

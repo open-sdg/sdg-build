@@ -2,6 +2,7 @@ import sdg
 from sdg.inputs import InputBase
 from xml.etree import ElementTree as ET
 from io import StringIO
+import pandas as pd
 
 class InputSdmx(InputBase):
     """Sources of SDG data that are SDMX format."""
@@ -231,6 +232,23 @@ class InputSdmx(InputBase):
         return df
 
 
+    def ensure_numeric_values(self, df):
+        """SDMX values get imported as strings, so we need to convert them here.
+
+        Parameters
+        ----------
+        Dataframe : df
+            The dataframe containing a 'Value' column.
+
+        Returns
+        -------
+        Dataframe
+            The same dataframe with all numeric values.
+        """
+        df['Value'] = pd.to_numeric(df['Value'], errors='coerce')
+        return df
+
+
     def get_dimension_name(self, dimension_id):
         """Determine the human-readable name of a dimension.
 
@@ -339,5 +357,6 @@ class InputSdmx(InputBase):
         for indicator_id in indicator_data:
             data = self.create_dataframe(indicator_data[indicator_id])
             data = self.drop_singleton_columns(data)
+            data = self.ensure_numeric_values(data)
             name = indicator_names[indicator_id] if self.import_names else None
             self.add_indicator(indicator_id, data=data, name=name)

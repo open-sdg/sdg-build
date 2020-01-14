@@ -245,7 +245,7 @@ class InputSdmx(InputBase):
         Dataframe
             The same dataframe with all numeric values.
         """
-        df['Value'] = pd.to_numeric(df['Value'], errors='coerce')
+        df['Value'] = pd.to_numeric(df['Value'], errors='raise')
         return df
 
 

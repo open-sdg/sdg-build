@@ -208,10 +208,18 @@ class InputSdmx(InputBase):
             # each indicator id.
             if len(indicator_ids) > len(indicator_names):
                 for i in range(len(indicator_ids) - len(indicator_names)):
-                    # Just pad the list of names with the first one.
+                    # If there were more indicator ids than indicator names,
+                    # just pad the list of names with the first one.
                     indicator_names.append(indicator_names[0])
+            elif len(indicator_names) > len(indicator_ids):
+                # If there were more indicator names than indicator ids, we
+                # just have to arbitrarily pick the first ones.
+                last_id_index = len(indicator_ids) - 1
+                indicator_names = indicator_names[0:last_id_index]
+
             # Now loop through, normalize and store the ids and names per series id.
             for index, element in enumerate(indicator_names):
+
                 indicator_id = indicator_ids[index]
                 indicator_name = self.normalize_indicator_name(element.text, indicator_id)
                 code_map[indicator_id] = indicator_name
@@ -232,7 +240,7 @@ class InputSdmx(InputBase):
         return df
 
 
-    def ensure_numeric_values(self, df):
+    def ensure_numeric_values(self, df, indicator_id):
         """SDMX values get imported as strings, so we need to convert them here.
 
         Parameters
@@ -240,12 +248,18 @@ class InputSdmx(InputBase):
         Dataframe : df
             The dataframe containing a 'Value' column.
 
+        string : indicator_id
+            The indicator id that we are fixing.
+
         Returns
         -------
         Dataframe
             The same dataframe with all numeric values.
         """
-        df['Value'] = pd.to_numeric(df['Value'], errors='coerce')
+        try:
+            df['Value'] = pd.to_numeric(df['Value'], errors='raise')
+        except ValueError as e:
+            print('WARNING: Indicator ' + indicator_id + ' has a non-numeric value: ' + str(e))
         return df
 
 
@@ -357,6 +371,6 @@ class InputSdmx(InputBase):
         for indicator_id in indicator_data:
             data = self.create_dataframe(indicator_data[indicator_id])
             data = self.drop_singleton_columns(data)
-            data = self.ensure_numeric_values(data)
+            data = self.ensure_numeric_values(data, indicator_id)
             name = indicator_names[indicator_id] if self.import_names else None
             self.add_indicator(indicator_id, data=data, name=name)

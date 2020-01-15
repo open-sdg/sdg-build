@@ -43,8 +43,17 @@ inputs = [data_input]
 schema_path = os.path.join('tests', '_prose.yml')
 schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
 
+# Pull in translations.
+translations = [
+    # Use two Git repos containing translations.
+    sdg.translations.TranslationInputSdgTranslations(source='https://github.com/open-sdg/translations-un-sdg.git', tag='1.0.0-rc1'),
+    sdg.translations.TranslationInputSdgTranslations(source='https://github.com/open-sdg/translations-open-sdg.git', tag='1.0.0-rc2'),
+    # Also look for translations in a local 'translations' folder.
+    sdg.translations.TranslationInputYaml(source='translations'),
+]
+
 # Create an "output" from these inputs and schema, for JSON for Open SDG.
-opensdg_output = sdg.outputs.OutputOpenSdg(inputs, schema, output_folder='_site')
+opensdg_output = sdg.outputs.OutputOpenSdg(inputs, schema, output_folder='_site', translations=translations)
 
 # Validate the indicators.
 validation_successful = opensdg_output.validate()

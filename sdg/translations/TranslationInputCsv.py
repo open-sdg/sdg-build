@@ -53,4 +53,4 @@ class TranslationInputCsv(TranslationInputBase):
             self.add_translation(language, group, key, value)
 
     def execute(self):
-        self.parse_yaml(self.source)
+        self.parse_csv(self.source)

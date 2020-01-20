@@ -214,8 +214,7 @@ class InputSdmx(InputBase):
             elif len(indicator_names) > len(indicator_ids):
                 # If there were more indicator names than indicator ids, we
                 # just have to arbitrarily pick the first ones.
-                last_id_index = len(indicator_ids) - 1
-                indicator_names = indicator_names[0:last_id_index]
+                indicator_names = indicator_names[0:len(indicator_ids)]
 
             # Now loop through, normalize and store the ids and names per series id.
             for index, element in enumerate(indicator_names):

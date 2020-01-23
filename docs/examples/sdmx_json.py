@@ -62,6 +62,13 @@ validation_successful = opensdg_output.validate()
 
 # If everything was valid, perform the build.
 if validation_successful:
-    opensdg_output.execute()
+    # Here are several ways you can generate the build:
+    # 1. Translated into a single language, like English: opensdg_output.execute('en')
+    #    (the build will appear in '_site/en')
+    # 2. Translated into several languages: opensdg_output.execute_per_language(['es', 'ru', 'en'])
+    #    (three builds will appear in '_site/es', '_site/ru', and '_site/en')
+    # 3. Untranslated: opensdg_output.execute()
+    #    (the build will appear in '_site')
+    opensdg_output.execute_per_language(['es', 'ru', 'en'])
 else:
     raise Exception('There were validation errors. See output above.')

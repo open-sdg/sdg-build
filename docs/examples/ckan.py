@@ -59,6 +59,6 @@ if validation_successful:
     #    (three builds will appear in '_site/es', '_site/ru', and '_site/en')
     # 3. Untranslated: opensdg_output.execute()
     #    (the build will appear in '_site')
-    opensdg_output.execute()
+    opensdg_output.execute_per_language(['es', 'ru', 'en'])
 else:
     raise Exception('There were validation errors. See output above.')

@@ -14,7 +14,7 @@ class InputSdmx(InputBase):
                  dimension_map={},
                  indicator_id_map={},
                  import_names=True,
-                 import_translation_keys=True,
+                 import_translation_keys=False,
                  dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
                  indicator_id_xpath=".//Annotation[AnnotationTitle='Indicator']/AnnotationText",
                  indicator_name_xpath=".//Annotation[AnnotationTitle='IndicatorTitle']/AnnotationText"):
@@ -49,7 +49,11 @@ class InputSdmx(InputBase):
             Whether to import names. Set to False to rely on global names
         import_translation_keys : boolean
             Whether to import translation keys instead of text values. Set to
-            False to import text values (taken from the first language in the DSD).
+            True to import translation keys, which will be in the format of:
+            * code.[id]
+            * concept.[id]
+            If left False, text values are imported instead, taken from the
+            first language in the DSD.
         dsd : string
             Remote URL of the SDMX DSD (data structure definition) or path to
             local file.

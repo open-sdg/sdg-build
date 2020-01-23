@@ -35,6 +35,7 @@ data_input = sdg.inputs.InputSdmxJson(
     source=source,
     dimension_map=dimension_map,
     dsd=dsd,
+    import_translation_keys=True,
     indicator_id_map=indicator_id_map,
     indicator_id_xpath=indicator_id_xpath,
     indicator_name_xpath=indicator_name_xpath

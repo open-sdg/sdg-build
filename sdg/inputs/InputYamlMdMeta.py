@@ -6,7 +6,7 @@ from sdg.Indicator import Indicator
 class InputYamlMdMeta(InputFiles):
     """Sources of SDG metadata that are local .md files containing Yaml."""
 
-    def __init__(self, path_pattern='', git=False):
+    def __init__(self, path_pattern='', git=True):
         """Constructor for InputYamlMdMeta.
 
         Keyword arguments:

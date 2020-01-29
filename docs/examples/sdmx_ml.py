@@ -34,6 +34,7 @@ data_input = sdg.inputs.InputSdmxMl_Structure(
     dimension_map=dimension_map,
     dsd=dsd,
     drop_dimensions=drop_dimensions,
+    import_translation_keys=True,
     indicator_id_xpath=indicator_id_xpath,
     indicator_name_xpath=indicator_name_xpath
 )
@@ -48,8 +49,8 @@ translations = [
     # Use two Git repos containing translations.
     sdg.translations.TranslationInputSdgTranslations(source='https://github.com/open-sdg/translations-un-sdg.git', tag='1.0.0-rc1'),
     sdg.translations.TranslationInputSdgTranslations(source='https://github.com/open-sdg/translations-open-sdg.git', tag='1.0.0-rc2'),
-    # Also look for translations in a local 'translations' folder.
-    sdg.translations.TranslationInputYaml(source='translations'),
+    # Also pull in translations from the SDMX DSD.
+    sdg.translations.TranslationInputSdmx(source=dsd),
 ]
 
 # Create an "output" from these inputs and schema, for JSON for Open SDG.

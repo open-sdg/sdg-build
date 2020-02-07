@@ -57,6 +57,7 @@ SDG Build can also import translations and use them to produce fully-translated 
 The export formats include:
 
 * JSON
+* GeoJSON
 
 ## Upcoming integrations
 
@@ -64,7 +65,6 @@ Other inputs and outputs are either under development or planned for the future:
 
 * Output to SDMX, both SDMX-JSON and SDMX-ML
 * Input and output from/to CSV-W
-* Input and output from/to GeoJSON
 
 ## Usage
 
@@ -112,6 +112,14 @@ An example conversion from CKAN data to JSON suitable for the Open SDG platform:
 
 ```
 python docs/examples/ckan.py
+```
+
+### Example #6: CSV to GeoJSON
+
+An example conversion from CSV data to GeoJSON suitable for mapping:
+
+```
+python docs/examples/geojson.py
 ```
 
 ## Additional documentation

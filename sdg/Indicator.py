@@ -1,4 +1,5 @@
 import copy
+import json
 import sdg
 import pandas as pd
 from sdg.translations import TranslationHelper
@@ -241,6 +242,7 @@ class Indicator:
         # Finally place the translation for later access.
         self.translations[language] = indicator
 
+
     def is_complete(self):
         """Decide whether this indicator can be considered "complete".
 
@@ -302,3 +304,42 @@ class Indicator:
             return None
 
         return self.meta[field]
+
+
+    def get_all_series(self):
+        """Indicator data can have multiple combinations of disaggregations,
+        which are here called "series". For our purposes, a "series" is a full
+        set of available years (for example, 2008, 2009, and 2010) with the
+        corresponding values (for example, 0.7, 0.8, and 0.9) and a description
+        of how it is disaggregated (for example, Female, Age 60+, Urban).
+
+        Each series is a dict containing a 'disaggregations' dict and a 'values'
+        dict. For example:
+
+        {
+            'disaggregations': {
+                'Sex': 'Female',
+                'Age': '60+',
+                'Area': 'Urban'
+            },
+            'values': {
+                2008: 0.7,
+                2009: 0.8,
+                2010: 0.9
+            }
+        }
+        """
+        all_series = {}
+        for index, row in self.data.iterrows():
+            # Assume "disaggregations" are everything except 'Year' and 'Value'.
+            disaggregations = row.drop('Value').drop('Year').to_dict()
+            # Serialize so that we can use a set of disaggregations as a key.
+            serialized = json.dumps(disaggregations)
+            # Initialized any new series.
+            if serialized not in all_series:
+                all_series[serialized] = sdg.Series(disaggregations)
+            # Finally add the year and value.
+            all_series[serialized].add_value(row['Year'], row['Value'])
+
+        # We only want to return a list, not a dict.
+        return all_series.values()

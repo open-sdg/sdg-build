@@ -234,3 +234,44 @@ class Indicator:
 
         # Finally place the translation for later access.
         self.translations[language] = indicator
+
+    def is_complete(self):
+        """Decide whether this indicator can be considered "complete".
+
+        Returns : boolean
+            True if the indicator can be considered "complete", False otherwise.
+        """
+        # First, check for an open-sdg-style "reporting_status" metadata field,
+        # for a value of "complete".
+        reporting_status = self.get_meta_field_value('reporting_status')
+        if reporting_status is not None and reporting_status == 'complete':
+            return True
+        # If there was some other reporting status, assume not complete.
+        elif reporting_status is not None:
+            return False
+        # Otherwise fall back to whether the indicator has data and metadata.
+        else:
+            return self.has_data() and self.has_meta()
+
+    def get_meta_field_value(self, field, language=None):
+        """Get the value for a metadata field.
+
+        Parameters
+        ----------
+        field : string
+            The key of the metadata field.
+        language : string or None
+            A language to use for translation, if any.
+
+        Return : string or None
+            The value of the specified field in the specified language, or
+            just None if the field could not be found.
+        """
+
+        if not self.has_meta():
+            return None
+
+        if field not in self.meta:
+            return None
+
+        return self.language(language).meta[field]

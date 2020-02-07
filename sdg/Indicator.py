@@ -253,19 +253,17 @@ class Indicator:
         else:
             return self.has_data() and self.has_meta()
 
-    def get_meta_field_value(self, field, language=None):
+    def get_meta_field_value(self, field):
         """Get the value for a metadata field.
 
         Parameters
         ----------
         field : string
             The key of the metadata field.
-        language : string or None
-            A language to use for translation, if any.
 
         Return : string or None
-            The value of the specified field in the specified language, or
-            just None if the field could not be found.
+            The value of the specified field or just None if the field could not
+            be found.
         """
 
         if not self.has_meta():
@@ -274,4 +272,4 @@ class Indicator:
         if field not in self.meta:
             return None
 
-        return self.language(language).meta[field]
+        return self.meta[field]

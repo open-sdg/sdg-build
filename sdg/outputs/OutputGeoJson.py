@@ -106,6 +106,9 @@ class OutputGeoJson(OutputBase):
                 # Loop through the features.
                 for index, feature in enumerate(geometry_data['features']):
                     geocode = feature['properties'][self.id_property]
+                    # If there are no series for this geocode, skip it.
+                    if geocode not in series_by_geocodes:
+                        continue
                     disaggregations = [series.get_disaggregations() for series in series_by_geocodes[geocode]]
                     values = [series.get_values() for series in series_by_geocodes[geocode]]
                     # Do some cleanup of the disaggregations.

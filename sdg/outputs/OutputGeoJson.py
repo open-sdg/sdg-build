@@ -129,7 +129,7 @@ class OutputGeoJson(OutputBase):
                     geometry_data['features'][index]['properties']['values'] = values
                     # Translate the name, if necessary using a 'data' group.
                     feature_name = feature['properties'][self.name_property]
-                    feature_name = self.translation_helper.translate(feature_name, language, default_group='data'):
+                    feature_name = self.translation_helper.translate(feature_name, language, default_group='data')
                     # Normalize the id and name properties.
                     geometry_data['features'][index]['properties']['name'] = feature_name
                     geometry_data['features'][index]['properties']['geocode'] = feature['properties'][self.id_property]

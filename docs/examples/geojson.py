@@ -25,6 +25,8 @@ id_property = 'kzCode'
 # The column in the source data representing some data's regional id. This
 # "joins" the source data with the geometry file.
 id_column = 'GeoCode'
+# The subfolder to put all the geojson files in.
+output_subfolder = 'regions'
 
 # Create an "output" from these inputs/schema/translations, for GeoJSON output.
 geojson_output = sdg.outputs.OutputGeoJson(
@@ -34,7 +36,8 @@ geojson_output = sdg.outputs.OutputGeoJson(
     geometry_file=geometry_file,
     name_property=name_property,
     id_property=id_property,
-    id_column=id_column)
+    id_column=id_column,
+    output_subfolder=output_subfolder)
 
 # Validate the indicators.
 validation_successful = geojson_output.validate()

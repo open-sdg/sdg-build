@@ -12,7 +12,7 @@ class OutputGeoJson(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=[],
         geometry_file='regions.geojson', name_property='name', id_property='id',
-        id_column='GeoCode'):
+        id_column='GeoCode', output_subfolder='regions'):
         """Constructor for OutputGeoJson.
 
         Parameters
@@ -86,15 +86,7 @@ class OutputGeoJson(OutputBase):
         """Write the GeoJSON output. Overrides parent."""
         status = True
 
-        # The output folder reflects the filename of the geometry file. The
-        # following converts any URL or local file path into a base filename
-        # without extension.
-        geometry_filename = self.geometry_file.split('/')[-1]
-        geometry_filename = geometry_filename.split('.')[0]
-        # Safety code.
-        if len(geometry_filename) < 2:
-            geometry_filename = 'regions'
-        target_folder = os.path.join(self.output_folder, 'geojson', geometry_filename)
+        target_folder = os.path.join(self.output_folder, 'geojson', self.output_subfolder)
         if not os.path.exists(target_folder):
             os.makedirs(target_folder, exist_ok=True)
 

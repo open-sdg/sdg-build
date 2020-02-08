@@ -12,7 +12,7 @@ class OutputGeoJson(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=[],
         geometry_file='regions.geojson', name_property='name', id_property='id',
-        id_column='GeoCode', output_subfolder='regions'):
+        id_column='GeoCode', output_subfolder='regions', filename_prefix='indicator_'):
         """Constructor for OutputGeoJson.
 
         Parameters
@@ -35,6 +35,9 @@ class OutputGeoJson(OutputBase):
         output_subfolder : string
             A folder beneath 'geojson' to put the files. The full path will be:
             [output_folder]/geojson/[output_subfolder]/[indicator_id].geojson
+        filename_prefix : string
+            A prefix added before the indicator id to construct a filename for
+            each geojson file.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations)
         self.geometry_file = geometry_file
@@ -42,6 +45,7 @@ class OutputGeoJson(OutputBase):
         self.id_property = id_property
         self.id_column = id_column
         self.output_subfolder = output_subfolder
+        self.filename_prefix = filename_prefix
         self.geometry_data = self.fetch_geometry_data()
 
 
@@ -142,7 +146,7 @@ class OutputGeoJson(OutputBase):
                     del geometry_data['features'][index]['properties'][self.name_property]
                     del geometry_data['features'][index]['properties'][self.id_property]
                 # Finally write the updated GeoJSON file.
-                filename = inid + '.geojson'
+                filename = self.filename_prefix + inid + '.geojson'
                 filepath = os.path.join(target_folder, filename)
                 with open(filepath, 'w') as f:
                     json.dump(geometry_data, f)

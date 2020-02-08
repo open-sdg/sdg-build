@@ -93,8 +93,8 @@ class OutputGeoJson(OutputBase):
         geometry_filename = geometry_filename.split('.')[0]
         # Safety code.
         if len(geometry_filename) < 2:
-            geometry_filename = 'geojson'
-        target_folder = os.path.join(self.output_folder, geometry_filename)
+            geometry_filename = 'regions'
+        target_folder = os.path.join(self.output_folder, 'geojson', geometry_filename)
         if not os.path.exists(target_folder):
             os.makedirs(target_folder, exist_ok=True)
 

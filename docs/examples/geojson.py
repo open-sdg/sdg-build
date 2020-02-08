@@ -9,7 +9,12 @@ import sdg
 # Input data from CSV files matching this pattern: tests/data/*-*.csv
 data_pattern = os.path.join('tests', 'data', '*-*.csv')
 data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
-inputs = [data_input]
+
+# Input metadata from YAML files matching this pattern: tests/meta/*-*.md
+meta_pattern = os.path.join('tests', 'meta', '*-*.md')
+meta_input = sdg.inputs.InputYamlMdMeta(path_pattern=meta_pattern)
+
+inputs = [data_input, meta_input]
 
 # Use a Prose.io file for the metadata schema.
 schema_path = os.path.join('tests', '_prose.yml')

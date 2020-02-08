@@ -3,18 +3,16 @@ import pandas as pd
 class Series:
     """Data model for series within SDG indicators."""
 
-    def __init__(self, disaggregations, values={}):
+    def __init__(self, disaggregations):
         """Constructor for the SDG series instances.
 
         Parameters
         ----------
         disaggregations : dict
             A dict describing the disaggregations contained in the series.
-        values : dict
-            A dict containing the year/value pairs for the series.
         """
         self.disaggregations = disaggregations
-        self.values = values
+        self.values = {}
 
 
     def get_disaggregations(self):
@@ -47,6 +45,9 @@ class Series:
         value : numeric
             The numerical value to add.
         """
+        if year in self.values:
+            raise KeyError('There is already a value for this year.')
+
         self.values[year] = value
 
     def has_disaggregation(self, disaggregation):

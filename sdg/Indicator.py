@@ -155,7 +155,7 @@ class Indicator:
         return self.inid.replace('-', '.')
 
 
-    def require_meta(self, minimum_metadata={}):
+    def require_meta(self, minimum_metadata=None):
         """Ensure the metadata for this indicator has minimum necessary values.
 
         Parameters
@@ -163,6 +163,9 @@ class Indicator:
         minimum_metadata : Dict
             Key/value pairs of minimum metadata for this indicator.
         """
+        if minimum_metadata is None:
+            minimum_metadata = {}
+
         if self.meta is None:
             self.meta = minimum_metadata
         else:

@@ -6,7 +6,7 @@ class OutputBase:
     """Base class for destinations of SDG data/metadata."""
 
 
-    def __init__(self, inputs, schema, output_folder='', translations=[]):
+    def __init__(self, inputs, schema, output_folder='', translations=None):
         """Constructor for OutputBase.
 
         inputs: list
@@ -18,6 +18,9 @@ class OutputBase:
         translations: list
             A list of TranslationInputBase (or descendant) classes.
         """
+        if translations is None:
+            translations = []
+
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
         self.output_folder = output_folder

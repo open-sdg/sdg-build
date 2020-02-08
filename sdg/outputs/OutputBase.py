@@ -6,7 +6,7 @@ class OutputBase:
     """Base class for destinations of SDG data/metadata."""
 
 
-    def __init__(self, inputs, schema, output_folder='', translations=None):
+    def __init__(self, inputs, schema, output_folder='_site', translations=None):
         """Constructor for OutputBase.
 
         inputs: list

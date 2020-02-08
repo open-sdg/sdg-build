@@ -10,8 +10,9 @@ class OutputGeoJson(OutputBase):
     """Output SDG data/metadata in GeoJson disaggregated by region."""
 
 
-    def __init__(self, inputs, schema, output_folder='', translations=[],
-        geometry_file=None, name_property=None, id_property=None, id_column=None):
+    def __init__(self, inputs, schema, output_folder='_site', translations=[],
+        geometry_file='regions.geojson', name_property='name', id_property='id',
+        id_column='GeoCode'):
         """Constructor for OutputGeoJson.
 
         Parameters
@@ -85,11 +86,17 @@ class OutputGeoJson(OutputBase):
         """Write the GeoJSON output. Overrides parent."""
         status = True
 
-        # Make sure the target folder exists.
-        folder = os.path.join(self.output_folder, 'geojson')
-        if not os.path.exists(folder):
-            os.makedirs(folder, exist_ok=True)
-        target_folder = folder
+        # The output folder reflects the filename of the geometry file. The
+        # following converts any URL or local file path into a base filename
+        # without extension.
+        geometry_filename = self.geometry_file.split('/')[-1]
+        geometry_filename = geometry_filename.split('.')[0]
+        # Safety code.
+        if len(geometry_filename) < 2:
+            geometry_filename = 'geojson'
+        target_folder = os.path.join(self.output_folder, geometry_filename)
+        if not os.path.exists(target_folder):
+            os.makedirs(target_folder, exist_ok=True)
 
         for inid in self.indicators:
             indicator = self.indicators[inid]

@@ -8,7 +8,7 @@ class OutputOpenSdg(OutputBase):
     """Output SDG data/metadata in the formats expected by Open SDG."""
 
 
-    def __init__(self, inputs, schema, output_folder='', translations=None,
+    def __init__(self, inputs, schema, output_folder='_site', translations=None,
         reporting_status_extra_fields=None):
         """Constructor for OutputOpenSdg.
 

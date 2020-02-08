@@ -32,12 +32,16 @@ class OutputGeoJson(OutputBase):
             The name of a column in the indicator data which corresponds to the
             id that is in the "id_property" of the geometry file. This serves to
             "join" the indicator data with the geometry file.
+        output_subfolder : string
+            A folder beneath 'geojson' to put the files. The full path will be:
+            [output_folder]/geojson/[output_subfolder]/[indicator_id].geojson
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations)
         self.geometry_file = geometry_file
         self.name_property = name_property
         self.id_property = id_property
         self.id_column = id_column
+        self.output_subfolder = output_subfolder
         self.geometry_data = self.fetch_geometry_data()
 
 

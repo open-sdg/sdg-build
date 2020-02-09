@@ -165,3 +165,40 @@ class OutputGeoJson(OutputBase):
             if pd.isna(disaggregations[key]):
                 disaggregations[key] = None
         return disaggregations
+
+
+    def validate(self):
+        """Validate geojson-related source data. Overrides parent.
+
+        This output does not currently test general data and metadata, as it is
+        assumed that this is a supplemental output, and that another output will
+        validate all of that.
+        """
+
+        status = True
+
+        # Make sure the geojson_file has the required properties on each feature.
+        for index, feature in enumerate(self.geometry_data['features']):
+            feature_is_bad = True
+            if self.name_property not in feature['properties']:
+                print('Name property "' + self.name_property + '" not found in feature:')
+                feature_is_bad = False
+            if self.id_property not in feature['properties']:
+                print('ID property "' + self.id_property + '" not found in feature:')
+                feature_is_bad = False
+            if feature_is_bad:
+                print(feature['properties'])
+                status = False
+
+        # Make sure at least one indicator has geocodes.
+        no_indicators_have_geocodes = True
+        for inid in self.indicators:
+            if self.indicator_has_geocodes(self.indicators[inid]):
+                no_indicators_have_geocodes = False
+                break
+
+        if no_indicators_have_geocodes:
+            print('No indicators have data under "' + self.id_column + '".')
+            status = False
+
+        return status

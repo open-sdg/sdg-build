@@ -179,13 +179,13 @@ class OutputGeoJson(OutputBase):
 
         # Make sure the geojson_file has the required properties on each feature.
         for index, feature in enumerate(self.geometry_data['features']):
-            feature_is_bad = True
+            feature_is_bad = False
             if self.name_property not in feature['properties']:
                 print('Name property "' + self.name_property + '" not found in feature:')
-                feature_is_bad = False
+                feature_is_bad = True
             if self.id_property not in feature['properties']:
                 print('ID property "' + self.id_property + '" not found in feature:')
-                feature_is_bad = False
+                feature_is_bad = True
             if feature_is_bad:
                 print(feature['properties'])
                 status = False

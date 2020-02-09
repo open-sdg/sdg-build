@@ -11,7 +11,7 @@ class OutputGeoJson(OutputBase):
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-        geometry_file='regions.geojson', name_property='name', id_property='id',
+        geojson_file='regions.geojson', name_property='name', id_property='id',
         id_column='GeoCode', output_subfolder='regions', filename_prefix='indicator_'):
         """Constructor for OutputGeoJson.
 
@@ -20,7 +20,7 @@ class OutputGeoJson(OutputBase):
 
         Inherits all the parameters from OutputBase, plus the following:
 
-        geometry_file : string
+        geojson_file : string
             A path to a GeoJSON file (remote or local) which contains all of the
             "geometries" for the regions to include. Each region should have an
             id and a name, in properties (see name_property and id_property).
@@ -43,7 +43,7 @@ class OutputGeoJson(OutputBase):
             translations = []
 
         OutputBase.__init__(self, inputs, schema, output_folder, translations)
-        self.geometry_file = geometry_file
+        self.geojson_file = geojson_file
         self.name_property = name_property
         self.id_property = id_property
         self.id_column = id_column
@@ -53,7 +53,7 @@ class OutputGeoJson(OutputBase):
 
 
     def fetch_geometry_data(self):
-        """Grab the data referenced by the "geometry_file" parameter.
+        """Grab the data referenced by the "geojson_file" parameter.
 
         Returns
         -------
@@ -62,11 +62,11 @@ class OutputGeoJson(OutputBase):
         """
         file = None
         data = None
-        if self.geometry_file.startswith('http'):
-            file = urlopen(self.geometry_file)
+        if self.geojson_file.startswith('http'):
+            file = urlopen(self.geojson_file)
             data = file.read().decode('utf-8')
         else:
-            file = open(self.geometry_file)
+            file = open(self.geojson_file)
             data = file.read()
         file.close()
 

@@ -48,7 +48,7 @@ reporting_status_extra_fields: []
 # Open SDG maps. The parameters available correspond to the OutputGeoJson class.
 # See sdg/outputs/OutputGeoJson.py for more information.
 map_layers:
-  - geometry_file: regions.geojson
+  - geojson_file: regions.geojson
     name_property: kzName
     id_property: kzCode
     output_subfolder: regions

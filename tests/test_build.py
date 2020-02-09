@@ -38,7 +38,20 @@ def test_build(test_site_dir):
     assert opensdg_output.validate()
     assert opensdg_output.execute()
 
-    exp_dirs = set(['comb', 'data', 'edges', 'headline', 'meta', 'stats', 'zip', 'translations'])
+    # Also generate GeoJSON output.
+    geojson_output = sdg.outputs.OutputGeoJson(
+        inputs=inputs,
+        schema=schema,
+        output_folder=site_dir,
+        translations=translations,
+        geojson_file='https://geoportal1-ons.opendata.arcgis.com/datasets/4fcca2a47fed4bfaa1793015a18537ac_4.geojson',
+        name_property='rgn17nm',
+        id_property='rgn17cd')
+
+    assert geojson_output.validate()
+    assert geojson_output.execute()
+
+    exp_dirs = set(['comb', 'data', 'edges', 'headline', 'meta', 'stats', 'zip', 'translations', 'geojson'])
     act_dirs = os.listdir(site_dir)
 
     assert all([a in exp_dirs for a in act_dirs])
@@ -131,3 +144,10 @@ def test_built_schema(test_site_dir):
     reporting_status_field = next((item for item in schema_output if item['name'] == 'reporting_status'), None)
     assert reporting_status_field
     assert reporting_status_field['field']['label'] == 'Reporting status'
+
+
+def test_built_geojson(test_site_dir):
+    geojson = json.load(
+        open(os.path.join(test_site_dir, 'geojson', 'regions', 'indicator_1-3-1.geojson'))
+    )
+    assert 'features' in geojson

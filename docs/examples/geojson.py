@@ -22,7 +22,7 @@ schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
 
 # GeoJSON parameters.
 # The base GeoJSON file containing the regional geometries (borders).
-geometry_file = 'tests/geometry.geojson'
+geometry_file = 'tests/regions.geojson'
 # The property of the features in the geometry file representing a region's name.
 name_property = 'kzName'
 # The property of the features in the geometry file representing a region's id.

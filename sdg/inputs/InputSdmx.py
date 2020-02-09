@@ -9,10 +9,10 @@ class InputSdmx(InputBase):
 
     def __init__(self,
                  source='',
-                 drop_dimensions=[],
+                 drop_dimensions=None,
                  drop_singleton_dimensions=True,
-                 dimension_map={},
-                 indicator_id_map={},
+                 dimension_map=None,
+                 indicator_id_map=None,
                  import_names=True,
                  import_translation_keys=False,
                  dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
@@ -62,6 +62,13 @@ class InputSdmx(InputBase):
         indicator_name_xpath : string
             An xpath query to find the indicator name within each Series code
         """
+        if drop_dimensions is None:
+            drop_dimensions = []
+        if dimension_map is None:
+            dimension_map = {}
+        if indicator_id_map is None:
+            indicator_id_map = {}
+
         self.source = source
         self.dsd = self.parse_xml(dsd)
         self.drop_dimensions = drop_dimensions

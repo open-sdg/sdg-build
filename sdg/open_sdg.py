@@ -198,6 +198,11 @@ def open_sdg_prep(options):
         }
         for key in map_layer:
             geojson_kwargs[key] = map_layer[key]
+        # If the geojson_file parameter is not remote, make sure it uses src_dir.
+        if not geojson_kwargs['geojson_file'].startswith('http'):
+            geojson_file = os.path.join(options['src_dir'], geojson_kwargs['geojson_file'])
+            geojson_kwargs['geojson_file'] = geojson_file
+        # Create the output.
         outputs.append(sdg.outputs.OutputGeoJson(**geojson_kwargs))
 
     return outputs

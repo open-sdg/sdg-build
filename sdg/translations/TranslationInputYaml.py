@@ -53,9 +53,10 @@ class TranslationInputYaml(TranslationInputBase):
                     try:
                         yamldata = yaml.load(stream, Loader=yaml.FullLoader)
                         # Loop through the YAML data to add the translations.
-                        for key in yamldata:
-                            value = yamldata[key]
-                            self.add_translation(language, group, key, value)
+                        if yamldata is not None:
+                            for key in yamldata:
+                                value = yamldata[key]
+                                self.add_translation(language, group, key, value)
                     except Exception as exc:
                         print(exc)
 

@@ -10,7 +10,7 @@ class OutputGeoJson(OutputBase):
     """Output SDG data/metadata in GeoJson disaggregated by region."""
 
 
-    def __init__(self, inputs, schema, output_folder='_site', translations=[],
+    def __init__(self, inputs, schema, output_folder='_site', translations=None,
         geometry_file='regions.geojson', name_property='name', id_property='id',
         id_column='GeoCode', output_subfolder='regions', filename_prefix='indicator_'):
         """Constructor for OutputGeoJson.
@@ -39,6 +39,9 @@ class OutputGeoJson(OutputBase):
             A prefix added before the indicator id to construct a filename for
             each geojson file.
         """
+        if translations is None:
+            translations = []
+
         OutputBase.__init__(self, inputs, schema, output_folder, translations)
         self.geometry_file = geometry_file
         self.name_property = name_property

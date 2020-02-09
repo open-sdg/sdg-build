@@ -36,7 +36,7 @@ def open_sdg_config(config_file, defaults):
 
 
 def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
-                   languages=None, translations=None,
+                   languages=None, translations=None, map_layers=None,
                    reporting_status_extra_fields=None, config='open_sdg_config.yml'):
     """Read each input file and edge file and write out json.
 
@@ -47,6 +47,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         schema_file: str. Location of schema file relative to src_dir
         languages: list. A list of language codes, for translated builds
         translations: list. A list of git repositories to pull translations from
+        map_layers: list. A list of dicts describing geojson to process
         reporting_status_extra_fields: list. A list of extra fields to generate
           reporting stats for.
         config: str. Path to a YAML config file that overrides other parameters
@@ -54,6 +55,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     Returns:
         Boolean status of file writes
     """
+    if map_layers is None:
+        map_layers = []
 
     status = True
 
@@ -64,20 +67,22 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'schema_file': schema_file,
         'languages': languages,
         'translations': translations,
+        'map_layers': map_layers,
         'reporting_status_extra_fields': reporting_status_extra_fields
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
 
-    # Prepare the output.
-    output = open_sdg_prep(options)
+    # Prepare the outputs.
+    outputs = open_sdg_prep(options)
 
-    if options['languages']:
-        # If languages were provide, perform a translated build.
-        status = status & output.execute_per_language(options['languages'])
-    else:
-        # Otherwise perform an untranslated build.
-        status = status & output.execute()
+    for output in outputs:
+        if options['languages']:
+            # If languages were provide, perform a translated build.
+            status = status & output.execute_per_language(options['languages'])
+        else:
+            # Otherwise perform an untranslated build.
+            status = status & output.execute()
 
     return status
 
@@ -107,8 +112,13 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
     options = open_sdg_config(config, defaults)
 
     # Prepare and validate the output.
-    output = open_sdg_prep(options)
-    return output.validate()
+    outputs = open_sdg_prep(options)
+
+    status = True
+    for output in outputs:
+        status = status & output.validate()
+
+    return status
 
 
 def open_sdg_prep(options):
@@ -118,7 +128,7 @@ def open_sdg_prep(options):
         options: Dict of options.
 
     Returns:
-        The prepared OutputBase object.
+        List of the prepared OutputBase objects.
     """
 
     # Set defaults for the mutable parameters.
@@ -169,9 +179,25 @@ def open_sdg_prep(options):
         reporting_status_extra_fields = options['reporting_status_extra_fields']
 
     # Create an "output" from these inputs/schema/translations, for Open SDG output.
-    return sdg.outputs.OutputOpenSdg(
+    opensdg_output = sdg.outputs.OutputOpenSdg(
         inputs=inputs,
         schema=schema,
         output_folder=options['site_dir'],
         translations=all_translations,
         reporting_status_extra_fields=reporting_status_extra_fields)
+
+    outputs = [opensdg_output]
+
+    # If there are any map layers, create some OutputGeoJson objects.
+    for map_layer in options['map_layers']:
+        geojson_kwargs = {
+            'inputs': inputs,
+            'schema': schema,
+            'output_folder': options['site_dir'],
+            'translations': all_translations
+        }
+        for key in map_layer:
+            geojson_kwargs[key] = map_layer[key]
+        outputs.append(sdg.outputs.OutputGeoJson(**geojson_kwargs))
+
+    return outputs

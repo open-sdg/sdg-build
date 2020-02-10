@@ -24,7 +24,7 @@ class InputCSVMeta(InputFiles):
             # Need to get the folder of the folder of the indicator file.
             src_dir = os.path.dirname(indicator_map[inid])
             src_dir = os.path.dirname(src_dir)                
-            meta = sdg.meta.read_meta(inid, git=self.git, src_dir=src_dir)
+            meta = read_csv_meta(inid, git=self.git, src_dir=src_dir)
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta)
            

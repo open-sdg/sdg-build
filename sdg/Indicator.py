@@ -307,27 +307,12 @@ class Indicator:
 
 
     def get_all_series(self):
-        """Indicator data can have multiple combinations of disaggregations,
-        which are here called "series". For our purposes, a "series" is a full
-        set of available years (for example, 2008, 2009, and 2010) with the
-        corresponding values (for example, 0.7, 0.8, and 0.9) and a description
-        of how it is disaggregated (for example, Female, Age 60+, Urban).
+        """Get all of the series present in this indicator's data.
 
-        Each series is a dict containing a 'disaggregations' dict and a 'values'
-        dict. For example:
-
-        {
-            'disaggregations': {
-                'Sex': 'Female',
-                'Age': '60+',
-                'Area': 'Urban'
-            },
-            'values': {
-                2008: 0.7,
-                2009: 0.8,
-                2010: 0.9
-            }
-        }
+        Returns
+        -------
+        list
+            List of Series objects.
         """
         all_series = {}
         for index, row in self.data.iterrows():

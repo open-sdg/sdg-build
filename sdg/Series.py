@@ -1,7 +1,28 @@
 import pandas as pd
 
 class Series:
-    """Data model for series within SDG indicators."""
+    """Data model for series within SDG indicators.
+
+    Indicator data can have multiple combinations of disaggregations, which are
+    here called "series". For our purposes, a "series" is a full set of available
+    years (for example, 2008, 2009, and 2010) with the corresponding values (for
+    example, 0.7, 0.8, and 0.9) and a description of how it is disaggregated
+    (for example, Female, Age 60+, Urban).
+
+    Each series contains 'disaggregations' and 'values'. For example a series
+    'disaggregations might look like this:
+        {
+            'Sex': 'Female',
+            'Age': '60+',
+            'Area': 'Urban'
+        }
+    And a series values might look like this:
+        {
+            2008: 0.7,
+            2009: 0.8,
+            2010: 0.9
+        }
+    """
 
     def __init__(self, disaggregations):
         """Constructor for the SDG series instances.

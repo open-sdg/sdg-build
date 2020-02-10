@@ -50,7 +50,7 @@ class IndicatorExportService:
     def __file_is_suitable_for_export(self, file_name):
         indicator_id = file_name.split('.')[0]
         if indicator_id not in self.__indicators:
-            raise KeyError("Could not check whether %s is complete." % indicator_id)
+            raise KeyError("Could not check whether %s is suitable for export." % indicator_id)
         suitable = True
         suitable = suitable & self.__indicators[indicator_id].is_complete()
         suitable = suitable & self.__indicators[indicator_id].is_statistical()

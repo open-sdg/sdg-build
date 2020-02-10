@@ -4,6 +4,7 @@ import numpy as np
 import sdg
 from sdg.inputs import InputFiles
 from sdg.Indicator import Indicator
+from sdg.path import input_path, output_path  # local package
 
 class InputCSVMeta(InputFiles):
     """Sources of SDG metadata that are local CSV files."""

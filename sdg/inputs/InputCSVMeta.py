@@ -1,4 +1,6 @@
 import os
+import pandas as pd
+import numpy as np
 import sdg
 from sdg.inputs import InputFiles
 from sdg.Indicator import Indicator

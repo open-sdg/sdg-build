@@ -34,7 +34,7 @@ class InputCSVMeta(InputFiles):
         metadata_mapping = pd.read_csv(os.path.join('metadata-mapping.csv'), header=None, names=["Field name", "Field value"])
         meta_csv = pd.read_csv(fr, header=None, names=["Field name", "Field key"])
 
-        meta_df=pd.merge(meta_mapping, meta_csv, on="Field name")
+        meta_df=pd.merge(metadata_mapping, meta_csv, on="Field name")
 
         meta=dict()
         for row in meta_df.iterrows():

@@ -32,6 +32,10 @@ id_property = 'rgn17cd'
 id_column = 'GeoCode'
 # The subfolder to put all the geojson files in.
 output_subfolder = 'regions'
+# A prefix to put in front of each geojson file.
+filename_prefix = 'indicator_'
+# Any columns in the source data you want to exclude from the geojson.
+exclude_columns = []
 
 # Create an "output" from these inputs/schema/translations, for GeoJSON output.
 geojson_output = sdg.outputs.OutputGeoJson(
@@ -42,7 +46,9 @@ geojson_output = sdg.outputs.OutputGeoJson(
     name_property=name_property,
     id_property=id_property,
     id_column=id_column,
-    output_subfolder=output_subfolder)
+    output_subfolder=output_subfolder,
+    filename_prefix=filename_prefix,
+    exclude_columns=exclude_columns)
 
 # Validate the indicators.
 validation_successful = geojson_output.validate()

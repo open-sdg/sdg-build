@@ -12,7 +12,8 @@ class OutputGeoJson(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
         geojson_file='regions.geojson', name_property='name', id_property='id',
-        id_column='GeoCode', output_subfolder='regions', filename_prefix='indicator_'):
+        id_column='GeoCode', output_subfolder='regions', filename_prefix='indicator_',
+        exclude_columns=None):
         """Constructor for OutputGeoJson.
 
         Parameters
@@ -38,9 +39,15 @@ class OutputGeoJson(OutputBase):
         filename_prefix : string
             A prefix added before the indicator id to construct a filename for
             each geojson file.
+        exclude_columns : list
+            A list of strings, each a column name in the indicator data that
+            should not be included in the disaggregation. This is typically
+            for any columns that mirror the region referenced by the id column.
         """
         if translations is None:
             translations = []
+        if exclude_columns is None:
+            exclude_columns = []
 
         OutputBase.__init__(self, inputs, schema, output_folder, translations)
         self.geojson_file = geojson_file
@@ -49,6 +56,7 @@ class OutputGeoJson(OutputBase):
         self.id_column = id_column
         self.output_subfolder = output_subfolder
         self.filename_prefix = filename_prefix
+        self.exclude_columns = exclude_columns
         self.geometry_data = self.fetch_geometry_data()
 
 
@@ -160,6 +168,10 @@ class OutputGeoJson(OutputBase):
     def clean_disaggregations(self, disaggregations):
         # We don't need the actual geocode column.
         del disaggregations[self.id_column]
+        # Remove any others necessary.
+        for column in self.exclude_columns:
+            if column in disaggregations:
+                del disaggregations[column]
         # Convert null/nan/etc into just null.
         for key in disaggregations:
             if pd.isna(disaggregations[key]):

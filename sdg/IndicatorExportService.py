@@ -32,7 +32,7 @@ class IndicatorExportService:
         all_data_file_names = os.listdir(self.__data_directory)
         csv_data_file_names = []
         for file_name in all_data_file_names:
-            if self.__file_is_csv(file_name) and self.__file_is_suitable_for_export(file_name):
+            if self.__file_is_suitable_for_export(file_name):
                 csv_data_file_names.append(file_name)
 
         csv_data_files = []
@@ -44,17 +44,18 @@ class IndicatorExportService:
 
         return csv_data_files
 
-    def __file_is_csv(self, file_name):
-        return file_name.endswith(".csv")
-
     def __file_is_suitable_for_export(self, file_name):
         indicator_id = file_name.split('.')[0]
         if indicator_id not in self.__indicators:
             raise KeyError("Could not check whether %s is suitable for export." % indicator_id)
         suitable = True
+        suitable = suitable & self.__file_is_csv(file_name)
         suitable = suitable & self.__indicators[indicator_id].is_complete()
         suitable = suitable & self.__indicators[indicator_id].is_statistical()
         return suitable
+
+    def __file_is_csv(self, file_name):
+        return file_name.endswith(".csv")
 
     def __create_zip_file(self, zip_file_name, files_to_include):
         zip_file = ZipFile("%s/%s" % (self.__zip_directory, zip_file_name), "w")

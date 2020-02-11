@@ -2,10 +2,21 @@ import os
 from zipfile import ZipFile
 
 class IndicatorExportService:
-    def __init__(self, site_directory):
+    def __init__(self, site_directory, indicators):
+        """Constructor for IndicatorExportService.
+
+        Parameters
+        ----------
+        site_directory : string
+            Path to an already-performed build. The files to be zipped are
+            assumed to be in a "data" subfolder.
+        indicators : dict
+            A dict of Indicator objects, keyed by indicator id.
+        """
         self.__site_directory = site_directory
         self.__zip_directory = "%s/zip" % site_directory
         self.__data_directory = "%s/data" % site_directory
+        self.__indicators = indicators
 
     def export_all_indicator_data_as_zip_archive(self):
         self.__create_zip_folder_at_site_directory()
@@ -20,9 +31,9 @@ class IndicatorExportService:
     def __get_all_indicator_csv_files(self):
         all_data_file_names = os.listdir(self.__data_directory)
         csv_data_file_names = []
-        for each_data_file_name in all_data_file_names:
-            if self.__file_is_csv(each_data_file_name):
-                csv_data_file_names.append(each_data_file_name)
+        for file_name in all_data_file_names:
+            if self.__file_is_suitable_for_export(file_name):
+                csv_data_file_names.append(file_name)
 
         csv_data_files = []
         for each_file_name in csv_data_file_names:
@@ -32,6 +43,16 @@ class IndicatorExportService:
             })
 
         return csv_data_files
+
+    def __file_is_suitable_for_export(self, file_name):
+        indicator_id = file_name.split('.')[0]
+        if indicator_id not in self.__indicators:
+            raise KeyError("Could not check whether %s is suitable for export." % indicator_id)
+        suitable = True
+        suitable = suitable & self.__file_is_csv(file_name)
+        suitable = suitable & self.__indicators[indicator_id].is_complete()
+        suitable = suitable & self.__indicators[indicator_id].is_statistical()
+        return suitable
 
     def __file_is_csv(self, file_name):
         return file_name.endswith(".csv")

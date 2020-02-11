@@ -4,7 +4,6 @@ import numpy as np
 import sdg
 from sdg.inputs import InputFiles
 from sdg.Indicator import Indicator
-from sdg.path import input_path, output_path  # local package
 
 class InputCSVMeta(InputFiles):
     """Sources of SDG metadata that are local CSV files."""
@@ -25,8 +24,12 @@ class InputCSVMeta(InputFiles):
         for inid in indicator_map:
             # Need to get the folder of the folder of the indicator file.
             src_dir = os.path.dirname(indicator_map[inid])
-            src_dir = os.path.dirname(src_dir)                
-            fr = input_path(inid, ftype='meta', src_dir=src_dir)
+            src_dir = os.path.dirname(src_dir)
+            path = os.path.join(src_dir, 'meta')
+            if inid is not None:
+                fr = os.path.join(path, inid + '.md')
+            else:
+                fr = path
             meta_csv = pd.read_csv(fr, header=None, names=["Field name", "Field key"])
             meta_df=pd.merge(metadata_mapping, meta_csv, on="Field name")
             meta=dict()

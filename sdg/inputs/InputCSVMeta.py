@@ -27,7 +27,7 @@ class InputCSVMeta(InputFiles):
             src_dir = os.path.dirname(src_dir)
             path = os.path.join(src_dir, 'meta')
             if inid is not None:
-                fr = os.path.join(path, inid + '.md')
+                fr = os.path.join(path, inid + '.csv')
             else:
                 fr = path
             meta_csv = pd.read_csv(fr, header=None, names=["Field name", "Field key"])

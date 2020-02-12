@@ -13,7 +13,7 @@ class OutputGeoJson(OutputBase):
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
         geojson_file='regions.geojson', name_property='name', id_property='id',
         id_column='GeoCode', output_subfolder='regions', filename_prefix='indicator_',
-        exclude_columns=None):
+        exclude_columns=None, id_replacements=None):
         """Constructor for OutputGeoJson.
 
         Parameters
@@ -43,11 +43,20 @@ class OutputGeoJson(OutputBase):
             A list of strings, each a column name in the indicator data that
             should not be included in the disaggregation. This is typically
             for any columns that mirror the region referenced by the id column.
+        id_replacements : dict
+            An optional for with replacements to apply to the values in
+            the id_column. This is typically used if another column exists which
+            "mirrors" what would be in an id column, to avoid duplicate work.
+            For example, maybe a "Region" column exists with the names of the
+            regions as values. This can be used to "map" those region names to
+            geocodes, and save you the work of maintaining a separate id column.
         """
         if translations is None:
             translations = []
         if exclude_columns is None:
             exclude_columns = []
+        if id_replacements is None:
+            id_replacements = {}
 
         OutputBase.__init__(self, inputs, schema, output_folder, translations)
         self.geojson_file = geojson_file
@@ -57,6 +66,7 @@ class OutputGeoJson(OutputBase):
         self.output_subfolder = output_subfolder
         self.filename_prefix = filename_prefix
         self.exclude_columns = exclude_columns
+        self.id_replacements = id_replacements
         self.geometry_data = self.fetch_geometry_data()
 
 
@@ -84,6 +94,11 @@ class OutputGeoJson(OutputBase):
 
     def indicator_has_geocodes(self, indicator):
         """Determine if an indicator has geographical data.
+
+        Parameters
+        ----------
+        indicator : Indicator object
+            An Indicator object to examine.
 
         Returns
         -------
@@ -117,6 +132,7 @@ class OutputGeoJson(OutputBase):
                 for series in indicator.get_all_series():
                     if series.has_disaggregation(self.id_column):
                         geocode = series.get_disaggregation(self.id_column)
+                        geocode = self.replace_geocode(geocode)
                         if geocode not in series_by_geocodes:
                             series_by_geocodes[geocode] = []
                         series_by_geocodes[geocode].append(series)
@@ -166,6 +182,19 @@ class OutputGeoJson(OutputBase):
 
 
     def clean_disaggregations(self, disaggregations):
+        """Apply any modifications to disaggregations before saving them into
+        the GeoJSON file.
+
+        Parameters
+        ----------
+        disaggregations : dict
+            A dict of disaggregations, with category keyed to subcategory.
+
+        Returns
+        -------
+        dict
+            A modified version of the disaggregations dict.
+        """
         # We don't need the actual geocode column.
         del disaggregations[self.id_column]
         # Remove any others necessary.
@@ -177,6 +206,24 @@ class OutputGeoJson(OutputBase):
             if pd.isna(disaggregations[key]):
                 disaggregations[key] = None
         return disaggregations
+
+
+    def replace_geocode(self, geocode):
+        """Make any replaces of geocodes, according to the id_replacements.
+
+        Parameters
+        ----------
+        geocode : string
+            A geocode to look for a replacement for.
+
+        Returns
+        -------
+        string
+            The replaced geocode, or the original, if no replacement was found.
+        """
+        if geocode in self.id_replacements:
+            return self.id_replacements[geocode]
+        return geocode
 
 
     def validate(self):

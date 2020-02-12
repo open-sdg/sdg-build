@@ -5,7 +5,7 @@ import sdg
 from sdg.inputs import InputFiles
 from sdg.Indicator import Indicator
 
-class InputCSVMeta(InputFiles):
+class InputCsvMeta(InputFiles):
     """Sources of SDG metadata that are local CSV files."""
 
     def __init__(self, path_pattern='', git=True, metadata_mapping=None):

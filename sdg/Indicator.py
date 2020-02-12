@@ -109,7 +109,7 @@ class Indicator:
         if val is not None and val:
             if self.has_meta():
                 self.meta.update(val)
-            else
+            else:
                 self.meta = val
 
 

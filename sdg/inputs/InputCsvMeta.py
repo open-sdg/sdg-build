@@ -15,10 +15,12 @@ class InputCSVMeta(InputFiles):
         git -- whether to use git information for dates in the metadata
         """
         self.git = git
+        self.metadata_mapping = metadata_mapping
         InputFiles.__init__(self, path_pattern)
 
     def execute(self):
         """Get the metadata from the CSV, returning a list of indicators."""
+        metadata_mapping=self.metadata_mapping
         indicator_map = self.get_indicator_map()
         if metadata_mapping != None:
             meta_mapping = pd.read_csv(os.path.join(metadata_mapping), header=None, names=["Field name", "Field value"])

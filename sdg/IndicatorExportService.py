@@ -1,4 +1,6 @@
 import os
+import git
+import json
 from zipfile import ZipFile
 
 class IndicatorExportService:
@@ -64,3 +66,19 @@ class IndicatorExportService:
             zip_file.write(each_file["path"], each_file["file_name"])
 
         zip_file.close()
+
+        self.__save_zip_file_info(zip_file_name)
+
+    def __save_zip_file_info(self, zip_file_name):
+        st = os.stat(os.path.join(self.__zip_directory, zip_file_name))
+        info = {
+            'bytes': st.st_size
+        }
+
+        repo = git.Repo(self.__site_directory, search_parent_directories=True)
+        if repo:
+            info['date'] = repo.head.commit.committed_date
+
+        json_file_name = zip_file_name.replace('.zip', '.json')
+        with open(os.path.join(self.__site_directory, json_file_name), 'w') as f:
+            json.dump(info, f)

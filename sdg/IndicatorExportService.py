@@ -80,5 +80,5 @@ class IndicatorExportService:
             info['date'] = repo.head.commit.committed_date
 
         json_file_name = zip_file_name.replace('.zip', '.json')
-        with open(os.path.join(self.__site_directory, json_file_name), 'w') as f:
+        with open(os.path.join(self.__zip_directory, json_file_name), 'w') as f:
             json.dump(info, f)

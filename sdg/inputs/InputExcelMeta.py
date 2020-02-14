@@ -49,4 +49,4 @@ class InputExcelMeta(InputFiles):
                     meta[row[1][1]]=row[1][2]
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta)
-            print(self.add_indicator(inid, name=name, meta=meta)
+            print(self.add_indicator(inid, name=name, meta=meta))

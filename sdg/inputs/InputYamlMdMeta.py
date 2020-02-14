@@ -26,3 +26,4 @@ class InputYamlMdMeta(InputFiles):
             meta = sdg.meta.read_meta(inid, git=self.git, src_dir=src_dir)
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta)
+            print(self.add_indicator(inid, name=name, meta=meta))

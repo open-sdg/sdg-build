@@ -78,9 +78,12 @@ class IndicatorExportService:
             'size_human': humanize.naturalsize(st.st_size)
         }
         # Get the last updated date of the zip file, if using Git.
-        repo = git.Repo(self.__site_directory, search_parent_directories=True)
-        if repo:
-            info['timestamp'] = repo.head.commit.committed_date
+        try:
+            repo = git.Repo(self.__site_directory, search_parent_directories=True)
+            if repo:
+                info['timestamp'] = repo.head.commit.committed_date
+        except git.exc.InvalidGitRepositoryError:
+            print('Warning: Git repository not found - zip file date not saved.')
 
         # Save the info as json.
         json_file_name = zip_file_name.replace('.zip', '.json')

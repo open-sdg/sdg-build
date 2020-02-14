@@ -1,5 +1,6 @@
 from .InputBase import InputBase
 from .InputFiles import InputFiles
+from .InputExcelMeta import InputExcelMeta
 from .InputCsvMeta import InputCsvMeta
 from .InputCsvData import InputCsvData
 from .InputYamlMdMeta import InputYamlMdMeta

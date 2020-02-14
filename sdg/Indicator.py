@@ -107,7 +107,10 @@ class Indicator:
         val : Dict or None
         """
         if val is not None and val:
-            self.meta = val
+            if self.has_meta():
+                self.meta.update(val)
+            else:
+                self.meta = val
 
 
     def set_headline(self):

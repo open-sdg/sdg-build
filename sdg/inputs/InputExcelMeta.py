@@ -38,6 +38,7 @@ class InputExcelMeta(InputFiles):
                         meta_df.iat[index-1,1]=row[1]
                         meta_df.iat[index, 1]=np.nan
             meta_df=meta_df.dropna()
+            print(meta_df)
             meta_df.columns=["Field name", "Field key"]
             meta_mapping_df=pd.merge(meta_mapping, meta_df, on="Field name")
             meta=dict()

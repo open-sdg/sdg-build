@@ -20,6 +20,7 @@ class InputExcelMeta(InputFiles):
     def execute(self):
         """Get the metadata from the CSV, returning a list of indicators."""
         indicator_map=self.get_indicator_map()
+        print(indicator_map)
         meta_mapping = pd.read_csv(os.path.join("metadata-mapping.csv"), header=None, names=["Field name", "Field value"])
         for inid in indicator_map:
             # Need to get the folder of the folder of the indicator file.
@@ -49,4 +50,3 @@ class InputExcelMeta(InputFiles):
                     meta[row[1][1]]=row[1][2]
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta)
-            print(self.add_indicator(inid, name=name, meta=meta))

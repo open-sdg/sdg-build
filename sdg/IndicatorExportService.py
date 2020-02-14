@@ -2,6 +2,7 @@ import os
 import git
 import json
 from zipfile import ZipFile
+import humanize
 
 class IndicatorExportService:
     def __init__(self, site_directory, indicators):
@@ -70,15 +71,18 @@ class IndicatorExportService:
         self.__save_zip_file_info(zip_file_name)
 
     def __save_zip_file_info(self, zip_file_name):
+        # Get the size of the zip file.
         st = os.stat(os.path.join(self.__zip_directory, zip_file_name))
         info = {
-            'bytes': st.st_size
+            'size_bytes': st.st_size,
+            'size_human': humanize.naturalsize(st.st_size)
         }
-
+        # Get the last updated date of the zip file, if using Git.
         repo = git.Repo(self.__site_directory, search_parent_directories=True)
         if repo:
-            info['date'] = repo.head.commit.committed_date
+            info['timestamp'] = repo.head.commit.committed_date
 
+        # Save the info as json.
         json_file_name = zip_file_name.replace('.zip', '.json')
         with open(os.path.join(self.__zip_directory, json_file_name), 'w') as f:
             json.dump(info, f)

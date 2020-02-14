@@ -19,8 +19,8 @@ class InputExcelMeta(InputFiles):
 
     def execute(self):
         """Get the metadata from the CSV, returning a list of indicators."""
-        indicator_map = self.get_indicator_map()
-        meta_mapping = pd.read_csv(os.path.join(metadata-mapping.csv), header=None, names=["Field name", "Field value"])
+        indicator_map=get_indicator_map()
+        meta_mapping = pd.read_csv(os.path.join("metadata-mapping.csv"), header=None, names=["Field name", "Field value"])
         for inid in indicator_map:
             # Need to get the folder of the folder of the indicator file.
             src_dir = os.path.dirname(indicator_map[inid])

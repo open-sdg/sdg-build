@@ -19,6 +19,7 @@ class InputYamlMdMeta(InputFiles):
     def execute(self):
         """Get the metadata from the YAML/Markdown, returning a list of indicators."""
         indicator_map = self.get_indicator_map()
+        print(indicator_map)
         for inid in indicator_map:
             # Need to get the folder of the folder of the indicator file.
             src_dir = os.path.dirname(indicator_map[inid])

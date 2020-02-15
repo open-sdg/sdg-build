@@ -218,6 +218,13 @@ class Indicator:
 
         # Translation callbacks for below.
         def translate_meta(text):
+            # Recursively handle lists.
+            if isinstance(text, list):
+                return [translate_meta(value) for value in text]
+            # Recursively handle dicts.
+            if isinstance(text, dict):
+                return {key: translate_meta(value) for (key, value) in text.items()}
+            # Otherwise treat as a string.
             return translation_helper.translate(text, language)
         def translate_data(text):
             return translation_helper.translate(text, language, default_group='data')

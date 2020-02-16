@@ -225,7 +225,7 @@ class Indicator:
             if isinstance(text, dict):
                 return {key: translate_meta(value) for (key, value) in text.items()}
             # Otherwise treat as a string.
-            return translation_helper.translate(text, language)
+            return translation_helper.translate(text, language, default_group='data')
         def translate_data(text):
             return translation_helper.translate(text, language, default_group='data')
 

@@ -71,21 +71,32 @@ class IndicatorExportService:
         self.__save_zip_file_info(zip_file_name)
 
     def __save_zip_file_info(self, zip_file_name):
-        # Get the size of the zip file.
-        st = os.stat(os.path.join(self.__zip_directory, zip_file_name))
-        info = {
-            'size_bytes': st.st_size,
-            'size_human': humanize.naturalsize(st.st_size)
-        }
-        # Get the last updated date of the zip file, if using Git.
-        try:
-            repo = git.Repo(self.__site_directory, search_parent_directories=True)
-            if repo:
-                info['timestamp'] = repo.head.commit.committed_date
-        except git.exc.InvalidGitRepositoryError:
-            print('Warning: Git repository not found - zip file date not saved.')
-
-        # Save the info as json.
+        info = self.__get_zip_file_info(zip_file_name)
         json_file_name = zip_file_name.replace('.zip', '.json')
         with open(os.path.join(self.__zip_directory, json_file_name), 'w') as f:
             json.dump(info, f)
+
+    def __get_zip_file_info(self, zip_file_name):
+        size = self.__get_zip_file_size(zip_file_name)
+        info = {
+            'size_bytes': size,
+            'size_human': humanize.naturalsize(size)
+        }
+        repo = self.__get_git_repository()
+        if repo is not None:
+            info['timestamp'] = self.__get_last_commit_timestamp(repo)
+        return info
+
+    def __get_zip_file_size(self, zip_file_name):
+        st = os.stat(os.path.join(self.__zip_directory, zip_file_name))
+        return st.st_size
+
+    def __get_git_repository(self):
+        try:
+            repo = git.Repo(self.__site_directory, search_parent_directories=True)
+            return repo
+        except git.exc.InvalidGitRepositoryError:
+            return None
+
+    def __get_last_commit_timestamp(self, repo):
+        return repo.head.commit.committed_date

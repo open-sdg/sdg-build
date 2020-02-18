@@ -322,12 +322,12 @@ class InputSdmx(InputBase):
         # Aggregate values are always "_T", these can be empty strings.
         if dimension_value_id == '_T':
             return None
-        # Just return the ids (as a "translation key") if necessary.
-        if self.import_translation_keys:
-            return dimension_id + '.' + dimension_value_id
-        # Otherwise default to whatever is in the SDMX.
         codelist_id = self.dimension_id_to_codelist_id(dimension_id)
         if codelist_id:
+            # Return the ids (as a "translation key") if necessary.
+            if self.import_translation_keys:
+                return codelist_id + '.' + dimension_value_id
+            # Otherwise default to whatever is in the SDMX.
             code = self.get_code(codelist_id, dimension_value_id)
             if code is not None:
                 return code.find(".//Name").text

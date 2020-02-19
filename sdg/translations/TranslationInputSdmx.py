@@ -46,7 +46,6 @@ class TranslationInputSdmx(TranslationInputBase):
         groups = {
             'category': './/Category',
             'codelist': './/Codelist',
-            'code': './/Code',
             'concept': './/Concept',
         }
         for group in groups:
@@ -54,6 +53,22 @@ class TranslationInputSdmx(TranslationInputBase):
             for tag in tags:
                 key = tag.attrib['id']
                 translations = tag.findall('.//Name')
+                for translation in translations:
+                    if 'lang' not in translation.attrib:
+                        continue
+                    language = translation.attrib['lang']
+                    value = translation.text
+                    self.add_translation(language, group, key, value)
+
+        # We treat Code elements differently. Because there can be duplicates,
+        # we use the Codelist ids are the "group".
+        codelists = dsd.findall('.//Codelist')
+        for codelist in codelists:
+            group = codelist.attrib['id']
+            codes = codelist.findall('Code')
+            for code in codes:
+                translations = code.findall('Name')
+                key = code.attrib['id']
                 for translation in translations:
                     if 'lang' not in translation.attrib:
                         continue

@@ -240,3 +240,21 @@ class Indicator:
 
         # Finally place the translation for later access.
         self.translations[language] = indicator
+
+    def is_statistical(self):
+        """Decide whether this indicator can be considered "statistical".
+        Returns
+        -------
+        boolean
+            True if the indicator can be considered statistical, False otherwise.
+        """
+        # First, check for an open-sdg-style "data_non_statistical" metadata field.
+        non_statistical = self.get_meta_field_value('data_non_statistical')
+        if non_statistical is None or non_statistical == False:
+            return True
+        # If the the indicator was explicitly non-statistical, return False.
+        elif non_statistical == True:
+            return False
+        # Otherwise fall back to whether the indicator has data.
+        else:
+            return self.is_statistical()

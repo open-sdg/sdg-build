@@ -258,3 +258,22 @@ class Indicator:
         # Otherwise fall back to whether the indicator has data.
         else:
             return self.is_statistical()
+
+    def get_meta_field_value(self, field):
+        """Get the value for a metadata field.
+        Parameters
+        ----------
+        field : string
+            The key of the metadata field.
+        Return : string or None
+            The value of the specified field or just None if the field could not
+            be found.
+        """
+
+        if not self.has_meta():
+            return None
+
+        if field not in self.meta:
+            return None
+
+        return self.meta[field]

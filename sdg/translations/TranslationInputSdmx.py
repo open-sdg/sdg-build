@@ -6,7 +6,6 @@ from sdg.translations import TranslationInputBase
 
 class TranslationInputSdmx(TranslationInputBase):
     """A class for importing translations from an SDMX DSD.
-
     This assumes that the "keys" of the translations will be the SDMX ids. So,
     if this is to be used with this library's SDMX import functionality, the
     import needs to import SDMX ids rather than text values. This is not yet
@@ -16,7 +15,6 @@ class TranslationInputSdmx(TranslationInputBase):
 
     def parse_xml(self, location, strip_namespaces=True):
         """Fetch and parse an XML file.
-
         Parameters
         ----------
         location : string
@@ -46,7 +44,6 @@ class TranslationInputSdmx(TranslationInputBase):
         groups = {
             'category': './/Category',
             'codelist': './/Codelist',
-            'code': './/Code',
             'concept': './/Concept',
         }
         for group in groups:
@@ -54,6 +51,22 @@ class TranslationInputSdmx(TranslationInputBase):
             for tag in tags:
                 key = tag.attrib['id']
                 translations = tag.findall('.//Name')
+                for translation in translations:
+                    if 'lang' not in translation.attrib:
+                        continue
+                    language = translation.attrib['lang']
+                    value = translation.text
+                    self.add_translation(language, group, key, value)
+
+        # We treat Code elements differently. Because there can be duplicates,
+        # we use the Codelist ids are the "group".
+        codelists = dsd.findall('.//Codelist')
+        for codelist in codelists:
+            group = codelist.attrib['id']
+            codes = codelist.findall('Code')
+            for code in codes:
+                translations = code.findall('Name')
+                key = code.attrib['id']
                 for translation in translations:
                     if 'lang' not in translation.attrib:
                         continue

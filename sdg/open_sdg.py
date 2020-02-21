@@ -37,7 +37,8 @@ def open_sdg_config(config_file, defaults):
 
 def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    languages=None, translations=None, map_layers=None,
-                   reporting_status_extra_fields=None, config='open_sdg_config.yml'):
+                   reporting_status_extra_fields=None, config='open_sdg_config.yml',
+                   git=True, git_data_dir=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -53,6 +54,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         reporting_status_extra_fields: list. A list of extra fields to generate
           reporting stats for.
         config: str. Path to a YAML config file that overrides other parameters
+        git: bool. Whether or not to use Git to calculate last-updated dates
+        git_data_dir: str. Location of folder to use for Git last-update dates
 
     Returns:
         Boolean status of file writes
@@ -70,7 +73,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'languages': languages,
         'translations': translations,
         'map_layers': map_layers,
-        'reporting_status_extra_fields': reporting_status_extra_fields
+        'reporting_status_extra_fields': reporting_status_extra_fields,
+        'git': git,
+        'git_data_dir': git_data_dir
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -145,13 +150,14 @@ def open_sdg_prep(options):
             'https://github.com/open-sdg/translations-open-sdg.git@1.0.0-rc1'
         ]
 
-    # Input data from CSV files matching this pattern: tests/data/*-*.csv
+    # Input data from CSV files matching this pattern: ['src_dir']/data/*-*.csv
     data_pattern = os.path.join(options['src_dir'], 'data', '*-*.csv')
     data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
 
-    # Input metadata from YAML files matching this pattern: tests/meta/*-*.md
+    # Input metadata from YAML files matching this pattern: ['src_dir']/meta/*-*.md
     meta_pattern = os.path.join(options['src_dir'], 'meta', '*-*.md')
-    meta_input = sdg.inputs.InputYamlMdMeta(path_pattern=meta_pattern)
+    meta_input = sdg.inputs.InputYamlMdMeta(path_pattern=meta_pattern,
+        git=options['git'], git_data_dir=options['git_data_dir'])
 
     # Combine these inputs into one list.
     inputs = [data_input, meta_input]

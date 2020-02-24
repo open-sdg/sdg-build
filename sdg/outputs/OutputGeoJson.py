@@ -19,7 +19,8 @@ class OutputGeoJson(OutputBase):
         Parameters
         ----------
 
-        Inherits all the parameters from OutputBase, plus the following:
+        Inherits all the parameters from OutputBase, plus the following optional
+        arguments (see above for the default values):
 
         geojson_file : string
             A path to a GeoJSON file (remote or local) which contains all of the

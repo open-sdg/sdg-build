@@ -41,6 +41,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     """Read each input file and edge file and write out json.
 
     Args:
+        Each argument is optional. The defaults above will be used if omitted.
+
         src_dir: str. Directory root for the project where data and meta data
             folders are
         site_dir: str. Directory to build the site to
@@ -93,6 +95,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
     This checks both *.csv (data) and *.md (metadata) files.
 
     Args:
+        Each argument is optional. The defaults above will be used if omitted.
+
         src_dir: str. Directory root for the project where data and meta data
             folders are
         schema_file: Location of schema file relative to src_dir

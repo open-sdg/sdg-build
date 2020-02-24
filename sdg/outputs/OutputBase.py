@@ -139,3 +139,27 @@ class OutputBase:
             Key/value pairs for minimum required metadata
         """
         return {}
+
+
+    def get_indicator_ids(self):
+        """Get a list of all the indicator ids that are included in this output."""
+        return self.indicators.keys()
+
+
+    def get_indicator_by_id(self, indicator_id):
+        """Get one specific Indicator object, by its id.
+
+        Parameters
+        ----------
+        indicator_id : str
+            The indicator id of the Indicator object being sought.
+
+        Returns
+        -------
+        Indicator
+            An instance of the Indicator class.
+        """
+        if indicator_id in self.indicators:
+            return self.indicators[indicator_id]
+        else:
+            raise KeyError('The indicator "' + indicator_id + '" could not be found in this output.')

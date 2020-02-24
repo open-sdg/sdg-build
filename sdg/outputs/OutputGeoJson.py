@@ -125,8 +125,8 @@ class OutputGeoJson(OutputBase):
         if not os.path.exists(target_folder):
             os.makedirs(target_folder, exist_ok=True)
 
-        for indicator_id in self.indicators:
-            indicator = self.indicators[indicator_id]
+        for indicator_id in self.get_indicator_ids():
+            indicator = self.get_indicator_by_id(indicator_id)
             if self.indicator_has_geocodes(indicator):
                 series_by_geocodes = {}
                 geometry_data = copy.deepcopy(self.geometry_data)
@@ -252,8 +252,8 @@ class OutputGeoJson(OutputBase):
 
         # Make sure at least one indicator has geocodes.
         no_indicators_have_geocodes = True
-        for indicator_id in self.indicators:
-            if self.indicator_has_geocodes(self.indicators[indicator_id]):
+        for indicator_id in self.get_indicator_ids():
+            if self.indicator_has_geocodes(self.get_indicator_by_id(indicator_id)):
                 no_indicators_have_geocodes = False
                 break
 

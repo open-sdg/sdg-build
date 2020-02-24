@@ -73,8 +73,8 @@ class OutputOpenSdg(OutputBase):
             status = status & sdg.json.write_json(indicator_id, indicator.meta, ftype='meta', site_dir=site_dir)
 
             # Append to the build-time "all" output
-            all_meta[inid] = indicator.meta
-            all_headline[inid] = headline_dict
+            all_meta[indicator_id] = indicator.meta
+            all_headline[indicator_id] = headline_dict
 
         status = status & sdg.json.write_json('all', all_meta, ftype='meta', site_dir=site_dir)
         status = status & sdg.json.write_json('all', all_headline, ftype='headline', site_dir=site_dir)

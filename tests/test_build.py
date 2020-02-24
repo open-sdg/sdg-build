@@ -44,7 +44,7 @@ def test_build(test_site_dir):
         schema=schema,
         output_folder=site_dir,
         translations=translations,
-        geojson_file=os.path.join('geojson', 'england-regions.geojson'),
+        geojson_file=os.path.join(src_dir, 'geojson', 'england-regions.geojson'),
         name_property='rgn17nm',
         id_property='rgn17cd')
 

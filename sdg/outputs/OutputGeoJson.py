@@ -125,8 +125,8 @@ class OutputGeoJson(OutputBase):
         if not os.path.exists(target_folder):
             os.makedirs(target_folder, exist_ok=True)
 
-        for inid in self.indicators:
-            indicator = self.indicators[inid]
+        for indicator_id in self.indicators:
+            indicator = self.indicators[indicator_id]
             if self.indicator_has_geocodes(indicator):
                 series_by_geocodes = {}
                 geometry_data = copy.deepcopy(self.geometry_data)
@@ -174,7 +174,7 @@ class OutputGeoJson(OutputBase):
                     del geometry_data['features'][index]['properties'][self.name_property]
                     del geometry_data['features'][index]['properties'][self.id_property]
                 # Finally write the updated GeoJSON file.
-                filename = self.filename_prefix + inid + '.geojson'
+                filename = self.filename_prefix + indicator_id + '.geojson'
                 filepath = os.path.join(target_folder, filename)
                 with open(filepath, 'w') as f:
                     json.dump(geometry_data, f)
@@ -252,8 +252,8 @@ class OutputGeoJson(OutputBase):
 
         # Make sure at least one indicator has geocodes.
         no_indicators_have_geocodes = True
-        for inid in self.indicators:
-            if self.indicator_has_geocodes(self.indicators[inid]):
+        for indicator_id in self.indicators:
+            if self.indicator_has_geocodes(self.indicators[indicator_id]):
                 no_indicators_have_geocodes = False
                 break
 

@@ -44,7 +44,7 @@ def test_build(test_site_dir):
         schema=schema,
         output_folder=site_dir,
         translations=translations,
-        geojson_file='https://geoportal1-ons.opendata.arcgis.com/datasets/4fcca2a47fed4bfaa1793015a18537ac_4.geojson',
+        geojson_file=os.path.join('geojson', 'england-regions.geojson'),
         name_property='rgn17nm',
         id_property='rgn17cd')
 

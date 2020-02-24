@@ -127,59 +127,69 @@ class OutputGeoJson(OutputBase):
 
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id)
-            if self.indicator_has_geocodes(indicator):
-                series_by_geocodes = {}
-                geometry_data = copy.deepcopy(self.geometry_data)
-                for series in indicator.get_all_series():
-                    if series.has_disaggregation(self.id_column):
-                        geocode = series.get_disaggregation(self.id_column)
-                        geocode = self.replace_geocode(geocode)
-                        if geocode not in series_by_geocodes:
-                            series_by_geocodes[geocode] = []
-                        series_by_geocodes[geocode].append(series)
 
-                # Loop through the features.
-                for index, feature in enumerate(geometry_data['features']):
-                    geocode = feature['properties'][self.id_property]
-                    # If there are no series for this geocode, skip it.
-                    if geocode not in series_by_geocodes:
-                        continue
-                    disaggregations = [series.get_disaggregations() for series in series_by_geocodes[geocode]]
-                    values = [series.get_values() for series in series_by_geocodes[geocode]]
-                    # Do some cleanup of the disaggregations.
-                    disaggregations = [self.clean_disaggregations(disaggregation) for disaggregation in disaggregations]
-                    # We need to figure out which series to mark as the "headline". Try
-                    # to find one with the smallest amount of disaggregation.
-                    headline_scores = {}
-                    for disagg_index, disaggregation in enumerate(disaggregations):
-                        num_disaggregations = 0
-                        for key in disaggregation:
-                            if not pd.isna(disaggregation[key]):
-                                num_disaggregations += 1
-                        headline_scores[disagg_index] = num_disaggregations
-                    headline_index = min(headline_scores, key=headline_scores.get)
-                    # Rather than introduce more complexity, just move the "headline"
-                    # to the front of the lists.
-                    disaggregations.insert(0, disaggregations.pop(headline_index))
-                    values.insert(0, values.pop(headline_index))
-                    # Set these lists on the GeoJSON data structure.
-                    geometry_data['features'][index]['properties']['disaggregations'] = disaggregations
-                    geometry_data['features'][index]['properties']['values'] = values
-                    # Translate the name, if necessary using a 'data' group.
-                    feature_name = feature['properties'][self.name_property]
-                    feature_name = self.translation_helper.translate(feature_name, language, default_group='data')
-                    # Normalize the id and name properties.
-                    geometry_data['features'][index]['properties']['name'] = feature_name
-                    geometry_data['features'][index]['properties']['geocode'] = feature['properties'][self.id_property]
-                    del geometry_data['features'][index]['properties'][self.name_property]
-                    del geometry_data['features'][index]['properties'][self.id_property]
-                # Finally write the updated GeoJSON file.
-                filename = self.filename_prefix + indicator_id + '.geojson'
-                filepath = os.path.join(target_folder, filename)
-                with open(filepath, 'w') as f:
-                    json.dump(geometry_data, f)
+            if not self.indicator_has_geocodes(indicator):
+                continue
+
+            series_by_geocodes = self.get_series_by_geocodes(indicator)
+            geometry_data = copy.deepcopy(self.geometry_data)
+
+            # Loop through the features.
+            for index, feature in enumerate(geometry_data['features']):
+                geocode = feature['properties'][self.id_property]
+                # If there are no series for this geocode, skip it.
+                if geocode not in series_by_geocodes:
+                    continue
+                disaggregations = [series.get_disaggregations() for series in series_by_geocodes[geocode]]
+                values = [series.get_values() for series in series_by_geocodes[geocode]]
+                # Do some cleanup of the disaggregations.
+                disaggregations = [self.clean_disaggregations(disaggregation) for disaggregation in disaggregations]
+                # Figure out a "headline" so we can move it to the front of the list.
+                headline_index = self.get_headline_index(disaggregations)
+                disaggregations.insert(0, disaggregations.pop(headline_index))
+                values.insert(0, values.pop(headline_index))
+                # Set these lists on the GeoJSON data structure.
+                geometry_data['features'][index]['properties']['disaggregations'] = disaggregations
+                geometry_data['features'][index]['properties']['values'] = values
+                # Translate the name, if necessary using a 'data' group.
+                feature_name = feature['properties'][self.name_property]
+                feature_name = self.translation_helper.translate(feature_name, language, default_group='data')
+                # Normalize the id and name properties.
+                geometry_data['features'][index]['properties']['name'] = feature_name
+                geometry_data['features'][index]['properties']['geocode'] = feature['properties'][self.id_property]
+                del geometry_data['features'][index]['properties'][self.name_property]
+                del geometry_data['features'][index]['properties'][self.id_property]
+            # Finally write the updated GeoJSON file.
+            filename = self.filename_prefix + indicator_id + '.geojson'
+            filepath = os.path.join(target_folder, filename)
+            with open(filepath, 'w') as f:
+                json.dump(geometry_data, f)
 
         return status
+
+
+    def get_series_by_geocodes(self, indicator):
+        """Get a dict of lists of Series objects, keyed by geocode ids.
+
+        Parameters
+        ----------
+        indicator : Indicator
+            An instance of the Indicator class.
+
+        Returns
+        -------
+        dict
+            Lists of instances of the Series class, keyed by geocode id.
+        """
+        series_by_geocodes = {}
+        for series in indicator.get_all_series():
+            if series.has_disaggregation(self.id_column):
+                geocode = series.get_disaggregation(self.id_column)
+                geocode = self.replace_geocode(geocode)
+                if geocode not in series_by_geocodes:
+                    series_by_geocodes[geocode] = []
+                series_by_geocodes[geocode].append(series)
+        return series_by_geocodes
 
 
     def clean_disaggregations(self, disaggregations):
@@ -207,6 +217,31 @@ class OutputGeoJson(OutputBase):
             if pd.isna(disaggregations[key]):
                 disaggregations[key] = None
         return disaggregations
+
+
+    def get_headline_index(self, disaggregations):
+        """Figure out a "headline" from a list of disaggregations.
+
+        Parameters
+        ----------
+        disaggregations : list
+            A list of disaggregations dicts (categories keyed to subcategory).
+
+        Returns
+        -------
+        int
+            The index of the disaggregation chosen to be the headline.
+        """
+        # We need to figure out which series to mark as the "headline". Try
+        # to find one with the smallest amount of disaggregation.
+        headline_scores = {}
+        for disagg_index, disaggregation in enumerate(disaggregations):
+            num_disaggregations = 0
+            for key in disaggregation:
+                if not pd.isna(disaggregation[key]):
+                    num_disaggregations += 1
+            headline_scores[disagg_index] = num_disaggregations
+        return min(headline_scores, key=headline_scores.get)
 
 
     def replace_geocode(self, geocode):

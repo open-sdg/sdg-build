@@ -8,7 +8,7 @@ class OutputOpenSdg(OutputBase):
     """Output SDG data/metadata in the formats expected by Open SDG."""
 
 
-    def __init__(self, inputs, schema, output_folder='', translations=None,
+    def __init__(self, inputs, schema, output_folder='_site', translations=None,
         reporting_status_extra_fields=None):
         """Constructor for OutputOpenSdg.
 
@@ -50,31 +50,31 @@ class OutputOpenSdg(OutputBase):
             filename='translations.json'
         )
 
-        for inid in self.indicators:
-            indicator = self.indicators[inid].language(language)
+        for indicator_id in self.get_indicator_ids():
+            indicator = self.get_indicator_by_id(indicator_id).language(language)
             # Output all the csvs
-            status = status & write_csv(inid, indicator.data, ftype='data', site_dir=site_dir)
-            status = status & write_csv(inid, indicator.edges, ftype='edges', site_dir=site_dir)
-            status = status & write_csv(inid, indicator.headline, ftype='headline', site_dir=site_dir)
+            status = status & write_csv(indicator_id, indicator.data, ftype='data', site_dir=site_dir)
+            status = status & write_csv(indicator_id, indicator.edges, ftype='edges', site_dir=site_dir)
+            status = status & write_csv(indicator_id, indicator.headline, ftype='headline', site_dir=site_dir)
             # And JSON
             data_dict = df_to_list_dict(indicator.data, orient='list')
             edges_dict = df_to_list_dict(indicator.edges, orient='list')
             headline_dict = df_to_list_dict(indicator.headline, orient='records')
 
-            status = status & write_json(inid, data_dict, ftype='data', gz=False, site_dir=site_dir)
-            status = status & write_json(inid, edges_dict, ftype='edges', gz=False, site_dir=site_dir)
-            status = status & write_json(inid, headline_dict, ftype='headline', gz=False, site_dir=site_dir)
+            status = status & write_json(indicator_id, data_dict, ftype='data', gz=False, site_dir=site_dir)
+            status = status & write_json(indicator_id, edges_dict, ftype='edges', gz=False, site_dir=site_dir)
+            status = status & write_json(indicator_id, headline_dict, ftype='headline', gz=False, site_dir=site_dir)
 
             # combined
             comb = {'data': data_dict, 'edges': edges_dict}
-            status = status & write_json(inid, comb, ftype='comb', gz=False, site_dir=site_dir)
+            status = status & write_json(indicator_id, comb, ftype='comb', gz=False, site_dir=site_dir)
 
             # Metadata
-            status = status & sdg.json.write_json(inid, indicator.meta, ftype='meta', site_dir=site_dir)
+            status = status & sdg.json.write_json(indicator_id, indicator.meta, ftype='meta', site_dir=site_dir)
 
             # Append to the build-time "all" output
-            all_meta[inid] = indicator.meta
-            all_headline[inid] = headline_dict
+            all_meta[indicator_id] = indicator.meta
+            all_headline[indicator_id] = headline_dict
 
         status = status & sdg.json.write_json('all', all_meta, ftype='meta', site_dir=site_dir)
         status = status & sdg.json.write_json('all', all_headline, ftype='headline', site_dir=site_dir)

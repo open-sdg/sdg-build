@@ -41,3 +41,18 @@ schema_file: _prose.yml
 # This allows the build to generate stats for reporting status by additional
 # fields, beyond the default "status by goal" report.
 reporting_status_extra_fields: []
+
+# Map layers
+# ----------
+# This allows the build to generate one or more GeoJSON files to be used by
+# Open SDG maps. The parameters available correspond to the OutputGeoJson class.
+# See sdg/outputs/OutputGeoJson.py for more information.
+map_layers:
+  - geojson_file: https://geoportal1-ons.opendata.arcgis.com/datasets/4fcca2a47fed4bfaa1793015a18537ac_4.geojson
+    name_property: rgn17nm
+    id_property: rgn17cd
+    output_subfolder: regions
+    filename_prefix: indicator_
+  # The above layer will produce GeoJSON files such as this:
+  #     _site/en/geojson/regions/indicator_1-2-1.geojson
+  # Add any number of additional layers, such as one for counties.

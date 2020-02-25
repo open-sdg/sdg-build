@@ -1,4 +1,5 @@
 import copy
+import json
 import sdg
 import pandas as pd
 from sdg.translations import TranslationHelper
@@ -248,6 +249,7 @@ class Indicator:
         # Finally place the translation for later access.
         self.translations[language] = indicator
 
+
     def is_complete(self):
         """Decide whether this indicator can be considered "complete".
 
@@ -309,3 +311,27 @@ class Indicator:
             return None
 
         return self.meta[field]
+
+
+    def get_all_series(self):
+        """Get all of the series present in this indicator's data.
+
+        Returns
+        -------
+        list
+            List of Series objects.
+        """
+        all_series = {}
+        for index, row in self.data.iterrows():
+            # Assume "disaggregations" are everything except 'Year' and 'Value'.
+            disaggregations = row.drop('Value').drop('Year').to_dict()
+            # Serialize so that we can use a set of disaggregations as a key.
+            serialized = json.dumps(disaggregations, sort_keys=True)
+            # Initialized any new series.
+            if serialized not in all_series:
+                all_series[serialized] = sdg.Series(disaggregations)
+            # Finally add the year and value.
+            all_series[serialized].add_value(row['Year'], row['Value'])
+
+        # We only want to return a list, not a dict.
+        return all_series.values()

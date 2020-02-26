@@ -104,7 +104,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
             jsonschema_field['type'].append('null')
 
         # Selects and multiselects are a little complex.
-        elif el == 'select' or el == 'multiselect':
+        if el == 'select' or el == 'multiselect':
             any_of = []
             for prose_option in prose_field['options']:
                 if 'translation_key' not in prose_option:

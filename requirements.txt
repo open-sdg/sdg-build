@@ -4,4 +4,5 @@ numpy
 gitpython
 jsonschema
 requests
+humanize
 git+git://github.com/dougmet/yamlmd

@@ -1,4 +1,5 @@
 import copy
+import json
 import sdg
 import pandas as pd
 from sdg.translations import TranslationHelper
@@ -218,7 +219,14 @@ class Indicator:
 
         # Translation callbacks for below.
         def translate_meta(text):
-            return translation_helper.translate(text, language)
+            # Recursively handle lists.
+            if isinstance(text, list):
+                return [translate_meta(value) for value in text]
+            # Recursively handle dicts.
+            if isinstance(text, dict):
+                return {key: translate_meta(value) for (key, value) in text.items()}
+            # Otherwise treat as a string.
+            return translation_helper.translate(text, language, default_group='data')
         def translate_data(text):
             return translation_helper.translate(text, language, default_group='data')
 
@@ -227,6 +235,11 @@ class Indicator:
 
         # Translate the metadata.
         meta_copy = copy.deepcopy(self.meta)
+        # But first do overrides of "subfolder" metadata.
+        if language in meta_copy and isinstance(meta_copy[language], dict):
+            meta_copy.update(meta_copy[language])
+            del meta_copy[language]
+        # Now we can actually translate.
         for key in meta_copy:
             meta_copy[key] = translate_meta(meta_copy[key])
         indicator.set_meta(meta_copy)
@@ -241,8 +254,31 @@ class Indicator:
         # Finally place the translation for later access.
         self.translations[language] = indicator
 
+
+    def is_complete(self):
+        """Decide whether this indicator can be considered "complete".
+
+        Returns
+        -------
+        boolean
+            True if the indicator can be considered "complete", False otherwise.
+        """
+        # First, check for an open-sdg-style "reporting_status" metadata field,
+        # for a value of "complete".
+        reporting_status = self.get_meta_field_value('reporting_status')
+        if reporting_status is not None and reporting_status == 'complete':
+            return True
+        # If there was some other reporting status, assume not complete.
+        elif reporting_status is not None:
+            return False
+        # Otherwise fall back to whether the indicator has data and metadata.
+        else:
+            return self.has_data() and self.has_meta()
+
+
     def is_statistical(self):
         """Decide whether this indicator can be considered "statistical".
+
         Returns
         -------
         boolean
@@ -259,12 +295,15 @@ class Indicator:
         else:
             return self.has_data()
 
+
     def get_meta_field_value(self, field):
         """Get the value for a metadata field.
+
         Parameters
         ----------
         field : string
             The key of the metadata field.
+
         Return : string or None
             The value of the specified field or just None if the field could not
             be found.
@@ -277,3 +316,27 @@ class Indicator:
             return None
 
         return self.meta[field]
+
+
+    def get_all_series(self):
+        """Get all of the series present in this indicator's data.
+
+        Returns
+        -------
+        list
+            List of Series objects.
+        """
+        all_series = {}
+        for index, row in self.data.iterrows():
+            # Assume "disaggregations" are everything except 'Year' and 'Value'.
+            disaggregations = row.drop('Value').drop('Year').to_dict()
+            # Serialize so that we can use a set of disaggregations as a key.
+            serialized = json.dumps(disaggregations, sort_keys=True)
+            # Initialized any new series.
+            if serialized not in all_series:
+                all_series[serialized] = sdg.Series(disaggregations)
+            # Finally add the year and value.
+            all_series[serialized].add_value(row['Year'], row['Value'])
+
+        # We only want to return a list, not a dict.
+        return all_series.values()

@@ -237,9 +237,7 @@ class Indicator:
         meta_copy = copy.deepcopy(self.meta)
         # But first do overrides of "subfolder" metadata.
         if language in meta_copy and isinstance(meta_copy[language], dict):
-            for key in meta_copy[language]:
-                meta_copy[key] = meta_copy[language][key]
-            # Clean up the "subfolder" as it is no longer needed.
+            meta_copy.update(meta_copy[language])
             del meta_copy[language]
         # Now we can actually translate.
         for key in meta_copy:

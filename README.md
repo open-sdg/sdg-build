@@ -22,6 +22,7 @@ SDG Build can **input** SDG data in the following formats:
 SDG Build can **output** SDG data in the following formats:
 
 * A particular JSON structure for data and metadata, expected by the [Open SDG](https://github.com/open-sdg/open-sdg) reporting platform.
+* GeoJSON for mapping (there is not a global standard for SDG GeoJSON at this time, so this is our best guess at a useful structure)
 
 ## Alterations of data and metadata
 
@@ -57,7 +58,18 @@ SDG Build can also import translations and use them to produce fully-translated 
 The export formats include:
 
 * JSON
-* GeoJSON
+
+### Metadata "subfolder" translations
+
+Indicator metadata is expected to be simple key/value pairs, but translations can also be structured using a "subfolder" approach. With this approach, a full set of pre-translated key/value pairs can be placed in the metadata under the appropriate language code. For example, the following structure could be used to provide a Spanish translation of an indicator's name:
+
+```
+indicator_name: My English indicator name
+es:
+  indicator_name: My Spanish indicator name
+```
+
+When using the InputYamlMdMeta class, this can be accomplished by creating subfolders for each language code, and adding pre-translated versions of the YAML files there.
 
 ## Upcoming integrations
 

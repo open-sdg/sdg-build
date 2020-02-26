@@ -18,6 +18,7 @@ from . import schemas
 from . import translations
 from .Indicator import Indicator
 from .IndicatorExportService import IndicatorExportService
+from .Series import Series
 from .build import build_data
 from .check_csv import check_all_csv
 from .check_metadata import check_all_meta

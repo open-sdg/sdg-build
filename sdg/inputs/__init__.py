@@ -2,6 +2,7 @@ from .InputBase import InputBase
 from .InputFiles import InputFiles
 from .InputCsvMeta import InputCsvMeta
 from .InputCsvData import InputCsvData
+from .InputExcelMeta import InputExcelMeta
 from .InputYamlMdMeta import InputYamlMdMeta
 from .InputSdmx import InputSdmx
 from .InputSdmxJson import InputSdmxJson

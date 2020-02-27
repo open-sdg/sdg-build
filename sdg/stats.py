@@ -43,7 +43,7 @@ def reporting_status(schema, all_meta, extra_fields=None):
     meta_df = pd.DataFrame(rows, index=all_meta.keys())
 
     # Make sure that numeric columns are numeric.
-    def value_is_numeric(val):
+    def value_is_numeric(value):
         return value if isinstance(value, int) else (isinstance(value, str) and value.isnumeric())
     for field in grouping_fields:
         if all(value_is_numeric(x) for x in meta_df[field]):

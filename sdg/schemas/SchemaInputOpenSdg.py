@@ -27,7 +27,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
         # Convert the Prose.io metadata into JSON Schema.
         for field in config['prose']['metadata']['meta']:
             is_required = field['name'] in schema['required']
-            jsonschema_field = self.prose_field_to_jsonschema(field['field'], is_required)
+            jsonschema_field = self.prose_field_to_jsonschema(field['field'], is_required, field['name'])
             schema['properties'][field['name']] = jsonschema_field
 
         # And similarly, there are certain conditional validation checks.
@@ -58,7 +58,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
         self.schema = schema
 
 
-    def prose_field_to_jsonschema(self, prose_field, is_required):
+    def prose_field_to_jsonschema(self, prose_field, is_required, field_name):
         """Convert a Prose.io field to a JSON Schema property.
 
         Parameters
@@ -87,6 +87,11 @@ class SchemaInputOpenSdg(SchemaInputBase):
 
         # Most Prose.io fields are general text or numbers.
         jsonschema_field['type'] = ['string', 'integer', 'number']
+        
+        # Some fields need special validation rules because they are multi-purpose.
+        if field_name == 'graph_title':
+            # graph_title can also be an array of objects.
+            jsonschema_field['type'].append('array')
 
         # Everything else depends on what kind of element it is.
         el = prose_field['element']

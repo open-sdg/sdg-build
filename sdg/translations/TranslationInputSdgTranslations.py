@@ -6,11 +6,6 @@ import shutil
 import yaml
 from sdg.translations import TranslationInputYaml
 
-# See https://stackoverflow.com/a/1889686/2436822
-def remove_readonly(func, path, excinfo):
-    os.chmod(path, stat.S_IWRITE)
-    func(path)
-
 class TranslationInputSdgTranslations(TranslationInputYaml):
     """This class imports translations from SDG Translations (or similar) repos.
 
@@ -50,6 +45,11 @@ class TranslationInputSdgTranslations(TranslationInputYaml):
 
 
     def clean_up(self):
+        # See https://stackoverflow.com/a/1889686/2436822
+        def remove_readonly(func, path, excinfo):
+            os.chmod(path, stat.S_IWRITE)
+            func(path)
+
         # Remove the folder if it is there.
         try:
             shutil.rmtree('temp', onerror=remove_readonly)

@@ -50,12 +50,12 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         site_dir: str. Directory to build the site to
         schema_file: str. Location of schema file relative to src_dir
         languages: list. A list of language codes, for translated builds
-        translations: list. A list of git repositories to pull translations from
+        translations: list. A list of dicts describing instances of TranslationInputBase
         map_layers: list. A list of dicts describing geojson to process
         reporting_status_extra_fields: list. A list of extra fields to generate
           reporting stats for.
         config: str. Path to a YAML config file that overrides other parameters
-        inputs: list. An array of dicts describing instances of InputBase
+        inputs: list. A list of dicts describing instances of InputBase
 
     Returns:
         Boolean status of file writes
@@ -63,7 +63,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     if map_layers is None:
         map_layers = []
     if inputs is None:
-        inputs = open_sdg_input_dict_defaults()
+        inputs = open_sdg_input_defaults()
+    if translations is None:
+        translations = open_sdg_translation_defaults()
 
     status = True
 
@@ -113,7 +115,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         boolean: True if the check was successful, False if not.
     """
     if inputs is None:
-        inputs = open_sdg_input_dict_defaults()
+        inputs = open_sdg_input_defaults()
 
     # Build a dict of options for open_sdg_prep().
     defaults = {
@@ -149,8 +151,6 @@ def open_sdg_prep(options):
     # Set defaults for the mutable parameters.
     if 'languages' in options and options['languages'] is None:
         options['languages'] = []
-    if 'translations' in options and options['translations'] is None:
-        options['translations'] = ['https://github.com/open-sdg/sdg-translations@master']
 
     # Combine the inputs into one list.
     inputs = [open_sdg_input_from_dict(input_dict, options) for input_dict in options['inputs']]
@@ -160,22 +160,7 @@ def open_sdg_prep(options):
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
 
     # Pull in remote translations if needed.
-    all_translations = []
-    if 'translations' in options:
-        for repo in options['translations']:
-            # Support an "@" syntax for pinning to a git tag/branch/commit.
-            parts = repo.split('@')
-            tag = None
-            if len(parts) == 2:
-                repo = parts[0]
-                tag = parts[1]
-            all_translations.append(sdg.translations.TranslationInputSdgTranslations(
-                source=repo, tag=tag
-            ))
-    # Also include local translations from a 'translation' folder if present.
-    translation_dir = os.path.join(options['src_dir'], 'translations')
-    if os.path.isdir(translation_dir):
-        all_translations.append(sdg.translations.TranslationInputYaml(source=translation_dir))
+    translations = [open_sdg_translation_from_dict(t_dict, options) for t_dict in options['translations']]
 
     # Indicate any extra fields for the reporting stats, if needed.
     reporting_status_extra_fields = []
@@ -187,7 +172,7 @@ def open_sdg_prep(options):
         inputs=inputs,
         schema=schema,
         output_folder=options['site_dir'],
-        translations=all_translations,
+        translations=translations,
         reporting_status_extra_fields=reporting_status_extra_fields)
 
     outputs = [opensdg_output]
@@ -198,7 +183,7 @@ def open_sdg_prep(options):
             'inputs': inputs,
             'schema': schema,
             'output_folder': options['site_dir'],
-            'translations': all_translations
+            'translations': translations
         }
         for key in map_layer:
             geojson_kwargs[key] = map_layer[key]
@@ -212,7 +197,7 @@ def open_sdg_prep(options):
     return outputs
 
 
-def open_sdg_input_dict_defaults():
+def open_sdg_input_defaults():
     return [
         {
             'class': 'InputCsvData',
@@ -268,3 +253,53 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputYamlMdMeta(**params)
 
     return input_instance
+
+
+def open_sdg_translation_defaults():
+    return [
+        {
+            'class': 'TranslationInputSdgTranslations',
+            'source': 'https://github.com/open-sdg/sdg-translations.git',
+            'tag': 'master',
+        },
+        {
+            'class': 'TranslationInputYaml',
+            'source': 'translations',
+        }
+    ]
+
+
+def open_sdg_translation_from_dict(params, options):
+
+    if 'class' not in params:
+        raise KeyError("Each 'translation' must have a 'class'.")
+    translation_class = params['class']
+
+    allowed = [
+        'TranslationInputCsv',
+        'TranslationInputSdgTranslations',
+        'TranslationInputSdmx',
+        'TranslationInputYaml',
+    ]
+    if translation_class not in allowed:
+        raise KeyError("Translation class '%s' is not one of: %s." % (translation_class, ', '.join(allowed)))
+
+    # We no longer need the "class" param.
+    del params['class']
+
+    # For "source" in TranslationInputYaml/Csv we need to prepend our src_dir.
+    if translation_class == 'TranslationInputCsv' or translation_class == 'TranslationInputYaml':
+        if 'source' in params:
+            params['source'] = os.path.join(options['src_dir'], params['source'])
+
+    translation_instance = None
+    if translation_class == 'TranslationInputCsv':
+        translation_instance = sdg.translations.TranslationInputCsv(**params)
+    elif translation_class == 'TranslationInputSdgTranslations':
+        translation_instance = sdg.translations.TranslationInputSdgTranslations(**params)
+    elif translation_class == 'TranslationInputSdmx':
+        translation_instance = sdg.translations.TranslationInputSdmx(**params)
+    elif translation_class == 'TranslationInputYaml':
+        translation_instance = sdg.translations.TranslationInputYaml(**params)
+
+    return translation_instance

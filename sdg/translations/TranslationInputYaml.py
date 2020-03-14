@@ -35,6 +35,11 @@ class TranslationInputYaml(TranslationInputBase):
         folder : string
             The folder that contains the language subfolders.
         """
+        # Safety code for missing folders.
+        if not os.path.isdir(folder):
+            print('Warning: Could not import translations from missing folder "%s".' % folder)
+            return
+
         # Walk through the translation folder.
         for root, dirs, files in os.walk(folder):
             # Each subfolder is a language code.

@@ -18,6 +18,10 @@ class InputSdmxMl_Multiple(InputFiles):
         ----------
         path_pattern : string
             path (glob) pattern describing where the files are
+        data_alterations : list
+            A list of alteration callback functions to apply to all data
+        meta_alterations : list
+            A list of alteration callback functions to apply to all metadata
         kwargs
             All the other keyword parameters to be passed to InputSdmx classes
         """
@@ -58,5 +62,5 @@ class InputSdmxMl_Multiple(InputFiles):
             self.indicators[indicator_id] = input_instance.indicators[indicator_id]
 
 
-    def get_sdmx_file_type(file):
+    def get_sdmx_file_type(self, file):
         return ET.parse(file).getroot().tag.split('}')[1]

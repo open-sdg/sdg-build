@@ -64,6 +64,7 @@ class InputSdmxMl_Multiple(InputFiles):
 
             # Execute the input and copy the resulting indicator to here.
             input_instance.execute()
+            print(input_instance.indicators.keys())
             self.indicators[indicator_id] = input_instance.indicators[indicator_id]
 
 

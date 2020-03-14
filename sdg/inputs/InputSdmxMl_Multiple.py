@@ -35,11 +35,6 @@ class InputSdmxMl_Multiple(InputFiles):
         self.kwargs = kwargs
 
 
-    def convert_filename_to_indicator_id(self, filename):
-        # Enforce dash-delimited indicator ids.
-        return filename.replace('.', '-')
-
-
     def execute(self):
         """Scan the SDMX files and create indicators."""
         indicator_map = self.get_indicator_map()
@@ -64,8 +59,7 @@ class InputSdmxMl_Multiple(InputFiles):
 
             # Execute the input and copy the resulting indicator to here.
             input_instance.execute()
-            print(input_instance.indicators.keys())
-            self.indicators[indicator_id] = input_instance.indicators[indicator_id]
+            self.indicators.update(input_instance.indicators)
 
 
     def get_sdmx_file_type(self, file):

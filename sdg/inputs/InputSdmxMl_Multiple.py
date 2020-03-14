@@ -4,7 +4,7 @@ from sdg.inputs import InputFiles
 from sdg.inputs import InputSdmxMl_Structure
 from sdg.inputs import InputSdmxMl_StructureSpecific
 from sdg.Indicator import Indicator
-import lxml.etree as ET
+from xml.etree import ElementTree as ET
 
 class InputSdmxMl_Multiple(InputFiles):
     """Sources of SDG data that are multiple SDMX-ML files - one per indicator."""

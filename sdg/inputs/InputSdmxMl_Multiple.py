@@ -10,7 +10,8 @@ class InputSdmxMl_Multiple(InputFiles):
     """Sources of SDG data that are multiple SDMX-ML files - one per indicator."""
 
 
-    def __init__(self, path_pattern='', **kwargs):
+    def __init__(self, path_pattern='', data_alterations=None,
+                 meta_alterations=None, **kwargs):
         """ Constructor for InputSdmxMultiple.
 
         Parameters
@@ -21,6 +22,12 @@ class InputSdmxMl_Multiple(InputFiles):
             All the other keyword parameters to be passed to InputSdmx classes
         """
         InputFiles.__init__(self, path_pattern)
+        if data_alterations is None:
+            data_alterations = []
+        if meta_alterations is None:
+            meta_alterations = []
+        self.data_alterations = data_alterations
+        self.meta_alterations = meta_alterations
         self.kwargs = kwargs
 
 
@@ -39,6 +46,12 @@ class InputSdmxMl_Multiple(InputFiles):
                 input_instance = InputSdmxMl_StructureSpecific(**kwargs)
             elif file_type == 'GenericData':
                 input_instance = InputSdmxMl_Structure(**kwargs)
+
+            # Apply any alterations.
+            for alteration in self.data_alterations:
+                input_instance.add_data_alteration(alteration)
+            for alteration in self.meta_alterations:
+                input_instance.add_meta_alteration(alteration)
 
             # Execute the input and copy the resulting indicator to here.
             input_instance.execute()

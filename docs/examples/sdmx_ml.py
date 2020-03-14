@@ -46,9 +46,8 @@ schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
 
 # Pull in translations.
 translations = [
-    # Use two Git repos containing translations.
-    sdg.translations.TranslationInputSdgTranslations(source='https://github.com/open-sdg/translations-un-sdg.git', tag='1.0.0-rc1'),
-    sdg.translations.TranslationInputSdgTranslations(source='https://github.com/open-sdg/translations-open-sdg.git', tag='1.0.0-rc2'),
+    # Use Git repo containing translations.
+    sdg.translations.TranslationInputSdgTranslations(source='https://github.com/open-sdg/sdg-translations.git', tag='master'),
     # Also pull in translations from the SDMX DSD.
     sdg.translations.TranslationInputSdmx(source=dsd),
 ]

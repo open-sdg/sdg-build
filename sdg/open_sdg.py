@@ -123,7 +123,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'site_dir': '_site',
         'schema_file': schema_file,
         'map_layers': [],
-        'inputs': inputs
+        'inputs': inputs,
+        'translations': []
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)

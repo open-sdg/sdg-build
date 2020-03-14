@@ -21,16 +21,20 @@ class InputSdmxMl_Multiple(InputFiles):
             All the other keyword parameters to be passed to InputSdmx classes
         """
         InputFiles.__init__(self, path_pattern)
+        self.kwargs = kwargs
 
 
     def execute(self):
         """Scan the SDMX files and create indicators."""
         indicator_map = self.get_indicator_map()
+        kwargs = self.kwargs
         for indicator_id in indicator_map:
             input_instance = None
+            source_file = indicator_map[indicator_id]
+            kwargs['source'] = source_file
 
             # Figure out which type of SDMX-ML we have.
-            file_type = self.get_sdmx_file_type(indicator_map[indicator_id])
+            file_type = self.get_sdmx_file_type(source_file)
             if file_type == 'StructureSpecificData':
                 input_instance = InputSdmxMl_StructureSpecific(**kwargs)
             elif file_type == 'GenericData':

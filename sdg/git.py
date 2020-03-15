@@ -36,12 +36,15 @@ def get_git_update(inid, ftype, src_dir='', git_data_dir=None):
     repo = git.Repo(f_dir, search_parent_directories=True)
     tree = repo.tree()
 
-    def get_list_of_keys_from_dict(data_dict, map_list):
-        for key in map_list:
+    def drill_down_into_dict(data_dict, drill_list):
+        # Remove empty strings in drill_list, which cause problems.
+        drill_list = [i for i in drill_list if i]
+        # Drill down using the drill_list.
+        for key in drill_list:
             data_dict = data_dict[key]
         return data_dict
 
-    data_folder_in_repo = get_list_of_keys_from_dict(tree, f_dir_parts)
+    data_folder_in_repo = drill_down_into_dict(tree, f_dir_parts)
     for blob in data_folder_in_repo.traverse():
         if blob.name != f_name:
             continue

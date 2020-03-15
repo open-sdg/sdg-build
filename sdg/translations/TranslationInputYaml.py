@@ -49,7 +49,7 @@ class TranslationInputYaml(TranslationInputBase):
                 extension = file_parts[1]
                 if extension != '.yml':
                     continue
-                with open(os.path.join(root, file), 'r') as stream:
+                with open(os.path.join(root, file), 'r', encoding='utf-8') as stream:
                     try:
                         yamldata = yaml.load(stream, Loader=yaml.FullLoader)
                         # Loop through the YAML data to add the translations.

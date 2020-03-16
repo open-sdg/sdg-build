@@ -24,9 +24,8 @@ class InputExcelMeta(InputFiles):
         metadata_mapping=self.metadata_mapping
         sheet_number=self.sheet_number
         indicator_map=self.get_indicator_map()
-        print(indicator_map)
         if metadata_mapping != None:
-            meta_mapping = pd.read_csv(os.path.join(metadata-mapping), header=None, names=["Field name", "Field value"])
+            meta_mapping = pd.read_csv(os.path.join(metadata_mapping), header=None, names=["Field name", "Field value"])
         for inid in indicator_map:
             # Need to get the folder of the folder of the indicator file.
             src_dir = os.path.dirname(indicator_map[inid])
@@ -64,6 +63,5 @@ class InputExcelMeta(InputFiles):
                         meta[row[1][0]]=row[1][1]
             
             name = meta['indicator_name'] if 'indicator_name' in meta else None
-            inid = inid.split()[1].replace(".","-")
-            print(inid)
+            inid = inid.split()[1]
             self.add_indicator(inid, name=name, meta=meta)

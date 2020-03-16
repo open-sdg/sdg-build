@@ -15,6 +15,7 @@ class InputExcelMeta(InputFiles):
         git -- whether to use git information for dates in the metadata
         """
         self.git = git
+        self.metadata_mapping = metadata_mapping
         InputFiles.__init__(self, path_pattern)
 
     def execute(self):

@@ -19,7 +19,7 @@ class InputExcelMeta(InputFiles):
 
     def execute(self):
         """Get the metadata from the CSV, returning a list of indicators."""
-        metadata_mapping=self.metadata_mappung
+        metadata_mapping=self.metadata_mapping
         indicator_map=self.get_indicator_map()
         print(indicator_map)
         if metadata_mapping != None:

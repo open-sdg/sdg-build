@@ -35,9 +35,9 @@ class InputCsvMeta(InputFiles):
                 fr = path
             meta_csv = pd.read_csv(fr, header=None, names=["Field name", "Field key"])
             if metadata_mapping != None:
-                meta_df=pd.merge(meta_mapping, meta_csv, on="Field name")
+                meta_mapping_df=pd.merge(meta_mapping, meta_csv, on="Field name")
                 meta=dict()
-                for row in meta_df.iterrows():
+                for row in meta_mapping_df.iterrows():
                     if type(row[1][2])==float:
                         if np.isnan(row[1][2])==False:
                             meta[row[1][1]]=row[1][2]
@@ -51,10 +51,6 @@ class InputCsvMeta(InputFiles):
                             meta[row[1][0]]=row[1][1]
                     else:
                         meta[row[1][0]]=row[1][1]
-            for i in range(1,7):
-                if "source_organisation_"+str(i) in meta:
-                    meta["source_active_"+str(i)]="true"
-                else:
-                    meta["source_active_"+str(i)]="false"
+                        
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta)

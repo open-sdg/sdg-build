@@ -65,4 +65,5 @@ class InputExcelMeta(InputFiles):
             
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             inid = inid.split()[1].replace(".","-")
+            print(inid)
             self.add_indicator(inid, name=name, meta=meta)

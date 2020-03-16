@@ -11,16 +11,11 @@ class OutputOpenSdg(OutputBase):
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
         reporting_status_extra_fields=None):
         """Constructor for OutputOpenSdg.
-
         Parameters
         ----------
-
         Inherits all the parameters from OutputBase, plus the following:
-
         reporting_status_extra_fields : string
             To be passed as "extra_fields" to sdg.stats.reporting_status.
-
-
         """
         if translations is None:
             translations = []
@@ -90,12 +85,10 @@ class OutputOpenSdg(OutputBase):
 
     def generate_sort_order(self, indicator):
         """Generate a sortable string from an indicator id.
-
         Parameters
         ----------
         indicator : Indicator
             An instance of the Indicator class.
-
         Returns
         -------
         string
@@ -115,7 +108,7 @@ class OutputOpenSdg(OutputBase):
             'indicator': indicator.get_indicator_id(),
             'target_id': indicator.get_target_id(),
             'sdg_goal': indicator.get_goal_id(),
-            'reporting_status': 'complete' if indicator.has_data() else 'notstarted',
+            'reporting_status': 'complete' if (indicator.has_data() or indicator.is_statistical() == False) else 'notstarted',
             'data_non_statistical': False if indicator.has_data() else True,
             'graph_type': 'line',
             'indicator_sort_order': self.generate_sort_order(indicator)

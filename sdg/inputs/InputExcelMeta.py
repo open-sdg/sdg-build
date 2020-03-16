@@ -16,11 +16,13 @@ class InputExcelMeta(InputFiles):
         """
         self.git = git
         self.metadata_mapping = metadata_mapping
+        self.sheet_number = sheet_number
         InputFiles.__init__(self, path_pattern)
 
     def execute(self):
         """Get the metadata from the CSV, returning a list of indicators."""
         metadata_mapping=self.metadata_mapping
+        sheet_number=self.sheet_number
         indicator_map=self.get_indicator_map()
         print(indicator_map)
         if metadata_mapping != None:

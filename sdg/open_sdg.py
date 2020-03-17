@@ -163,6 +163,10 @@ def open_sdg_prep(options):
         if callable(custom.alter_data):
             for input in inputs:
                 input.add_data_alteration(custom.alter_data)
+    except:
+        pass
+    try:
+        custom = importlib.import_module('open_sdg_alter')
         if callable(custom.alter_meta):
             for input in inputs:
                 input.add_meta_alteration(custom.alter_meta)

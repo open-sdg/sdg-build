@@ -11,6 +11,7 @@ functionality of the following legacy functions that were specific to Open SDG:
 
 import os
 import inspect
+import importlib
 import sdg
 import yaml
 
@@ -155,6 +156,18 @@ def open_sdg_prep(options):
 
     # Combine the inputs into one list.
     inputs = [open_sdg_input_from_dict(input_dict, options) for input_dict in options['inputs']]
+
+    # Do we need to do any data/metadata alterations?
+    try:
+        custom = importlib.import_module('open_sdg_alter')
+        if callable(custom.alter_data):
+            for input in inputs:
+                input.add_data_alteration(custom.alter_data)
+        if callable(custom.alter_meta):
+            for input in inputs:
+                input.add_meta_alteration(custom.alter_meta)
+    except:
+        pass
 
     # Use a Prose.io file for the metadata schema.
     schema_path = os.path.join(options['src_dir'], options['schema_file'])

@@ -90,3 +90,10 @@ map_layers:
   # The above layer will produce GeoJSON files such as this:
   #     _site/en/geojson/regions/indicator_1-2-1.geojson
   # Add any number of additional layers, such as one for counties.
+
+# Data and metadata alterations
+# -----------------------------
+# If you would like to perform any data and metadata alterations, you will need
+# to create a file called "open_sdg_alter.py" in the same folder as this file.
+# To perform data alterations, it should include a function called "alter_data".
+# To perform meta alterations, it should include a function called "alter_meta".

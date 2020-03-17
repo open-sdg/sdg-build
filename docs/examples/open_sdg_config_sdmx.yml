@@ -71,3 +71,10 @@ schema_file: _prose.yml
 # This allows the build to generate stats for reporting status by additional
 # fields, beyond the default "status by goal" report.
 reporting_status_extra_fields: []
+
+# Data and metadata alterations
+# -----------------------------
+# If you would like to perform any data and metadata alterations, you will need
+# to create a file called "open_sdg_alter.py" in the same folder as this file.
+# To perform data alterations, it should include a function called "alter_data".
+# To perform meta alterations, it should include a function called "alter_meta".

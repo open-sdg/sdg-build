@@ -38,9 +38,9 @@ class InputExcelMeta(InputFiles):
             # Read in specified sheet of Excel file containing metadata
             meta_excel=pd.ExcelFile(fr)
             meta_df=meta_excel.parse(meta_excel.sheet_names[sheet_number])
+            meta_df.columns=["Field name", "Field key"]
             # Drop rows with any empty columns
             meta_df=meta_df.dropna()
-            meta_df.columns=["Field name", "Field key"]
             # Empty dictionary to store metadata
             meta=dict()
             # If metadata_mapping exists, merge the mapping and metadata dataframe

@@ -37,20 +37,19 @@ class InputExcelMeta(InputFiles):
                 fr = path
             meta_excel=pd.ExcelFile(fr)
             meta_df=meta_excel.parse(meta_excel.sheet_names[sheet_number])
+            meta_df.columns=["Field name", "Field key"]
             for index, row in meta_df.iterrows():
                 if type(row[0])==float:
                     if np.isnan(row[0]):
                         meta_df.iat[index-1,1]=row[1]
                         meta_df.iat[index, 1]=np.nan
             meta_df=meta_df.dropna()
-            meta_df.columns=["Field name", "Field key"]
+            meta=dict()
             if metadata_mapping != None:         
                 meta_mapping_df=pd.merge(meta_mapping, meta_df, on="Field name")
-                meta=dict()
                 for row in meta_mapping_df.iterrows():
                     meta[row[1][1]]=row[1][2]
-            else:
-                meta=dict()
+            else:             
                 for row in meta_df.iterrows():
                     meta[row[1][0]]=row[1][1]
             

@@ -16,7 +16,7 @@ class OutputOpenSdg(OutputBase):
         ----------
 
         Inherits all the parameters from OutputBase, plus the following:
-        
+
         reporting_status_extra_fields : string
             To be passed as "extra_fields" to sdg.stats.reporting_status.
 

@@ -35,32 +35,27 @@ class InputExcelMeta(InputFiles):
                 fr = os.path.join(path, inid + '.xlsx')
             else:
                 fr = path
+            # Read in specified sheet of Excel file containing metadata
             meta_excel=pd.ExcelFile(fr)
             meta_df=meta_excel.parse(meta_excel.sheet_names[sheet_number])
-            for index, row in meta_df.iterrows():
-                if type(row[0])==float:
-                    if np.isnan(row[0]):
-                        meta_df.iat[index-1,1]=row[1]
-                        meta_df.iat[index, 1]=np.nan
+            # Drop rows with any empty columns
             meta_df=meta_df.dropna()
             meta_df.columns=["Field name", "Field key"]
+            # Empty dictionary to store metadata
+            meta=dict()
+            # If metadata_mapping exists, merge the mapping and metadata dataframe
             if metadata_mapping != None:         
                 meta_mapping_df=pd.merge(meta_mapping, meta_df, on="Field name")
-                meta=dict()
+                # Loop through dataframe rows, assigning second column item to dictionary key
+                # and third column item to dictionary value (first column is human-readable labels)
                 for row in meta_mapping_df.iterrows():
-                    if type(row[1][2])==float:
-                        if np.isnan(row[1][2])==False:
-                            meta[row[1][1]]=row[1][2]
-                    else:
-                        meta[row[1][1]]=row[1][2]
+                    meta[row[1][1]]=row[1][2]
+            # If metadata_mapping doesn't exist, use metadata dataframe as it is
             else:
-                meta=dict()
+                # Loop through dataframe rows, assigning first column item to dictionary key
+                # and second column item to dictionary value
                 for row in meta_df.iterrows():
-                    if type(row[1][1])==float:
-                        if np.isnan(row[1][1])==False:
-                            meta[row[1][0]]=row[1][1]
-                    else:
-                        meta[row[1][0]]=row[1][1]
+                    meta[row[1][0]]=row[1][1]
             
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta)

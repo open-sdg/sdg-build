@@ -5,10 +5,10 @@ import sdg
 from sdg.inputs import InputFiles
 from sdg.Indicator import Indicator
 
-class InputCsvMeta(InputFiles):
+class InputExcelMeta(InputFiles):
     """Sources of SDG metadata that are local CSV files."""
 
-    def __init__(self, path_pattern='', git=True, metadata_mapping=None):
+    def __init__(self, path_pattern='', git=True, metadata_mapping=None, sheet_number=0):
         """Constructor for InputYamlMdMeta.
         Keyword arguments:
         path_pattern -- path (glob) pattern describing where the files are
@@ -16,12 +16,14 @@ class InputCsvMeta(InputFiles):
         """
         self.git = git
         self.metadata_mapping = metadata_mapping
+        self.sheet_number = sheet_number
         InputFiles.__init__(self, path_pattern)
 
     def execute(self):
         """Get the metadata from the CSV, returning a list of indicators."""
         metadata_mapping=self.metadata_mapping
-        indicator_map = self.get_indicator_map()
+        sheet_number=self.sheet_number
+        indicator_map=self.get_indicator_map()
         if metadata_mapping != None:
             meta_mapping = pd.read_csv(os.path.join(metadata_mapping), header=None, names=["Field name", "Field value"])
         for inid in indicator_map:
@@ -30,17 +32,20 @@ class InputCsvMeta(InputFiles):
             src_dir = os.path.dirname(src_dir)
             path = os.path.join(src_dir, 'meta')
             if inid is not None:
-                fr = os.path.join(path, inid + '.csv')
+                fr = os.path.join(path, inid + '.xlsx')
             else:
                 fr = path
-            # Read in CSV file as dataframe
-            meta_csv = pd.read_csv(fr, header=None, names=["Field name", "Field key"])
+            # Read in specified sheet of Excel file containing metadata
+            meta_excel=pd.ExcelFile(fr)
+            meta_df=meta_excel.parse(meta_excel.sheet_names[sheet_number])
+            meta_df.columns=["Field name", "Field key"]
             # Drop rows with any empty columns
             meta_df=meta_df.dropna()
+            # Empty dictionary to store metadata
             meta=dict()
             # If metadata_mapping exists, merge the mapping and metadata dataframe
-            if metadata_mapping != None:
-                meta_mapping_df=pd.merge(meta_mapping, meta_csv, on="Field name")
+            if metadata_mapping != None:         
+                meta_mapping_df=pd.merge(meta_mapping, meta_df, on="Field name")
                 # Loop through dataframe rows, assigning second column item to dictionary key
                 # and third column item to dictionary value (first column is human-readable labels)
                 for row in meta_mapping_df.iterrows():
@@ -49,8 +54,8 @@ class InputCsvMeta(InputFiles):
             else:
                 # Loop through dataframe rows, assigning first column item to dictionary key
                 # and second column item to dictionary value
-                for row in meta_csv.iterrows():
+                for row in meta_df.iterrows():
                     meta[row[1][0]]=row[1][1]
-                        
+            
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta)

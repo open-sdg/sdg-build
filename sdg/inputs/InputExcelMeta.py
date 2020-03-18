@@ -48,19 +48,11 @@ class InputExcelMeta(InputFiles):
                 meta_mapping_df=pd.merge(meta_mapping, meta_df, on="Field name")
                 meta=dict()
                 for row in meta_mapping_df.iterrows():
-                    if type(row[1][2])==float:
-                        if np.isnan(row[1][2])==False:
-                            meta[row[1][1]]=row[1][2]
-                    else:
-                        meta[row[1][1]]=row[1][2]
+                    meta[row[1][1]]=row[1][2]
             else:
                 meta=dict()
                 for row in meta_df.iterrows():
-                    if type(row[1][1])==float:
-                        if np.isnan(row[1][1])==False:
-                            meta[row[1][0]]=row[1][1]
-                    else:
-                        meta[row[1][0]]=row[1][1]
+                    meta[row[1][0]]=row[1][1]
             
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             inid = inid.split()[1].replace(".","-")

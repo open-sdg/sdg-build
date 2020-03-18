@@ -8,7 +8,6 @@
 # languages. Each build is in its own subfolder - one for each language.
 languages:
   - en
-  - es
 
 # Source directory
 # ----------------
@@ -25,23 +24,18 @@ src_dir: 'tests'
 #
 # Each item must have a "class" which corresponds to classes in the sdg/inputs
 # folder. Further, each item can have any/all of the parameters that class uses.
-# The defaults below show what is used when this is omitted.
+# The config below shows usage for importing SDMX-JSON.
 inputs:
-  - class: InputCsvData
-    # This describes the data files, relative to the "src_dir" indicated above.
-    path_pattern: data/*-*.csv
-  - class: InputYamlMdMeta
-    # This describes the meta files, relative to the "src_dir" indicated above.
-    path_pattern: meta/*-*.md
-    # This specifies whether or not to use Git to calculate the "last updated"
-    # dates for data files.
-    git: true
-    # This specifies an alternate folder to look in for Git-versioned data files,
-    # when calculating the "last updated" dates for data files. This defaults to
-    # "data" (the folder where the data files actually exist.) Most sites will not
-    # need to change this setting. It is intended for sites where the data needs
-    # to be "built" before being processed by sdg-build.
-    git_data_dir: data
+  - class: InputSdmxJson
+    source: http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminateNSIService/rest/data/KH_NIS,DF_SDG_KH,1.1/all/?startPeriod=2008&endPeriod=2018
+    dimension_map:
+      UNIT_MEASURE: 'Units'
+    dsd: http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminateNSIService/rest/dataflow/KH_NIS/DF_SDG_KH/1.1/?references=all
+    import_translation_keys: true
+    indicator_id_xpath: .//Name
+    indicator_name_xpath: .//Name
+    indicator_id_map:
+      N_KH_040c05_01: 4-c-d
 
 # Translations
 # ------------
@@ -58,6 +52,8 @@ translations:
     tag: master
   - class: TranslationInputYaml
     source: translations
+  - class: TranslationInputSdmx
+    source: http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminateNSIService/rest/dataflow/KH_NIS/DF_SDG_KH/1.1/?references=all
 
 # Destination directory
 # ---------------------
@@ -75,21 +71,6 @@ schema_file: _prose.yml
 # This allows the build to generate stats for reporting status by additional
 # fields, beyond the default "status by goal" report.
 reporting_status_extra_fields: []
-
-# Map layers
-# ----------
-# This allows the build to generate one or more GeoJSON files to be used by
-# Open SDG maps. The parameters available correspond to the OutputGeoJson class.
-# See sdg/outputs/OutputGeoJson.py for more information.
-map_layers:
-  - geojson_file: https://geoportal1-ons.opendata.arcgis.com/datasets/4fcca2a47fed4bfaa1793015a18537ac_4.geojson
-    name_property: rgn17nm
-    id_property: rgn17cd
-    output_subfolder: regions
-    filename_prefix: indicator_
-  # The above layer will produce GeoJSON files such as this:
-  #     _site/en/geojson/regions/indicator_1-2-1.geojson
-  # Add any number of additional layers, such as one for counties.
 
 # Data and metadata alterations
 # -----------------------------

@@ -30,7 +30,8 @@ def open_sdg_config(config_file, defaults):
     try:
         with open(config_file) as file:
             options = yaml.load(file, Loader=yaml.FullLoader)
-    except:
+    except FileNotFoundError:
+        print('Config file not found, using defaults.')
         pass
 
     defaults.update(options)
@@ -242,7 +243,8 @@ def open_sdg_input_from_dict(params, options):
         'InputSdmxJson',
         'InputSdmxMl_Structure',
         'InputSdmxMl_StructureSpecific',
-        'InputYamlMdMeta'
+        'InputYamlMdMeta',
+        'InputSdmxMl_Multiple',
     ]
     if input_class not in allowed:
         raise KeyError("Input class '%s' is not one of: %s." % (input_class, ', '.join(allowed)))
@@ -269,6 +271,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputSdmxMl_StructureSpecific(**params)
     elif input_class == 'InputYamlMdMeta':
         input_instance = sdg.inputs.InputYamlMdMeta(**params)
+    elif input_class == 'InputSdmxMl_Multiple':
+        input_instance = sdg.inputs.InputSdmxMl_Multiple(**params)
 
     return input_instance
 

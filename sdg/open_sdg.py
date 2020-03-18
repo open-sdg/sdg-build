@@ -41,7 +41,7 @@ def open_sdg_config(config_file, defaults):
 def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    languages=None, translations=None, map_layers=None,
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
-                   inputs=None):
+                   inputs=None, alter_data=None, alter_meta=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -58,6 +58,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
           reporting stats for.
         config: str. Path to a YAML config file that overrides other parameters
         inputs: list. A list of dicts describing instances of InputBase
+        alter_data: function. A callback function that alters a data Dataframe
+        alter_meta: function. A callback function that alters a metadata dictionary
 
     Returns:
         Boolean status of file writes
@@ -85,6 +87,10 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
 
+    # Pass along our data/meta alterations.
+    options['alter_data'] = alter_data
+    options['alter_meta'] = alter_meta
+
     # Prepare the outputs.
     outputs = open_sdg_prep(options)
 
@@ -100,7 +106,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
 
 
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
-        inputs=None):
+        inputs=None, alter_data=None, alter_meta=None):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -112,6 +118,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
             folders are
         schema_file: Location of schema file relative to src_dir
         config: str. Path to a YAML config file that overrides other parameters
+        alter_data: function. A callback function that alters a data Dataframe
+        alter_meta: function. A callback function that alters a metadata dictionary
 
     Returns:
         boolean: True if the check was successful, False if not.
@@ -130,6 +138,10 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
+
+    # Pass along our data/meta alterations.
+    options['alter_data'] = alter_data
+    options['alter_meta'] = alter_meta
 
     # Prepare and validate the output.
     outputs = open_sdg_prep(options)
@@ -158,21 +170,13 @@ def open_sdg_prep(options):
     # Combine the inputs into one list.
     inputs = [open_sdg_input_from_dict(input_dict, options) for input_dict in options['inputs']]
 
-    # Do we need to do any data/metadata alterations?
-    try:
-        custom = importlib.import_module('open_sdg_alter')
-        if callable(custom.alter_data):
-            for input in inputs:
-                input.add_data_alteration(custom.alter_data)
-    except:
-        pass
-    try:
-        custom = importlib.import_module('open_sdg_alter')
-        if callable(custom.alter_meta):
-            for input in inputs:
-                input.add_meta_alteration(custom.alter_meta)
-    except:
-        pass
+    # Do any data/metadata alterations.
+    if callable(options['alter_data']):
+        for input in inputs:
+            input.add_data_alteration(options['alter_data'])
+    if callable(options['alter_meta']):
+        for input in inputs:
+            input.add_meta_alteration(options['alter_meta'])
 
     # Use a Prose.io file for the metadata schema.
     schema_path = os.path.join(options['src_dir'], options['schema_file'])

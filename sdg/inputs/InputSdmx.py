@@ -3,6 +3,7 @@ from sdg.inputs import InputBase
 from xml.etree import ElementTree as ET
 from io import StringIO
 import pandas as pd
+import numpy as np
 
 class InputSdmx(InputBase):
     """Sources of SDG data that are SDMX format."""
@@ -275,6 +276,9 @@ class InputSdmx(InputBase):
         """
         try:
             df['Value'] = pd.to_numeric(df['Value'], errors='raise')
+        except KeyError as e:
+            print('WARNING: Indicator ' + indicator_id + ' did not have a value column - inserting null values.')
+            df['Value'] = np.nan
         except ValueError as e:
             print('WARNING: Indicator ' + indicator_id + ' has a non-numeric value: ' + str(e))
         return df

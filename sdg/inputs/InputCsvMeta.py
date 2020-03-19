@@ -50,7 +50,6 @@ class InputCsvMeta(InputFiles):
                 # Loop through dataframe rows, assigning first column item to dictionary key
                 # and second column item to dictionary value
                 for row in meta_csv.iterrows():
-                    meta[row[1][0]]=row[1][1]
-                        
+                    meta[row[1][0]]=row[1][1]                        
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta)

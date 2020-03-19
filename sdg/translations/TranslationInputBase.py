@@ -67,8 +67,7 @@ class TranslationInputBase:
             The translated text to add
         """
         self.add_group(language, group)
-        if key not in self.translations[language][group]:
-            self.translations[language][group][key] = value
+        self.translations[language][group][key] = value
 
 
     def fetch_file(self, location):

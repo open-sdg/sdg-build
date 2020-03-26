@@ -29,6 +29,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
             is_required = field['name'] in schema['required']
             jsonschema_field = self.prose_field_to_jsonschema(field['field'], is_required)
             schema['properties'][field['name']] = jsonschema_field
+            self.add_field_order(field['name'])
 
         # And similarly, there are certain conditional validation checks.
         schema['allOf'] = [

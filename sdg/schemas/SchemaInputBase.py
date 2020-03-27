@@ -21,6 +21,7 @@ class SchemaInputBase:
         """
 
         self.schema_path = schema_path
+        self.field_order = []
         self.load_schema()
         self.load_validator()
 
@@ -170,3 +171,25 @@ class SchemaInputBase:
             raise ValueError(field + " field does not have options element")
 
         return {x['enum'][0]: x['translation_key'] for x in options}
+
+
+    def add_item_to_field_order(self, field):
+        """Add a field to the list, in case an output needs a field order.
+
+        Parameters
+        ----------
+        field : string
+            The name of a field to add to the list
+        """
+        self.field_order.append(field)
+
+
+    def get_field_order(self):
+        """Get the list of fields in the preserved order.
+
+        Returns
+        -------
+        list
+            A list of field names in a particular order
+        """
+        return self.field_order if len(self.field_order) > 0 else self.schema['properties'].keys()

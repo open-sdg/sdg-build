@@ -28,12 +28,13 @@ class SchemaOutputOpenSdg(SchemaOutputBase):
         jsonschema = self.schema.schema
 
         # Convert the JSON Schema into a list of Prose-style fields.
-        for key in jsonschema['properties']:
-            prose_field = self.jsonschema_field_to_prose(jsonschema['properties'][key])
-            output.append({
-                'name': key,
-                'field': prose_field
-            })
+        for key in self.schema.get_field_order():
+            if key in jsonschema['properties']:
+                prose_field = self.jsonschema_field_to_prose(jsonschema['properties'][key])
+                output.append({
+                    'name': key,
+                    'field': prose_field
+                })
 
         output_json = json.dumps(output)
         with open(output_path, 'w', encoding='utf-8') as outfile:

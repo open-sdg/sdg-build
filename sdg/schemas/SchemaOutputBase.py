@@ -5,12 +5,12 @@ class SchemaOutputBase:
 
 
     def __init__(self, schema):
-        """Create a new SchemaBase object
+        """Create a new SchemaOutputBase object
 
-        Paramters
+        Parameters
         ---------
-        schema : SchemaBase
-            SchemaBase (or subclass) to output
+        schema : SchemaInputBase
+            SchemaInputBase (or subclass) to output
         """
 
         self.schema = schema

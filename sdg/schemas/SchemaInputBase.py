@@ -173,7 +173,7 @@ class SchemaInputBase:
         return {x['enum'][0]: x['translation_key'] for x in options}
 
 
-    def add_field_order(self, field):
+    def add_item_to_field_order(self, field):
         """Add a field to the list, in case an output needs a field order.
 
         Parameters
@@ -192,6 +192,4 @@ class SchemaInputBase:
         list
             A list of field names in a particular order
         """
-        if len(self.field_order) == 0:
-            raise Exception('The schema input did not preserve the order of fields.')
-        return self.field_order
+        return self.field_order if len(self.field_order) > 0 else self.schema['properties'].keys()

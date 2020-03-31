@@ -11,12 +11,16 @@ import yamlmd
 import sdg
 from sdg.path import input_path, output_path  # local package
 
-def read_meta(inid, git=True, src_dir='', git_data_dir=None):
+def read_meta(inid, path_pattern='', git=True, src_dir='', git_data_dir=None):
     """Perform pre-processing for the metadata files"""
     status = True
     # Read and write paths may be different
-    fr = input_path(inid, ftype='meta', src_dir=src_dir)
-
+    meta_folder=path_pattern.split("/")[0]
+    extension=path_pattern.split(".")[1]
+    if inid is not None:
+        fr = os.path.join(meta_folder, inid + extension)
+    else:
+        fr = path
     meta_md = yamlmd.read_yamlmd(fr)
     meta = dict(meta_md[0])
     if git:
@@ -28,10 +32,9 @@ def read_meta(inid, git=True, src_dir='', git_data_dir=None):
 
     # Now look for all subfolders of the meta folder, which may contain
     # multilingual metadata, and add them as well.
-    meta_folder = input_path(None, ftype='meta', src_dir=src_dir)
     languages = next(os.walk(meta_folder))[1]
     for language in languages:
-        i18n_fr = os.path.join(meta_folder, language, inid + '.md')
+        i18n_fr = os.path.join(meta_folder, language, inid + extension)
         if os.path.isfile(i18n_fr):
             i18n_meta_md = yamlmd.read_yamlmd(i18n_fr)
             i18n_meta = dict(i18n_meta_md[0])

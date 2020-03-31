@@ -15,8 +15,12 @@ def read_meta(inid, path_pattern='', git=True, src_dir='', git_data_dir=None):
     """Perform pre-processing for the metadata files"""
     status = True
     # Read and write paths may be different
-    meta_folder=path_pattern.split("/")[0]
-    extension=path_pattern.split(".")[1]
+    if path_pattern == '':
+        meta_folder = meta
+        extension='.md'
+    else:
+        meta_folder = path_pattern.split("/")[0]
+        extension=path_pattern.split(".")[1]
     if inid is not None:
         fr = os.path.join(meta_folder, inid + extension)
     else:

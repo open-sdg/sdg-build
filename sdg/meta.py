@@ -16,7 +16,7 @@ def read_meta(inid, path_pattern='', git=True, src_dir='', git_data_dir=None):
     status = True
     # Read and write paths may be different
     if path_pattern == '':
-        meta_folder = meta
+        meta_folder = 'meta'
         extension='.md'
     else:
         meta_folder = path_pattern.split("/")[0]

@@ -22,9 +22,9 @@ def read_meta(inid, path_pattern='', git=True, src_dir='', git_data_dir=None):
         meta_folder = path_pattern.split("/")[0]
         extension=path_pattern.split(".")[1]
     if inid is not None:
-        fr = os.path.join(meta_folder, inid + extension)
+        fr = os.path.join(src_dir, meta_folder, inid + extension)
     else:
-        fr = meta_folder
+        fr = os.path.join(src_dir, meta_folder)
     meta_md = yamlmd.read_yamlmd(fr)
     meta = dict(meta_md[0])
     if git:
@@ -38,7 +38,7 @@ def read_meta(inid, path_pattern='', git=True, src_dir='', git_data_dir=None):
     # multilingual metadata, and add them as well.
     languages = next(os.walk(meta_folder))[1]
     for language in languages:
-        i18n_fr = os.path.join(meta_folder, language, inid + extension)
+        i18n_fr = os.path.join(src_dir, meta_folder, language, inid + extension)
         if os.path.isfile(i18n_fr):
             i18n_meta_md = yamlmd.read_yamlmd(i18n_fr)
             i18n_meta = dict(i18n_meta_md[0])

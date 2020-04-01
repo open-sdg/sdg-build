@@ -36,7 +36,7 @@ def read_meta(inid, path_pattern='', git=True, src_dir='', git_data_dir=None):
 
     # Now look for all subfolders of the meta folder, which may contain
     # multilingual metadata, and add them as well.
-    languages = next(os.walk(meta_folder))[1]
+    languages = next(os.walk(os.path.join(src_dir, meta_folder)))[1]
     for language in languages:
         i18n_fr = os.path.join(src_dir, meta_folder, language, inid + extension)
         if os.path.isfile(i18n_fr):

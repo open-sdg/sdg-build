@@ -25,7 +25,6 @@ def read_meta(inid, path_pattern='', git=True, src_dir='', git_data_dir=None):
         fr = os.path.join(src_dir, meta_folder, inid + extension)
     else:
         fr = os.path.join(src_dir, meta_folder)
-    print(fr)
     meta_md = yamlmd.read_yamlmd(fr)
     meta = dict(meta_md[0])
     if git:

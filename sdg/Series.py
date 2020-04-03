@@ -67,9 +67,10 @@ class Series:
             The numerical value to add.
         """
         if year in self.values:
-            raise KeyError('There is already a value for this year.')
-
-        self.values[year] = value
+            warning = '\nWARNING: Duplicate values for year {}: {} and {} in series: {}'
+            print(warning.format(year, value, self.values[year], self.get_disaggregations()))
+        else:
+            self.values[year] = value
 
     def has_disaggregation(self, disaggregation):
         """Check to see if the series has a specific disaggregation.

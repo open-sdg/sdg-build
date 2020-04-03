@@ -334,7 +334,7 @@ class Indicator:
             serialized = json.dumps(disaggregations, sort_keys=True)
             # Initialized any new series.
             if serialized not in all_series:
-                all_series[serialized] = sdg.Series(disaggregations)
+                all_series[serialized] = sdg.Series(disaggregations, self.get_indicator_id())
             # Finally add the year and value.
             all_series[serialized].add_value(row['Year'], row['Value'])
 

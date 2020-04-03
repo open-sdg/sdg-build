@@ -24,16 +24,19 @@ class Series:
         }
     """
 
-    def __init__(self, disaggregations):
+    def __init__(self, disaggregations, indicator_id='Indicator'):
         """Constructor for the SDG series instances.
 
         Parameters
         ----------
         disaggregations : dict
             A dict describing the disaggregations contained in the series.
+        indicator_id : string
+            Optional indicator ID this series is a part of (eg, 1.1.1).
         """
         self.disaggregations = disaggregations
         self.values = {}
+        self.indicator_id = indicator_id
 
 
     def get_disaggregations(self):
@@ -67,8 +70,8 @@ class Series:
             The numerical value to add.
         """
         if year in self.values:
-            warning = '\nWARNING: Duplicate values for year {}: {} and {} in series: {}'
-            print(warning.format(year, value, self.values[year], self.get_disaggregations()))
+            warning = '\nWARNING: {} - Duplicate values for year {}: {} and {} in series: {}'
+            print(warning.format(self.indicator_id, year, value, self.values[year], self.get_disaggregations()))
         else:
             self.values[year] = value
 

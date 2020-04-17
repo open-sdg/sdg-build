@@ -24,7 +24,7 @@ def filter_headline(df):
     special_cols = ['Year']
     if 'Units' in df.columns:
         special_cols.append('Units')
-    if 'Series' in df.column:
+    if 'Series' in df.columns:
         special_cols.append('Series')
     special_cols.append('Value')
 

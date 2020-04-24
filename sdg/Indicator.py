@@ -229,6 +229,11 @@ class Indicator:
             return translation_helper.translate(text, language, default_group='data')
         def translate_data(text):
             return translation_helper.translate(text, language, default_group='data')
+        def translate_data_columns(text):
+            special_columns = ['Year', 'Value', 'Units']
+            if text in special_columns:
+                return text
+            return translation_helper.translate(text, language, default_group='data')
 
         # Translate the name.
         indicator.set_name(translate_meta(self.name))
@@ -248,7 +253,7 @@ class Indicator:
         data_copy = copy.deepcopy(self.data)
         for column in data_copy:
             data_copy[column] = data_copy[column].apply(translate_data)
-        data_copy.rename(mapper=translate_data, axis='columns', inplace=True)
+        data_copy.rename(mapper=translate_data_columns, axis='columns', inplace=True)
         indicator.set_data(data_copy)
 
         # Finally place the translation for later access.

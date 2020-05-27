@@ -21,11 +21,12 @@ def filter_headline(df):
     In the case of multiple units it will keep all headline for each unit.
     """
 
-    # The pandas version on trusty doesn't support 'errors' argument so:
+    special_cols = ['Year']
     if 'Units' in df.columns:
-        special_cols = ['Year', 'Units', 'Value']
-    else:
-        special_cols = ['Year', 'Value']
+        special_cols.append('Units')
+    if 'Series' in df.columns:
+        special_cols.append('Series')
+    special_cols.append('Value')
 
     # Select the non-data rows and filter rows that are all missing (nan)
     disag = df.drop(special_cols, axis=1)

@@ -25,7 +25,7 @@ import itertools
 # %% Keep a list of columns to ignore
 
 
-edge_ignore_cols = ['Year', 'Units', 'Value', 'GeoCode',
+edge_ignore_cols = ['Year', 'Units', 'Series', 'Value', 'GeoCode',
                     'Observation status', 'Unit multiplier', 'Unit measure']
 
 # %% Check correct columns - copied from csvcheck

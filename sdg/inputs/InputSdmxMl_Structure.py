@@ -75,8 +75,8 @@ class InputSdmxMl_Structure(InputSdmx):
         disaggregations = {}
         dimensions = self.get_series_dimensions(series)
         for dimension_id in dimensions:
-            if dimension_id == 'SERIES' or dimension_id in self.drop_dimensions:
-                # Skip "SERIES" and anything set to be dropped.
+            if dimension_id in self.drop_dimensions:
+                # Skip anything set to be dropped.
                 continue
             else:
                 # Otherwise we will use this dimension as a disaggregation.

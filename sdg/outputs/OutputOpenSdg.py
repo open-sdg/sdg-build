@@ -3,6 +3,7 @@ import sdg
 from sdg.outputs import OutputBase
 from sdg.data import write_csv
 from sdg.json import write_json, df_to_list_dict
+from jinja2 import Template
 
 class OutputOpenSdg(OutputBase):
     """Output SDG data/metadata in the formats expected by Open SDG."""
@@ -127,3 +128,93 @@ class OutputOpenSdg(OutputBase):
             minimum['graph_title'] = indicator.get_name()
 
         return minimum
+
+
+    def get_documentation_title(self):
+        return 'Open SDG output'
+
+
+    def get_documentation_content(self, languages=None):
+        if languages is None:
+            languages = ['']
+
+        template = Template("""
+        <p>This output includes a variety of endpoints. Examples are below:<p>
+
+        <h2>Headlines</h2>
+        <p>CSV/JSON files containing "headline" (aggregated only) data for indicators.</p>
+        <ul>
+            {% for language in languages %}
+            <li>{{ language }}/headline/1-1-1.csv</li>
+            <li>{{ language }}/headline/1-1-1.json</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Data</h2>
+        <p>CSV/JSON files containing fully disaggregated data for indicators.</p>
+        <ul>
+            {% for language in languages %}
+            <li>{{ language }}/data/1-1-1.csv</li>
+            <li>{{ language }}/data/1-1-1.json</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Edges</h2>
+        <p>CSV/JSON files containing "edges" (relationships between disaggregations) data for indicators.</p>
+        <ul>
+            {% for language in languages %}
+            <li>{{ language }}/edges/1-1-1.csv</li>
+            <li>{{ language }}/edges/1-1-1.json</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Combined edges and data</h2>
+        <p>JSON files containing both the fully-disaggregated and "edges" data mentioned above.</p>
+        <ul>
+            {% for language in languages %}
+            <li>{{ language }}/comb/1-1-1.json</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Metadata</h2>
+        <p>JSON files containing metadata for the indicators.</p>
+        <ul>
+            {% for language in languages %}
+            <li>{{ language }}/comb/1-1-1.json</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Zip file of CSV data</h2>
+        <p>Zip files containing all indicators in CSV form.</p>
+        <ul>
+            {% for language in languages %}
+            <li>{{ language }}/zip/all_indicators.zip</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Zip file information</h2>
+        <p>JSON file containing information about the above-mentioned zip files.</p>
+        <ul>
+            {% for language in languages %}
+            <li>{{ language }}/zip/all_indicators.json</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Reporting status</h2>
+        <p>JSON file containing information about the reporting status of the indicators.</p>
+        <ul>
+            {% for language in languages %}
+            <li>{{ language }}/stats/reporting.json</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Translations</h2>
+        <p>JSON file containing all the translations used in the platform.</p>
+        <ul>
+            {% for language in languages %}
+            <li>{{ language }}/translations/translations.json</li>
+            {% endfor %}
+        </ul>
+
+        """)
+        return template.render(languages=languages)

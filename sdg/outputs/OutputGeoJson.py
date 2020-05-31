@@ -5,6 +5,7 @@ from urllib.request import urlopen
 import sdg
 import pandas as pd
 from sdg.outputs import OutputBase
+from jinja2 import Template
 
 class OutputGeoJson(OutputBase):
     """Output SDG data/metadata in GeoJson disaggregated by region."""
@@ -302,3 +303,23 @@ class OutputGeoJson(OutputBase):
                 break
 
         return False if no_indicators_have_geocodes else True
+
+
+    def get_documentation_title(self):
+        return 'GeoJSON output - ' + self.output_subfolder
+
+
+    def get_documentation_content(self, languages=None):
+        if languages is None:
+            languages = ['']
+
+        template = Template("""
+        <p>This output contains GeoJSON for certain indicators. Examples are below:<p>
+
+        <ul>
+            {% for language in languages %}
+            <li>{{ language }}/{{ output_subfolder }}/indicator_1-1-1.geojson</li>
+            {% endfor %}
+        </ul>
+        """)
+        return template.render(languages=languages, output_subfolder=self.output_subfolder)

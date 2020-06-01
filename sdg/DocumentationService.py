@@ -73,7 +73,7 @@ class DocumentationService:
         page : dict
             A dict containing "title", "filename", and "content"
         """
-        html = self.get_html(page['title'], page['content'])
+        html = self.get_html(self.title + ' - ' + page['title'], page['content'])
         self.write_page(page['filename'], html)
 
 

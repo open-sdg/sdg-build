@@ -1,8 +1,7 @@
 import os
 import sdg
 from slugify import slugify
-from jinja2 import Environment, PackageLoader
-env = Environment(loader=PackageLoader('sdg', 'templates'))
+from jinja2 import Template
 
 class DocumentationService:
     """HTML generation to document outputs built with this library.
@@ -51,20 +50,16 @@ class DocumentationService:
         self.write_index(pages)
 
 
-    def write_page(self, filename, template_file, variables):
+    def write_page(self, filename, html):
         """Write a page.
 
         Parameters
         ----------
         filename : string
             The path on disk to write the file to
-        template : string
-            Which file in the "templates" folder to use
-        variables : dict
-            A dict of variables to pass into the template
+        html : string
+            The HTML to write to file
         """
-        template = env.get_template(template_file)
-        html = template.render(**variables)
         filepath = os.path.join(self.folder, filename)
         with open(filepath, 'w', encoding='utf-8') as file:
             file.write(html)
@@ -78,10 +73,9 @@ class DocumentationService:
         page : dict
             A dict containing "title", "filename", and "content"
         """
-        self.write_page(page['filename'], 'documentation.html', {
-            'title': page['title'],
-            'content': page['content'],
-        })
+        html = self.get_html(page['title'], page['content'])
+        self.write_page(page['filename'], html)
+
 
     def write_index(self, pages):
         """Write the index page.
@@ -91,11 +85,19 @@ class DocumentationService:
         pages : list
             A list of dicts containing "title", "filename", and "content"
         """
-        self.write_page('index.html', 'index.html', {
-            'title': self.title,
-            'intro': self.intro,
-            'pages': pages,
-        })
+        index_template = Template("""
+        <div>
+            {{ intro }}
+        </div>
+        <ul>
+            {% for page in pages %}
+            <li><a href="{{ page.filename }}">{{ page.title }}</a></li>
+            {% endfor %}
+        </ul>
+        """)
+        index_html = index_template.render(intro=self.intro, pages=pages)
+        page_html = self.get_html(self.title, index_html)
+        self.write_page('index.html', page_html)
 
 
     def create_filename(self, title):
@@ -116,3 +118,24 @@ class DocumentationService:
             slug = slug + '_'
         self.slugs.append(slug)
         return slug + '.html'
+
+
+    def get_html(self, title, content):
+        template = Template("""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>{{ title }}</title>
+            <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
+            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.css">
+        </head>
+        <body>
+            <div class="container">
+                <h1>{{ title }}</h1>
+                {{ content }}
+            </div>
+        </body>
+        </html>
+        """)
+        return template.render(title=title, content=content)

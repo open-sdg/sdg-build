@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-{% block content %}
-{{ intro }}
-<ul>
-{% for page in pages %}
-  <li><a href="{{ page.filename }}">{{ page.title }}</a></li>
-{% endfor %}
-</ul>
-{% endblock %}

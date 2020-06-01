@@ -153,8 +153,8 @@ class InputSdmxJson(InputSdmx):
         for key in dimensions:
             dimension = dimensions[key]
             dimension_id = dimension['dimension']['id']
-            if dimension_id == 'SERIES' or dimension_id in self.drop_dimensions:
-                # Skip "SERIES" and anything set to be dropped.
+            if dimension_id in self.drop_dimensions:
+                # Skip anything set to be dropped.
                 continue
             else:
                 # Otherwise we will use this dimension as a disaggregation.

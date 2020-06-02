@@ -5,7 +5,6 @@ from urllib.request import urlopen
 import sdg
 import pandas as pd
 from sdg.outputs import OutputBase
-from jinja2 import Template
 
 class OutputGeoJson(OutputBase):
     """Output SDG data/metadata in GeoJson disaggregated by region."""
@@ -313,13 +312,23 @@ class OutputGeoJson(OutputBase):
         if languages is None:
             languages = ['']
 
-        template = Template("""
-        <p>This output contains GeoJSON for certain indicators. Examples are below:<p>
+        indicator_ids = []
+        for indicator_id in self.get_indicator_ids():
+            if len(indicator_ids) > 2:
+                break
+            indicator = self.get_indicator_by_id(indicator_id)
+            if not self.indicator_has_geocodes(indicator):
+                continue
+            indicator_ids.append(indicator_id)
 
-        <ul>
-            {% for language in languages %}
-            <li>{{ language }}/{{ output_subfolder }}/indicator_1-1-1.geojson</li>
-            {% endfor %}
-        </ul>
-        """)
-        return template.render(languages=languages, output_subfolder=self.output_subfolder)
+        endpoint = '{language}/geojson/{folder}/indicator_{indicator_id}.geojson'
+        output = '<p>This output contains GeoJSON for certain indicators. Examples are below:<p>'
+        output += '<ul>'
+        for language in languages:
+            for indicator_id in indicator_ids:
+                path = endpoint.format(language=language, indicator_id=indicator_id, folder=self.output_subfolder)
+                output += '<li><a href="' + path + '">' + path + '</a></li>'
+        output + '<li>etc...</li>'
+        output += '</ul>'
+
+        return output

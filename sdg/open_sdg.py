@@ -42,7 +42,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    languages=None, translations=None, map_layers=None,
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
                    inputs=None, alter_data=None, alter_meta=None,
-                   docs_title='Build docs', docs_intro=''):
+                   docs_branding='Build docs', docs_intro=''):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -61,7 +61,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         inputs: list. A list of dicts describing instances of InputBase
         alter_data: function. A callback function that alters a data Dataframe
         alter_meta: function. A callback function that alters a metadata dictionary
-        docs_title: string. A title for the documentation homepage
+        docs_branding: string. A heading for all documentation pages
         docs_intro: string. An introduction for the documentation homepage
 
     Returns:
@@ -86,7 +86,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'map_layers': map_layers,
         'reporting_status_extra_fields': reporting_status_extra_fields,
         'inputs': inputs,
-        'docs_title': docs_title,
+        'docs_branding': docs_branding,
         'docs_intro': docs_intro,
     }
     # Allow for a config file to update these.
@@ -110,7 +110,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     # Output the documentation pages.
     documentation_service = sdg.DocumentationService(outputs,
         folder=options['site_dir'],
-        title=options['docs_title'],
+        branding=options['docs_branding'],
         intro=options['docs_intro'],
         languages=options['languages']
     )

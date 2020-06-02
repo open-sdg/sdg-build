@@ -1,7 +1,7 @@
 import os
 import sdg
+import numpy
 from slugify import slugify
-from jinja2 import Template
 
 class DocumentationService:
     """HTML generation to document outputs built with this library.
@@ -13,7 +13,7 @@ class DocumentationService:
     """
 
 
-    def __init__(self, outputs, folder='_site', title='Build docs', languages=None, intro=''):
+    def __init__(self, outputs, folder='_site', branding='Build docs', languages=None, intro=''):
         """Constructor for the DocumentationService class.
 
         Parameters
@@ -23,7 +23,7 @@ class DocumentationService:
         """
         self.outputs = outputs
         self.folder = folder
-        self.title = title
+        self.branding = branding
         self.intro = intro
         self.slugs = []
         self.languages = [] if languages is None else languages
@@ -73,7 +73,7 @@ class DocumentationService:
         page : dict
             A dict containing "title", "filename", and "content"
         """
-        html = self.get_html(self.title + ' - ' + page['title'], page['content'])
+        html = self.get_html(page['title'], page['content'])
         self.write_page(page['filename'], html)
 
 
@@ -85,18 +85,20 @@ class DocumentationService:
         pages : list
             A list of dicts containing "title", "filename", and "content"
         """
-        index_template = Template("""
-        <div>
-            {{ intro }}
-        </div>
-        <ul>
-            {% for page in pages %}
-            <li><a href="{{ page.filename }}">{{ page.title }}</a></li>
-            {% endfor %}
-        </ul>
-        """)
-        index_html = index_template.render(intro=self.intro, pages=pages)
-        page_html = self.get_html(self.title, index_html)
+        html = '<p>' + self.intro + '</p>'
+        html += '<div class="container">'
+
+        last_page = len(pages) - 1
+        for num, page in enumerate(pages):
+            if num % 3 == 0:
+                html += '<div class="row">'
+            link = '<a href="' + page['filename'] + '">' + page['title'] + '</a>'
+            html += '<div class="col-sm"><div class="card"><div class="card-body">' + link + '</div></div></div>'
+            if (num % 3 == 0 and num > 0) or num == last_page:
+                html += '</div>'
+
+        html += '</div>'
+        page_html = self.get_html('Overview', html)
         self.write_page('index.html', page_html)
 
 
@@ -121,21 +123,37 @@ class DocumentationService:
 
 
     def get_html(self, title, content):
-        template = Template("""
+        template = """
         <!DOCTYPE html>
         <html>
         <head>
-            <title>{{ title }}</title>
-            <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.css">
-            <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/milligram/1.3.0/milligram.css">
+            <meta charset="utf-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+
+            <title>{branding} - {title}</title>
+
+            <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         </head>
         <body>
-            <div class="container">
-                <h1>{{ title }}</h1>
-                {{ content }}
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container">
+                    <a class="navbar-brand" href="index.html">{branding}</a>
+                </div>
+            </nav>
+            <main role="main">
+                <div class="container">
+                    <h1 style="margin:20px 0">{title}</h1>
+                    <div>
+                        {content}
+                    </div>
+                </div>
             </div>
+            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         </body>
         </html>
-        """)
-        return template.render(title=title, content=content)
+        """
+        return template.format(branding=self.branding, title=title, content=content)

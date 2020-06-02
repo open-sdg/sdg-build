@@ -217,7 +217,9 @@ class OutputOpenSdg(OutputBase):
             }
         ]
 
-        output = '<p>This output includes a variety of endpoints. Examples are below:<p>'
+        output = """<p>This output includes a variety of endpoints designed to
+        support the <a href="https://open-sdg.readthedocs.io">Open SDG</a>
+        platform. Examples are below:<p>"""
         for section in sections:
             output += '<h2>' + section['title'] + '</h2>'
             output += '<p>' + section['description'] + '</p>'

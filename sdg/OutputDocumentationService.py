@@ -33,8 +33,9 @@ class OutputDocumentationService:
         """Generate the HTML pages for documentation of all of the outputs."""
         pages = []
         for output in self.outputs:
+            title = output.get_documentation_title()
             pages.append({
-                'title': output.get_documentation_title(),
+                'title': title,
                 'filename': self.create_filename(title),
                 'content': output.get_documentation_content(self.languages),
                 'description': output.get_documentation_description()

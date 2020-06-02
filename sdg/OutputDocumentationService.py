@@ -3,7 +3,7 @@ import sdg
 import numpy
 from slugify import slugify
 
-class DocumentationService:
+class OutputDocumentationService:
     """HTML generation to document outputs built with this library.
 
     Note that this is meant to document particular builds, not the library in
@@ -14,7 +14,7 @@ class DocumentationService:
 
 
     def __init__(self, outputs, folder='_site', branding='Build docs', languages=None, intro=''):
-        """Constructor for the DocumentationService class.
+        """Constructor for the OutputDocumentationService class.
 
         Parameters
         ----------
@@ -41,28 +41,12 @@ class DocumentationService:
                 'content': content
             })
 
-        if not os.path.exists(self.folder):
-            os.makedirs(self.folder)
+        os.makedirs(self.folder, exist_ok=True)
 
         for page in pages:
             self.write_documentation(page)
 
         self.write_index(pages)
-
-
-    def write_page(self, filename, html):
-        """Write a page.
-
-        Parameters
-        ----------
-        filename : string
-            The path on disk to write the file to
-        html : string
-            The HTML to write to file
-        """
-        filepath = os.path.join(self.folder, filename)
-        with open(filepath, 'w', encoding='utf-8') as file:
-            file.write(html)
 
 
     def write_documentation(self, page):
@@ -100,6 +84,21 @@ class DocumentationService:
         html += '</div>'
         page_html = self.get_html('Overview', html)
         self.write_page('index.html', page_html)
+
+
+    def write_page(self, filename, html):
+        """Write a page.
+
+        Parameters
+        ----------
+        filename : string
+            The path on disk to write the file to
+        html : string
+            The HTML to write to file
+        """
+        filepath = os.path.join(self.folder, filename)
+        with open(filepath, 'w', encoding='utf-8') as file:
+            file.write(html)
 
 
     def create_filename(self, title):

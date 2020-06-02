@@ -108,7 +108,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             status = status & output.execute()
 
     # Output the documentation pages.
-    documentation_service = sdg.DocumentationService(outputs,
+    documentation_service = sdg.OutputDocumentationService(outputs,
         folder=options['site_dir'],
         branding=options['docs_branding'],
         intro=options['docs_intro'],

@@ -50,11 +50,11 @@ if validation_successful:
     #    (the build will appear in '_site')
     opensdg_output.execute_per_language(['es', 'ru', 'en'])
     # Build the human-readable build documentation.
-    documentation = sdg.DocumentationService(
+    documentation = sdg.OutputDocumentationService(
         [opensdg_output],
         folder='_site',
         languages=['es', 'ru', 'en'],
-        title='My homepage title',
+        branding='My homepage title',
         intro='My homepage intro'
     )
     documentation.generate_documentation()

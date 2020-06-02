@@ -192,3 +192,14 @@ class OutputBase:
         """
         # This should be overridden, but fallback to generic text.
         return '<p>Documentation unavailable - must be provided by get_documentation_content().</p>'
+
+
+    def get_documentation_description(self):
+        """Get a description of this output, for documentation purposes.
+
+        Returns
+        -------
+        string
+            The description for this output.
+        """
+        return 'Description unavailable - must be provided by get_documentation_description().'

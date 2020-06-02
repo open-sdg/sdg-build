@@ -217,9 +217,7 @@ class OutputOpenSdg(OutputBase):
             }
         ]
 
-        output = """<p>This output includes a variety of endpoints designed to
-        support the <a href="https://open-sdg.readthedocs.io">Open SDG</a>
-        platform. Examples are below:<p>"""
+        output = '<p>' + self.get_documentation_description() + ' Examples are below:<p>'
         for section in sections:
             output += '<h2>' + section['title'] + '</h2>'
             output += '<p>' + section['description'] + '</p>'
@@ -236,3 +234,9 @@ class OutputOpenSdg(OutputBase):
             output += '</ul>'
 
         return output
+
+
+    def get_documentation_description(self):
+        return """This output includes a variety of endpoints designed to
+        support the <a href="https://open-sdg.readthedocs.io">Open SDG</a>
+        platform."""

@@ -322,7 +322,7 @@ class OutputGeoJson(OutputBase):
             indicator_ids.append(indicator_id)
 
         endpoint = '{language}/geojson/{folder}/indicator_{indicator_id}.geojson'
-        output = '<p>This output contains GeoJSON for certain indicators. Examples are below:<p>'
+        output = '<p>' + self.get_documentation_description() + ' Examples are below:<p>'
         output += '<ul>'
         for language in languages:
             for indicator_id in indicator_ids:
@@ -332,3 +332,7 @@ class OutputGeoJson(OutputBase):
         output += '</ul>'
 
         return output
+
+
+    def get_documentation_description(self):
+        return 'This output contains GeoJSON for certain indicators.'

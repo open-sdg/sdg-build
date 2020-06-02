@@ -35,10 +35,12 @@ class OutputDocumentationService:
         for output in self.outputs:
             title = output.get_documentation_title()
             content = output.get_documentation_content(self.languages)
+            description = output.get_documentation_description()
             pages.append({
                 'title': title,
                 'filename': self.create_filename(title),
-                'content': content
+                'content': content,
+                'description': description
             })
 
         os.makedirs(self.folder, exist_ok=True)
@@ -76,8 +78,10 @@ class OutputDocumentationService:
         for num, page in enumerate(pages):
             if num % 3 == 0:
                 html += '<div class="row">'
-            link = '<a href="' + page['filename'] + '">' + page['title'] + '</a>'
-            html += '<div class="col-sm"><div class="card"><div class="card-body">' + link + '</div></div></div>'
+            title = '<h5 class="card-title">' + page['title'] + '</h5>'
+            description = '<p class="card-text">' + page['description'] + '</p>'
+            link = '<a href="' + page['filename'] + '" class="btn btn-primary">See examples</a>'
+            html += '<div class="col-sm"><div class="card"><div class="card-body">' + title + description + link + '</div></div></div>'
             if (num % 3 == 0 and num > 0) or num == last_page:
                 html += '</div>'
 

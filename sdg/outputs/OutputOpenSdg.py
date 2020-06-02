@@ -143,6 +143,7 @@ class OutputOpenSdg(OutputBase):
             {
                 'title': 'Headlines',
                 'description': 'CSV/JSON files containing "headline" (aggregated only) data for indicators',
+                'loop_indicators': True,
                 'endpoints': [
                     '{language}/headline/{indicator_id}.csv',
                     '{language}/headline/{indicator_id}.json'
@@ -151,6 +152,7 @@ class OutputOpenSdg(OutputBase):
             {
                 'title': 'Data',
                 'description': 'CSV/JSON files containing fully disaggregated data for indicators',
+                'loop_indicators': True,
                 'endpoints': [
                     '{language}/data/{indicator_id}.csv',
                     '{language}/data/{indicator_id}.json'
@@ -159,6 +161,7 @@ class OutputOpenSdg(OutputBase):
             {
                 'title': 'Edges',
                 'description': 'CSV/JSON files containing "edges" (relationships between disaggregations) data for indicators',
+                'loop_indicators': True,
                 'endpoints': [
                     '{language}/edges/{indicator_id}.csv',
                     '{language}/edges/{indicator_id}.json'
@@ -167,6 +170,7 @@ class OutputOpenSdg(OutputBase):
             {
                 'title': 'Combined edges and data',
                 'description': 'JSON files containing both the fully-disaggregated and "edges" data mentioned above',
+                'loop_indicators': True,
                 'endpoints': [
                     '{language}/comb/{indicator_id}.json'
                 ]
@@ -174,6 +178,7 @@ class OutputOpenSdg(OutputBase):
             {
                 'title': 'Metadata',
                 'description': 'JSON files containing metadata for the indicators',
+                'loop_indicators': True,
                 'endpoints': [
                     '{language}/comb/{indicator_id}.json'
                 ]
@@ -181,6 +186,7 @@ class OutputOpenSdg(OutputBase):
             {
                 'title': 'Zip file of CSV data',
                 'description': 'Zip files containing all indicators in CSV form',
+                'loop_indicators': False,
                 'endpoints': [
                     '{language}/zip/all_indicators.zip'
                 ]
@@ -188,6 +194,7 @@ class OutputOpenSdg(OutputBase):
             {
                 'title': 'Zip file information',
                 'description': 'JSON file containing information about the above-mentioned zip files',
+                'loop_indicators': False,
                 'endpoints': [
                     '{language}/zip/all_indicators.json'
                 ]
@@ -195,6 +202,7 @@ class OutputOpenSdg(OutputBase):
             {
                 'title': 'Reporting status',
                 'description': 'JSON file containing information about the reporting status of the indicators',
+                'loop_indicators': False,
                 'endpoints': [
                     '{language}/stats/reporting.json'
                 ]
@@ -202,6 +210,7 @@ class OutputOpenSdg(OutputBase):
             {
                 'title': 'Translations',
                 'description': 'JSON file containing all the translations used in the platform',
+                'loop_indicators': False,
                 'endpoints': [
                     '{language}/translations/translations.json'
                 ]
@@ -218,7 +227,10 @@ class OutputOpenSdg(OutputBase):
                     for endpoint in section['endpoints']:
                         path = endpoint.format(language=language, indicator_id=indicator_id)
                         output += '<li><a href="' + path + '">' + path + '</a></li>'
-            output += '<li>etc...</li>'
+                    if section['loop_indicators'] == False:
+                        break
+            if section['loop_indicators'] == True:
+                output += '<li>etc...</li>'
             output += '</ul>'
 
         return output

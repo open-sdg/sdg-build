@@ -33,14 +33,11 @@ class OutputDocumentationService:
         """Generate the HTML pages for documentation of all of the outputs."""
         pages = []
         for output in self.outputs:
-            title = output.get_documentation_title()
-            content = output.get_documentation_content(self.languages)
-            description = output.get_documentation_description()
             pages.append({
-                'title': title,
+                'title': output.get_documentation_title(),
                 'filename': self.create_filename(title),
-                'content': content,
-                'description': description
+                'content': output.get_documentation_content(self.languages),
+                'description': output.get_documentation_description()
             })
 
         os.makedirs(self.folder, exist_ok=True)
@@ -49,6 +46,26 @@ class OutputDocumentationService:
             self.write_documentation(page)
 
         self.write_index(pages)
+
+
+    def create_filename(self, title):
+        """Convert a title into a unique filename.
+
+        Parameters
+        ----------
+        title : string
+            A title representing the output
+
+        Returns
+        -------
+        string
+            The title converted into a unique *.html filename
+        """
+        slug = slugify(title)
+        if slug in self.slugs:
+            slug = slug + '_'
+        self.slugs.append(slug)
+        return slug + '.html'
 
 
     def write_documentation(self, page):
@@ -90,41 +107,6 @@ class OutputDocumentationService:
         self.write_page('index.html', page_html)
 
 
-    def write_page(self, filename, html):
-        """Write a page.
-
-        Parameters
-        ----------
-        filename : string
-            The path on disk to write the file to
-        html : string
-            The HTML to write to file
-        """
-        filepath = os.path.join(self.folder, filename)
-        with open(filepath, 'w', encoding='utf-8') as file:
-            file.write(html)
-
-
-    def create_filename(self, title):
-        """Convert a title into a unique filename.
-
-        Parameters
-        ----------
-        title : string
-            A title representing the output
-
-        Returns
-        -------
-        string
-            The title converted into a unique *.html filename
-        """
-        slug = slugify(title)
-        if slug in self.slugs:
-            slug = slug + '_'
-        self.slugs.append(slug)
-        return slug + '.html'
-
-
     def get_html(self, title, content):
         template = """
         <!DOCTYPE html>
@@ -160,3 +142,18 @@ class OutputDocumentationService:
         </html>
         """
         return template.format(branding=self.branding, title=title, content=content)
+
+
+    def write_page(self, filename, html):
+        """Write a page.
+
+        Parameters
+        ----------
+        filename : string
+            The path on disk to write the file to
+        html : string
+            The HTML to write to file
+        """
+        filepath = os.path.join(self.folder, filename)
+        with open(filepath, 'w', encoding='utf-8') as file:
+            file.write(html)

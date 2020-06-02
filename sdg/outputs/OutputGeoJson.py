@@ -328,7 +328,7 @@ class OutputGeoJson(OutputBase):
             for indicator_id in indicator_ids:
                 path = endpoint.format(language=language, indicator_id=indicator_id, folder=self.output_subfolder)
                 output += '<li><a href="' + path + '">' + path + '</a></li>'
-        output + '<li>etc...</li>'
+        output += '<li>etc...</li>'
         output += '</ul>'
 
         return output

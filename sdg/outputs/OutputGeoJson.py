@@ -302,3 +302,42 @@ class OutputGeoJson(OutputBase):
                 break
 
         return False if no_indicators_have_geocodes else True
+
+
+    def get_documentation_title(self):
+        return 'GeoJSON output - ' + self.output_subfolder
+
+
+    def get_documentation_content(self, languages=None):
+        if languages is None:
+            languages = ['']
+
+        indicator_ids = self.get_documentation_indicator_ids()
+
+        endpoint = '{language}/geojson/{folder}/indicator_{indicator_id}.geojson'
+        output = '<p>' + self.get_documentation_description() + ' Examples are below:<p>'
+        output += '<ul>'
+        for language in languages:
+            for indicator_id in indicator_ids:
+                path = endpoint.format(language=language, indicator_id=indicator_id, folder=self.output_subfolder)
+                output += '<li><a href="' + path + '">' + path + '</a></li>'
+        output += '<li>etc...</li>'
+        output += '</ul>'
+
+        return output
+
+
+    def get_documentation_indicator_ids(self):
+        indicator_ids = []
+        for indicator_id in self.get_indicator_ids():
+            if len(indicator_ids) > 2:
+                break
+            indicator = self.get_indicator_by_id(indicator_id)
+            if not self.indicator_has_geocodes(indicator):
+                continue
+            indicator_ids.append(indicator_id)
+        return indicator_ids
+
+
+    def get_documentation_description(self):
+        return 'This output contains GeoJSON for those indicators that have geocoded data.'

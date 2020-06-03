@@ -127,3 +127,133 @@ class OutputOpenSdg(OutputBase):
             minimum['graph_title'] = indicator.get_name()
 
         return minimum
+
+
+    def get_documentation_title(self):
+        return 'Open SDG output'
+
+
+    def get_documentation_content(self, languages=None):
+        if languages is None:
+            languages = ['']
+
+        indicator_ids = self.get_documentation_indicator_ids()
+
+        sections = [
+            {
+                'title': 'Headlines',
+                'description': 'CSV/JSON files containing "headline" (aggregated only) data for indicators',
+                'loop_indicators': True,
+                'endpoints': [
+                    '{language}/headline/{indicator_id}.csv',
+                    '{language}/headline/{indicator_id}.json'
+                ]
+            },
+            {
+                'title': 'Data',
+                'description': 'CSV/JSON files containing fully disaggregated data for indicators',
+                'loop_indicators': True,
+                'endpoints': [
+                    '{language}/data/{indicator_id}.csv',
+                    '{language}/data/{indicator_id}.json'
+                ]
+            },
+            {
+                'title': 'Edges',
+                'description': 'CSV/JSON files containing "edges" (relationships between disaggregations) data for indicators',
+                'loop_indicators': True,
+                'endpoints': [
+                    '{language}/edges/{indicator_id}.csv',
+                    '{language}/edges/{indicator_id}.json'
+                ]
+            },
+            {
+                'title': 'Combined edges and data',
+                'description': 'JSON files containing both the fully-disaggregated and "edges" data mentioned above',
+                'loop_indicators': True,
+                'endpoints': [
+                    '{language}/comb/{indicator_id}.json'
+                ]
+            },
+            {
+                'title': 'Metadata',
+                'description': 'JSON files containing metadata for the indicators',
+                'loop_indicators': True,
+                'endpoints': [
+                    '{language}/comb/{indicator_id}.json'
+                ]
+            },
+            {
+                'title': 'Zip file of CSV data',
+                'description': 'Zip files containing all indicators in CSV form',
+                'loop_indicators': False,
+                'endpoints': [
+                    '{language}/zip/all_indicators.zip'
+                ]
+            },
+            {
+                'title': 'Zip file information',
+                'description': 'JSON file containing information about the above-mentioned zip files',
+                'loop_indicators': False,
+                'endpoints': [
+                    '{language}/zip/all_indicators.json'
+                ]
+            },
+            {
+                'title': 'Reporting status',
+                'description': 'JSON file containing information about the reporting status of the indicators',
+                'loop_indicators': False,
+                'endpoints': [
+                    '{language}/stats/reporting.json'
+                ]
+            },
+            {
+                'title': 'Translations',
+                'description': 'JSON file containing all the translations used in the platform',
+                'loop_indicators': False,
+                'endpoints': [
+                    '{language}/translations/translations.json'
+                ]
+            }
+        ]
+
+        output = '<p>' + self.get_documentation_description() + ' Examples are below:<p>'
+        for section in sections:
+            output += '<h2>' + section['title'] + '</h2>'
+            output += '<p>' + section['description'] + '</p>'
+            output += '<ul>'
+            for language in languages:
+                for indicator_id in indicator_ids:
+                    for endpoint in section['endpoints']:
+                        path = endpoint.format(language=language, indicator_id=indicator_id)
+                        output += '<li><a href="' + path + '">' + path + '</a></li>'
+                    if section['loop_indicators'] == False:
+                        break
+            if section['loop_indicators'] == True:
+                output += '<li>etc...</li>'
+            output += '</ul>'
+
+        return output
+
+
+    def get_documentation_indicator_ids(self):
+        indicator_ids = []
+        for indicator_id in self.get_indicator_ids():
+            if len(indicator_ids) > 2:
+                break
+            indicator = self.get_indicator_by_id(indicator_id)
+            if not indicator.has_edges():
+                continue
+            if not indicator.has_headline():
+                continue
+            indicator_ids.append(indicator_id)
+        if len(indicator_ids) < 1:
+            return OutputBase.get_documentation_indicator_ids()
+        else:
+            return indicator_ids
+
+
+    def get_documentation_description(self):
+        return """This output includes a variety of endpoints designed to
+        support the <a href="https://open-sdg.readthedocs.io">Open SDG</a>
+        platform."""

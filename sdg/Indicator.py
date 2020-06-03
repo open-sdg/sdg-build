@@ -120,10 +120,20 @@ class Indicator:
         self.headline = sdg.data.filter_headline(self.data)
 
 
+    def has_headline(self):
+        """Report whether this indicator has a headline."""
+        return hasattr(self, 'headline') and not self.headline.empty
+
+
     def set_edges(self):
         """Calculate and set the edges for this indicator."""
         self.require_data()
         self.edges = sdg.edges.edge_detection(self.inid, self.data)
+
+
+    def has_edges(self):
+        """Report whether this indicator has edges."""
+        return hasattr(self, 'edges') and not self.edges.empty
 
 
     def get_goal_id(self):

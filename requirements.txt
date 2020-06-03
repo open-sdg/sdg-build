@@ -5,4 +5,5 @@ gitpython
 jsonschema
 requests
 humanize
+unicode-slugify
 git+git://github.com/dougmet/yamlmd

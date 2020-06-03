@@ -16,6 +16,7 @@ from . import inputs
 from . import outputs
 from . import schemas
 from . import translations
+from .OutputDocumentationService import OutputDocumentationService
 from .Indicator import Indicator
 from .IndicatorExportService import IndicatorExportService
 from .Series import Series

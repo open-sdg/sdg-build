@@ -163,3 +163,54 @@ class OutputBase:
             return self.indicators[indicator_id]
         else:
             raise KeyError('The indicator "' + indicator_id + '" could not be found in this output.')
+
+
+    def get_documentation_title(self):
+        """Get a descriptive title for this output, for documentation purposes.
+
+        Returns
+        -------
+        string
+            The descriptive title for this output.
+        """
+        # This should be overridden, but fallback to the name of the class.
+        return type(self).__name__
+
+
+    def get_documentation_content(self, languages=None):
+        """Get detailed content for this output, for documentation purposes.
+
+        Parameters
+        ----------
+        languages : list or None
+            A list of languages, in the case of translated builds, or None otherwise
+
+        Returns
+        -------
+        string
+            The detailed content for this output, in HTML format.
+        """
+        # This should be overridden, but fallback to generic text.
+        return '<p>Documentation unavailable - must be provided by get_documentation_content().</p>'
+
+
+    def get_documentation_indicator_ids(self):
+        """Get a list of indicator ids to use as examples in the documentation.
+
+        Returns
+        -------
+        list
+            The list of dash-delimited indicators ids. (1-1-1, 1-2-1, etc)
+        """
+        return list(self.get_indicator_ids())[:2]
+
+
+    def get_documentation_description(self):
+        """Get a description of this output, for documentation purposes.
+
+        Returns
+        -------
+        string
+            The description for this output.
+        """
+        return 'Description unavailable - must be provided by get_documentation_description().'

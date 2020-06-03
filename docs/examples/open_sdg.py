@@ -49,5 +49,14 @@ if validation_successful:
     # 3. Untranslated: opensdg_output.execute()
     #    (the build will appear in '_site')
     opensdg_output.execute_per_language(['es', 'ru', 'en'])
+    # Build the human-readable build documentation.
+    documentation = sdg.OutputDocumentationService(
+        [opensdg_output],
+        folder='_site',
+        languages=['es', 'ru', 'en'],
+        branding='My homepage title',
+        intro='My homepage intro'
+    )
+    documentation.generate_documentation()
 else:
     raise Exception('There were validation errors. See output above.')

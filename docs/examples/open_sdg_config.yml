@@ -90,3 +90,11 @@ map_layers:
   # The above layer will produce GeoJSON files such as this:
   #     _site/en/geojson/regions/indicator_1-2-1.geojson
   # Add any number of additional layers, such as one for counties.
+
+# Documentation settings
+# ----------------------
+# This controls the automatic documentation that is created for your build.
+docs_branding: My build documentation
+docs_intro: This is a list of examples of endpoints and output that are
+  available on this service. Click each of the links below for more information
+  on the available output.

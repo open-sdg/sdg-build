@@ -137,7 +137,7 @@ class OutputOpenSdg(OutputBase):
         if languages is None:
             languages = ['']
 
-        indicator_ids = list(self.get_indicator_ids())[:2]
+        indicator_ids = self.get_documentation_indicator_ids()
 
         sections = [
             {
@@ -234,6 +234,23 @@ class OutputOpenSdg(OutputBase):
             output += '</ul>'
 
         return output
+
+
+    def get_documentation_indicator_ids(self):
+        indicator_ids = []
+        for indicator_id in self.get_indicator_ids():
+            if len(indicator_ids) > 2:
+                break
+            indicator = self.get_indicator_by_id(indicator_id)
+            if not indicator.has_edges():
+                continue
+            if not indicator.has_headline():
+                continue
+            indicator_ids.append(indicator_id)
+        if len(indicator_ids) < 1:
+            return OutputBase.get_documentation_indicator_ids()
+        else:
+            return indicator_ids
 
 
     def get_documentation_description(self):

@@ -194,6 +194,17 @@ class OutputBase:
         return '<p>Documentation unavailable - must be provided by get_documentation_content().</p>'
 
 
+    def get_documentation_indicator_ids(self):
+        """Get a list of indicator ids to use as examples in the documentation.
+
+        Returns
+        -------
+        list
+            The list of dash-delimited indicators ids. (1-1-1, 1-2-1, etc)
+        """
+        return list(self.get_indicator_ids())[:2]
+
+
     def get_documentation_description(self):
         """Get a description of this output, for documentation purposes.
 

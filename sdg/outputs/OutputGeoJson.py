@@ -312,14 +312,7 @@ class OutputGeoJson(OutputBase):
         if languages is None:
             languages = ['']
 
-        indicator_ids = []
-        for indicator_id in self.get_indicator_ids():
-            if len(indicator_ids) > 2:
-                break
-            indicator = self.get_indicator_by_id(indicator_id)
-            if not self.indicator_has_geocodes(indicator):
-                continue
-            indicator_ids.append(indicator_id)
+        indicator_ids = self.get_documentation_indicator_ids()
 
         endpoint = '{language}/geojson/{folder}/indicator_{indicator_id}.geojson'
         output = '<p>' + self.get_documentation_description() + ' Examples are below:<p>'
@@ -334,5 +327,17 @@ class OutputGeoJson(OutputBase):
         return output
 
 
+    def get_documentation_indicator_ids(self):
+        indicator_ids = []
+        for indicator_id in self.get_indicator_ids():
+            if len(indicator_ids) > 2:
+                break
+            indicator = self.get_indicator_by_id(indicator_id)
+            if not self.indicator_has_geocodes(indicator):
+                continue
+            indicator_ids.append(indicator_id)
+        return indicator_ids
+
+
     def get_documentation_description(self):
-        return 'This output contains GeoJSON for certain indicators.'
+        return 'This output contains GeoJSON for those indicators that have geocoded data.'

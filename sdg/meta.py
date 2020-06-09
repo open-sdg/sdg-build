@@ -19,7 +19,7 @@ def read_meta(inid, path_pattern='', git=True, src_dir='', git_data_dir=None):
         meta_folder = 'meta'
         extension='.md'
     else:
-        meta_folder = path_pattern.split("/")[0]
+        meta_folder = os.path.split(path_pattern)[0]
         extension='.'+path_pattern.split(".")[1]
     if inid is not None:
         fr = os.path.join(src_dir, meta_folder, inid + extension)

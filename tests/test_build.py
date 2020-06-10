@@ -21,12 +21,12 @@ def test_build(test_site_dir):
 
     site_dir = test_site_dir
 
-    data_pattern = os.path.join('tests', 'data', '*-*.csv')
+    data_pattern = os.path.join('data', '*-*.csv')
     data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
-    meta_pattern = os.path.join('tests', 'meta', '*-*.md')
+    meta_pattern = os.path.join('meta', '*-*.md')
     meta_input = sdg.inputs.InputYamlMdMeta(path_pattern=meta_pattern)
     inputs = [data_input, meta_input]
-    schema_path = os.path.join('tests', '_prose.yml')
+    schema_path = os.path.join('_prose.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
     translations = sdg.translations.TranslationInputSdgTranslations()
     opensdg_output = sdg.outputs.OutputOpenSdg(

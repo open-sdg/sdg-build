@@ -169,18 +169,6 @@ class Indicator:
         """
         return self.inid.replace('-', '.')
     
-    def get_source_csv_size(self):
-        """Get the size of the source csv for this indicator (in bytes)
-        
-        Returns
-        -------
-        integer
-            The size of the source csv file, in bytes
-        """
-        st = os.stat(self.data)
-        return st.st_size
-
-
 
     def require_meta(self, minimum_metadata=None):
         """Ensure the metadata for this indicator has minimum necessary values.

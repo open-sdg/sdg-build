@@ -118,7 +118,8 @@ class OutputOpenSdg(OutputBase):
             'reporting_status': 'complete' if (indicator.has_data() or indicator.is_statistical() == False) else 'notstarted',
             'data_non_statistical': False if indicator.has_data() else True,
             'graph_type': 'line',
-            'indicator_sort_order': self.generate_sort_order(indicator)
+            'indicator_sort_order': self.generate_sort_order(indicator),
+            'source_csv_size': indicator.get_source_csv_size()
         }
 
         # Add names only if the indicator has one.

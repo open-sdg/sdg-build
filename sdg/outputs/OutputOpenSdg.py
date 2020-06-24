@@ -115,7 +115,7 @@ class OutputOpenSdg(OutputBase):
         return st.st_size
         
 
-    def minimum_metadata(self, indicator):
+    def minimum_metadata(self, indicator, site_dir):
         """Provide minimum metadata for an indicator. Overrides parent."""
         minimum = {
             'indicator': indicator.get_indicator_id(),

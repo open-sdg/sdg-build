@@ -2,6 +2,7 @@ import copy
 import json
 import sdg
 import pandas as pd
+import os
 from sdg.translations import TranslationHelper
 
 class Indicator:

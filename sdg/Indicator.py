@@ -2,6 +2,7 @@ import copy
 import json
 import sdg
 import pandas as pd
+import numpy as np
 from sdg.translations import TranslationHelper
 
 class Indicator:
@@ -341,17 +342,21 @@ class Indicator:
         list
             List of Series objects.
         """
-        all_series = {}
-        for index, row in self.data.iterrows():
-            # Assume "disaggregations" are everything except 'Year' and 'Value'.
-            disaggregations = row.drop('Value').drop('Year').to_dict()
-            # Serialize so that we can use a set of disaggregations as a key.
-            serialized = json.dumps(disaggregations, sort_keys=True)
-            # Initialized any new series.
-            if serialized not in all_series:
-                all_series[serialized] = sdg.Series(disaggregations, self.get_indicator_id())
-            # Finally add the year and value.
-            all_series[serialized].add_value(row['Year'], row['Value'])
+        # Assume "disaggregations" are everything except 'Year' and 'Value'.
+        aggregating_columns = ['Year', 'Value']
+        grouping_columns = [column for column in self.data.columns if column not in aggregating_columns]
 
-        # We only want to return a list, not a dict.
-        return all_series.values()
+        def row_to_series(row):
+            disaggregations = row[grouping_columns].to_dict()
+            series = sdg.Series(disaggregations)
+            for year, value in zip(row['Year'], row['Value']):
+                series.add_value(year, value)
+            return series
+
+        # NaN must be replaced with '' so that it can be grouped by.
+        grouped = self.data.replace(np.nan, '', regex=True)
+        # Group by disaggreations to get each unique combination.
+        grouped = grouped.groupby(grouping_columns, as_index=False)[aggregating_columns].agg(lambda x: list(x))
+        # Convert to a list of Series objects.
+        grouped['series_objects'] = grouped.apply(row_to_series, axis=1)
+        return grouped['series_objects'].tolist()

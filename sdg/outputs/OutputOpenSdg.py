@@ -109,7 +109,7 @@ class OutputOpenSdg(OutputBase):
         return '-'.join(sorted)
     
     
-    def generate_source_csv_size(self, indicator):
+    def generate_source_csv_size(self, indicator, site_dir):
         csv_file_path = "%s/data/"+indicator.get_indicator_id().replace('.','-')+".csv" % site_dir
         st = os.stat(csv_file_path)
         return st.st_size
@@ -125,7 +125,7 @@ class OutputOpenSdg(OutputBase):
             'data_non_statistical': False if indicator.has_data() else True,
             'graph_type': 'line',
             'indicator_sort_order': self.generate_sort_order(indicator),
-            'source_csv_size': self.generate_source_csv_size(indicator)
+            'source_csv_size': self.generate_source_csv_size(indicator, site_dir)
         }
 
         # Add names only if the indicator has one.

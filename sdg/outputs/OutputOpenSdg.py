@@ -107,7 +107,13 @@ class OutputOpenSdg(OutputBase):
             padded_part = part if len(part) > 1 else '0' + part
             sorted.append(padded_part)
         return '-'.join(sorted)
-
+    
+    
+    def generate_source_csv_size(self, indicator):
+        csv_file_path = "%s/data/"+indicator.get_indicator_id().replace('.','-')+".csv" % site_dir
+        st = os.stat(csv_file_path)
+        return st.st_size
+        
 
     def minimum_metadata(self, indicator):
         """Provide minimum metadata for an indicator. Overrides parent."""
@@ -119,7 +125,7 @@ class OutputOpenSdg(OutputBase):
             'data_non_statistical': False if indicator.has_data() else True,
             'graph_type': 'line',
             'indicator_sort_order': self.generate_sort_order(indicator),
-            'source_csv_size': indicator.get_source_csv_size()
+            'source_csv_size': self.generate_source_csv_size(indicator)
         }
 
         # Add names only if the indicator has one.

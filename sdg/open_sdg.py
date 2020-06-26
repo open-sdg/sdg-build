@@ -92,6 +92,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
 
+    # Convert the translations.
+    options['translations'] = open_sdg_translations_from_options(options)
+
     # Pass along our data/meta alterations.
     options['alter_data'] = alter_data
     options['alter_meta'] = alter_meta
@@ -112,7 +115,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         folder=options['site_dir'],
         branding=options['docs_branding'],
         intro=options['docs_intro'],
-        languages=options['languages']
+        languages=options['languages'],
+        translations=options['translations'],
     )
     documentation_service.generate_documentation()
 
@@ -152,6 +156,9 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
+
+    # Convert the translations.
+    options['translations'] = open_sdg_translations_from_options(options)
 
     # Pass along our data/meta alterations.
     options['alter_data'] = alter_data
@@ -196,9 +203,6 @@ def open_sdg_prep(options):
     schema_path = os.path.join(options['src_dir'], options['schema_file'])
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
 
-    # Pull in remote translations if needed.
-    translations = [open_sdg_translation_from_dict(t_dict, options) for t_dict in options['translations']]
-
     # Indicate any extra fields for the reporting stats, if needed.
     reporting_status_extra_fields = []
     if 'reporting_status_extra_fields' in options:
@@ -209,7 +213,7 @@ def open_sdg_prep(options):
         inputs=inputs,
         schema=schema,
         output_folder=options['site_dir'],
-        translations=translations,
+        translations=options['translations'],
         reporting_status_extra_fields=reporting_status_extra_fields)
 
     outputs = [opensdg_output]
@@ -220,7 +224,7 @@ def open_sdg_prep(options):
             'inputs': inputs,
             'schema': schema,
             'output_folder': options['site_dir'],
-            'translations': translations
+            'translations': options['translations']
         }
         for key in map_layer:
             geojson_kwargs[key] = map_layer[key]
@@ -310,6 +314,10 @@ def open_sdg_translation_defaults():
             'source': 'translations',
         }
     ]
+
+
+def open_sdg_translations_from_options(options):
+    return [open_sdg_translation_from_dict(t_dict, options) for t_dict in options['translations']]
 
 
 def open_sdg_translation_from_dict(params, options):

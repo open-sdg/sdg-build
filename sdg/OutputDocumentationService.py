@@ -13,7 +13,7 @@ class OutputDocumentationService:
     """
 
 
-    def __init__(self, outputs, folder='_site', branding='Build docs', languages=None, intro=''):
+    def __init__(self, outputs, folder='_site', branding='Build docs', languages=None, intro='', translations=None):
         """Constructor for the OutputDocumentationService class.
 
         Parameters
@@ -26,7 +26,11 @@ class OutputDocumentationService:
         self.branding = branding
         self.intro = intro
         self.slugs = []
-        self.languages = [] if languages is None else languages
+        self.languages = ['en'] if languages is None else languages
+        if translations is not None:
+            self.translation_helper = sdg.translations.TranslationHelper(translations)
+        else:
+            self.translation_helper = None
 
 
     def generate_documentation(self):
@@ -177,13 +181,21 @@ class OutputDocumentationService:
 
             detail_filename = self.create_filename(disaggregation)
             self.write_disaggregation_detail_page(disaggregation, detail_filename, all_disaggregations[disaggregation])
-            df_rows.append({
-                'Disaggregation': '<a href="' + detail_filename + '">' + disaggregation + '</a>',
-                'Number of indicators': num_indicators,
-                'Number of values': num_values,
-            })
+            row = {}
+            row['Disaggregation'] = '<a href="' + detail_filename + '">' + self.translate(disaggregation, self.languages[0]) + '</a>'
+            for language in self.languages[1:]:
+                row[language] = self.translate(disaggregation, language)
+                row['Number of indicators'] = num_indicators
+                row['Number of values'] = num_values
+            df_rows.append(row)
 
-        df = pd.DataFrame(df_rows)
+        df_columns = ['Disaggregation']
+        for language in self.languages[1:]:
+            df_columns.append(language)
+        df_columns.append('Number of indicators')
+        df_columns.append('Number of values')
+
+        df = pd.DataFrame(df_rows, columns=df_columns)
         df.sort_values(by=['Disaggregation'], inplace=True)
         table = df.to_html(escape=False, index=False, classes="table table-striped")
         download_button = self.get_csv_download(df, 'disaggregations', 'disaggregation-report.csv')
@@ -195,11 +207,19 @@ class OutputDocumentationService:
     def write_disaggregation_detail_page(self, disaggregation, filename, info):
         values_rows = []
         for value in info['values']:
-            values_rows.append({
-                'Value': value,
-                'Number of instances': info['values'][value],
-            })
-        values_df = pd.DataFrame(values_rows)
+            row = {}
+            row['Value'] = self.translate(value, self.languages[0])
+            for language in self.languages[1:]:
+                row[language] = self.translate(value, language)
+            row['Number of instances'] = info['values'][value]
+            values_rows.append(row)
+
+        values_columns = ['Value']
+        for language in self.languages[1:]:
+            values_columns.append(language)
+        values_columns.append('Number of instances')
+
+        values_df = pd.DataFrame(values_rows, columns=values_columns)
         values_df.sort_values(by=['Value'], inplace=True)
         values_header = '<h2>Values used in disaggregation</h2>'
         values_download = self.get_csv_download(values_df, 'disaggregations', 'values--' + filename.replace('.html', '.csv'))
@@ -225,6 +245,13 @@ class OutputDocumentationService:
             indicators_table=indicators_table
         ))
         self.write_page(os.path.join('disaggregations', filename), detail_html)
+
+
+    def translate(self, text, language):
+        if self.translation_helper is None:
+            return text
+        else:
+            return self.translation_helper.translate(text, language, 'data')
 
 
     def get_disaggregation_detail_template(self):

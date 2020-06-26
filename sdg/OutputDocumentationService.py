@@ -68,6 +68,8 @@ class OutputDocumentationService:
         slug = slugify(title)
         if slug in self.slugs:
             slug = slug + '_'
+        if len(slug) > 100:
+            slug = slug[0:100]
         self.slugs.append(slug)
         return slug + '.html'
 
@@ -164,13 +166,23 @@ class OutputDocumentationService:
 
         df_rows = []
         for disaggregation in all_disaggregations:
+
+            num_indicators = len(all_disaggregations[disaggregation]['indicators'].keys())
+            num_values = len(all_disaggregations[disaggregation]['values'].keys())
+
+            # In some cases, a disaggregation may exist as a column but will have
+            # no values. In these cases, we skip it.
+            if num_values == 0:
+                continue
+
             detail_filename = self.create_filename(disaggregation)
             self.write_disaggregation_detail_page(disaggregation, detail_filename, all_disaggregations[disaggregation])
             df_rows.append({
                 'Disaggregation': '<a href="' + detail_filename + '">' + disaggregation + '</a>',
-                'Number of indicators': len(all_disaggregations[disaggregation]['indicators'].keys()),
-                'Number of values': len(all_disaggregations[disaggregation]['values'].keys()),
+                'Number of indicators': num_indicators,
+                'Number of values': num_values,
             })
+
         df = pd.DataFrame(df_rows)
         df.sort_values(by=['Disaggregation'], inplace=True)
         table = df.to_html(escape=False, index=False, classes="table table-striped")

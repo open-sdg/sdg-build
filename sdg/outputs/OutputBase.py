@@ -214,3 +214,27 @@ class OutputBase:
             The description for this output.
         """
         return 'Description unavailable - must be provided by get_documentation_description().'
+
+
+    def get_documentation_extras(self):
+        """Get any additional pages necessary for documentation.
+
+        Returns
+        -------
+        list
+            List of dicts containing three strings: title, path, and HTML content.
+            For example:
+            [
+                {
+                    'title': 'My hello world page',
+                    'path': 'my-subfolder/hello-world.html',
+                    'content': '<p>Hello world</p>'),
+                },
+                {
+                    'title': 'My other stuff page',
+                    'path': 'my-subfolder/other-stuff.html',
+                    'content': '<p>Other stuff</p>'),
+                }
+            ]
+        """
+        return []

@@ -1,6 +1,6 @@
 import os
 import sdg
-import numpy
+import pandas as pd
 from slugify import slugify
 
 class OutputDocumentationService:
@@ -40,6 +40,8 @@ class OutputDocumentationService:
                 'content': output.get_documentation_content(self.languages),
                 'description': output.get_documentation_description()
             })
+            extras = output.get_documentation_extras()
+            pages.extend(extras)
 
         os.makedirs(self.folder, exist_ok=True)
 
@@ -47,6 +49,7 @@ class OutputDocumentationService:
             self.write_documentation(page)
 
         self.write_index(pages)
+        self.write_disaggregation_report()
 
 
     def create_filename(self, title):
@@ -103,9 +106,91 @@ class OutputDocumentationService:
             if (num % 3 == 0 and num > 0) or num == last_page:
                 html += '</div>'
 
+        html += """
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Disaggregation report</h5>
+                                <p class="card-text">These tables show information about all the disaggregations used in the data.</p>
+                                <a href="disaggregations" class="btn btn-primary">See report</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                """
         html += '</div>'
+
+
         page_html = self.get_html('Overview', html)
         self.write_page('index.html', page_html)
+
+
+    def write_disaggregation_report(self):
+        os.makedirs(os.path.join(self.folder, 'disaggregations'), exist_ok=True)
+        # Get a full list of indicators by looking through all the outputs.
+        indicators = {}
+        for output in self.outputs:
+            for indicator_id in output.get_indicator_ids():
+                indicators[indicator_id] = output.get_indicator_by_id(indicator_id)
+
+        all_disaggregations = {}
+        for indicator_id in indicators:
+            for series in indicators[indicator_id].get_all_series():
+                disaggregations = series.get_disaggregations()
+                for disaggregation in disaggregations:
+                    if disaggregation not in all_disaggregations:
+                        all_disaggregations[disaggregation] = {
+                            'values': {},
+                            'indicators': {},
+                        }
+                    value = disaggregations[disaggregation]
+                    if pd.isna(value):
+                        continue
+                    if value not in all_disaggregations[disaggregation]['values']:
+                        all_disaggregations[disaggregation]['values'][value] = 0
+                    all_disaggregations[disaggregation]['values'][value] += 1
+                    all_disaggregations[disaggregation]['indicators'][indicator_id] = True
+
+        df_rows = []
+        for disaggregation in all_disaggregations:
+            detail_filename = self.create_filename(disaggregation)
+            self.write_disaggregation_detail_page(disaggregation, detail_filename, all_disaggregations[disaggregation])
+            df_rows.append({
+                'Disaggregation': disaggregation,
+                'Number of indicators': len(all_disaggregations[disaggregation]['indicators'].keys()),
+                'Number of values': len(all_disaggregations[disaggregation]['values'].keys()),
+                'Details': '<a href="' + detail_filename + '">Details</a>',
+            })
+        df = pd.DataFrame(df_rows)
+        df.sort_values(by=['Disaggregation'], inplace=True)
+        report_html = self.get_html('Disaggregation report', df.to_html(escape=False, index=False, classes="table table-striped"))
+        report_path = os.path.join('disaggregations', 'index.html')
+        self.write_page(report_path, report_html)
+
+
+    def write_disaggregation_detail_page(self, disaggregation, filepath, info):
+        values_rows = []
+        for value in info['values']:
+            values_rows.append({
+                'Value': value,
+                'Number of instances': info['values'][value],
+            })
+        values_df = pd.DataFrame(values_rows)
+        values_df.sort_values(by=['Value'], inplace=True)
+        values_html = '<h2>Values used in disaggregation</h2>' + values_df.to_html(index=False, classes="table table-striped")
+
+        indicators_rows = []
+        for indicator_id in info['indicators']:
+            indicators_rows.append({
+                'Indicator': indicator_id
+            })
+        indicators_df = pd.DataFrame(indicators_rows)
+        indicators_df.sort_values(by=['Indicator'], inplace=True)
+        indicators_html = '<h2>Indicators using disaggregation</h2>' + indicators_df.to_html(index=False, classes="table table-striped")
+
+        detail_html = self.get_html('Disaggregation: ' + disaggregation, values_html + indicators_html)
+        self.write_page(os.path.join('disaggregations', filepath), detail_html)
 
 
     def get_html(self, title, content):

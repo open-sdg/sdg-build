@@ -197,7 +197,7 @@ class OutputDocumentationService:
 
         df = pd.DataFrame(df_rows, columns=df_columns)
         df.sort_values(by=['Disaggregation'], inplace=True)
-        table = df.to_html(escape=False, index=False, classes="table table-striped tablesorter")
+        table = df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
         download_button = self.get_csv_download(df, 'disaggregations', 'disaggregation-report.csv')
         report_html = self.get_html('Disaggregation report', download_button + table)
         report_path = os.path.join('disaggregations', 'index.html')
@@ -223,7 +223,7 @@ class OutputDocumentationService:
         values_df.sort_values(by=['Value'], inplace=True)
         values_header = '<h2>Values used in disaggregation</h2>'
         values_download = self.get_csv_download(values_df, 'disaggregations', 'values--' + filename.replace('.html', '.csv'))
-        values_table = values_df.to_html(index=False, classes="table table-striped tablesorter")
+        values_table = values_df.to_html(index=False, classes="table table-striped table-bordered tablesorter")
 
         indicators_rows = []
         for indicator_id in info['indicators']:
@@ -234,7 +234,7 @@ class OutputDocumentationService:
         indicators_df.sort_values(by=['Indicator'], inplace=True)
         indicators_header = '<h2>Indicators using disaggregation</h2>'
         indicators_download = self.get_csv_download(indicators_df, 'disaggregations', 'indicators--' + filename.replace('.html', '.csv'))
-        indicators_table = indicators_df.to_html(index=False, classes="table table-striped tablesorter")
+        indicators_table = indicators_df.to_html(index=False, classes="table table-striped table-bordered tablesorter")
 
         detail_html = self.get_html('Disaggregation: ' + disaggregation, self.get_disaggregation_detail_template().format(
             values_header=values_header,
@@ -317,7 +317,9 @@ class OutputDocumentationService:
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha256-dtGH1XcAyKopMui5x20KnPxuGuSx9Rs6piJB/4Oqu6I=" crossorigin="anonymous"></script>
-            <script>$(".tablesorter").tablesorter();</script>
+            <script>$(".tablesorter").tablesorter({{
+                theme: 'bootstrap'
+            }});</script>
         </html>
         """
         return template.format(branding=self.branding, title=title, content=content)

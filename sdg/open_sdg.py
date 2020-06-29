@@ -42,7 +42,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    languages=None, translations=None, map_layers=None,
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
                    inputs=None, alter_data=None, alter_meta=None,
-                   docs_branding='Build docs', docs_intro=''):
+                   docs_branding='Build docs', docs_intro='', docs_indicator_url=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -63,6 +63,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         alter_meta: function. A callback function that alters a metadata dictionary
         docs_branding: string. A heading for all documentation pages
         docs_intro: string. An introduction for the documentation homepage
+        docs_indicator_url: string. A pattern for indicator URLs on the site repo
 
     Returns:
         Boolean status of file writes
@@ -88,6 +89,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'inputs': inputs,
         'docs_branding': docs_branding,
         'docs_intro': docs_intro,
+        'docs_indicator_url': docs_indicator_url,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -117,6 +119,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         intro=options['docs_intro'],
         languages=options['languages'],
         translations=options['translations'],
+        indicator_url=options['docs_indicator_url'],
     )
     documentation_service.generate_documentation()
 

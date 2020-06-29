@@ -192,8 +192,8 @@ class OutputDocumentationService:
             row['Disaggregation'] = '<a href="' + detail_filename + '">' + self.translate(disaggregation, self.languages[0]) + '</a>'
             for language in self.languages[1:]:
                 row[language] = self.translate(disaggregation, language)
-                row['Number of indicators'] = num_indicators
-                row['Number of values'] = num_values
+            row['Number of indicators'] = num_indicators
+            row['Number of values'] = num_values
             disaggregation_df_rows.append(row)
 
             for indicator_id in all_disaggregations[disaggregation]['indicators']:

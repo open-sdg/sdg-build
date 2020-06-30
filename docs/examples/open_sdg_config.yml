@@ -98,3 +98,4 @@ docs_branding: My build documentation
 docs_intro: This is a list of examples of endpoints and output that are
   available on this service. Click each of the links below for more information
   on the available output.
+docs_indicator_url: https://my-github-org/my-site-repository/[id]

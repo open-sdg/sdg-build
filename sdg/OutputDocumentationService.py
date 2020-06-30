@@ -20,7 +20,28 @@ class OutputDocumentationService:
         Parameters
         ----------
         outputs : list
-            List of objects inheriting from OutputBase
+            Required list of objects inheriting from OutputBase. Each output
+            will receive its own documentation page (or pages).
+        folder : string
+            Optional folder in which to create the documentation pages. Defaults
+            to the "_site" folder.
+        branding : string
+            Optional title/heading to use on all documentation pages. Defaults
+            to "Build docs".
+        languages : list
+            Optional list of language codes. If more than one language is
+            provided, any languages beyond the first will display as translations
+            in additional columns. Defaults to ['en'].
+        intro : string
+            Optionl chunk of text to display at the top of the front page.
+        translations : list
+            Optional list of objects inheriting from TranslationInputBase. If
+            provided these will be used to translate the output.
+        indicator_url : string
+            Optional URL pattern to use for linking to indicators. If provided,
+            the "[id]" will be replaced with the indicator id (dash-delimited).
+            For example, "https://example.com/[id].html" will be replaced with
+            "https://example.com/4-1-1.html".
         """
         self.outputs = outputs
         self.folder = folder

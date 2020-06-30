@@ -122,31 +122,36 @@ class OutputDocumentationService:
             A list of dicts containing "title", "filename", and "content"
         """
         html = '<p>' + self.intro + '</p>'
-        html += '<div>'
+
+        row_start = '<div class="row">'
+        row_end = '</div>'
 
         # Add all of the output pages.
-        last_page = len(pages) - 1
-        for num, page in enumerate(pages):
-            if num % 3 == 0:
-                html += '<div class="row">'
+        card_number = 0
+        for page in pages:
+            if card_number % 3 == 0:
+                html += row_start
             html += self.get_index_card_template().format(
                 title=page['title'],
                 description=page['description'],
                 destination=page['filename'],
                 call_to_action='See examples'
             )
-            if (num % 3 == 0 and num > 0) or num == last_page:
-                html += '</div>'
+            card_number += 1
+            if (card_number % 3 == 0):
+                html += row_end
 
-        # Add the disaggregation report (which is separate from the output pages).
-        html += '<div class="row my-5">' + self.get_index_card_template().format(
+        # Add the disaggregation report.
+        if card_number % 3 == 0:
+            html += row_start
+        html += self.get_index_card_template().format(
             title='Disaggregation report',
             description='These tables show information about all the disaggregations used in the data.',
             destination='disaggregations',
             call_to_action='See report'
-        ) + '</div>'
+        )
 
-        html += '</div>'
+        html += row_end
 
         page_html = self.get_html('Overview', html)
         self.write_page('index.html', page_html)
@@ -154,7 +159,7 @@ class OutputDocumentationService:
 
     def get_index_card_template(self):
         return """
-        <div class="col-sm">
+        <div class="col-sm mt-4">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">{title}</h5>

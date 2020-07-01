@@ -42,7 +42,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    languages=None, translations=None, map_layers=None,
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
                    inputs=None, alter_data=None, alter_meta=None,
-                   docs_branding='Build docs', docs_intro='', docs_indicator_url=None):
+                   docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
+                   docs_subfolder=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -90,6 +91,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'docs_branding': docs_branding,
         'docs_intro': docs_intro,
         'docs_indicator_url': docs_indicator_url,
+        'docs_subfolder': docs_subfolder,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -113,8 +115,12 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             status = status & output.execute()
 
     # Output the documentation pages.
+    if options['docs_subfolder'] is not None:
+        docs_folder = os.path.join(options['site_dir'], options['docs_subfolder'])
+    else:
+        docs_folder = options['site_dir']
     documentation_service = sdg.OutputDocumentationService(outputs,
-        folder=options['site_dir'],
+        folder=docs_folder,
         branding=options['docs_branding'],
         intro=options['docs_intro'],
         languages=options['languages'],

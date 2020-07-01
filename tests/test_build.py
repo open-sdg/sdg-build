@@ -151,3 +151,44 @@ def test_built_geojson(test_site_dir):
         open(os.path.join(test_site_dir, 'geojson', 'regions', 'indicator_1-3-1.geojson'))
     )
     assert 'features' in geojson
+
+
+def test_documentation(test_site_dir):
+
+    site_dir = test_site_dir
+
+    data_pattern = os.path.join('tests', 'data', '*-*.csv')
+    data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
+    meta_pattern = os.path.join('tests', 'meta', '*-*.md')
+    meta_input = sdg.inputs.InputYamlMdMeta(path_pattern=meta_pattern)
+    inputs = [data_input, meta_input]
+    schema_path = os.path.join('tests', '_prose.yml')
+    schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
+    translations = sdg.translations.TranslationInputSdgTranslations()
+    opensdg_output = sdg.outputs.OutputOpenSdg(
+        inputs=inputs,
+        schema=schema,
+        output_folder=site_dir,
+        translations=translations)
+
+
+    docs = sdg.OutputDocumentationService([opensdg_output], folder=site_dir)
+    docs.generate_documentation()
+
+    top_level_files = [
+        'index.html',
+        'open-sdg-output.html',
+    ]
+
+    assert all([os.path.isfile(os.path.join(site_dir, file)) for file in top_level_files])
+
+    disaggregation_files = [
+        'index.html',
+        'disaggregation-report.csv',
+        'disaggregation-by-indicator-report.csv',
+        'region.html',
+        'indicators--region.csv',
+        'values--region.csv',
+    ]
+
+    assert all([os.path.isfile(os.path.join(site_dir, 'disaggregations', file)) for file in disaggregation_files])

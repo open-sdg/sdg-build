@@ -22,11 +22,6 @@ import pandas as pd
 import numpy as np
 import itertools
 
-# %% Keep a list of columns to ignore
-
-
-edge_ignore_cols = ['Year', 'Units', 'Series', 'Value', 'GeoCode',
-                    'Observation status', 'Unit multiplier', 'Unit measure']
 
 # %% Check correct columns - copied from csvcheck
 
@@ -58,11 +53,11 @@ def x_without_y(x, y):
     return np.any(y.isnull() & x.notnull())
 
 
-def detect_all_edges(inid, df):
+def detect_all_edges(inid, df, non_disaggregation_columns):
     """Loop over the data frame and try all pairs"""
     cols = df.columns
     # Remove the protected columns
-    cols = cols[[x not in edge_ignore_cols for x in cols]]
+    cols = cols[[x not in non_disaggregation_columns for x in cols]]
 
     edges = pd.DataFrame(columns=['From', 'To'])
 
@@ -156,7 +151,7 @@ def prune_grand_parents(edges):
 # %% Write out edges for one inid
 
 
-def edge_detection(inid, df):
+def edge_detection(inid, df, non_disaggregation_columns):
     """Check dependencies between columns and write out the edges
 
     If there are any problems return False as this is part of the build.
@@ -164,6 +159,7 @@ def edge_detection(inid, df):
     Args:
         inid (str): The indicator id for printing
         df (pandas DataFrame): The indicator data read from raw csv
+        non_disaggregation_columns: List of columns that are not disaggregations
 
     Returns:
         DataFrame: edge data frame
@@ -172,7 +168,7 @@ def edge_detection(inid, df):
     check_headers(inid, df)
 
     # Get the edges
-    edges = detect_all_edges(inid, df)
+    edges = detect_all_edges(inid, df, non_disaggregation_columns)
     edges = prune_grand_parents(edges)
 
     return edges

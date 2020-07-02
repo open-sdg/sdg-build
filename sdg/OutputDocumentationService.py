@@ -181,6 +181,8 @@ class OutputDocumentationService:
         all_disaggregations = {}
         all_disaggregations_by_indicator = {}
         for indicator_id in indicators:
+            if not indicators[indicator_id].is_statistical():
+                continue
             if indicator_id not in all_disaggregations_by_indicator:
                 all_disaggregations_by_indicator[indicator_id] = {}
             for series in indicators[indicator_id].get_all_series():

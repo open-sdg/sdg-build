@@ -8,7 +8,7 @@ from sdg.translations import TranslationHelper
 class Indicator:
     """Data model for SDG indicators."""
 
-    def __init__(self, inid, name=None, data=None, meta=None):
+    def __init__(self, inid, name=None, data=None, meta=None, options=None):
         """Constructor for the SDG indicator instances.
 
         Parameters
@@ -21,11 +21,14 @@ class Indicator:
             Dataframe of all data, with at least "Year" and "Value" columns.
         meta : dict
             Dict of fielded metadata.
+        options : IndicatorOptions
+            Output-specific options provided by the OutputBase class.
         """
         self.inid = inid
         self.name = name
         self.data = data
         self.meta = meta
+        self.options = sdg.IndicatorOptions() if options is None else options
         self.set_headline()
         self.set_edges()
         self.translations = {}
@@ -118,7 +121,8 @@ class Indicator:
     def set_headline(self):
         """Calculate and set the headline for this indicator."""
         self.require_data()
-        self.headline = sdg.data.filter_headline(self.data)
+        non_disaggregation_columns = self.options.get_non_disaggregation_columns()
+        self.headline = sdg.data.filter_headline(self.data, non_disaggregation_columns)
 
 
     def has_headline(self):
@@ -129,7 +133,8 @@ class Indicator:
     def set_edges(self):
         """Calculate and set the edges for this indicator."""
         self.require_data()
-        self.edges = sdg.edges.edge_detection(self.inid, self.data)
+        non_disaggregation_columns = self.options.get_non_disaggregation_columns()
+        self.edges = sdg.edges.edge_detection(self.inid, self.data, non_disaggregation_columns)
 
 
     def has_edges(self):

@@ -69,7 +69,7 @@ class InputApi(InputBase):
         raise NotImplementedError
 
 
-    def execute(self):
+    def execute(self, indicator_options):
         """Fetch the resource data from the API for each indicator."""
         headers = { 'Accept': 'application/json' }
         for resource_id in self.indicator_id_map:
@@ -82,4 +82,4 @@ class InputApi(InputBase):
             inid = self.indicator_id_map[resource_id]
             data = self.indicator_data_from_json(json)
             name = self.get_indicator_name(inid, resource_id)
-            self.add_indicator(inid, data=data, name=name)
+            self.add_indicator(inid, data=data, name=name, options=indicator_options)

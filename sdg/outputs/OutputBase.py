@@ -1,4 +1,5 @@
 import os
+from sdg.IndicatorOptions import IndicatorOptions
 from sdg.translations import TranslationInputBase
 from sdg.translations import TranslationHelper
 
@@ -6,7 +7,8 @@ class OutputBase:
     """Base class for destinations of SDG data/metadata."""
 
 
-    def __init__(self, inputs, schema, output_folder='_site', translations=None):
+    def __init__(self, inputs, schema, output_folder='_site', translations=None,
+                 indicator_options=None):
         """Constructor for OutputBase.
 
         inputs: list
@@ -17,9 +19,13 @@ class OutputBase:
             The path to where the output files should be created.
         translations: list
             A list of TranslationInputBase (or descendant) classes.
+        indicator_options: IndicatorOptions
+            Optional options that are passed into each Indicator object.
+            Allows particular outputs to affect the data/metadata of indicators.
         """
         if translations is None:
             translations = []
+        self.indicator_options = IndicatorOptions() if indicator_options is None else indicator_options
 
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
@@ -77,7 +83,7 @@ class OutputBase:
         merged_indicators = {}
         for input in inputs:
             # Fetch the input.
-            input.execute()
+            input.execute(self.indicator_options)
             # Merge the results.
             for inid in input.indicators:
                 if inid not in merged_indicators:

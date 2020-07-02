@@ -183,11 +183,14 @@ class OutputDocumentationService:
         for indicator_id in indicators:
             if not indicators[indicator_id].is_statistical():
                 continue
+            non_disaggregation_columns = indicators[indicator_id].options.get_non_disaggregation_columns()
             if indicator_id not in all_disaggregations_by_indicator:
                 all_disaggregations_by_indicator[indicator_id] = {}
             for series in indicators[indicator_id].get_all_series():
                 disaggregations = series.get_disaggregations()
                 for disaggregation in disaggregations:
+                    if disaggregation in non_disaggregation_columns:
+                        continue
                     if disaggregation not in all_disaggregations_by_indicator[indicator_id]:
                         all_disaggregations_by_indicator[indicator_id][disaggregation] = ''
                     if disaggregation not in all_disaggregations:

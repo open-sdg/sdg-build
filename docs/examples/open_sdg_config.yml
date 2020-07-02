@@ -91,6 +91,22 @@ map_layers:
   #     _site/en/geojson/regions/indicator_1-2-1.geojson
   # Add any number of additional layers, such as one for counties.
 
+# Indicator options
+# -----------------
+# This control optional settings to control how your indicators are loaded.
+# Below are all the possible options, along with the defaults.
+indicator_options:
+  # This specifies the columns that should not be considered disaggregations.
+  non_disaggregation_columns:
+    - Year
+    - Units
+    - Series
+    - Value
+    - GeoCode
+    - Observation status
+    - Unit multiplier
+    - Unit measure
+
 # Documentation settings
 # ----------------------
 # This controls the automatic documentation that is created for your build.

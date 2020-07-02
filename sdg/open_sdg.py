@@ -139,7 +139,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     return status
 
 
-def open_sdg_indicator_options_defaults(self):
+def open_sdg_indicator_options_defaults():
     return {
         'non_disaggregation_columns': [
             'Year',
@@ -154,7 +154,7 @@ def open_sdg_indicator_options_defaults(self):
     }
 
 
-def open_sdg_indicator_options_from_dict(self, options):
+def open_sdg_indicator_options_from_dict(options):
     options_obj = sdg.IndicatorOptions()
     for column in options['non_disaggregation_columns']:
         options_obj.add_non_disaggregation_columns(column)

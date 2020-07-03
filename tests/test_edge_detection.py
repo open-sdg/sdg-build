@@ -18,8 +18,9 @@ def test_edge_detection_no_edges():
     Acts as a control for the other tests
     """
     inid = "17-19-2"
+    non_disaggregation_columns = ['Year', 'Value']
     data = sdg.data.get_inid_data(inid, src_dir=src_dir)
-    edges = sdg.edges.edge_detection(inid, data)
+    edges = sdg.edges.edge_detection(inid, data, non_disaggregation_columns)
     assert edges.empty
 
 def test_edge_detection_simple():
@@ -27,8 +28,9 @@ def test_edge_detection_simple():
     The edge detection function should return a DataFrame with a single row reflecting this relationship
     """
     inid = "1-a-2"
+    non_disaggregation_columns = ['Year', 'Units', 'Value']
     data = sdg.data.get_inid_data(inid, src_dir=src_dir)
-    edges = sdg.edges.edge_detection(inid, data)
+    edges = sdg.edges.edge_detection(inid, data, non_disaggregation_columns)
     assert len(edges.index) == 1
     assert parent_has_child(edges, 'Area of spending category', 'Area of spending sub-category')
 
@@ -37,11 +39,12 @@ def test_edge_detection_pruned_grandparents():
     For example it has the grandparent>parent>child relationship Sex>Ethnicity>Ethnic Group
     (Since the ethnic columns are never present without the Sex being specified)
     As the edge detection routine prunes grandparent relationship the results should include
-    Sex>Ethnicity and Ethnicity>Ethnic Group but not Sex>Ethnic Group  
+    Sex>Ethnicity and Ethnicity>Ethnic Group but not Sex>Ethnic Group
     """
     inid = "5-2-2"
+    non_disaggregation_columns = ['Year', 'Value']
     data = sdg.data.get_inid_data(inid, src_dir=src_dir)
-    edges = sdg.edges.edge_detection(inid, data)
+    edges = sdg.edges.edge_detection(inid, data, non_disaggregation_columns)
     assert parent_has_child(edges, 'Sex', 'Ethnicity')
     assert not parent_has_child(edges, 'Sex', 'Ethnic group')
     assert parent_has_child(edges, 'Ethnicity', 'Ethnic group')
@@ -51,5 +54,5 @@ def parent_has_child(edges, parent, child):
     A column named 'From' whose value matches the 'parent' paremeter and a column named 'To' whose value matches the 'child' parameter
     """
     parents = edges.query('From == "' + parent + '"')
-    children = parents.get('To')   
+    children = parents.get('To')
     return child in children.unique()

@@ -15,18 +15,13 @@ def get_inid_data(inid, src_dir=''):
     return df
 
 
-def filter_headline(df):
+def filter_headline(df, non_disaggregation_columns):
     """Given a dataframe filter it down to just the headline data.
 
     In the case of multiple units it will keep all headline for each unit.
     """
 
-    special_cols = ['Year']
-    if 'Units' in df.columns:
-        special_cols.append('Units')
-    if 'Series' in df.columns:
-        special_cols.append('Series')
-    special_cols.append('Value')
+    special_cols = [col for col in non_disaggregation_columns if col in df.columns]
 
     # Select the non-data rows and filter rows that are all missing (nan)
     disag = df.drop(special_cols, axis=1)

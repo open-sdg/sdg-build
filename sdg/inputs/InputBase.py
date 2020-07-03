@@ -13,7 +13,7 @@ class InputBase:
         self.meta_alterations = []
 
 
-    def execute(self):
+    def execute(self, indicator_options):
         """Fetch all data/metadata from source, fetching a list of indicators."""
         raise NotImplementedError
 
@@ -159,7 +159,7 @@ class InputBase:
         return df
 
 
-    def add_indicator(self, indicator_id, name=None, data=None, meta=None):
+    def add_indicator(self, indicator_id, name=None, data=None, meta=None, options=None):
         """Add an indicator to this input.
 
         Parameters
@@ -172,10 +172,12 @@ class InputBase:
             The indicator data
         meta : dict or None
             The indicator metadata
+        options : IndicatorOptions or None
+            The indicator options
         """
         data = self.alter_data(data)
         meta = self.alter_meta(meta)
-        indicator = Indicator(indicator_id, name=name, data=data, meta=meta)
+        indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options)
         self.indicators[indicator_id] = indicator
 
 

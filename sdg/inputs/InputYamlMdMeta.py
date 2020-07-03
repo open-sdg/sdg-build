@@ -18,7 +18,7 @@ class InputYamlMdMeta(InputFiles):
         self.git_data_dir = git_data_dir
         InputFiles.__init__(self, path_pattern)
 
-    def execute(self):
+    def execute(self, indicator_options):
         """Get the metadata from the YAML/Markdown, returning a list of indicators."""
         indicator_map = self.get_indicator_map()
         for inid in indicator_map:
@@ -28,4 +28,4 @@ class InputYamlMdMeta(InputFiles):
             meta = sdg.meta.read_meta(inid, git=self.git, src_dir=src_dir,
                 git_data_dir=self.git_data_dir)
             name = meta['indicator_name'] if 'indicator_name' in meta else None
-            self.add_indicator(inid, name=name, meta=meta)
+            self.add_indicator(inid, name=name, meta=meta, options=indicator_options)

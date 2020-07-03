@@ -359,7 +359,7 @@ class InputSdmx(InputBase):
         return indicator_map[series_id]
 
 
-    def execute(self):
+    def execute(self, indicator_options):
         """Execute this input. Overrides parent."""
 
         # Fetch the response from the SDMX endpoint.
@@ -397,4 +397,4 @@ class InputSdmx(InputBase):
             data = self.drop_singleton_columns(data)
             data = self.ensure_numeric_values(data, indicator_id)
             name = indicator_names[indicator_id] if self.import_names else None
-            self.add_indicator(indicator_id, data=data, name=name)
+            self.add_indicator(indicator_id, data=data, name=name, options=indicator_options)

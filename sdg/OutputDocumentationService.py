@@ -246,7 +246,7 @@ class OutputDocumentationService:
         for indicator_id in all_disaggregations_by_indicator:
             disaggregation_links = []
             for disaggregation in all_disaggregations_by_indicator[indicator_id]:
-                disaggregation_links.append('<a href="' + all_disaggregations_by_indicator[indicator_id][disaggregation] + '">' + disaggregation + '</a>')
+                disaggregation_links.append('<a href="' + all_disaggregations_by_indicator[indicator_id][disaggregation] + '">' + self.translate(disaggregation, self.languages[0]) + '</a>')
             if len(disaggregation_links) == 0:
                 continue
             indicator_df_rows.append({

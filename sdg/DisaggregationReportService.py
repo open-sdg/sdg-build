@@ -159,7 +159,8 @@ class DisaggregationReportService:
         columns.extend(['Number of indicators', 'Number of values'])
 
         df = pd.DataFrame(rows, columns=columns)
-        df.sort_values(by=['Disaggregation'], inplace=True)
+        if not df.empty:
+            df.sort_values(by=['Disaggregation'], inplace=True)
         return df
 
 
@@ -182,7 +183,8 @@ class DisaggregationReportService:
                 'Number of disaggregations': len(disaggregation_links),
             })
         df = pd.DataFrame(rows, columns=['Indicator', 'Disaggregations', 'Number of disaggregations'])
-        df.sort_values(by=['Indicator'], inplace=True)
+        if not df.empty:
+            df.sort_values(by=['Indicator'], inplace=True)
         return df
 
 
@@ -202,7 +204,8 @@ class DisaggregationReportService:
         columns.append('Number of instances')
 
         df = pd.DataFrame(rows, columns=columns)
-        df.sort_values(by=['Value'], inplace=True)
+        if not df.empty:
+            df.sort_values(by=['Value'], inplace=True)
         return df
 
 
@@ -213,7 +216,8 @@ class DisaggregationReportService:
                 'Indicator': self.get_indicator_link(indicator_id)
             })
         df = pd.DataFrame(rows)
-        df.sort_values(by=['Indicator'], inplace=True)
+        if not df.empty:
+            df.sort_values(by=['Indicator'], inplace=True)
         return df
 
 

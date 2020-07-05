@@ -231,7 +231,7 @@ class Indicator:
             return
 
         # Start with an empty indicator.
-        indicator = Indicator(inid=self.inid)
+        indicator = Indicator(inid=self.inid, options=self.options)
 
         # Translation callbacks for below.
         def translate_meta(text):

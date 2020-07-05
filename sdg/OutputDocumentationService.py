@@ -170,98 +170,28 @@ class OutputDocumentationService:
         </div>
         """
 
+
     def write_disaggregation_report(self):
         os.makedirs(os.path.join(self.folder, 'disaggregations'), exist_ok=True)
-        # Get a full list of indicators by looking through all the outputs.
-        indicators = {}
-        for output in self.outputs:
-            for indicator_id in output.get_indicator_ids():
-                indicators[indicator_id] = output.get_indicator_by_id(indicator_id)
+        service = sdg.DisaggregationReportService(
+            self.outputs,
+            languages = self.languages,
+            translation_helper = self.translation_helper,
+            indicator_url = self.indicator_url
+        )
+        store = service.get_disaggregation_store()
 
-        all_disaggregations = {}
-        all_disaggregations_by_indicator = {}
-        for indicator_id in indicators:
-            if not indicators[indicator_id].is_statistical():
-                continue
-            non_disaggregation_columns = indicators[indicator_id].options.get_non_disaggregation_columns()
-            if indicator_id not in all_disaggregations_by_indicator:
-                all_disaggregations_by_indicator[indicator_id] = {}
-            for series in indicators[indicator_id].get_all_series():
-                disaggregations = series.get_disaggregations()
-                for disaggregation in disaggregations:
-                    if disaggregation in non_disaggregation_columns:
-                        continue
-                    if disaggregation not in all_disaggregations_by_indicator[indicator_id]:
-                        all_disaggregations_by_indicator[indicator_id][disaggregation] = ''
-                    if disaggregation not in all_disaggregations:
-                        all_disaggregations[disaggregation] = {
-                            'values': {},
-                            'indicators': {},
-                        }
-                    value = disaggregations[disaggregation]
-                    if pd.isna(value):
-                        continue
-                    if value not in all_disaggregations[disaggregation]['values']:
-                        all_disaggregations[disaggregation]['values'][value] = 0
-                    all_disaggregations[disaggregation]['values'][value] += 1
-                    all_disaggregations[disaggregation]['indicators'][indicator_id] = True
-
-        disaggregation_df_rows = []
-        for disaggregation in all_disaggregations:
-
-            num_indicators = len(all_disaggregations[disaggregation]['indicators'].keys())
-            num_values = len(all_disaggregations[disaggregation]['values'].keys())
-
-            # In some cases, a disaggregation may exist as a column but will have
-            # no values. In these cases, we skip it.
-            if num_values == 0:
-                continue
-
-            detail_filename = self.create_filename(disaggregation)
-            self.write_disaggregation_detail_page(disaggregation, detail_filename, all_disaggregations[disaggregation])
-            row = {}
-            row['Disaggregation'] = '<a href="' + detail_filename + '">' + self.translate(disaggregation, self.languages[0]) + '</a>'
-            for language in self.languages[1:]:
-                row[language] = self.translate(disaggregation, language)
-            row['Number of indicators'] = num_indicators
-            row['Number of values'] = num_values
-            disaggregation_df_rows.append(row)
-
-            for indicator_id in all_disaggregations[disaggregation]['indicators']:
-                all_disaggregations_by_indicator[indicator_id][disaggregation] = detail_filename
-
-        disaggregation_df_columns = ['Disaggregation']
-        for language in self.languages[1:]:
-            disaggregation_df_columns.append(language)
-        disaggregation_df_columns.append('Number of indicators')
-        disaggregation_df_columns.append('Number of values')
-
-        disaggregation_df = pd.DataFrame(disaggregation_df_rows, columns=disaggregation_df_columns)
-        disaggregation_df.sort_values(by=['Disaggregation'], inplace=True)
+        disaggregation_df = service.get_disaggregations_dataframe(store)
         disaggregation_header = 'By disaggregation'
         disaggregation_table = disaggregation_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
         disaggregation_download = self.get_csv_download(disaggregation_df, 'disaggregations', 'disaggregation-report.csv')
 
-        indicator_df_rows = []
-        for indicator_id in all_disaggregations_by_indicator:
-            disaggregation_links = []
-            for disaggregation in all_disaggregations_by_indicator[indicator_id]:
-                disaggregation_links.append('<a href="' + all_disaggregations_by_indicator[indicator_id][disaggregation] + '">' + self.translate(disaggregation, self.languages[0]) + '</a>')
-            if len(disaggregation_links) == 0:
-                continue
-            indicator_df_rows.append({
-                'Indicator': self.get_indicator_link(indicator_id),
-                'Disaggregations': ', '.join(disaggregation_links),
-                'Number of disaggregations': len(disaggregation_links),
-            })
-
-        indicator_df = pd.DataFrame(indicator_df_rows, columns=['Indicator', 'Disaggregations', 'Number of disaggregations'])
-        indicator_df.sort_values(by=['Indicator'], inplace=True)
+        indicator_df = service.get_indicators_dataframe(store)
         indicator_header = 'By indicator'
         indicator_table = indicator_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
         indicator_download = self.get_csv_download(indicator_df, 'disaggregations', 'disaggregation-by-indicator-report.csv')
 
-        report_html = self.get_html('Disaggregation report', self.get_disaggregation_report_template().format(
+        report_html = self.get_html('Disaggregation report', service.get_disaggregation_report_template().format(
             disaggregation_header=disaggregation_header,
             disaggregation_download=disaggregation_download,
             disaggregation_table=disaggregation_table,
@@ -272,54 +202,25 @@ class OutputDocumentationService:
         report_path = os.path.join('disaggregations', 'index.html')
         self.write_page(report_path, report_html)
 
+        for disaggregation in store:
+            self.write_disaggregation_detail_page(store[disaggregation], service)
 
-    def get_disaggregation_report_template(self):
-        return """
-        <div>
-            <h2>{disaggregation_header}</h2>
-            {disaggregation_download}
-            {disaggregation_table}
-        </div>
-        <div>
-            <h2>{indicator_header}</h2>
-            {indicator_download}
-            {indicator_table}
-        </div>
-        """
 
-    def write_disaggregation_detail_page(self, disaggregation, filename, info):
-        values_rows = []
-        for value in info['values']:
-            row = {}
-            row['Value'] = self.translate(value, self.languages[0])
-            for language in self.languages[1:]:
-                row[language] = self.translate(value, language)
-            row['Number of instances'] = info['values'][value]
-            values_rows.append(row)
+    def write_disaggregation_detail_page(self, info, service):
+        disaggregation = info['name']
+        filename = info['filename']
 
-        values_columns = ['Value']
-        for language in self.languages[1:]:
-            values_columns.append(language)
-        values_columns.append('Number of instances')
-
-        values_df = pd.DataFrame(values_rows, columns=values_columns)
-        values_df.sort_values(by=['Value'], inplace=True)
+        values_df = service.get_disaggregation_dataframe(info)
         values_header = 'Values used in disaggregation'
         values_download = self.get_csv_download(values_df, 'disaggregations', 'values--' + filename.replace('.html', '.csv'))
         values_table = values_df.to_html(index=False, classes="table table-striped table-bordered tablesorter")
 
-        indicators_rows = []
-        for indicator_id in info['indicators']:
-            indicators_rows.append({
-                'Indicator': self.get_indicator_link(indicator_id)
-            })
-        indicators_df = pd.DataFrame(indicators_rows)
-        indicators_df.sort_values(by=['Indicator'], inplace=True)
+        indicators_df = service.get_disaggregation_indicator_dataframe(info)
         indicators_header = 'Indicators using disaggregation'
         indicators_download = self.get_csv_download(indicators_df, 'disaggregations', 'indicators--' + filename.replace('.html', '.csv'))
         indicators_table = indicators_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
 
-        detail_html = self.get_html('Disaggregation: ' + disaggregation, self.get_disaggregation_detail_template().format(
+        detail_html = self.get_html('Disaggregation: ' + disaggregation, service.get_disaggregation_detail_template().format(
             values_header=values_header,
             values_download=values_download,
             values_table=values_table,
@@ -328,36 +229,6 @@ class OutputDocumentationService:
             indicators_table=indicators_table
         ))
         self.write_page(os.path.join('disaggregations', filename), detail_html)
-
-
-    def translate(self, text, language):
-        if self.translation_helper is None:
-            return text
-        else:
-            return self.translation_helper.translate(text, language, 'data')
-
-
-    def get_disaggregation_detail_template(self):
-        return """
-        <div>
-            <h2>{values_header}</h2>
-            {values_download}
-            {values_table}
-        </div>
-        <div>
-            <h2>{indicators_header}</h2>
-            {indicators_download}
-            {indicators_table}
-        </div>
-        """
-
-
-    def get_indicator_link(self, indicator_id):
-        if self.indicator_url is None:
-            return indicator_id
-        link = '<a href="{href}">{indicator_id}</a>'
-        href = self.indicator_url.replace('[id]', indicator_id)
-        return link.format(href=href, indicator_id=indicator_id)
 
 
     def get_csv_download(self, df, path, filename):

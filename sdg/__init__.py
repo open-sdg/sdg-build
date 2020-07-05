@@ -16,6 +16,7 @@ from . import inputs
 from . import outputs
 from . import schemas
 from . import translations
+from .DisaggregationReportService import DisaggregationReportService
 from .OutputDocumentationService import OutputDocumentationService
 from .Indicator import Indicator
 from .IndicatorExportService import IndicatorExportService

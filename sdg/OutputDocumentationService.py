@@ -204,10 +204,11 @@ class OutputDocumentationService:
         self.write_page(report_path, report_html)
 
         for disaggregation in store:
-            self.write_disaggregation_detail_page(store[disaggregation], service)
+            self.write_disaggregation_detail_page(store[disaggregation])
 
 
-    def write_disaggregation_detail_page(self, info, service):
+    def write_disaggregation_detail_page(self, info):
+        service = self.disaggregation_report_service
         disaggregation = info['name']
         filename = info['filename']
 

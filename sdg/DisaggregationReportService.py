@@ -231,12 +231,12 @@ class DisaggregationReportService:
     def get_disaggregation_report_template(self):
         return """
         <div>
-            <h2>{disaggregation_header}</h2>
+            <h2>By disaggregation</h2>
             {disaggregation_download}
             {disaggregation_table}
         </div>
         <div>
-            <h2>{indicator_header}</h2>
+            <h2>By indicator</h2>
             {indicator_download}
             {indicator_table}
         </div>
@@ -246,12 +246,12 @@ class DisaggregationReportService:
     def get_disaggregation_detail_template(self):
         return """
         <div>
-            <h2>{values_header}</h2>
+            <h2>Values used in disaggregation</h2>
             {values_download}
             {values_table}
         </div>
         <div>
-            <h2>{indicators_header}</h2>
+            <h2>Indicators using disaggregation</h2>
             {indicators_download}
             {indicators_table}
         </div>

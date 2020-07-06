@@ -187,20 +187,16 @@ class OutputDocumentationService:
         store = self.disaggregation_report_service.get_disaggregation_store()
 
         disaggregation_df = service.get_disaggregations_dataframe()
-        disaggregation_header = 'By disaggregation'
         disaggregation_table = disaggregation_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
         disaggregation_download = self.get_csv_download(disaggregation_df, 'disaggregations', 'disaggregation-report.csv')
 
         indicator_df = service.get_indicators_dataframe()
-        indicator_header = 'By indicator'
         indicator_table = indicator_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
         indicator_download = self.get_csv_download(indicator_df, 'disaggregations', 'disaggregation-by-indicator-report.csv')
 
         report_html = self.get_html('Disaggregation report', service.get_disaggregation_report_template().format(
-            disaggregation_header=disaggregation_header,
             disaggregation_download=disaggregation_download,
             disaggregation_table=disaggregation_table,
-            indicator_header=indicator_header,
             indicator_download=indicator_download,
             indicator_table=indicator_table
         ))
@@ -216,20 +212,16 @@ class OutputDocumentationService:
         filename = info['filename']
 
         values_df = service.get_disaggregation_dataframe(info)
-        values_header = 'Values used in disaggregation'
         values_download = self.get_csv_download(values_df, 'disaggregations', 'values--' + filename.replace('.html', '.csv'))
         values_table = values_df.to_html(index=False, classes="table table-striped table-bordered tablesorter")
 
         indicators_df = service.get_disaggregation_indicator_dataframe(info)
-        indicators_header = 'Indicators using disaggregation'
         indicators_download = self.get_csv_download(indicators_df, 'disaggregations', 'indicators--' + filename.replace('.html', '.csv'))
         indicators_table = indicators_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
 
         detail_html = self.get_html('Disaggregation: ' + disaggregation, service.get_disaggregation_detail_template().format(
-            values_header=values_header,
             values_download=values_download,
             values_table=values_table,
-            indicators_header=indicators_header,
             indicators_download=indicators_download,
             indicators_table=indicators_table
         ))

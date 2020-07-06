@@ -33,6 +33,7 @@ class DisaggregationReportService:
         self.slugs = []
         self.languages = ['en'] if languages is None else languages
         self.translation_helper = translation_helper
+        self.disaggregation_store = None
 
 
     def get_disaggregation_store(self):
@@ -47,6 +48,9 @@ class DisaggregationReportService:
             - filename (string, suitable for writing to disk)
             - name (string, the name of the disaggregation)
         """
+        if self.disaggregation_store is not None:
+            return self.disaggregation_store
+
         all_disaggregations = {}
         indicators = self.get_all_indicators()
         for indicator_id in indicators:
@@ -72,7 +76,8 @@ class DisaggregationReportService:
                         all_disaggregations[disaggregation]['values'][value] = 0
                     all_disaggregations[disaggregation]['values'][value] += 1
                     all_disaggregations[disaggregation]['indicators'][indicator_id] = True
-        return all_disaggregations
+        self.disaggregation_store = all_disaggregations
+        return self.disaggregation_store
 
 
     def get_all_indicators(self):
@@ -105,7 +110,8 @@ class DisaggregationReportService:
         return slug + '.html'
 
 
-    def group_disaggregation_store_by_indicator(self, store):
+    def group_disaggregation_store_by_indicator(self):
+        store = self.get_disaggregation_store()
         grouped = {}
         for disaggregation in store:
             for indicator in store[disaggregation]['indicators']:
@@ -133,7 +139,8 @@ class DisaggregationReportService:
             return self.translation_helper.translate(text, language, 'data')
 
 
-    def get_disaggregations_dataframe(self, store):
+    def get_disaggregations_dataframe(self):
+        store = self.get_disaggregation_store()
         rows = []
         for disaggregation in store:
 
@@ -170,8 +177,8 @@ class DisaggregationReportService:
         return self.languages[1:]
 
 
-    def get_indicators_dataframe(self, store):
-        grouped = self.group_disaggregation_store_by_indicator(store)
+    def get_indicators_dataframe(self):
+        grouped = self.group_disaggregation_store_by_indicator()
         rows = []
         for indicator in grouped:
             disaggregation_links = [self.get_disaggregation_link(disaggregation) for disaggregation in grouped[indicator].values()]
@@ -257,3 +264,7 @@ class DisaggregationReportService:
         link = '<a href="{href}">{indicator_id}</a>'
         href = self.indicator_url.replace('[id]', indicator_id)
         return link.format(href=href, indicator_id=indicator_id)
+
+
+    def remove_links_from_dataframe(self, df):
+        return df.replace('<[^<]+?>', '', regex=True)

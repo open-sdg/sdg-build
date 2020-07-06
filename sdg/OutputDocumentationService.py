@@ -54,6 +54,12 @@ class OutputDocumentationService:
             self.translation_helper = sdg.translations.TranslationHelper(translations)
         else:
             self.translation_helper = None
+        self.disaggregation_report_service = sdg.DisaggregationReportService(
+            self.outputs,
+            languages = self.languages,
+            translation_helper = self.translation_helper,
+            indicator_url = self.indicator_url
+        )
 
 
     def generate_documentation(self):
@@ -138,7 +144,7 @@ class OutputDocumentationService:
                 call_to_action='See examples'
             )
             card_number += 1
-            if (card_number % 3 == 0):
+            if card_number % 3 == 0:
                 html += row_end
 
         # Add the disaggregation report.
@@ -150,8 +156,12 @@ class OutputDocumentationService:
             destination='disaggregations',
             call_to_action='See report'
         )
+        card_number += 1
+        if card_number % 3 == 0:
+            html += row_end
 
-        html += row_end
+        if card_number % 3 != 0:
+            html += row_end
 
         page_html = self.get_html('Overview', html)
         self.write_page('index.html', page_html)
@@ -173,20 +183,15 @@ class OutputDocumentationService:
 
     def write_disaggregation_report(self):
         os.makedirs(os.path.join(self.folder, 'disaggregations'), exist_ok=True)
-        service = sdg.DisaggregationReportService(
-            self.outputs,
-            languages = self.languages,
-            translation_helper = self.translation_helper,
-            indicator_url = self.indicator_url
-        )
-        store = service.get_disaggregation_store()
+        service = self.disaggregation_report_service
+        store = self.disaggregation_report_service.get_disaggregation_store()
 
-        disaggregation_df = service.get_disaggregations_dataframe(store)
+        disaggregation_df = service.get_disaggregations_dataframe()
         disaggregation_header = 'By disaggregation'
         disaggregation_table = disaggregation_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
         disaggregation_download = self.get_csv_download(disaggregation_df, 'disaggregations', 'disaggregation-report.csv')
 
-        indicator_df = service.get_indicators_dataframe(store)
+        indicator_df = service.get_indicators_dataframe()
         indicator_header = 'By indicator'
         indicator_table = indicator_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
         indicator_download = self.get_csv_download(indicator_df, 'disaggregations', 'disaggregation-by-indicator-report.csv')
@@ -233,7 +238,7 @@ class OutputDocumentationService:
 
     def get_csv_download(self, df, path, filename):
         csv_path = os.path.join(self.folder, path, filename)
-        df = df.replace('<[^<]+?>', '', regex=True)
+        df = self.disaggregation_report_service.remove_links_from_dataframe(df)
         df.to_csv(csv_path, index=False)
         return self.get_download_button_template().format(filename=filename)
 

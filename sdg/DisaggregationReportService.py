@@ -101,7 +101,7 @@ class DisaggregationReportService:
         string
             The title converted into a unique *.html filename
         """
-        slug = slugify(title)
+        slug = 'disaggregation--' + slugify(title)
         if slug in self.slugs:
             slug = slug + '_'
         if len(slug) > 100:

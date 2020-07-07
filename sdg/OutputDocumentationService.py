@@ -153,7 +153,7 @@ class OutputDocumentationService:
         html += self.get_index_card_template().format(
             title='Disaggregation report',
             description='These tables show information about all the disaggregations used in the data.',
-            destination='disaggregations',
+            destination='disaggregations.html',
             call_to_action='See report'
         )
         card_number += 1
@@ -182,17 +182,16 @@ class OutputDocumentationService:
 
 
     def write_disaggregation_report(self):
-        os.makedirs(os.path.join(self.folder, 'disaggregations'), exist_ok=True)
         service = self.disaggregation_report_service
         store = self.disaggregation_report_service.get_disaggregation_store()
 
         disaggregation_df = service.get_disaggregations_dataframe()
         disaggregation_table = disaggregation_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
-        disaggregation_download = self.get_csv_download(disaggregation_df, 'disaggregations', 'disaggregation-report.csv')
+        disaggregation_download = self.get_csv_download(disaggregation_df, 'disaggregation-report.csv')
 
         indicator_df = service.get_indicators_dataframe()
         indicator_table = indicator_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
-        indicator_download = self.get_csv_download(indicator_df, 'disaggregations', 'disaggregation-by-indicator-report.csv')
+        indicator_download = self.get_csv_download(indicator_df, 'disaggregation-by-indicator-report.csv')
 
         report_html = self.get_html('Disaggregation report', service.get_disaggregation_report_template().format(
             disaggregation_download=disaggregation_download,
@@ -200,8 +199,7 @@ class OutputDocumentationService:
             indicator_download=indicator_download,
             indicator_table=indicator_table
         ))
-        report_path = os.path.join('disaggregations', 'index.html')
-        self.write_page(report_path, report_html)
+        self.write_page('disaggregations.html', report_html)
 
         for disaggregation in store:
             self.write_disaggregation_detail_page(store[disaggregation])
@@ -213,11 +211,11 @@ class OutputDocumentationService:
         filename = info['filename']
 
         values_df = service.get_disaggregation_dataframe(info)
-        values_download = self.get_csv_download(values_df, 'disaggregations', 'values--' + filename.replace('.html', '.csv'))
+        values_download = self.get_csv_download(values_df, 'values--' + filename.replace('.html', '.csv'))
         values_table = values_df.to_html(index=False, classes="table table-striped table-bordered tablesorter")
 
         indicators_df = service.get_disaggregation_indicator_dataframe(info)
-        indicators_download = self.get_csv_download(indicators_df, 'disaggregations', 'indicators--' + filename.replace('.html', '.csv'))
+        indicators_download = self.get_csv_download(indicators_df, 'indicators--' + filename.replace('.html', '.csv'))
         indicators_table = indicators_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
 
         detail_html = self.get_html('Disaggregation: ' + disaggregation, service.get_disaggregation_detail_template().format(
@@ -226,11 +224,11 @@ class OutputDocumentationService:
             indicators_download=indicators_download,
             indicators_table=indicators_table
         ))
-        self.write_page(os.path.join('disaggregations', filename), detail_html)
+        self.write_page(filename, detail_html)
 
 
-    def get_csv_download(self, df, path, filename):
-        csv_path = os.path.join(self.folder, path, filename)
+    def get_csv_download(self, df, filename):
+        csv_path = os.path.join(self.folder, filename)
         df = self.disaggregation_report_service.remove_links_from_dataframe(df)
         df.to_csv(csv_path, index=False)
         return self.get_download_button_template().format(filename=filename)

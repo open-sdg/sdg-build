@@ -73,8 +73,18 @@ class DisaggregationReportService:
                     if pd.isna(value) or value == '':
                         continue
                     if value not in all_disaggregations[disaggregation]['values']:
-                        all_disaggregations[disaggregation]['values'][value] = 0
-                    all_disaggregations[disaggregation]['values'][value] += 1
+                        all_disaggregations[disaggregation]['values'][value] = {
+                            'instances': 0,
+                            'indicators': {},
+                            'filename': self.create_filename(value, prefix='disaggregation-value--'),
+                            'name': value,
+                            'disaggregation': disaggregation,
+                        }
+                    all_disaggregations[disaggregation]['values'][value]['instances'] += 1
+                    if indicator_id not in all_disaggregations[disaggregation]['values'][value]['indicators']:
+                        all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] = 0
+                    all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] += 1
+
                     all_disaggregations[disaggregation]['indicators'][indicator_id] = True
         self.disaggregation_store = all_disaggregations
         return self.disaggregation_store
@@ -88,7 +98,7 @@ class DisaggregationReportService:
         return indicators
 
 
-    def create_filename(self, title):
+    def create_filename(self, title, prefix='disaggregation--'):
         """Convert a title into a unique filename.
 
         Parameters
@@ -101,7 +111,7 @@ class DisaggregationReportService:
         string
             The title converted into a unique *.html filename
         """
-        slug = 'disaggregation--' + slugify(title)
+        slug = prefix + slugify(title)
         if slug in self.slugs:
             slug = slug + '_'
         if len(slug) > 100:
@@ -125,6 +135,13 @@ class DisaggregationReportService:
         return '<a href="{}">{}</a>'.format(
             disaggregation_info['filename'],
             self.translate(disaggregation_info['name'], self.get_default_language())
+        )
+
+
+    def get_disaggregation_value_link(self, disaggregation_value_info):
+        return '<a href="{}">{}</a>'.format(
+            disaggregation_value_info['filename'],
+            self.translate(disaggregation_value_info['name'], self.get_default_language())
         )
 
 
@@ -199,8 +216,9 @@ class DisaggregationReportService:
         rows = []
         for value in info['values']:
             row = {
-                'Value': self.translate(value, self.get_default_language()),
-                'Number of instances': info['values'][value],
+                'Value': self.get_disaggregation_value_link(info['values'][value]),
+                'Number of instances': info['values'][value]['instances'],
+                'Number of indicators': len(info['values'][value]['indicators'].keys()),
             }
             for language in self.get_additional_languages():
                 row[language] = self.translate(value, language)
@@ -208,7 +226,7 @@ class DisaggregationReportService:
 
         columns = ['Value']
         columns.extend(self.get_additional_languages())
-        columns.append('Number of instances')
+        columns.extend(['Number of instances', 'Number of indicators'])
 
         df = pd.DataFrame(rows, columns=columns)
         if not df.empty:
@@ -221,6 +239,19 @@ class DisaggregationReportService:
         for indicator_id in info['indicators']:
             rows.append({
                 'Indicator': self.get_indicator_link(indicator_id)
+            })
+        df = pd.DataFrame(rows)
+        if not df.empty:
+            df.sort_values(by=['Indicator'], inplace=True)
+        return df
+
+
+    def get_disaggregation_value_dataframe(self, info):
+        rows = []
+        for indicator_id in info['indicators']:
+            rows.append({
+                'Indicator': self.get_indicator_link(indicator_id),
+                'Number of instances': info['indicators'][indicator_id]
             })
         df = pd.DataFrame(rows)
         if not df.empty:
@@ -262,6 +293,15 @@ class DisaggregationReportService:
             <h2 id="indicators-using">Indicators using disaggregation</h2>
             {indicators_download}
             {indicators_table}
+        </div>
+        """
+
+
+    def get_disaggregation_value_detail_template(self):
+        return """
+        <div>
+            {download}
+            {table}
         </div>
         """
 

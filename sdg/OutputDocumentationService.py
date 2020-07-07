@@ -203,6 +203,8 @@ class OutputDocumentationService:
 
         for disaggregation in store:
             self.write_disaggregation_detail_page(store[disaggregation])
+            for disaggregation_value in store[disaggregation]['values']:
+                self.write_disaggregation_value_detail_page(store[disaggregation]['values'][disaggregation_value])
 
 
     def write_disaggregation_detail_page(self, info):
@@ -212,7 +214,7 @@ class OutputDocumentationService:
 
         values_df = service.get_disaggregation_dataframe(info)
         values_download = self.get_csv_download(values_df, 'values--' + filename.replace('.html', '.csv'))
-        values_table = values_df.to_html(index=False, classes="table table-striped table-bordered tablesorter")
+        values_table = values_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
 
         indicators_df = service.get_disaggregation_indicator_dataframe(info)
         indicators_download = self.get_csv_download(indicators_df, 'indicators--' + filename.replace('.html', '.csv'))
@@ -225,6 +227,23 @@ class OutputDocumentationService:
             indicators_table=indicators_table
         ))
         self.write_page(filename, detail_html)
+
+
+    def write_disaggregation_value_detail_page(self, info):
+        service = self.disaggregation_report_service
+        disaggregation = info['disaggregation']
+        disaggregation_value = info['name']
+        filename = info['filename']
+
+        df = service.get_disaggregation_value_dataframe(info)
+        download = self.get_csv_download(df, filename.replace('.html', '.csv'))
+        table = df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
+
+        html = self.get_html(disaggregation + ': ' + disaggregation_value, service.get_disaggregation_value_detail_template().format(
+            download=download,
+            table=table
+        ))
+        self.write_page(filename, html)
 
 
     def get_csv_download(self, df, filename):

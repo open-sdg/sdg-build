@@ -267,11 +267,12 @@ class DisaggregationReportService:
 
 
     def get_indicator_link(self, indicator_id):
+        indicator_label = '#' + indicator_id
         if self.indicator_url is None:
-            return indicator_id
-        link = '<a href="{href}">{indicator_id}</a>'
+            return indicator_label
+        link = '<a href="{href}">{label}</a>'
         href = self.indicator_url.replace('[id]', indicator_id)
-        return link.format(href=href, indicator_id=indicator_id)
+        return link.format(href=href, label=indicator_label)
 
 
     def remove_links_from_dataframe(self, df):

@@ -178,17 +178,11 @@ def test_documentation(test_site_dir):
     top_level_files = [
         'index.html',
         'open-sdg-output.html',
+        'disaggregation-report.csv',
+        'disaggregation-by-indicator-report.csv',
+        'disaggregation--region.html',
+        'indicators--disaggregation--region.csv',
+        'values--disaggregation--region.csv',
     ]
 
     assert all([os.path.isfile(os.path.join(site_dir, file)) for file in top_level_files])
-
-    disaggregation_files = [
-        'index.html',
-        'disaggregation-report.csv',
-        'disaggregation-by-indicator-report.csv',
-        'region.html',
-        'indicators--region.csv',
-        'values--region.csv',
-    ]
-
-    assert all([os.path.isfile(os.path.join(site_dir, 'disaggregations', file)) for file in disaggregation_files])

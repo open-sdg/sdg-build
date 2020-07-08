@@ -1,6 +1,6 @@
 import os
 import sdg
-import numpy
+import pandas as pd
 from slugify import slugify
 
 class OutputDocumentationService:
@@ -13,20 +13,53 @@ class OutputDocumentationService:
     """
 
 
-    def __init__(self, outputs, folder='_site', branding='Build docs', languages=None, intro=''):
+    def __init__(self, outputs, folder='_site', branding='Build docs',
+                 languages=None, intro='', translations=None, indicator_url=None):
         """Constructor for the OutputDocumentationService class.
 
         Parameters
         ----------
         outputs : list
-            List of objects inheriting from OutputBase
+            Required list of objects inheriting from OutputBase. Each output
+            will receive its own documentation page (or pages).
+        folder : string
+            Optional folder in which to create the documentation pages. Defaults
+            to the "_site" folder.
+        branding : string
+            Optional title/heading to use on all documentation pages. Defaults
+            to "Build docs".
+        languages : list
+            Optional list of language codes. If more than one language is
+            provided, any languages beyond the first will display as translations
+            in additional columns. Defaults to ['en'].
+        intro : string
+            Optionl chunk of text to display at the top of the front page.
+        translations : list
+            Optional list of objects inheriting from TranslationInputBase. If
+            provided these will be used to translate the output.
+        indicator_url : string
+            Optional URL pattern to use for linking to indicators. If provided,
+            the "[id]" will be replaced with the indicator id (dash-delimited).
+            For example, "https://example.com/[id].html" will be replaced with
+            "https://example.com/4-1-1.html".
         """
         self.outputs = outputs
         self.folder = folder
         self.branding = branding
         self.intro = intro
+        self.indicator_url = indicator_url
         self.slugs = []
-        self.languages = [] if languages is None else languages
+        self.languages = ['en'] if languages is None else languages
+        if translations is not None:
+            self.translation_helper = sdg.translations.TranslationHelper(translations)
+        else:
+            self.translation_helper = None
+        self.disaggregation_report_service = sdg.DisaggregationReportService(
+            self.outputs,
+            languages = self.languages,
+            translation_helper = self.translation_helper,
+            indicator_url = self.indicator_url
+        )
 
 
     def generate_documentation(self):
@@ -40,6 +73,8 @@ class OutputDocumentationService:
                 'content': output.get_documentation_content(self.languages),
                 'description': output.get_documentation_description()
             })
+            extras = output.get_documentation_extras()
+            pages.extend(extras)
 
         os.makedirs(self.folder, exist_ok=True)
 
@@ -47,6 +82,7 @@ class OutputDocumentationService:
             self.write_documentation(page)
 
         self.write_index(pages)
+        self.write_disaggregation_report()
 
 
     def create_filename(self, title):
@@ -65,6 +101,8 @@ class OutputDocumentationService:
         slug = slugify(title)
         if slug in self.slugs:
             slug = slug + '_'
+        if len(slug) > 100:
+            slug = slug[0:100]
         self.slugs.append(slug)
         return slug + '.html'
 
@@ -90,22 +128,137 @@ class OutputDocumentationService:
             A list of dicts containing "title", "filename", and "content"
         """
         html = '<p>' + self.intro + '</p>'
-        html += '<div class="container">'
 
-        last_page = len(pages) - 1
-        for num, page in enumerate(pages):
-            if num % 3 == 0:
-                html += '<div class="row">'
-            title = '<h5 class="card-title">' + page['title'] + '</h5>'
-            description = '<p class="card-text">' + page['description'] + '</p>'
-            link = '<a href="' + page['filename'] + '" class="btn btn-primary">See examples</a>'
-            html += '<div class="col-sm"><div class="card"><div class="card-body">' + title + description + link + '</div></div></div>'
-            if (num % 3 == 0 and num > 0) or num == last_page:
-                html += '</div>'
+        row_start = '<div class="row">'
+        row_end = '</div>'
 
-        html += '</div>'
+        # Add all of the output pages.
+        card_number = 0
+        for page in pages:
+            if card_number % 3 == 0:
+                html += row_start
+            html += self.get_index_card_template().format(
+                title=page['title'],
+                description=page['description'],
+                destination=page['filename'],
+                call_to_action='See examples'
+            )
+            card_number += 1
+            if card_number % 3 == 0:
+                html += row_end
+
+        # Add the disaggregation report.
+        if card_number % 3 == 0:
+            html += row_start
+        html += self.get_index_card_template().format(
+            title='Disaggregation report',
+            description='These tables show information about all the disaggregations used in the data.',
+            destination='disaggregations.html',
+            call_to_action='See report'
+        )
+        card_number += 1
+        if card_number % 3 == 0:
+            html += row_end
+
+        if card_number % 3 != 0:
+            html += row_end
+
         page_html = self.get_html('Overview', html)
         self.write_page('index.html', page_html)
+
+
+    def get_index_card_template(self):
+        return """
+        <div class="col-sm mt-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{title}</h5>
+                    <p class="card-text">{description}</p>
+                    <a href="{destination}" class="btn btn-primary">{call_to_action}</a>
+                </div>
+            </div>
+        </div>
+        """
+
+
+    def write_disaggregation_report(self):
+        service = self.disaggregation_report_service
+        store = self.disaggregation_report_service.get_disaggregation_store()
+
+        disaggregation_df = service.get_disaggregations_dataframe()
+        disaggregation_table = self.html_from_dataframe(disaggregation_df)
+        disaggregation_download = self.get_csv_download(disaggregation_df, 'disaggregation-report.csv')
+
+        indicator_df = service.get_indicators_dataframe()
+        indicator_table = self.html_from_dataframe(indicator_df)
+        indicator_download = self.get_csv_download(indicator_df, 'disaggregation-by-indicator-report.csv')
+
+        report_html = self.get_html('Disaggregation report', service.get_disaggregation_report_template().format(
+            disaggregation_download=disaggregation_download,
+            disaggregation_table=disaggregation_table,
+            indicator_download=indicator_download,
+            indicator_table=indicator_table
+        ))
+        self.write_page('disaggregations.html', report_html)
+
+        for disaggregation in store:
+            self.write_disaggregation_detail_page(store[disaggregation])
+            for disaggregation_value in store[disaggregation]['values']:
+                self.write_disaggregation_value_detail_page(store[disaggregation]['values'][disaggregation_value])
+
+
+    def write_disaggregation_detail_page(self, info):
+        service = self.disaggregation_report_service
+        disaggregation = info['name']
+        filename = info['filename']
+
+        values_df = service.get_disaggregation_dataframe(info)
+        values_download = self.get_csv_download(values_df, 'values--' + filename.replace('.html', '.csv'))
+        values_table = self.html_from_dataframe(values_df)
+
+        indicators_df = service.get_disaggregation_indicator_dataframe(info)
+        indicators_download = self.get_csv_download(indicators_df, 'indicators--' + filename.replace('.html', '.csv'))
+        indicators_table = self.html_from_dataframe(indicators_df)
+
+        detail_html = self.get_html('Disaggregation: ' + disaggregation, service.get_disaggregation_detail_template().format(
+            values_download=values_download,
+            values_table=values_table,
+            indicators_download=indicators_download,
+            indicators_table=indicators_table
+        ))
+        self.write_page(filename, detail_html)
+
+
+    def write_disaggregation_value_detail_page(self, info):
+        service = self.disaggregation_report_service
+        disaggregation = info['disaggregation']
+        disaggregation_value = info['name']
+        filename = info['filename']
+
+        df = service.get_disaggregation_value_dataframe(info)
+        download = self.get_csv_download(df, filename.replace('.html', '.csv'))
+        table = self.html_from_dataframe(df)
+
+        html = self.get_html(disaggregation + ': ' + disaggregation_value, service.get_disaggregation_value_detail_template().format(
+            download=download,
+            table=table
+        ))
+        self.write_page(filename, html)
+
+
+    def get_csv_download(self, df, filename):
+        csv_path = os.path.join(self.folder, filename)
+        df = self.disaggregation_report_service.remove_links_from_dataframe(df)
+        df.to_csv(csv_path, index=False)
+        return self.get_download_button_template().format(filename=filename)
+
+
+    def get_download_button_template(self):
+        return """
+        <div class="my-3">
+            <a href="{filename}" class="btn btn-primary">Download CSV</a>
+        </div>
+        """
 
 
     def get_html(self, title, content):
@@ -120,7 +273,8 @@ class OutputDocumentationService:
             <title>{branding} - {title}</title>
 
             <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css" integrity="sha256-vFn0MM8utz2N3JoNzRxHXUtfCJLz5Pb9ygBY2exIaqg=" crossorigin="anonymous" />
         </head>
         <body>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -136,13 +290,41 @@ class OutputDocumentationService:
                     </div>
                 </div>
             </div>
-            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        </body>
+            <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha256-dtGH1XcAyKopMui5x20KnPxuGuSx9Rs6piJB/4Oqu6I=" crossorigin="anonymous"></script>
+            <script>$(".tablesorter").tablesorter({{
+                theme: 'bootstrap'
+            }});</script>
         </html>
         """
         return template.format(branding=self.branding, title=title, content=content)
+
+
+    def html_from_dataframe(self, df, escape=False, totals=True):
+        """Generate an HTML table from a DataFrame.
+
+        Paramters
+        ---------
+        df : DataFrame
+            The dataframe itself.
+        escape : boolean
+            Whether or not to escape content. If the cells need to contain
+            HTML, this should be False. Defaults to False.
+        total : boolean
+            Whether or not to display a "Total rows" count above the table.
+            Defaults to True.
+        """
+        html = ''
+        if totals:
+            html = """
+                <div class="total-rows">
+                    Total rows: <span class="total">{}</span>
+                </div>
+                """.format(len(df))
+        html += df.to_html(escape=escape, index=False, classes="table table-striped table-bordered tablesorter")
+        return html
 
 
     def write_page(self, filename, html):

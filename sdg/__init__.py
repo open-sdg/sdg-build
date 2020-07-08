@@ -16,9 +16,11 @@ from . import inputs
 from . import outputs
 from . import schemas
 from . import translations
+from .DisaggregationReportService import DisaggregationReportService
 from .OutputDocumentationService import OutputDocumentationService
 from .Indicator import Indicator
 from .IndicatorExportService import IndicatorExportService
+from .IndicatorOptions import IndicatorOptions
 from .Series import Series
 from .build import build_data
 from .check_csv import check_all_csv

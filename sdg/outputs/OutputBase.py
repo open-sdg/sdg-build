@@ -1,4 +1,5 @@
 import os
+from sdg.IndicatorOptions import IndicatorOptions
 from sdg.translations import TranslationInputBase
 from sdg.translations import TranslationHelper
 
@@ -6,7 +7,8 @@ class OutputBase:
     """Base class for destinations of SDG data/metadata."""
 
 
-    def __init__(self, inputs, schema, output_folder='_site', translations=None):
+    def __init__(self, inputs, schema, output_folder='_site', translations=None,
+                 indicator_options=None):
         """Constructor for OutputBase.
 
         inputs: list
@@ -17,9 +19,13 @@ class OutputBase:
             The path to where the output files should be created.
         translations: list
             A list of TranslationInputBase (or descendant) classes.
+        indicator_options: IndicatorOptions
+            Optional options that are passed into each Indicator object.
+            Allows particular outputs to affect the data/metadata of indicators.
         """
         if translations is None:
             translations = []
+        self.indicator_options = IndicatorOptions() if indicator_options is None else indicator_options
 
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
@@ -77,7 +83,7 @@ class OutputBase:
         merged_indicators = {}
         for input in inputs:
             # Fetch the input.
-            input.execute()
+            input.execute(self.indicator_options)
             # Merge the results.
             for inid in input.indicators:
                 if inid not in merged_indicators:
@@ -214,3 +220,27 @@ class OutputBase:
             The description for this output.
         """
         return 'Description unavailable - must be provided by get_documentation_description().'
+
+
+    def get_documentation_extras(self):
+        """Get any additional pages necessary for documentation.
+
+        Returns
+        -------
+        list
+            List of dicts containing three strings: title, path, and HTML content.
+            For example:
+            [
+                {
+                    'title': 'My hello world page',
+                    'path': 'my-subfolder/hello-world.html',
+                    'content': '<p>Hello world</p>'),
+                },
+                {
+                    'title': 'My other stuff page',
+                    'path': 'my-subfolder/other-stuff.html',
+                    'content': '<p>Other stuff</p>'),
+                }
+            ]
+        """
+        return []

@@ -18,7 +18,7 @@ class InputCsvMeta(InputFiles):
         self.metadata_mapping = metadata_mapping
         InputFiles.__init__(self, path_pattern)
 
-    def execute(self):
+    def execute(self, indicator_options):
         """Get the metadata from the CSV, returning a list of indicators."""
         metadata_mapping=self.metadata_mapping
         indicator_map = self.get_indicator_map()
@@ -51,6 +51,6 @@ class InputCsvMeta(InputFiles):
                 # and second column item to dictionary value
                 for row in meta_csv.iterrows():
                     meta[row[1][0]]=row[1][1]
-                        
+
             name = meta['indicator_name'] if 'indicator_name' in meta else None
-            self.add_indicator(inid, name=name, meta=meta)
+            self.add_indicator(inid, name=name, meta=meta, options=indicator_options)

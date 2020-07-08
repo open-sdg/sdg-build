@@ -35,7 +35,7 @@ class InputSdmxMl_Multiple(InputFiles):
         self.kwargs = kwargs
 
 
-    def execute(self):
+    def execute(self, indicator_options):
         """Scan the SDMX files and create indicators."""
         indicator_map = self.get_indicator_map()
         kwargs = self.kwargs
@@ -58,7 +58,7 @@ class InputSdmxMl_Multiple(InputFiles):
                 input_instance.add_meta_alteration(alteration)
 
             # Execute the input and copy the resulting indicator to here.
-            input_instance.execute()
+            input_instance.execute(indicator_options)
             self.indicators.update(input_instance.indicators)
 
 

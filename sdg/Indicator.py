@@ -8,7 +8,7 @@ from sdg.translations import TranslationHelper
 class Indicator:
     """Data model for SDG indicators."""
 
-    def __init__(self, inid, name=None, data=None, meta=None):
+    def __init__(self, inid, name=None, data=None, meta=None, options=None):
         """Constructor for the SDG indicator instances.
 
         Parameters
@@ -21,11 +21,14 @@ class Indicator:
             Dataframe of all data, with at least "Year" and "Value" columns.
         meta : dict
             Dict of fielded metadata.
+        options : IndicatorOptions
+            Output-specific options provided by the OutputBase class.
         """
         self.inid = inid
         self.name = name
         self.data = data
         self.meta = meta
+        self.options = sdg.IndicatorOptions() if options is None else options
         self.set_headline()
         self.set_edges()
         self.translations = {}
@@ -118,7 +121,8 @@ class Indicator:
     def set_headline(self):
         """Calculate and set the headline for this indicator."""
         self.require_data()
-        self.headline = sdg.data.filter_headline(self.data)
+        non_disaggregation_columns = self.options.get_non_disaggregation_columns()
+        self.headline = sdg.data.filter_headline(self.data, non_disaggregation_columns)
 
 
     def has_headline(self):
@@ -129,7 +133,8 @@ class Indicator:
     def set_edges(self):
         """Calculate and set the edges for this indicator."""
         self.require_data()
-        self.edges = sdg.edges.edge_detection(self.inid, self.data)
+        non_disaggregation_columns = self.options.get_non_disaggregation_columns()
+        self.edges = sdg.edges.edge_detection(self.inid, self.data, non_disaggregation_columns)
 
 
     def has_edges(self):
@@ -226,7 +231,7 @@ class Indicator:
             return
 
         # Start with an empty indicator.
-        indicator = Indicator(inid=self.inid)
+        indicator = Indicator(inid=self.inid, options=self.options)
 
         # Translation callbacks for below.
         def translate_meta(text):
@@ -342,13 +347,22 @@ class Indicator:
         list
             List of Series objects.
         """
+        # Safety code for empty dataframes.
+        if self.data.empty:
+            return []
         # Assume "disaggregations" are everything except 'Year' and 'Value'.
         aggregating_columns = ['Year', 'Value']
         grouping_columns = [column for column in self.data.columns if column not in aggregating_columns]
 
+        if len(grouping_columns) == 0:
+            series = sdg.Series({}, self.get_indicator_id())
+            for index, row in self.data.iterrows():
+                series.add_value(row['Year'], row['Value'])
+            return [series]
+
         def row_to_series(row):
             disaggregations = row[grouping_columns].to_dict()
-            series = sdg.Series(disaggregations)
+            series = sdg.Series(disaggregations, self.get_indicator_id())
             for year, value in zip(row['Year'], row['Value']):
                 series.add_value(year, value)
             return series

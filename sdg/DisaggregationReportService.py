@@ -56,6 +56,8 @@ class DisaggregationReportService:
         for indicator_id in indicators:
             if not indicators[indicator_id].is_statistical():
                 continue
+            if not indicators[indicator_id].is_complete():
+                continue
             non_disaggregation_columns = indicators[indicator_id].options.get_non_disaggregation_columns()
             for series in indicators[indicator_id].get_all_series():
                 disaggregations = series.get_disaggregations()

@@ -253,7 +253,7 @@ class DisaggregationReportService:
                 'Indicator': self.get_indicator_link(indicator_id),
                 'Disaggregation combinations using this value': info['indicators'][indicator_id]
             })
-        df = pd.DataFrame(rows)
+        df = pd.DataFrame(rows, columns=['Indicator', 'Disaggregation combinations using this value'])
         if not df.empty:
             df.sort_values(by=['Indicator'], inplace=True)
         return df

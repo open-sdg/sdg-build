@@ -217,7 +217,7 @@ class DisaggregationReportService:
         for value in info['values']:
             row = {
                 'Value': self.get_disaggregation_value_link(info['values'][value]),
-                'Number of instances': info['values'][value]['instances'],
+                'Disaggregation combinations using this value': info['values'][value]['instances'],
                 'Number of indicators': len(info['values'][value]['indicators'].keys()),
             }
             for language in self.get_additional_languages():
@@ -226,7 +226,7 @@ class DisaggregationReportService:
 
         columns = ['Value']
         columns.extend(self.get_additional_languages())
-        columns.extend(['Number of instances', 'Number of indicators'])
+        columns.extend(['Disaggregation combinations using this value', 'Number of indicators'])
 
         df = pd.DataFrame(rows, columns=columns)
         if not df.empty:
@@ -251,7 +251,7 @@ class DisaggregationReportService:
         for indicator_id in info['indicators']:
             rows.append({
                 'Indicator': self.get_indicator_link(indicator_id),
-                'Number of instances': info['indicators'][indicator_id]
+                'Disaggregation combinations using this value': info['indicators'][indicator_id]
             })
         df = pd.DataFrame(rows)
         if not df.empty:

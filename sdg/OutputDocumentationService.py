@@ -186,11 +186,11 @@ class OutputDocumentationService:
         store = self.disaggregation_report_service.get_disaggregation_store()
 
         disaggregation_df = service.get_disaggregations_dataframe()
-        disaggregation_table = disaggregation_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
+        disaggregation_table = self.html_from_dataframe(disaggregation_df)
         disaggregation_download = self.get_csv_download(disaggregation_df, 'disaggregation-report.csv')
 
         indicator_df = service.get_indicators_dataframe()
-        indicator_table = indicator_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
+        indicator_table = self.html_from_dataframe(indicator_df)
         indicator_download = self.get_csv_download(indicator_df, 'disaggregation-by-indicator-report.csv')
 
         report_html = self.get_html('Disaggregation report', service.get_disaggregation_report_template().format(
@@ -214,11 +214,11 @@ class OutputDocumentationService:
 
         values_df = service.get_disaggregation_dataframe(info)
         values_download = self.get_csv_download(values_df, 'values--' + filename.replace('.html', '.csv'))
-        values_table = values_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
+        values_table = self.html_from_dataframe(values_df)
 
         indicators_df = service.get_disaggregation_indicator_dataframe(info)
         indicators_download = self.get_csv_download(indicators_df, 'indicators--' + filename.replace('.html', '.csv'))
-        indicators_table = indicators_df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
+        indicators_table = self.html_from_dataframe(indicators_df)
 
         detail_html = self.get_html('Disaggregation: ' + disaggregation, service.get_disaggregation_detail_template().format(
             values_download=values_download,
@@ -237,7 +237,7 @@ class OutputDocumentationService:
 
         df = service.get_disaggregation_value_dataframe(info)
         download = self.get_csv_download(df, filename.replace('.html', '.csv'))
-        table = df.to_html(escape=False, index=False, classes="table table-striped table-bordered tablesorter")
+        table = self.html_from_dataframe(df)
 
         html = self.get_html(disaggregation + ': ' + disaggregation_value, service.get_disaggregation_value_detail_template().format(
             download=download,
@@ -300,6 +300,31 @@ class OutputDocumentationService:
         </html>
         """
         return template.format(branding=self.branding, title=title, content=content)
+
+
+    def html_from_dataframe(self, df, escape=False, totals=True):
+        """Generate an HTML table from a DataFrame.
+
+        Paramters
+        ---------
+        df : DataFrame
+            The dataframe itself.
+        escape : boolean
+            Whether or not to escape content. If the cells need to contain
+            HTML, this should be False. Defaults to False.
+        total : boolean
+            Whether or not to display a "Total rows" count above the table.
+            Defaults to True.
+        """
+        html = ''
+        if totals:
+            html = """
+                <div class="total-rows">
+                    Total rows: <span class="total">{}</span>
+                </div>
+                """.format(len(df))
+        html += df.to_html(escape=escape, index=False, classes="table table-striped table-bordered tablesorter")
+        return html
 
 
     def write_page(self, filename, html):

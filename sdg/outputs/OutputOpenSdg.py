@@ -248,7 +248,7 @@ class OutputOpenSdg(OutputBase):
                 continue
             indicator_ids.append(indicator_id)
         if len(indicator_ids) < 1:
-            return OutputBase.get_documentation_indicator_ids()
+            return OutputBase.get_documentation_indicator_ids(self)
         else:
             return indicator_ids
 

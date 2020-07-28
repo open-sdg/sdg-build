@@ -36,7 +36,7 @@ class InputCsvMeta(InputFiles):
             # Read in CSV file as dataframe
             meta_csv = pd.read_csv(fr, header=None, names=["Field name", "Field key"])
             # Drop rows with any empty columns
-            meta_df=meta_df.dropna()
+            meta_df=meta_csv.dropna()
             meta=dict()
             # If metadata_mapping exists, merge the mapping and metadata dataframe
             if metadata_mapping != None:

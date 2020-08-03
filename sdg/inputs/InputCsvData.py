@@ -14,6 +14,8 @@ class InputCsvData(InputFiles):
     def execute(self, indicator_options):
         """Get the data, edges, and headline from CSV, returning a list of indicators."""
         indicator_map = self.get_indicator_map()
+        print("!!! indicator_map (CSV) !!!")
+        print(indicator_map)
         for inid in indicator_map:
             data = pd.read_csv(indicator_map[inid])
             self.add_indicator(inid, data=data, options=indicator_options)

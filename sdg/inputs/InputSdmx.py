@@ -393,6 +393,8 @@ class InputSdmx(InputBase):
 
         # Create the Indicator objects.
         for indicator_id in indicator_data:
+            if not indicator_data[indicator_id]:
+                continue
             data = self.create_dataframe(indicator_data[indicator_id])
             data = self.drop_singleton_columns(data)
             data = self.ensure_numeric_values(data, indicator_id)

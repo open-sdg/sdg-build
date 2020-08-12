@@ -17,6 +17,7 @@ from . import translations
 from .DisaggregationReportService import DisaggregationReportService
 from .OutputDocumentationService import OutputDocumentationService
 from .Indicator import Indicator
+from .IndicatorDownloadService import IndicatorDownloadService
 from .IndicatorExportService import IndicatorExportService
 from .IndicatorOptions import IndicatorOptions
 from .Series import Series

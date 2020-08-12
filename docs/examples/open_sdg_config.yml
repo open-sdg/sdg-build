@@ -115,3 +115,14 @@ docs_intro: This is a list of examples of endpoints and output that are
   available on this service. Click each of the links below for more information
   on the available output.
 docs_indicator_url: https://my-github-org/my-site-repository/[id]
+
+# Indicator downloads
+# -------------------
+# This controls any types of indicator downloads that need to be in the build.
+# The following will ensure that all files matching data/indicator_*.csv will
+# be available for download in the build at downloads/data-csv/indicator_*.csv.
+indicator_downloads:
+  - button_label: csv
+    source_pattern: data/indicator_*.csv
+    indicator_id_pattern: indicator_(.*)
+    output_folder: data-csv

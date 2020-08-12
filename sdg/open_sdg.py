@@ -140,18 +140,6 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     )
     documentation_service.generate_documentation()
 
-    # Write the indicator downloads.
-    if options['indicator_downloads'] is not None:
-        download_service = sdg.IndicatorDownloadService(options['src_dir'], options['site_dir'])
-        for download in options['indicator_downloads']:
-            download_service.write_downloads(
-                download['button_label'],
-                download['source_pattern'],
-                download['indicator_id_pattern'],
-                download['output_folder']
-            )
-        download_service.write_index()
-
     return status
 
 
@@ -275,7 +263,8 @@ def open_sdg_prep(options):
         output_folder=options['site_dir'],
         translations=options['translations'],
         reporting_status_extra_fields=reporting_status_extra_fields,
-        indicator_options=options['indicator_options'])
+        indicator_options=options['indicator_options'],
+        indicator_downloads=options['indicator_downloads'])
 
     outputs = [opensdg_output]
 

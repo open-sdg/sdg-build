@@ -123,6 +123,6 @@ docs_indicator_url: https://my-github-org/my-site-repository/[id]
 # be available for download in the build at downloads/data-csv/indicator_*.csv.
 indicator_downloads:
   - button_label: csv
-    source_pattern: data/indicator_*.csv
+    source_pattern: tests/data/indicator_*.csv
     indicator_id_pattern: indicator_(.*)
     output_folder: data-csv

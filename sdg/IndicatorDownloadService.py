@@ -6,9 +6,8 @@ from shutil import copyfile
 from pathlib import Path
 
 class IndicatorDownloadService:
-    def __init__(self, input_folder=None, output_folder=None):
+    def __init__(self, output_folder=None):
         """Constructor for IndicatorDownloadService."""
-        self.__input_folder = input_folder
         self.__output_folder = output_folder
         self.__index = {}
 
@@ -18,8 +17,6 @@ class IndicatorDownloadService:
         original_output_folder = output_folder
         if self.__output_folder is not None:
             output_folder = os.path.join(self.__output_folder, output_folder)
-        if self.__input_folder is not None:
-            source_pattern = os.path.join(self.__input_folder, source_pattern)
         Path(output_folder).mkdir(parents=True, exist_ok=True)
         self.__index[button_label] = {}
         for path_from in glob.glob(source_pattern):

@@ -34,13 +34,13 @@ class InputCsvMeta(InputFiles):
             else:
                 fr = path
             # Read in CSV file as dataframe
-            meta_csv = pd.read_csv(fr, header=None, names=["Field name", "Field key"])
+            meta_df = pd.read_csv(fr, header=None, names=["Field name", "Field key"])
             # Drop rows with any empty columns
-            meta_df=meta_csv.dropna()
+            meta_df=meta_df.dropna()
             meta=dict()
             # If metadata_mapping exists, merge the mapping and metadata dataframe
             if metadata_mapping != None:
-                meta_mapping_df=pd.merge(meta_mapping, meta_csv, on="Field name")
+                meta_mapping_df=pd.merge(meta_mapping, meta_df, on="Field name")
                 # Loop through dataframe rows, assigning second column item to dictionary key
                 # and third column item to dictionary value (first column is human-readable labels)
                 for row in meta_mapping_df.iterrows():
@@ -49,7 +49,7 @@ class InputCsvMeta(InputFiles):
             else:
                 # Loop through dataframe rows, assigning first column item to dictionary key
                 # and second column item to dictionary value
-                for row in meta_csv.iterrows():
+                for row in meta_df.iterrows():
                     meta[row[1][0]]=row[1][1]
 
             name = meta['indicator_name'] if 'indicator_name' in meta else None

@@ -18,14 +18,16 @@ class IndicatorDownloadService:
         if self.__output_folder is not None:
             output_folder = os.path.join(self.__output_folder, output_folder)
         Path(output_folder).mkdir(parents=True, exist_ok=True)
-        self.__index[button_label] = {}
+        self.__index[button_label] = {
+            'indicators': {}
+        }
         for path_from in glob.glob(source_pattern):
             filename = os.path.basename(path_from)
             indicator_id = self.__get_indicator_id(indicator_id_pattern, filename)
             if indicator_id:
                 path_to = os.path.join(output_folder, filename)
                 copyfile(path_from, path_to)
-                self.__index[button_label][indicator_id] = os.path.join(original_output_folder, filename)
+                self.__index[button_label]['indicators'][indicator_id] = os.path.join(original_output_folder, filename)
 
 
     def __get_indicator_id(self, indicator_id_pattern, filename):

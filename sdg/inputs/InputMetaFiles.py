@@ -70,18 +70,21 @@ class InputMetaFiles(InputFiles):
 
     def get_git_updates(self, filepath):
         meta_update = self.get_git_update(filepath)
+        updates = {
+            'national_metadata_update_url_text': meta_update['date'] + ': see changes on GitHub',
+            'national_metadata_update_url': meta_update['commit_url']
+        }
+
         indicator_id = self.convert_path_to_indicator_id(filepath)
         data_filename = self.git_data_filemask.replace('*', indicator_id)
         src_dir = os.path.dirname(os.path.dirname(self.path_pattern))
         data_filepath = os.path.join(src_dir, self.git_data_dir, data_filename)
-        data_update = self.get_git_update(data_filepath)
+        if os.path.isfile(data_filepath):
+            data_update = self.get_git_update(data_filepath)
+            updates['national_data_update_url_text'] = data_update['date'] + ': see changes on GitHub'
+            updates['national_data_update_url'] = data_update['commit_url']
         
-        return {
-            'national_data_update_url_text': data_update['date'] + ': see changes on GitHub',
-            'national_data_update_url': data_update['commit_url'],
-            'national_metadata_update_url_text': meta_update['date'] + ': see changes on GitHub',
-            'national_metadata_update_url': meta_update['commit_url']
-        }
+        return updates
 
 
     def get_git_update(self, filepath):
@@ -93,7 +96,6 @@ class InputMetaFiles(InputFiles):
         # Need to translate relative to the repo root (this may be a submodule)
         repo_dir = os.path.relpath(repo.working_dir, os.getcwd())
         filepath = os.path.relpath(filepath, repo_dir)
-        
         commit = next(repo.iter_commits(paths=filepath, max_count=1))
         git_date = str(commit.committed_datetime.date())
         git_sha = commit.hexsha
@@ -117,7 +119,7 @@ class InputMetaFiles(InputFiles):
         # Otherwise assume it is a path to a file.
         else:
             extension = os.path.splitext(self.metadata_mapping)[1]
-            if extension == 'csv':
+            if extension.lower() == '.csv':
                 mapping = pd.read_csv(self.metadata_mapping, header=None, index_col=0, squeeze=True).to_dict()
 
         if mapping is None:

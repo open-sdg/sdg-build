@@ -4,7 +4,7 @@ from sdg.inputs import InputMetaFiles
 class InputExcelMeta(InputMetaFiles):
     """Sources of SDG metadata that are local CSV files."""
 
-    def __init__(self, path_pattern='', git=True, git_data_dir=None,
+    def __init__(self, path_pattern='', git=True, git_data_dir='data',
                  git_data_filemask='indicator_*.csv', metadata_mapping=None,
                  sheet_number=0):
         """Constructor for InputExcelMeta.

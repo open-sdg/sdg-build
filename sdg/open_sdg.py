@@ -18,11 +18,9 @@ import yaml
 
 def open_sdg_config(config_file, defaults):
     """Look for a YAML config file with Open SDG options.
-
     Args:
         config_file: str. Path to the YAML config file.
         defaults: dict. Set of options to default to.
-
     Returns:
         Dict of options.
     """
@@ -43,12 +41,10 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
                    inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
-                   docs_subfolder=None):
+                   docs_subfolder=None, indicator_downloads=None):
     """Read each input file and edge file and write out json.
-
     Args:
         Each argument is optional. The defaults above will be used if omitted.
-
         src_dir: str. Directory root for the project where data and meta data
             folders are
         site_dir: str. Directory to build the site to
@@ -66,7 +62,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         docs_branding: string. A heading for all documentation pages
         docs_intro: string. An introduction for the documentation homepage
         docs_indicator_url: string. A pattern for indicator URLs on the site repo
-
+        docs_subfolder: string. A subfolder in which to put the documentation pages
+        indicator_downloads: list. A list of dicts describing calls to the
+            write_downloads() method of IndicatorDownloadService
     Returns:
         Boolean status of file writes
     """
@@ -96,6 +94,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'docs_indicator_url': docs_indicator_url,
         'docs_subfolder': docs_subfolder,
         'indicator_options': indicator_options,
+        'indicator_downloads': indicator_downloads,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -164,19 +163,15 @@ def open_sdg_indicator_options_from_dict(options):
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
         inputs=None, alter_data=None, alter_meta=None, indicator_options=None):
     """Run validation checks for all indicators.
-
     This checks both *.csv (data) and *.md (metadata) files.
-
     Args:
         Each argument is optional. The defaults above will be used if omitted.
-
         src_dir: str. Directory root for the project where data and meta data
             folders are
         schema_file: Location of schema file relative to src_dir
         config: str. Path to a YAML config file that overrides other parameters
         alter_data: function. A callback function that alters a data Dataframe
         alter_meta: function. A callback function that alters a metadata dictionary
-
     Returns:
         boolean: True if the check was successful, False if not.
     """
@@ -194,6 +189,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'inputs': inputs,
         'translations': [],
         'indicator_options': indicator_options,
+        'indicator_downloads': None,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -220,10 +216,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
 
 def open_sdg_prep(options):
     """Prepare Open SDG output for validation and builds.
-
     Args:
         options: Dict of options.
-
     Returns:
         List of the prepared OutputBase objects.
     """
@@ -259,7 +253,8 @@ def open_sdg_prep(options):
         output_folder=options['site_dir'],
         translations=options['translations'],
         reporting_status_extra_fields=reporting_status_extra_fields,
-        indicator_options=options['indicator_options'])
+        indicator_options=options['indicator_options'],
+        indicator_downloads=options['indicator_downloads'])
 
     outputs = [opensdg_output]
 

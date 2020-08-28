@@ -49,4 +49,3 @@ class IndicatorDownloadService:
         filepath = os.path.join(index_path, 'indicator-downloads.json')
         with open(filepath, 'w') as fp:
             json.dump(self.__index, fp)
-© 2020 GitHub, Inc.

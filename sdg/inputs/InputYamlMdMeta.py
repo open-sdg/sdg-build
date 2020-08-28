@@ -14,6 +14,7 @@ class InputYamlMdMeta(InputFiles):
         git -- whether to use git information for dates in the metadata
         git_data_dir -- location of folder containing git data for dates
         """
+        self.path_pattern = path_pattern
         self.git = git
         self.git_data_dir = git_data_dir
         InputFiles.__init__(self, path_pattern)
@@ -25,7 +26,7 @@ class InputYamlMdMeta(InputFiles):
             # Need to get the folder of the folder of the indicator file.
             src_dir = os.path.dirname(indicator_map[inid])
             src_dir = os.path.dirname(src_dir)
-            meta = sdg.meta.read_meta(inid, git=self.git, src_dir=src_dir,
+            meta = sdg.meta.read_meta(inid, path_pattern=self.path_pattern, git=self.git, src_dir=src_dir,
                 git_data_dir=self.git_data_dir)
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta, options=indicator_options)

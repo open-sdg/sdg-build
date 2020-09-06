@@ -59,6 +59,7 @@ class InputMetaFiles(InputFiles):
             translated_filepath = os.path.join(meta_folder, language, filename)
             if os.path.isfile(translated_filepath):
                 translated_meta = self.read_meta_at_path(translated_filepath)
+                self.apply_metadata_mapping(translated_meta)
                 meta[language] = translated_meta
 
 

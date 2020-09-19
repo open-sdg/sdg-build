@@ -3,6 +3,7 @@ import json
 import sdg
 import pandas as pd
 import numpy as np
+import collections.abc
 from sdg.translations import TranslationHelper
 
 class Indicator:
@@ -113,9 +114,19 @@ class Indicator:
         """
         if val is not None and val:
             if self.has_meta():
-                self.meta.update(val)
+                self.meta = self.deepUpdate(self.meta, val)
             else:
                 self.meta = val
+
+
+    def deepUpdate(self, d, u):
+        """Recursive utility method for merging nested dicts."""
+        for k, v in u.items():
+            if isinstance(v, collections.abc.Mapping):
+                d[k] = self.deepUpdate(d.get(k, {}), v)
+            else:
+                d[k] = v
+        return d
 
 
     def set_headline(self):

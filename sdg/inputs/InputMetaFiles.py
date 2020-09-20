@@ -16,7 +16,9 @@ class InputMetaFiles(InputFiles):
         git -- whether to use git information for dates in the metadata
         git_data_dir -- location of folder containing git data for dates
         git_data_filemask -- a pattern for data filenames, where "*" is the
-          indicator id
+          indicator id. Alternatively, each indicator can contain a metadata
+          field called "data_filename" with the name of the data file for
+          that indicator.
         metadata_mapping -- a dict mapping human-readable labels to machine keys
           or a path to a CSV file
         """
@@ -64,12 +66,12 @@ class InputMetaFiles(InputFiles):
 
 
     def add_git_dates(self, meta, filepath):
-        git_update = self.get_git_updates(filepath)
+        git_update = self.get_git_updates(meta, filepath)
         for k in git_update.keys():
             meta[k] = git_update[k]
 
 
-    def get_git_updates(self, filepath):
+    def get_git_updates(self, meta, filepath):
         meta_update = self.get_git_update(filepath)
         updates = {
             'national_metadata_update_url_text': meta_update['date'] + ': see changes on GitHub',
@@ -78,6 +80,8 @@ class InputMetaFiles(InputFiles):
 
         indicator_id = self.convert_path_to_indicator_id(filepath)
         data_filename = self.git_data_filemask.replace('*', indicator_id)
+        if 'data_filename' in meta:
+            data_filename = meta['data_filename']
         src_dir = os.path.dirname(os.path.dirname(self.path_pattern))
         data_filepath = os.path.join(src_dir, self.git_data_dir, data_filename)
         if os.path.isfile(data_filepath):

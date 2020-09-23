@@ -9,27 +9,19 @@ class OutputOpenSdg(OutputBase):
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-        reporting_status_extra_fields=None, indicator_options=None,
-        indicator_downloads=None):
+        reporting_status_extra_fields=None, indicator_options=None):
         """Constructor for OutputOpenSdg.
-
         Parameters
         ----------
-
         Inherits all the parameters from OutputBase, plus the following:
-
         reporting_status_extra_fields : string
             To be passed as "extra_fields" to sdg.stats.reporting_status.
-        indicator_downloads : list
-            A list of dicts describing calls to the write_downloads() method of
-            IndicatorDownloadService.
         """
         if translations is None:
             translations = []
 
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.reporting_status_grouping_fields = reporting_status_extra_fields
-        self.indicator_downloads = indicator_downloads
 
 
     def build(self, language=None):
@@ -88,29 +80,15 @@ class OutputOpenSdg(OutputBase):
         indicator_export_service = sdg.IndicatorExportService(site_dir, self.indicators)
         indicator_export_service.export_all_indicator_data_as_zip_archive()
 
-        # Write the indicator downloads.
-        if self.indicator_downloads is not None:
-            download_service = sdg.IndicatorDownloadService(self.output_folder)
-            for download in self.indicator_downloads:
-                download_service.write_downloads(
-                    download['button_label'],
-                    download['source_pattern'],
-                    download['indicator_id_pattern'],
-                    download['output_folder']
-                )
-            download_service.write_index()
-
         return(status)
 
 
     def generate_sort_order(self, indicator):
         """Generate a sortable string from an indicator id.
-
         Parameters
         ----------
         indicator : Indicator
             An instance of the Indicator class.
-
         Returns
         -------
         string

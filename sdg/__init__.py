@@ -6,10 +6,8 @@ __author__ = "Doug Ashton <douglas.j.ashton@gmail.com>"
 # Load key components
 from . import path
 from . import data
-from . import git
 from . import edges
 from . import json
-from . import meta
 from . import stats
 from . import open_sdg
 from . import inputs

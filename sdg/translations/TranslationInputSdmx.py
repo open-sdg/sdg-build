@@ -31,7 +31,7 @@ class TranslationInputSdmx(TranslationInputBase):
             for _, el in it:
                 if '}' in el.tag:
                     el.tag = el.tag.split('}', 1)[1]
-                for attrib in el.attrib:
+                for attrib in list(el.attrib.keys()):
                     if '}' in attrib:
                         val = el.attrib[attrib]
                         del el.attrib[attrib]

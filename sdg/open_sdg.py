@@ -294,7 +294,7 @@ def open_sdg_input_defaults():
             'class': 'InputYamlMdMeta',
             'path_pattern': os.path.join('meta', '*-*.md'),
             'git': True,
-            'git_data_dir': None,
+            'git_data_dir': 'data',
         }
     ]
 

@@ -50,6 +50,10 @@ class OutputBase:
         # Keep a backup of the output folder.
         original_output_folder = self.output_folder
 
+        if language == 'untranslated':
+            self.output_folder = os.path.join(original_output_folder, 'untranslated')
+            language = None
+
         if language:
             # Temporarily change the output folder.
             self.output_folder = os.path.join(original_output_folder, language)

@@ -117,6 +117,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         if options['languages']:
             # If languages were provide, perform a translated build.
             status = status & output.execute_per_language(options['languages'])
+            # Also provide an untranslated build.
+            status = status & output.execute('untranslated')
         else:
             # Otherwise perform an untranslated build.
             status = status & output.execute()

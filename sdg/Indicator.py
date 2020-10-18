@@ -254,8 +254,8 @@ class Indicator:
                 return {key: translate_meta(value) for (key, value) in text.items()}
             # Otherwise treat as a string.
             return translation_helper.translate(text, language, default_group='data')
-        def translate_data(text):
-            return translation_helper.translate(text, language, default_group='data')
+        def translate_data(text, column):
+            return translation_helper.translate(text, language, default_group=[column, 'data'])
         def translate_data_columns(text):
             special_columns = ['Year', 'Value', 'Units']
             if text in special_columns:
@@ -279,7 +279,7 @@ class Indicator:
         # Translate the data cells and headers.
         data_copy = copy.deepcopy(self.data)
         for column in data_copy:
-            data_copy[column] = data_copy[column].apply(translate_data)
+            data_copy[column] = data_copy[column].apply(lambda x: translate_data(x, column))
         data_copy.rename(mapper=translate_data_columns, axis='columns', inplace=True)
         indicator.set_data(data_copy)
 

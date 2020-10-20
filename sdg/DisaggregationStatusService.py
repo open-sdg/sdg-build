@@ -71,17 +71,19 @@ class DisaggregationStatusService:
         return num_statistical
 
 
-    def get_percentage_of_full_disaggregation(self):
-        num_total = self.get_number_of_statistical_indicators()
-        num_disaggregated = self.get_number_of_fully_disaggregated_indicators()
-        return 100 * float(num_disaggregated)/float(num_total)
-
-
     def get_stats(self):
+        total = self.get_number_of_statistical_indicators()
+        disaggregated = self.get_number_of_fully_disaggregated_indicators()
+        not_disaggregated = total - disaggregated
+        disaggregated_percent = 100 * float(disaggregated) / float(total)
+        not_disaggregated_percent = 100 * float(not_disaggregated) / float(total)
+
         return {
-            'num_fully_disaggregated': self.get_number_of_fully_disaggregated_indicators(),
-            'num_statistical': self.get_number_of_statistical_indicators(),
-            'percent_fully_disaggregated': self.get_percentage_of_full_disaggregation(),
+            'total': total,
+            'disaggregated': disaggregated,
+            'not_disaggregated': not_disaggregated,
+            'disaggregated_percent': disaggregated_percent,
+            'not_disaggregated_percent': not_disaggregated_percent,
         }
 
 

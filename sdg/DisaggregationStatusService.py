@@ -47,9 +47,14 @@ class DisaggregationStatusService:
 
 
     def is_indicator_fully_disaggregated(self, indicator_id):
-        num_expected = len(self.expected_disaggregations[indicator_id])
-        num_actual = len(self.actual_disaggregations[indicator_id])
-        return num_actual - num_expected >= 0
+        expected = self.expected_disaggregations[indicator_id]
+        actual = self.actual_disaggregations[indicator_id]
+        if len(actual) < len(expected):
+            return False
+        for disaggregation in expected:
+            if disaggregation not in actual:
+                return False
+        return True
 
 
     def get_number_of_fully_disaggregated_indicators(self):

@@ -19,7 +19,7 @@ class DisaggregationStatusService:
         self.site_dir = site_dir
         self.indicators = indicators
         self.expected_disaggregations = self.get_expected_disaggregations()
-        self.actual_disaggregations = self.get_expected_disaggregations()
+        self.actual_disaggregations = self.get_actual_disaggregations()
 
 
     def get_expected_disaggregations(self):

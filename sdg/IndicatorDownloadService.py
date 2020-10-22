@@ -13,6 +13,8 @@ class IndicatorDownloadService:
 
 
     def write_downloads(self, button_label, source_pattern, indicator_id_pattern, output_folder):
+        if indicator_id_pattern is None:
+            indicator_id_pattern = 'indicator_(.*)'
         output_folder = os.path.join('downloads', output_folder)
         original_output_folder = output_folder
         if self.__output_folder is not None:

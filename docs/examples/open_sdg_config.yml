@@ -124,5 +124,6 @@ docs_indicator_url: https://my-github-org/my-site-repository/[id]
 indicator_downloads:
   - button_label: csv
     source_pattern: tests/data/indicator_*.csv
-    indicator_id_pattern: indicator_(.*)
     output_folder: data-csv
+    # The "indicator_id_pattern" is optional, default below:
+    indicator_id_pattern: indicator_(.*)

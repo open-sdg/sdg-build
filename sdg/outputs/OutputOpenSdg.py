@@ -95,7 +95,7 @@ class OutputOpenSdg(OutputBase):
                 download_service.write_downloads(
                     download['button_label'],
                     download['source_pattern'],
-                    download['indicator_id_pattern'],
+                    download['indicator_id_pattern'] if 'indicator_id_pattern' in download else None,
                     download['output_folder']
                 )
             download_service.write_index()

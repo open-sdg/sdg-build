@@ -59,10 +59,11 @@ class TranslationHelper(TranslationOutputBase):
             The string of text that may be a translation key (or may not).
         language : string
             The language code to translate into.
-        default_group : None or string
+        default_group : None or string or List
             An optional "group" to add (if needed) to the text. For example, if
             text = "bar" and default_group = "foo", this function will first
-            try "bar", and if nothing is found, try "foo.bar".
+            try "bar", and if nothing is found, try "foo.bar". Can also be a list
+            of groups, which will all be attempted.
 
         Returns
         -------
@@ -75,8 +76,16 @@ class TranslationHelper(TranslationOutputBase):
         # Add the default_group if necessary.
         key = text
         if not self.is_translation_key(key):
-            if default_group:
-                key = default_group + "." + key
+            if default_group is not None:
+                if isinstance(default_group, str):
+                    key = default_group + "." + key
+                elif isinstance(default_group, list):
+                    for group in default_group:
+                        potential_key = group + "." + key
+                        if self.is_translation_key(potential_key):
+                            key = potential_key
+                            break
+
         # If it is not translated, return the original.
         if not self.is_translation_key(key):
             return text

@@ -76,7 +76,7 @@ class DisaggregationStatusService:
 
         status = {
             'statuses': [{
-                'value': 'fully_dissaggregated',
+                'value': 'fully_disaggregated',
                 'translation_key': 'Fully disaggregated',
             }],
             'overall': {
@@ -161,7 +161,7 @@ class DisaggregationStatusService:
                 status['extra_fields'][extra_field].append({
                     extra_field: extra_field_value,
                     'statuses': [{
-                        'status': 'fully_dissaggregated',
+                        'status': 'fully_disaggregated',
                         'translation_key': 'Fully disaggregated',
                         'count': num_fully_disaggregated,
                         'percentage': self.get_percent(num_fully_disaggregated, num_total),

@@ -75,10 +75,16 @@ class DisaggregationStatusService:
     def get_stats(self):
 
         status = {
-            'statuses': [{
-                'value': 'fully_disaggregated',
-                'translation_key': 'Fully disaggregated',
-            }],
+            'statuses': [
+                {
+                    'value': 'fully_disaggregated',
+                    'translation_key': 'Fully disaggregated',
+                },
+                {
+                    'value': 'not_disaggregated',
+                    'translation_key': 'Not disaggregated',
+                },
+            ],
             'overall': {
                 'statuses': [],
                 'totals': {
@@ -92,6 +98,7 @@ class DisaggregationStatusService:
             goals[goal] = {
                 'total': 0,
                 'fully_disaggregated': 0,
+                'not_disaggregated': 0,
             }
 
         extra_fields = {}
@@ -100,6 +107,7 @@ class DisaggregationStatusService:
 
         overall_total = 0
         overall_fully_disaggregated = 0
+        overall_not_disaggregated = 0
 
         for indicator_id in self.indicators:
             indicator = self.indicators[indicator_id]
@@ -117,6 +125,7 @@ class DisaggregationStatusService:
                             extra_fields[extra_field][extra_field_value] = {
                                 'total': 0,
                                 'fully_disaggregated': 0,
+                                'not_disaggregated': 0,
                             }
                         extra_fields[extra_field][extra_field_value]['total'] += 1
 
@@ -127,6 +136,13 @@ class DisaggregationStatusService:
                     extra_field_value = indicator.get_meta_field_value(extra_field)
                     if extra_field_value is not None:
                         extra_fields[extra_field][extra_field_value]['fully_disaggregated'] += 1
+            else:
+                overall_not_disaggregated += 1
+                goals[goal_id]['not_disaggregated'] += 1
+                for extra_field in self.extra_fields:
+                    extra_field_value = indicator.get_meta_field_value(extra_field)
+                    if extra_field_value is not None:
+                        extra_fields[extra_field][extra_field_value]['not_disaggregated'] += 1
 
         status['overall']['totals']['total'] = overall_total
         status['overall']['statuses'].append({
@@ -135,19 +151,34 @@ class DisaggregationStatusService:
             'count': overall_fully_disaggregated,
             'percentage': self.get_percent(overall_fully_disaggregated, overall_total)
         })
+        status['overall']['statuses'].append({
+            'status': 'not_disaggregated',
+            'translation_key': 'Not disaggregated',
+            'count': overall_not_disaggregated,
+            'percentage': self.get_percent(overall_not_disaggregated, overall_total)
+        })
 
         status['goals'] = []
         for goal_id in goals:
             num_fully_disaggregated = goals[goal_id]['fully_disaggregated']
+            num_not_disaggregated = goals[goal_id]['not_disaggregated']
             num_total = goals[goal_id]['total']
             status['goals'].append({
                 'goal': goal_id,
-                'statuses': [{
-                    'status': 'fully_disaggregated',
-                    'translation_key': 'Fully disaggregated',
-                    'count': num_fully_disaggregated,
-                    'percentage': self.get_percent(num_fully_disaggregated, num_total),
-                }],
+                'statuses': [
+                    {
+                        'status': 'fully_disaggregated',
+                        'translation_key': 'Fully disaggregated',
+                        'count': num_fully_disaggregated,
+                        'percentage': self.get_percent(num_fully_disaggregated, num_total),
+                    },
+                    {
+                        'status': 'not_disaggregated',
+                        'translation_key': 'Not disaggregated',
+                        'count': num_not_disaggregated,
+                        'percentage': self.get_percent(num_not_disaggregated, num_total),
+                    },
+                ],
                 'totals': {
                     'total': num_total
                 }
@@ -157,15 +188,24 @@ class DisaggregationStatusService:
             status['extra_fields'][extra_field] = []
             for extra_field_value in extra_fields[extra_field]:
                 num_fully_disaggregated = extra_fields[extra_field][extra_field_value]['fully_disaggregated']
+                num_not_disaggregated = extra_fields[extra_field][extra_field_value]['not_disaggregated']
                 num_total = extra_fields[extra_field][extra_field_value]['total']
                 status['extra_fields'][extra_field].append({
                     extra_field: extra_field_value,
-                    'statuses': [{
-                        'status': 'fully_disaggregated',
-                        'translation_key': 'Fully disaggregated',
-                        'count': num_fully_disaggregated,
-                        'percentage': self.get_percent(num_fully_disaggregated, num_total),
-                    }],
+                    'statuses': [
+                        {
+                            'status': 'fully_disaggregated',
+                            'translation_key': 'Fully disaggregated',
+                            'count': num_fully_disaggregated,
+                            'percentage': self.get_percent(num_fully_disaggregated, num_total),
+                        },
+                        {
+                            'status': 'not_disaggregated',
+                            'translation_key': 'Not disaggregated',
+                            'count': num_not_disaggregated,
+                            'percentage': self.get_percent(num_not_disaggregated, num_total),
+                        },
+                    ],
                     'totals': {
                         'total': num_total
                     }

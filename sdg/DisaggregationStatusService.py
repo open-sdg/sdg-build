@@ -77,7 +77,7 @@ class DisaggregationStatusService:
         status = {
             'statuses': [{
                 'value': 'fully_dissaggregated',
-                'translation_key': 'status.fully_disaggregated',
+                'translation_key': 'Fully disaggregated',
             }],
             'overall': {
                 'statuses': [],
@@ -131,7 +131,7 @@ class DisaggregationStatusService:
         status['overall']['totals']['total'] = overall_total
         status['overall']['statuses'].append({
             'status': 'fully_disaggregated',
-            'translation_key': 'status.fully_disaggregated',
+            'translation_key': 'Fully disaggregated',
             'count': overall_fully_disaggregated,
             'percentage': self.get_percent(overall_fully_disaggregated, overall_total)
         })
@@ -143,8 +143,8 @@ class DisaggregationStatusService:
             status['goals'].append({
                 'goal': goal_id,
                 'statuses': [{
-                    'status': 'fully_dissaggregated',
-                    'translation_key': 'status.fully_disaggregated',
+                    'status': 'fully_disaggregated',
+                    'translation_key': 'Fully disaggregated',
                     'count': num_fully_disaggregated,
                     'percentage': self.get_percent(num_fully_disaggregated, num_total),
                 }],
@@ -162,7 +162,7 @@ class DisaggregationStatusService:
                     extra_field: extra_field_value,
                     'statuses': [{
                         'status': 'fully_dissaggregated',
-                        'translation_key': 'status.fully_disaggregated',
+                        'translation_key': 'Fully disaggregated',
                         'count': num_fully_disaggregated,
                         'percentage': self.get_percent(num_fully_disaggregated, num_total),
                     }],

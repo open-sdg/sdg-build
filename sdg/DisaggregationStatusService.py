@@ -82,7 +82,7 @@ class DisaggregationStatusService:
                 },
                 {
                     'value': 'not_disaggregated',
-                    'translation_key': 'Not disaggregated',
+                    'translation_key': 'Not fully disaggregated',
                 },
             ],
             'overall': {
@@ -153,7 +153,7 @@ class DisaggregationStatusService:
         })
         status['overall']['statuses'].append({
             'status': 'not_disaggregated',
-            'translation_key': 'Not disaggregated',
+            'translation_key': 'Not fully disaggregated',
             'count': overall_not_disaggregated,
             'percentage': self.get_percent(overall_not_disaggregated, overall_total)
         })
@@ -174,7 +174,7 @@ class DisaggregationStatusService:
                     },
                     {
                         'status': 'not_disaggregated',
-                        'translation_key': 'Not disaggregated',
+                        'translation_key': 'Not fully disaggregated',
                         'count': num_not_disaggregated,
                         'percentage': self.get_percent(num_not_disaggregated, num_total),
                     },
@@ -201,7 +201,7 @@ class DisaggregationStatusService:
                         },
                         {
                             'status': 'not_disaggregated',
-                            'translation_key': 'Not disaggregated',
+                            'translation_key': 'Not fully disaggregated',
                             'count': num_not_disaggregated,
                             'percentage': self.get_percent(num_not_disaggregated, num_total),
                         },

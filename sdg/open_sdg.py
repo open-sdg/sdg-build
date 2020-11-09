@@ -43,7 +43,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
                    inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
-                   docs_subfolder=None):
+                   docs_subfolder=None, indicator_downloads=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -66,6 +66,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         docs_branding: string. A heading for all documentation pages
         docs_intro: string. An introduction for the documentation homepage
         docs_indicator_url: string. A pattern for indicator URLs on the site repo
+        docs_subfolder: string. A subfolder in which to put the documentation pages
+        indicator_downloads: list. A list of dicts describing calls to the
+            write_downloads() method of IndicatorDownloadService
 
     Returns:
         Boolean status of file writes
@@ -96,6 +99,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'docs_indicator_url': docs_indicator_url,
         'docs_subfolder': docs_subfolder,
         'indicator_options': indicator_options,
+        'indicator_downloads': indicator_downloads,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -196,6 +200,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'inputs': inputs,
         'translations': [],
         'indicator_options': indicator_options,
+        'indicator_downloads': None,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -261,7 +266,8 @@ def open_sdg_prep(options):
         output_folder=options['site_dir'],
         translations=options['translations'],
         reporting_status_extra_fields=reporting_status_extra_fields,
-        indicator_options=options['indicator_options'])
+        indicator_options=options['indicator_options'],
+        indicator_downloads=options['indicator_downloads'])
 
     outputs = [opensdg_output]
 

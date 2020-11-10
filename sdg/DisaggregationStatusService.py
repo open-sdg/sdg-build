@@ -136,7 +136,7 @@ class DisaggregationStatusService:
                     extra_field_value = indicator.get_meta_field_value(extra_field)
                     if extra_field_value is not None:
                         extra_fields[extra_field][extra_field_value]['fully_disaggregated'] += 1
-            else:
+            elif is_statistical:
                 overall_not_disaggregated += 1
                 goals[goal_id]['not_disaggregated'] += 1
                 for extra_field in self.extra_fields:

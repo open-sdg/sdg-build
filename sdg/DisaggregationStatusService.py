@@ -72,6 +72,17 @@ class DisaggregationStatusService:
         return True
 
 
+    def is_indicator_partially_disaggregated(self, indicator_id):
+        expected = self.expected_disaggregations[indicator_id]
+        actual = self.actual_disaggregations[indicator_id]
+        if len(actual) == 0:
+            return False
+        for disaggregation in expected:
+            if disaggregation in actual:
+                return True
+        return False
+
+
     def get_stats(self):
 
         status = {
@@ -81,8 +92,16 @@ class DisaggregationStatusService:
                     'translation_key': 'Fully disaggregated',
                 },
                 {
+                    'value': 'partially_disaggregated',
+                    'translation_key': 'Partially disaggregated',
+                },
+                {
                     'value': 'not_disaggregated',
-                    'translation_key': 'Not fully disaggregated',
+                    'translation_key': 'Not yet disaggregated',
+                },
+                {
+                    'value': 'out_of_scope',
+                    'translation_key': 'Out of scope',
                 },
             ],
             'overall': {
@@ -98,7 +117,9 @@ class DisaggregationStatusService:
             goals[goal] = {
                 'total': 0,
                 'fully_disaggregated': 0,
+                'partially_disaggregated': 0,
                 'not_disaggregated': 0,
+                'out_of_scope': 0,
             }
 
         extra_fields = {}
@@ -107,41 +128,52 @@ class DisaggregationStatusService:
 
         overall_total = 0
         overall_fully_disaggregated = 0
+        overall_partially_disaggregated = 0
         overall_not_disaggregated = 0
+        overall_out_of_scope = 0
 
         for indicator_id in self.indicators:
             indicator = self.indicators[indicator_id]
             is_statistical = indicator.is_statistical()
             is_fully_disaggregated = self.is_indicator_fully_disaggregated(indicator_id)
+            is_partially_disaggregated = self.is_indicator_partially_disaggregated(indicator_id)
             goal_id = int(indicator.get_goal_id())
 
-            if is_statistical:
-                overall_total += 1
-                goals[goal_id]['total'] += 1
-                for extra_field in self.extra_fields:
-                    extra_field_value = indicator.get_meta_field_value(extra_field)
-                    if extra_field_value is not None:
-                        if extra_field_value not in extra_fields[extra_field]:
-                            extra_fields[extra_field][extra_field_value] = {
-                                'total': 0,
-                                'fully_disaggregated': 0,
-                                'not_disaggregated': 0,
-                            }
-                        extra_fields[extra_field][extra_field_value]['total'] += 1
+            overall_total += 1
+            goals[goal_id]['total'] += 1
 
-            if is_statistical and is_fully_disaggregated:
-                overall_fully_disaggregated += 1
+            if not is_statistical:
+                goals[goal_id]['out_of_scope'] += 1
+                overall_out_of_scope += 1
+            elif is_fully_disaggregated:
                 goals[goal_id]['fully_disaggregated'] += 1
-                for extra_field in self.extra_fields:
-                    extra_field_value = indicator.get_meta_field_value(extra_field)
-                    if extra_field_value is not None:
-                        extra_fields[extra_field][extra_field_value]['fully_disaggregated'] += 1
-            elif is_statistical:
-                overall_not_disaggregated += 1
+                overall_fully_disaggregated += 1
+            elif is_partially_disaggregated:
+                goals[goal_id]['partially_disaggregated'] += 1
+                overall_partially_disaggregated += 1
+            else:
                 goals[goal_id]['not_disaggregated'] += 1
-                for extra_field in self.extra_fields:
-                    extra_field_value = indicator.get_meta_field_value(extra_field)
-                    if extra_field_value is not None:
+                overall_not_disaggregated += 1
+
+            for extra_field in self.extra_fields:
+                extra_field_value = indicator.get_meta_field_value(extra_field)
+                if extra_field_value is not None:
+                    if extra_field_value not in extra_fields[extra_field]:
+                        extra_fields[extra_field][extra_field_value] = {
+                            'total': 0,
+                            'fully_disaggregated': 0,
+                            'partially_disaggregated': 0,
+                            'not_disaggregated': 0,
+                            'out_of_scope': 0,
+                        }
+                    extra_fields[extra_field][extra_field_value]['total'] += 1
+                    if not is_statistical:
+                        extra_fields[extra_field][extra_field_value]['out_of_scope'] += 1
+                    elif is_fully_disaggregated:
+                        extra_fields[extra_field][extra_field_value]['fully_disaggregated'] += 1
+                    elif is_partially_disaggregated:
+                        extra_fields[extra_field][extra_field_value]['partially_disaggregated'] += 1
+                    else:
                         extra_fields[extra_field][extra_field_value]['not_disaggregated'] += 1
 
         status['overall']['totals']['total'] = overall_total
@@ -152,16 +184,30 @@ class DisaggregationStatusService:
             'percentage': self.get_percent(overall_fully_disaggregated, overall_total)
         })
         status['overall']['statuses'].append({
+            'status': 'partially_disaggregated',
+            'translation_key': 'Partially disaggregated',
+            'count': overall_partially_disaggregated,
+            'percentage': self.get_percent(overall_partially_disaggregated, overall_total)
+        })
+        status['overall']['statuses'].append({
             'status': 'not_disaggregated',
             'translation_key': 'Not fully disaggregated',
             'count': overall_not_disaggregated,
             'percentage': self.get_percent(overall_not_disaggregated, overall_total)
         })
+        status['overall']['statuses'].append({
+            'status': 'out_of_scope',
+            'translation_key': 'Out of scope',
+            'count': overall_out_of_scope,
+            'percentage': self.get_percent(overall_out_of_scope, overall_total)
+        })
 
         status['goals'] = []
         for goal_id in goals:
             num_fully_disaggregated = goals[goal_id]['fully_disaggregated']
+            num_partially_disaggregated = goals[goal_id]['partially_disaggregated']
             num_not_disaggregated = goals[goal_id]['not_disaggregated']
+            num_out_of_scope = goals[goal_id]['out_of_scope']
             num_total = goals[goal_id]['total']
             status['goals'].append({
                 'goal': goal_id,
@@ -173,10 +219,22 @@ class DisaggregationStatusService:
                         'percentage': self.get_percent(num_fully_disaggregated, num_total),
                     },
                     {
+                        'status': 'partially_disaggregated',
+                        'translation_key': 'Partially disaggregated',
+                        'count': num_partially_disaggregated,
+                        'percentage': self.get_percent(num_partially_disaggregated, num_total)
+                    },
+                    {
                         'status': 'not_disaggregated',
                         'translation_key': 'Not fully disaggregated',
                         'count': num_not_disaggregated,
                         'percentage': self.get_percent(num_not_disaggregated, num_total),
+                    },
+                    {
+                        'status': 'out_of_scope',
+                        'translation_key': 'Out of scope',
+                        'count': num_out_of_scope,
+                        'percentage': self.get_percent(num_out_of_scope, num_total)
                     },
                 ],
                 'totals': {
@@ -188,7 +246,9 @@ class DisaggregationStatusService:
             status['extra_fields'][extra_field] = []
             for extra_field_value in extra_fields[extra_field]:
                 num_fully_disaggregated = extra_fields[extra_field][extra_field_value]['fully_disaggregated']
+                num_partially_disaggregated = extra_fields[extra_field][extra_field_value]['partially_disaggregated']
                 num_not_disaggregated = extra_fields[extra_field][extra_field_value]['not_disaggregated']
+                num_out_of_scope = extra_fields[extra_field][extra_field_value]['out_of_scope']
                 num_total = extra_fields[extra_field][extra_field_value]['total']
                 status['extra_fields'][extra_field].append({
                     extra_field: extra_field_value,
@@ -200,10 +260,22 @@ class DisaggregationStatusService:
                             'percentage': self.get_percent(num_fully_disaggregated, num_total),
                         },
                         {
+                            'status': 'partially_disaggregated',
+                            'translation_key': 'Partially disaggregated',
+                            'count': num_partially_disaggregated,
+                            'percentage': self.get_percent(num_partially_disaggregated, num_total),
+                        },
+                        {
                             'status': 'not_disaggregated',
                             'translation_key': 'Not fully disaggregated',
                             'count': num_not_disaggregated,
                             'percentage': self.get_percent(num_not_disaggregated, num_total),
+                        },
+                        {
+                            'status': 'out_of_scope',
+                            'translation_key': 'Out of scope',
+                            'count': num_out_of_scope,
+                            'percentage': self.get_percent(num_out_of_scope, num_total),
                         },
                     ],
                     'totals': {

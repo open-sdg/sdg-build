@@ -61,7 +61,7 @@ class DisaggregationStatusService:
         return goal_ids
 
 
-    def is_indicator_fully_disaggregated(self, indicator_id):
+    def is_indicator_complete(self, indicator_id):
         expected = self.expected_disaggregations[indicator_id]
         actual = self.actual_disaggregations[indicator_id]
         if len(actual) < len(expected):
@@ -72,7 +72,7 @@ class DisaggregationStatusService:
         return True
 
 
-    def is_indicator_partially_disaggregated(self, indicator_id):
+    def is_indicator_inprogress(self, indicator_id):
         expected = self.expected_disaggregations[indicator_id]
         actual = self.actual_disaggregations[indicator_id]
         if len(actual) == 0:
@@ -88,15 +88,15 @@ class DisaggregationStatusService:
         status = {
             'statuses': [
                 {
-                    'value': 'fully_disaggregated',
+                    'value': 'complete',
                     'translation_key': 'Fully disaggregated',
                 },
                 {
-                    'value': 'partially_disaggregated',
+                    'value': 'inprogress',
                     'translation_key': 'Partially disaggregated',
                 },
                 {
-                    'value': 'not_disaggregated',
+                    'value': 'notstarted',
                     'translation_key': 'Not yet disaggregated',
                 },
                 {
@@ -116,9 +116,9 @@ class DisaggregationStatusService:
         for goal in self.goals:
             goals[goal] = {
                 'total': 0,
-                'fully_disaggregated': 0,
-                'partially_disaggregated': 0,
-                'not_disaggregated': 0,
+                'complete': 0,
+                'inprogress': 0,
+                'notstarted': 0,
                 'notapplicable': 0,
             }
 
@@ -127,16 +127,16 @@ class DisaggregationStatusService:
             extra_fields[extra_field] = {}
 
         overall_total = 0
-        overall_fully_disaggregated = 0
-        overall_partially_disaggregated = 0
-        overall_not_disaggregated = 0
+        overall_complete = 0
+        overall_inprogress = 0
+        overall_notstarted = 0
         overall_notapplicable = 0
 
         for indicator_id in self.indicators:
             indicator = self.indicators[indicator_id]
             is_statistical = indicator.is_statistical()
-            is_fully_disaggregated = self.is_indicator_fully_disaggregated(indicator_id)
-            is_partially_disaggregated = self.is_indicator_partially_disaggregated(indicator_id)
+            is_complete = self.is_indicator_complete(indicator_id)
+            is_inprogress = self.is_indicator_inprogress(indicator_id)
             goal_id = int(indicator.get_goal_id())
 
             overall_total += 1
@@ -145,15 +145,15 @@ class DisaggregationStatusService:
             if not is_statistical:
                 goals[goal_id]['notapplicable'] += 1
                 overall_notapplicable += 1
-            elif is_fully_disaggregated:
-                goals[goal_id]['fully_disaggregated'] += 1
-                overall_fully_disaggregated += 1
-            elif is_partially_disaggregated:
-                goals[goal_id]['partially_disaggregated'] += 1
-                overall_partially_disaggregated += 1
+            elif is_complete:
+                goals[goal_id]['complete'] += 1
+                overall_complete += 1
+            elif is_inprogress:
+                goals[goal_id]['inprogress'] += 1
+                overall_inprogress += 1
             else:
-                goals[goal_id]['not_disaggregated'] += 1
-                overall_not_disaggregated += 1
+                goals[goal_id]['notstarted'] += 1
+                overall_notstarted += 1
 
             for extra_field in self.extra_fields:
                 extra_field_value = indicator.get_meta_field_value(extra_field)
@@ -161,39 +161,39 @@ class DisaggregationStatusService:
                     if extra_field_value not in extra_fields[extra_field]:
                         extra_fields[extra_field][extra_field_value] = {
                             'total': 0,
-                            'fully_disaggregated': 0,
-                            'partially_disaggregated': 0,
-                            'not_disaggregated': 0,
+                            'complete': 0,
+                            'inprogress': 0,
+                            'notstarted': 0,
                             'notapplicable': 0,
                         }
                     extra_fields[extra_field][extra_field_value]['total'] += 1
                     if not is_statistical:
                         extra_fields[extra_field][extra_field_value]['notapplicable'] += 1
-                    elif is_fully_disaggregated:
-                        extra_fields[extra_field][extra_field_value]['fully_disaggregated'] += 1
-                    elif is_partially_disaggregated:
-                        extra_fields[extra_field][extra_field_value]['partially_disaggregated'] += 1
+                    elif is_complete:
+                        extra_fields[extra_field][extra_field_value]['complete'] += 1
+                    elif is_inprogress:
+                        extra_fields[extra_field][extra_field_value]['inprogress'] += 1
                     else:
-                        extra_fields[extra_field][extra_field_value]['not_disaggregated'] += 1
+                        extra_fields[extra_field][extra_field_value]['notstarted'] += 1
 
         status['overall']['totals']['total'] = overall_total
         status['overall']['statuses'].append({
-            'status': 'fully_disaggregated',
+            'status': 'complete',
             'translation_key': 'Fully disaggregated',
-            'count': overall_fully_disaggregated,
-            'percentage': self.get_percent(overall_fully_disaggregated, overall_total)
+            'count': overall_complete,
+            'percentage': self.get_percent(overall_complete, overall_total)
         })
         status['overall']['statuses'].append({
-            'status': 'partially_disaggregated',
+            'status': 'inprogress',
             'translation_key': 'Partially disaggregated',
-            'count': overall_partially_disaggregated,
-            'percentage': self.get_percent(overall_partially_disaggregated, overall_total)
+            'count': overall_inprogress,
+            'percentage': self.get_percent(overall_inprogress, overall_total)
         })
         status['overall']['statuses'].append({
-            'status': 'not_disaggregated',
+            'status': 'notstarted',
             'translation_key': 'Not fully disaggregated',
-            'count': overall_not_disaggregated,
-            'percentage': self.get_percent(overall_not_disaggregated, overall_total)
+            'count': overall_notstarted,
+            'percentage': self.get_percent(overall_notstarted, overall_total)
         })
         status['overall']['statuses'].append({
             'status': 'notapplicable',
@@ -204,31 +204,31 @@ class DisaggregationStatusService:
 
         status['goals'] = []
         for goal_id in goals:
-            num_fully_disaggregated = goals[goal_id]['fully_disaggregated']
-            num_partially_disaggregated = goals[goal_id]['partially_disaggregated']
-            num_not_disaggregated = goals[goal_id]['not_disaggregated']
+            num_complete = goals[goal_id]['complete']
+            num_inprogress = goals[goal_id]['inprogress']
+            num_notstarted = goals[goal_id]['notstarted']
             num_notapplicable = goals[goal_id]['notapplicable']
             num_total = goals[goal_id]['total']
             status['goals'].append({
                 'goal': goal_id,
                 'statuses': [
                     {
-                        'status': 'fully_disaggregated',
+                        'status': 'complete',
                         'translation_key': 'Fully disaggregated',
-                        'count': num_fully_disaggregated,
-                        'percentage': self.get_percent(num_fully_disaggregated, num_total),
+                        'count': num_complete,
+                        'percentage': self.get_percent(num_complete, num_total),
                     },
                     {
-                        'status': 'partially_disaggregated',
+                        'status': 'inprogress',
                         'translation_key': 'Partially disaggregated',
-                        'count': num_partially_disaggregated,
-                        'percentage': self.get_percent(num_partially_disaggregated, num_total)
+                        'count': num_inprogress,
+                        'percentage': self.get_percent(num_inprogress, num_total)
                     },
                     {
-                        'status': 'not_disaggregated',
+                        'status': 'notstarted',
                         'translation_key': 'Not fully disaggregated',
-                        'count': num_not_disaggregated,
-                        'percentage': self.get_percent(num_not_disaggregated, num_total),
+                        'count': num_notstarted,
+                        'percentage': self.get_percent(num_notstarted, num_total),
                     },
                     {
                         'status': 'notapplicable',
@@ -245,31 +245,31 @@ class DisaggregationStatusService:
         for extra_field in extra_fields:
             status['extra_fields'][extra_field] = []
             for extra_field_value in extra_fields[extra_field]:
-                num_fully_disaggregated = extra_fields[extra_field][extra_field_value]['fully_disaggregated']
-                num_partially_disaggregated = extra_fields[extra_field][extra_field_value]['partially_disaggregated']
-                num_not_disaggregated = extra_fields[extra_field][extra_field_value]['not_disaggregated']
+                num_complete = extra_fields[extra_field][extra_field_value]['complete']
+                num_inprogress = extra_fields[extra_field][extra_field_value]['inprogress']
+                num_notstarted = extra_fields[extra_field][extra_field_value]['notstarted']
                 num_notapplicable = extra_fields[extra_field][extra_field_value]['notapplicable']
                 num_total = extra_fields[extra_field][extra_field_value]['total']
                 status['extra_fields'][extra_field].append({
                     extra_field: extra_field_value,
                     'statuses': [
                         {
-                            'status': 'fully_disaggregated',
+                            'status': 'complete',
                             'translation_key': 'Fully disaggregated',
-                            'count': num_fully_disaggregated,
-                            'percentage': self.get_percent(num_fully_disaggregated, num_total),
+                            'count': num_complete,
+                            'percentage': self.get_percent(num_complete, num_total),
                         },
                         {
-                            'status': 'partially_disaggregated',
+                            'status': 'inprogress',
                             'translation_key': 'Partially disaggregated',
-                            'count': num_partially_disaggregated,
-                            'percentage': self.get_percent(num_partially_disaggregated, num_total),
+                            'count': num_inprogress,
+                            'percentage': self.get_percent(num_inprogress, num_total),
                         },
                         {
-                            'status': 'not_disaggregated',
+                            'status': 'notstarted',
                             'translation_key': 'Not fully disaggregated',
-                            'count': num_not_disaggregated,
-                            'percentage': self.get_percent(num_not_disaggregated, num_total),
+                            'count': num_notstarted,
+                            'percentage': self.get_percent(num_notstarted, num_total),
                         },
                         {
                             'status': 'notapplicable',

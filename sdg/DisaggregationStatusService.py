@@ -83,6 +83,11 @@ class DisaggregationStatusService:
         return False
 
 
+    def is_indicator_notapplicable(self, indicator_id):
+        expected = self.expected_disaggregations[indicator_id]
+        return len(expected) == 0
+
+
     def get_stats(self):
 
         status = {
@@ -134,7 +139,7 @@ class DisaggregationStatusService:
 
         for indicator_id in self.indicators:
             indicator = self.indicators[indicator_id]
-            is_statistical = indicator.is_statistical()
+            is_notapplicable = self.is_indicator_notapplicable(indicator_id)
             is_complete = self.is_indicator_complete(indicator_id)
             is_inprogress = self.is_indicator_inprogress(indicator_id)
             goal_id = int(indicator.get_goal_id())
@@ -142,7 +147,7 @@ class DisaggregationStatusService:
             overall_total += 1
             goals[goal_id]['total'] += 1
 
-            if not is_statistical:
+            if is_notapplicable:
                 goals[goal_id]['notapplicable'] += 1
                 overall_notapplicable += 1
             elif is_complete:
@@ -167,7 +172,7 @@ class DisaggregationStatusService:
                             'notapplicable': 0,
                         }
                     extra_fields[extra_field][extra_field_value]['total'] += 1
-                    if not is_statistical:
+                    if is_notapplicable:
                         extra_fields[extra_field][extra_field_value]['notapplicable'] += 1
                     elif is_complete:
                         extra_fields[extra_field][extra_field_value]['complete'] += 1

@@ -100,7 +100,7 @@ class DisaggregationStatusService:
                     'translation_key': 'Not yet disaggregated',
                 },
                 {
-                    'value': 'out_of_scope',
+                    'value': 'notapplicable',
                     'translation_key': 'Out of scope',
                 },
             ],
@@ -119,7 +119,7 @@ class DisaggregationStatusService:
                 'fully_disaggregated': 0,
                 'partially_disaggregated': 0,
                 'not_disaggregated': 0,
-                'out_of_scope': 0,
+                'notapplicable': 0,
             }
 
         extra_fields = {}
@@ -130,7 +130,7 @@ class DisaggregationStatusService:
         overall_fully_disaggregated = 0
         overall_partially_disaggregated = 0
         overall_not_disaggregated = 0
-        overall_out_of_scope = 0
+        overall_notapplicable = 0
 
         for indicator_id in self.indicators:
             indicator = self.indicators[indicator_id]
@@ -143,8 +143,8 @@ class DisaggregationStatusService:
             goals[goal_id]['total'] += 1
 
             if not is_statistical:
-                goals[goal_id]['out_of_scope'] += 1
-                overall_out_of_scope += 1
+                goals[goal_id]['notapplicable'] += 1
+                overall_notapplicable += 1
             elif is_fully_disaggregated:
                 goals[goal_id]['fully_disaggregated'] += 1
                 overall_fully_disaggregated += 1
@@ -164,11 +164,11 @@ class DisaggregationStatusService:
                             'fully_disaggregated': 0,
                             'partially_disaggregated': 0,
                             'not_disaggregated': 0,
-                            'out_of_scope': 0,
+                            'notapplicable': 0,
                         }
                     extra_fields[extra_field][extra_field_value]['total'] += 1
                     if not is_statistical:
-                        extra_fields[extra_field][extra_field_value]['out_of_scope'] += 1
+                        extra_fields[extra_field][extra_field_value]['notapplicable'] += 1
                     elif is_fully_disaggregated:
                         extra_fields[extra_field][extra_field_value]['fully_disaggregated'] += 1
                     elif is_partially_disaggregated:
@@ -196,10 +196,10 @@ class DisaggregationStatusService:
             'percentage': self.get_percent(overall_not_disaggregated, overall_total)
         })
         status['overall']['statuses'].append({
-            'status': 'out_of_scope',
+            'status': 'notapplicable',
             'translation_key': 'Out of scope',
-            'count': overall_out_of_scope,
-            'percentage': self.get_percent(overall_out_of_scope, overall_total)
+            'count': overall_notapplicable,
+            'percentage': self.get_percent(overall_notapplicable, overall_total)
         })
 
         status['goals'] = []
@@ -207,7 +207,7 @@ class DisaggregationStatusService:
             num_fully_disaggregated = goals[goal_id]['fully_disaggregated']
             num_partially_disaggregated = goals[goal_id]['partially_disaggregated']
             num_not_disaggregated = goals[goal_id]['not_disaggregated']
-            num_out_of_scope = goals[goal_id]['out_of_scope']
+            num_notapplicable = goals[goal_id]['notapplicable']
             num_total = goals[goal_id]['total']
             status['goals'].append({
                 'goal': goal_id,
@@ -231,10 +231,10 @@ class DisaggregationStatusService:
                         'percentage': self.get_percent(num_not_disaggregated, num_total),
                     },
                     {
-                        'status': 'out_of_scope',
+                        'status': 'notapplicable',
                         'translation_key': 'Out of scope',
-                        'count': num_out_of_scope,
-                        'percentage': self.get_percent(num_out_of_scope, num_total)
+                        'count': num_notapplicable,
+                        'percentage': self.get_percent(num_notapplicable, num_total)
                     },
                 ],
                 'totals': {
@@ -248,7 +248,7 @@ class DisaggregationStatusService:
                 num_fully_disaggregated = extra_fields[extra_field][extra_field_value]['fully_disaggregated']
                 num_partially_disaggregated = extra_fields[extra_field][extra_field_value]['partially_disaggregated']
                 num_not_disaggregated = extra_fields[extra_field][extra_field_value]['not_disaggregated']
-                num_out_of_scope = extra_fields[extra_field][extra_field_value]['out_of_scope']
+                num_notapplicable = extra_fields[extra_field][extra_field_value]['notapplicable']
                 num_total = extra_fields[extra_field][extra_field_value]['total']
                 status['extra_fields'][extra_field].append({
                     extra_field: extra_field_value,
@@ -272,10 +272,10 @@ class DisaggregationStatusService:
                             'percentage': self.get_percent(num_not_disaggregated, num_total),
                         },
                         {
-                            'status': 'out_of_scope',
+                            'status': 'notapplicable',
                             'translation_key': 'Out of scope',
-                            'count': num_out_of_scope,
-                            'percentage': self.get_percent(num_out_of_scope, num_total),
+                            'count': num_notapplicable,
+                            'percentage': self.get_percent(num_notapplicable, num_total),
                         },
                     ],
                     'totals': {

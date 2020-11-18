@@ -2,7 +2,7 @@
 This output assumes the following:
 1. A DSD is already created and available
 2. All columns in the data correspond exactly
-   to dimension codes.
+   to dimension IDs.
 3. All values in the columns correspond exactly
    to codes in those dimensions.
 """
@@ -18,7 +18,7 @@ from io import StringIO
 from sdg.outputs import OutputBase
 
 class OutputSdmxMl(OutputBase):
-    """Output SDG data/metadata in GeoJson disaggregated by region."""
+    """Output SDG data/metadata in SDMX-ML."""
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
@@ -117,4 +117,10 @@ class OutputSdmxMl(OutputBase):
 
 
     def get_documentation_description(self):
-        return 'This output has an SDMX file for each indicator, plus one SDMX file with all indicators.'
+        description = (
+            "This output has an SDMX file for each indicator's data, "
+            "plus one SDMX file with all indicator data. In addition, "
+            "it has an SDMX file for each indicator's metadata, plus "
+            "one SDMX file with all indicator metadata."
+        )
+        return description

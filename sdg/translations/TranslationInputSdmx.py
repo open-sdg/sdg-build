@@ -43,35 +43,38 @@ class TranslationInputSdmx(TranslationInputBase):
 
     def execute(self):
         dsd = self.parse_xml(self.source)
-        groups = {
-            'category': './/Category',
-            'codelist': './/Codelist',
-            'concept': './/Concept',
-        }
-        for group in groups:
-            tags = dsd.findall(groups[group])
-            for tag in tags:
-                key = tag.attrib['id']
-                translations = tag.findall('.//Name')
-                for translation in translations:
-                    if 'lang' not in translation.attrib:
-                        continue
-                    language = translation.attrib['lang']
-                    value = translation.text
-                    self.add_translation(language, group, key, value)
 
-        # We treat Code elements differently. Because there can be duplicates,
-        # we use the Codelist ids are the "group".
-        codelists = dsd.findall('.//Codelist')
-        for codelist in codelists:
-            group = codelist.attrib['id']
+        dimension_tags = dsd.findall('.//Dimension')
+        self.add_translations_for_tags(dimension_tags, dsd)
+
+        attribute_tags = dsd.findall('.//Attribute')
+        self.add_translations_for_tags(attribute_tags, dsd)
+
+
+    def add_translations_for_tags(self, tags, dsd):
+        for tag in tags:
+            tag_id = tag.attrib['id']
+            concept_id = tag.find('.//ConceptIdentity/Ref').attrib['id']
+            concept_xpath = ".//Concept[@id='{}']"
+            concept = dsd.find(concept_xpath.format(concept_id))
+            translations = concept.findall('.//Name')
+            for translation in translations:
+                if 'lang' not in translation.attrib:
+                    continue
+                language = translation.attrib['lang']
+                value = translation.text
+                self.add_translation(language, tag_id, tag_id, value)
+
+            codelist_id = tag.find('.//LocalRepresentation/Enumeration/Ref').attrib['id']
+            codelist_xpath = ".//Codelist[@id='{}']"
+            codelist = dsd.find(codelist_xpath.format(codelist_id))
             codes = codelist.findall('Code')
             for code in codes:
                 translations = code.findall('Name')
-                key = code.attrib['id']
+                code_key = code.attrib['id']
                 for translation in translations:
                     if 'lang' not in translation.attrib:
                         continue
                     language = translation.attrib['lang']
                     value = translation.text
-                    self.add_translation(language, group, key, value)
+                    self.add_translation(language, tag_id, code_key, value)

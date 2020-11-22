@@ -12,7 +12,18 @@ import json
 import copy
 import sdg
 import pandas as pd
-from urllib.request import urlopen
+import sdmx
+from sdmx.model import (
+    Key,
+    AttributeValue,
+    Observation,
+    DataSet,
+    DataflowDefinition
+)
+from sdmx.message import (
+    DataMessage
+)
+from urllib.request import urlretrieve
 from xml.etree import ElementTree as ET
 from io import StringIO
 from sdg.outputs import OutputBase
@@ -39,60 +50,76 @@ class OutputSdmxMl(OutputBase):
             translations = []
 
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
-        self.dsd = self.parse_xml(dsd)
+        self.retrieve_dsd(dsd)
+        sdmx_folder = os.path.join(output_folder, 'sdmx')
+        if not os.path.exists(sdmx_folder):
+            os.makedirs(sdmx_folder, exist_ok=True)
+        self.sdmx_folder = sdmx_folder
 
 
-    def parse_xml(self, location, strip_namespaces=True):
-        """Fetch and parse an XML file.
-
-        Parameters
-        ----------
-        location : string
-            Remote URL of the XML file or path to local file.
-        strip_namespaces : boolean
-            Whether or not to strip namespaces. This is helpful in cases where
-            different implementations may use different namespaces/prefixes.
-        """
-        xml = self.fetch_file(location)
-        it = ET.iterparse(StringIO(xml))
-        if strip_namespaces:
-            for _, el in it:
-                if '}' in el.tag:
-                    el.tag = el.tag.split('}', 1)[1]
-        return it.root
-
-
-    def fetch_file(self, location):
-        """Fetch a file, either on disk, or on the Internet.
-
-        Parameters
-        ----------
-        location : String
-            Either an http address, or a path on disk
-        """
-        file = None
-        data = None
-        if location.startswith('http'):
-            file = urlopen(location)
-            data = file.read().decode('utf-8')
-        else:
-            file = open(location)
-            data = file.read()
-        file.close()
-        return data
+    def retrieve_dsd(self, dsd):
+        if dsd.startswith('http'):
+            urlretrieve(dsd, 'SDG_DSD.xml')
+            dsd = 'SDG_DSD.xml'
+        msg = sdmx.read_sdmx(dsd)
+        dsd_object = msg.structure[0]
+        self.dsd = dsd_object
 
 
     def build(self, language=None):
         """Write the SDMX output. Overrides parent."""
         status = True
+        datasets = []
+        dfd = DataflowDefinition(id="OPEN_SDG_DFD", structure=self.dsd)
 
+        for indicator_id in self.get_indicator_ids():
+            indicator = self.get_indicator_by_id(indicator_id).language(language)
+            data = indicator.data.copy()
+            observations = data.apply(self.make_obs, axis=1).to_list()
+            dataset = DataSet(structured_by=self.dsd, obs=observations)
+            msg = DataMessage(data=[dataset], dataflow=dfd)
+            sdmx_path = os.path.join(self.sdmx_folder, indicator_id + '.xml')
+            with open(sdmx_path, 'wb') as f:
+                status = status & f.write(sdmx.to_xml(msg))
+            datasets.append(dataset)
 
+        msg = DataMessage(data=datasets, dataflow=dfd)
+        all_sdmx_path = os.path.join(self.sdmx_folder, 'all.xml')
+        with open(all_sdmx_path, 'wb') as f:
+            status = status & f.write(sdmx.to_xml(msg))
 
         return status
 
 
+    def get_dimension_values(self, row):
+        values = {}
+        for dimension in self.dsd.dimensions:
+            if dimension.id in row:
+                values[dimension.id] = row[dimension.id]
+        return values
+
+
+    def get_attribute_values(self, row):
+        values = {}
+        for attribute in self.dsd.attributes:
+            if attribute.id in row:
+                values[attribute.id] = AttributeValue(value_for=attribute, value=row[attribute.id])
+        return values
+
+
     def get_documentation_title(self):
         return 'SDMX output'
+
+
+    def make_obs(self, row):
+        key = self.dsd.make_key(Key, self.get_dimension_values(row))
+        attrs = self.get_attribute_values(row)
+        return Observation(
+            dimension=key,
+            attached_attribute=attrs,
+            value_for=self.dsd.measures[0],
+            value=row[self.dsd.measures[0].id],
+        )
 
 
     def get_documentation_content(self, languages=None):
@@ -119,8 +146,6 @@ class OutputSdmxMl(OutputBase):
     def get_documentation_description(self):
         description = (
             "This output has an SDMX file for each indicator's data, "
-            "plus one SDMX file with all indicator data. In addition, "
-            "it has an SDMX file for each indicator's metadata, plus "
-            "one SDMX file with all indicator metadata."
+            "plus one SDMX file with all indicator data."
         )
         return description

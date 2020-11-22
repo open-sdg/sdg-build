@@ -15,6 +15,7 @@ class InputSdmx(InputBase):
                  dimension_map=None,
                  indicator_id_map=None,
                  import_names=True,
+                 import_codes=False,
                  import_translation_keys=False,
                  dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
                  indicator_id_xpath=".//Annotation[AnnotationTitle='Indicator']/AnnotationText",
@@ -48,13 +49,10 @@ class InputSdmx(InputBase):
             }
         import_names : boolean
             Whether to import names. Set to False to rely on global names
-        import_translation_keys : boolean
-            Whether to import translation keys instead of text values. Set to
-            True to import translation keys, which will be in the format of:
-            * code.[id]
-            * concept.[id]
-            If left False, text values are imported instead, taken from the
-            first language in the DSD.
+        import_codes : boolean
+            Whether to import SDMX codes instead of text values. Set to True
+            to import codes. This overrides the deprecated "import_translation_keys"
+            and inherits its value if set.
         dsd : string
             Remote URL of the SDMX DSD (data structure definition) or path to
             local file.
@@ -77,7 +75,10 @@ class InputSdmx(InputBase):
         self.dimension_map = dimension_map
         self.indicator_id_map = indicator_id_map
         self.import_names = import_names
-        self.import_translation_keys = import_translation_keys
+        self.import_codes = import_codes
+        # Also use deprecated import_translation_keys.
+        if not import_codes and import_translation_keys:
+            self.import_codes = import_translation_keys
         self.indicator_id_xpath = indicator_id_xpath
         self.indicator_name_xpath = indicator_name_xpath
         self.series_dimensions = {}
@@ -182,8 +183,8 @@ class InputSdmx(InputBase):
         string
             The human-readable SDMX Concept name
         """
-        if self.import_translation_keys:
-            return 'concept.' + concept_id
+        if self.import_codes:
+            return concept_id
         concept = self.get_concept(concept_id)
         return concept.find(".//Name").text
 
@@ -328,9 +329,9 @@ class InputSdmx(InputBase):
             return None
         codelist_id = self.dimension_id_to_codelist_id(dimension_id)
         if codelist_id:
-            # Return the ids (as a "translation key") if necessary.
-            if self.import_translation_keys:
-                return codelist_id + '.' + dimension_value_id
+            # Return the ids if necessary.
+            if self.import_codes:
+                return dimension_value_id
             # Otherwise default to whatever is in the SDMX.
             code = self.get_code(codelist_id, dimension_value_id)
             if code is not None:

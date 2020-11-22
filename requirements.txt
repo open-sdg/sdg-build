@@ -1,6 +1,6 @@
 pyyaml
 pandas
-pandasdmx
+sdmx1
 numpy
 gitpython
 jsonschema

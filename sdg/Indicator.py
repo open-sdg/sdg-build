@@ -257,10 +257,10 @@ class Indicator:
         def translate_data(text, column):
             return translation_helper.translate(text, language, default_group=[column, 'data'])
         def translate_data_columns(text):
-            special_columns = ['Year', 'Value', 'Units']
+            special_columns = ['Year', 'Value', 'Units', 'Series']
             if text in special_columns:
                 return text
-            return translation_helper.translate(text, language, default_group='data')
+            return translation_helper.translate(text, language, default_group=[text, 'data'])
 
         # Translate the name.
         indicator.set_name(translate_meta(self.name))

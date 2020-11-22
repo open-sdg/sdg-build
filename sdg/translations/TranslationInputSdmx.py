@@ -71,7 +71,7 @@ class TranslationInputSdmx(TranslationInputBase):
                     continue
                 language = translation.attrib['lang']
                 value = translation.text
-                self.add_translation(language, tag_id, 'CONCEPT_NAME', value)
+                self.add_translation(language, tag_id, tag_id, value)
 
             codelist_ref = tag.find('.//LocalRepresentation/Enumeration/Ref')
             if codelist_ref is None:

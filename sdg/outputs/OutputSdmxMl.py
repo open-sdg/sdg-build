@@ -4,14 +4,13 @@ This output assumes the following:
 2. All columns in the data correspond exactly
    to dimension IDs.
 3. All values in the columns correspond exactly
-   to codes in those dimensions.
+   to codes in those dimensions' codelists.
 """
 
 import os
-import json
-import copy
 import sdg
 import pandas as pd
+import numpy as np
 import sdmx
 from sdmx.model import (
     Key,
@@ -24,8 +23,6 @@ from sdmx.message import (
     DataMessage
 )
 from urllib.request import urlretrieve
-from xml.etree import ElementTree as ET
-from io import StringIO
 from sdg.outputs import OutputBase
 
 class OutputSdmxMl(OutputBase):
@@ -75,6 +72,18 @@ class OutputSdmxMl(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
+
+            # Some hardcoded dataframe changes.
+            data = data.rename(columns={
+                'Value': 'OBS_VALUE',
+                'Units': 'UNIT_MEASURE',
+                'Series': 'SERIES',
+                'Year': 'TIME_DETAIL',
+            })
+            data = data.replace(np.nan, '', regex=True)
+            if data.empty:
+                continue
+
             observations = data.apply(self.make_obs, axis=1).to_list()
             dataset = DataSet(structured_by=self.dsd, obs=observations)
             msg = DataMessage(data=[dataset], dataflow=dfd)
@@ -123,20 +132,17 @@ class OutputSdmxMl(OutputBase):
 
 
     def get_documentation_content(self, languages=None):
-        if languages is None:
-            languages = ['']
 
         indicator_ids = self.get_documentation_indicator_ids()
 
-        endpoint = '{language}/sdmx/{indicator_id}.xml'
+        endpoint = 'sdmx/{indicator_id}.xml'
         output = '<p>' + self.get_documentation_description() + ' Examples are below:<p>'
         output += '<ul>'
-        for language in languages:
-            path = endpoint.format(language=language, indicator_id='all')
+        path = endpoint.format(indicator_id='all')
+        output += '<li><a href="' + path + '">' + path + '</a></li>'
+        for indicator_id in indicator_ids:
+            path = endpoint.format(indicator_id=indicator_id)
             output += '<li><a href="' + path + '">' + path + '</a></li>'
-            for indicator_id in indicator_ids:
-                path = endpoint.format(language=language, indicator_id=indicator_id)
-                output += '<li><a href="' + path + '">' + path + '</a></li>'
         output += '<li>etc...</li>'
         output += '</ul>'
 
@@ -146,6 +152,14 @@ class OutputSdmxMl(OutputBase):
     def get_documentation_description(self):
         description = (
             "This output has an SDMX file for each indicator's data, "
-            "plus one SDMX file with all indicator data."
+            "plus one SDMX file with all indicator data. This data uses"
+            "numbers and codes only, so is not specific to any language."
         )
         return description
+
+
+    def validate(self):
+        """Validate the data for the indicators."""
+
+        # Need to figure out SDMX validation.
+        return True

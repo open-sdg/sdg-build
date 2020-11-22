@@ -152,7 +152,7 @@ class OutputSdmxMl(OutputBase):
     def get_documentation_description(self):
         description = (
             "This output has an SDMX file for each indicator's data, "
-            "plus one SDMX file with all indicator data. This data uses"
+            "plus one SDMX file with all indicator data. This data uses "
             "numbers and codes only, so is not specific to any language."
         )
         return description

@@ -7,10 +7,15 @@ from sdg.translations import TranslationInputBase
 class TranslationInputSdmx(TranslationInputBase):
     """A class for importing translations from an SDMX DSD.
 
-    This assumes that the "keys" of the translations will be the SDMX ids. So,
+    This assumes that the "keys" of the translations will be the SDMX codes. So,
     if this is to be used with this library's SDMX import functionality, the
-    import needs to import SDMX ids rather than text values. This is not yet
-    implemented, so this is only a preliminary example class.
+    import needs to import SDMX codes rather than text values.
+
+    This imports only the codes in the "codelists" attached to all SDMX dimensions
+    and attributes. In addition it imports the names of the dimensions and
+    attributes themselves, as the 'CONCEPT_NAME' key.
+
+    Each translation is put into a group according to the dimension/attribute id.
     """
 
 
@@ -53,6 +58,9 @@ class TranslationInputSdmx(TranslationInputBase):
 
     def add_translations_for_tags(self, tags, dsd):
         for tag in tags:
+            if 'id' not in tag.attrib:
+                # Not sure why this happens - possibly the "TimeDimension"?
+                continue
             tag_id = tag.attrib['id']
             concept_id = tag.find('.//ConceptIdentity/Ref').attrib['id']
             concept_xpath = ".//Concept[@id='{}']"
@@ -63,9 +71,13 @@ class TranslationInputSdmx(TranslationInputBase):
                     continue
                 language = translation.attrib['lang']
                 value = translation.text
-                self.add_translation(language, tag_id, tag_id, value)
+                self.add_translation(language, tag_id, 'CONCEPT_NAME', value)
 
-            codelist_id = tag.find('.//LocalRepresentation/Enumeration/Ref').attrib['id']
+            codelist_ref = tag.find('.//LocalRepresentation/Enumeration/Ref')
+            if codelist_ref is None:
+                # Some attributes don't have codelists.
+                continue
+            codelist_id = codelist_ref.attrib['id']
             codelist_xpath = ".//Codelist[@id='{}']"
             codelist = dsd.find(codelist_xpath.format(codelist_id))
             codes = codelist.findall('Code')

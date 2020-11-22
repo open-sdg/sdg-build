@@ -43,9 +43,6 @@ class OutputSdmxMl(OutputBase):
             Remote URL of the SDMX DSD (data structure definition) or path to
             local file.
         """
-        if translations is None:
-            translations = []
-
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.retrieve_dsd(dsd)
         sdmx_folder = os.path.join(output_folder, 'sdmx')

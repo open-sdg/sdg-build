@@ -91,6 +91,8 @@ class OutputDocumentationService:
             fixed = fixed + '/'
         if subfolder is not None and subfolder != '':
             fixed = fixed + subfolder
+        if not fixed.endswith('/'):
+            fixed = fixed + '/'
         return fixed
 
 

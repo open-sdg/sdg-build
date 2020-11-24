@@ -43,7 +43,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
                    inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
-                   docs_subfolder=None, indicator_downloads=None):
+                   docs_subfolder=None, indicator_downloads=None, docs_baseurl=''):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -67,6 +67,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         docs_intro: string. An introduction for the documentation homepage
         docs_indicator_url: string. A pattern for indicator URLs on the site repo
         docs_subfolder: string. A subfolder in which to put the documentation pages
+        docs_baseurl: string. A baseurl to put at the beginning of all absolute links
         indicator_downloads: list. A list of dicts describing calls to the
             write_downloads() method of IndicatorDownloadService
 
@@ -98,6 +99,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'docs_intro': docs_intro,
         'docs_indicator_url': docs_indicator_url,
         'docs_subfolder': docs_subfolder,
+        'docs_baseurl': docs_baseurl,
         'indicator_options': indicator_options,
         'indicator_downloads': indicator_downloads,
     }
@@ -128,17 +130,15 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             status = status & output.execute()
 
     # Output the documentation pages.
-    if options['docs_subfolder'] is not None:
-        docs_folder = os.path.join(options['site_dir'], options['docs_subfolder'])
-    else:
-        docs_folder = options['site_dir']
     documentation_service = sdg.OutputDocumentationService(outputs,
-        folder=docs_folder,
+        folder=options['site_dir'],
+        subfolder=options['docs_subfolder'],
         branding=options['docs_branding'],
         intro=options['docs_intro'],
         languages=options['languages'],
         translations=options['translations'],
         indicator_url=options['docs_indicator_url'],
+        baseurl=options['docs_baseurl'],
     )
     documentation_service.generate_documentation()
 

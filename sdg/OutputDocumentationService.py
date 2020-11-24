@@ -14,7 +14,8 @@ class OutputDocumentationService:
 
 
     def __init__(self, outputs, folder='_site', branding='Build docs',
-                 languages=None, intro='', translations=None, indicator_url=None):
+                 languages=None, intro='', translations=None, indicator_url=None,
+                 subfolder=None, baseurl=''):
         """Constructor for the OutputDocumentationService class.
 
         Parameters
@@ -25,6 +26,9 @@ class OutputDocumentationService:
         folder : string
             Optional folder in which to create the documentation pages. Defaults
             to the "_site" folder.
+        subfolder : string
+            Optional subfolder (beneath the "folder" parameter) in which to
+            create the documentation pages.
         branding : string
             Optional title/heading to use on all documentation pages. Defaults
             to "Build docs".
@@ -42,12 +46,16 @@ class OutputDocumentationService:
             the "[id]" will be replaced with the indicator id (dash-delimited).
             For example, "https://example.com/[id].html" will be replaced with
             "https://example.com/4-1-1.html".
+        baseurl : string
+            An optional path that all absolute URLs in the data repository start with.
         """
         self.outputs = outputs
-        self.folder = folder
+        self.folder = self.fix_folder(folder, subfolder)
         self.branding = branding
         self.intro = intro
         self.indicator_url = indicator_url
+        self.data_baseurl = self.get_data_baseurl(baseurl)
+        self.docs_baseurl = self.get_docs_baseurl(baseurl, subfolder)
         self.slugs = []
         self.languages = ['en'] if languages is None else languages
         if translations is not None:
@@ -62,6 +70,47 @@ class OutputDocumentationService:
         )
 
 
+    def fix_folder(self, folder, subfolder):
+        fixed = '_site'
+        if folder is not None:
+            fixed = folder
+        if subfolder is not None and subfolder != '':
+            fixed = os.path.join(fixed, subfolder)
+        return fixed
+
+
+    def get_data_baseurl(self, baseurl):
+        fixed = ''
+        if baseurl is None or baseurl == '':
+            # All links will be relative.
+            return ''
+        fixed = baseurl
+        # Make sure the baseurl starts and ends with a slash.
+        if not fixed.startswith('/'):
+            fixed = '/' + fixed
+        if not fixed.endswith('/'):
+            fixed = fixed + '/'
+        return fixed
+
+
+    def get_docs_baseurl(self, baseurl, subfolder):
+        fixed = ''
+        if baseurl is None or baseurl == '':
+            # All links will be relative.
+            return ''
+        fixed = baseurl
+        # Make sure the baseurl starts and ends with a slash.
+        if not fixed.startswith('/'):
+            fixed = '/' + fixed
+        if not fixed.endswith('/'):
+            fixed = fixed + '/'
+        if subfolder is not None and subfolder != '':
+            fixed = fixed + subfolder
+        if not fixed.endswith('/'):
+            fixed = fixed + '/'
+        return fixed
+
+
     def generate_documentation(self):
         """Generate the HTML pages for documentation of all of the outputs."""
         pages = []
@@ -70,7 +119,7 @@ class OutputDocumentationService:
             pages.append({
                 'title': title,
                 'filename': self.create_filename(title),
-                'content': output.get_documentation_content(self.languages),
+                'content': output.get_documentation_content(self.languages, self.data_baseurl),
                 'description': output.get_documentation_description()
             })
             extras = output.get_documentation_extras()
@@ -279,7 +328,7 @@ class OutputDocumentationService:
         <body>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container">
-                    <a class="navbar-brand" href="index.html">{branding}</a>
+                    <a class="navbar-brand" href="{baseurl}index.html">{branding}</a>
                 </div>
             </nav>
             <main role="main">
@@ -299,7 +348,7 @@ class OutputDocumentationService:
             }});</script>
         </html>
         """
-        return template.format(branding=self.branding, title=title, content=content)
+        return template.format(branding=self.branding, title=title, content=content, baseurl=self.docs_baseurl)
 
 
     def html_from_dataframe(self, df, escape=False, totals=True):

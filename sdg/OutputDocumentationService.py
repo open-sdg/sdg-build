@@ -15,7 +15,7 @@ class OutputDocumentationService:
 
     def __init__(self, outputs, folder='_site', branding='Build docs',
                  languages=None, intro='', translations=None, indicator_url=None,
-                 baseurl=''):
+                 subfolder=None, baseurl=''):
         """Constructor for the OutputDocumentationService class.
 
         Parameters
@@ -26,6 +26,9 @@ class OutputDocumentationService:
         folder : string
             Optional folder in which to create the documentation pages. Defaults
             to the "_site" folder.
+        subfolder : string
+            Optional subfolder (beneath the "folder" parameter) in which to
+            create the documentation pages.
         branding : string
             Optional title/heading to use on all documentation pages. Defaults
             to "Build docs".
@@ -47,11 +50,11 @@ class OutputDocumentationService:
             An optional path that all absolute URLs in the data repository start with.
         """
         self.outputs = outputs
-        self.folder = folder
+        self.folder = self.fix_folder(folder, subfolder)
         self.branding = branding
         self.intro = intro
         self.indicator_url = indicator_url
-        self.baseurl = self.fix_baseurl(baseurl)
+        self.baseurl = self.fix_baseurl(baseurl, subfolder)
         self.slugs = []
         self.languages = ['en'] if languages is None else languages
         if translations is not None:
@@ -66,15 +69,29 @@ class OutputDocumentationService:
         )
 
 
-    def fix_baseurl(self, baseurl):
+    def fix_folder(self, folder, subfolder):
+        fixed = '_site'
+        if folder is not None:
+            fixed = folder
+        if subfolder is not None and subfolder != '':
+            fixed = os.path.join(fixed, subfolder)
+        return fixed
+
+
+    def fix_baseurl(self, baseurl, subfolder):
+        fixed = ''
         if baseurl is None or baseurl == '':
+            # All links will be relative.
             return ''
+        fixed = baseurl
         # Make sure the baseurl starts and ends with a slash.
-        if not baseurl.startswith('/'):
-            baseurl = '/' + baseurl
-        if not baseurl.endswith('/'):
-            baseurl = baseurl + '/'
-        return baseurl
+        if not fixed.startswith('/'):
+            fixed = '/' + fixed
+        if not fixed.endswith('/'):
+            fixed = fixed + '/'
+        if subfolder is not None and subfolder != '':
+            fixed = fixed + subfolder
+        return fixed
 
 
     def generate_documentation(self):

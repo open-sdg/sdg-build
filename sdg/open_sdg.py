@@ -130,12 +130,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             status = status & output.execute()
 
     # Output the documentation pages.
-    if options['docs_subfolder'] is not None:
-        docs_folder = os.path.join(options['site_dir'], options['docs_subfolder'])
-    else:
-        docs_folder = options['site_dir']
     documentation_service = sdg.OutputDocumentationService(outputs,
-        folder=docs_folder,
+        folder=options['site_dir'],
+        subfolder=options['docs_subfolder'],
         branding=options['docs_branding'],
         intro=options['docs_intro'],
         languages=options['languages'],

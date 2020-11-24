@@ -51,7 +51,7 @@ class OutputDocumentationService:
         self.branding = branding
         self.intro = intro
         self.indicator_url = indicator_url
-        self.baseurl = baseurl
+        self.baseurl = self.fix_baseurl(baseurl)
         self.slugs = []
         self.languages = ['en'] if languages is None else languages
         if translations is not None:
@@ -64,6 +64,17 @@ class OutputDocumentationService:
             translation_helper = self.translation_helper,
             indicator_url = self.indicator_url
         )
+
+
+    def fix_baseurl(self, baseurl):
+        if baseurl is None or baseurl == '':
+            return ''
+        # Make sure the baseurl starts and ends with a slash.
+        if not baseurl.startswith('/'):
+            baseurl = '/' + baseurl
+        if not baseurl.endswith('/'):
+            baseurl = baseurl + '/'
+        return baseurl
 
 
     def generate_documentation(self):

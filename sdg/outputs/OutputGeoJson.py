@@ -308,7 +308,7 @@ class OutputGeoJson(OutputBase):
         return 'GeoJSON output - ' + self.output_subfolder
 
 
-    def get_documentation_content(self, languages=None):
+    def get_documentation_content(self, languages=None, baseurl=''):
         if languages is None:
             languages = ['']
 
@@ -320,7 +320,7 @@ class OutputGeoJson(OutputBase):
         for language in languages:
             for indicator_id in indicator_ids:
                 path = endpoint.format(language=language, indicator_id=indicator_id, folder=self.output_subfolder)
-                output += '<li><a href="' + path + '">' + path + '</a></li>'
+                output += '<li><a href="' + baseurl + path + '">' + path + '</a></li>'
         output += '<li>etc...</li>'
         output += '</ul>'
 

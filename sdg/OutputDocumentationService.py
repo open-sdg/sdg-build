@@ -14,7 +14,8 @@ class OutputDocumentationService:
 
 
     def __init__(self, outputs, folder='_site', branding='Build docs',
-                 languages=None, intro='', translations=None, indicator_url=None):
+                 languages=None, intro='', translations=None, indicator_url=None,
+                 baseurl=''):
         """Constructor for the OutputDocumentationService class.
 
         Parameters
@@ -42,12 +43,15 @@ class OutputDocumentationService:
             the "[id]" will be replaced with the indicator id (dash-delimited).
             For example, "https://example.com/[id].html" will be replaced with
             "https://example.com/4-1-1.html".
+        baseurl : string
+            An optional path that all absolute URLs in the data repository start with.
         """
         self.outputs = outputs
         self.folder = folder
         self.branding = branding
         self.intro = intro
         self.indicator_url = indicator_url
+        self.baseurl = baseurl
         self.slugs = []
         self.languages = ['en'] if languages is None else languages
         if translations is not None:
@@ -70,7 +74,7 @@ class OutputDocumentationService:
             pages.append({
                 'title': title,
                 'filename': self.create_filename(title),
-                'content': output.get_documentation_content(self.languages),
+                'content': output.get_documentation_content(self.languages, self.baseurl),
                 'description': output.get_documentation_description()
             })
             extras = output.get_documentation_extras()
@@ -279,7 +283,7 @@ class OutputDocumentationService:
         <body>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container">
-                    <a class="navbar-brand" href="index.html">{branding}</a>
+                    <a class="navbar-brand" href="{baseurl}index.html">{branding}</a>
                 </div>
             </nav>
             <main role="main">
@@ -299,7 +303,7 @@ class OutputDocumentationService:
             }});</script>
         </html>
         """
-        return template.format(branding=self.branding, title=title, content=content)
+        return template.format(branding=self.branding, title=title, content=content, baseurl=self.baseurl)
 
 
     def html_from_dataframe(self, df, escape=False, totals=True):

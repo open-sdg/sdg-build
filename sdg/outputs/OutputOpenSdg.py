@@ -148,7 +148,7 @@ class OutputOpenSdg(OutputBase):
         return 'Open SDG output'
 
 
-    def get_documentation_content(self, languages=None):
+    def get_documentation_content(self, languages=None, baseurl=''):
         if languages is None:
             languages = ['']
 
@@ -241,7 +241,7 @@ class OutputOpenSdg(OutputBase):
                 for indicator_id in indicator_ids:
                     for endpoint in section['endpoints']:
                         path = endpoint.format(language=language, indicator_id=indicator_id)
-                        output += '<li><a href="' + path + '">' + path + '</a></li>'
+                        output += '<li><a href="' + baseurl + path + '">' + path + '</a></li>'
                     if section['loop_indicators'] == False:
                         break
             if section['loop_indicators'] == True:

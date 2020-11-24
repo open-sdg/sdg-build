@@ -187,7 +187,7 @@ class OutputBase:
         return type(self).__name__
 
 
-    def get_documentation_content(self, languages=None):
+    def get_documentation_content(self, languages=None, baseurl=''):
         """Get detailed content for this output, for documentation purposes.
 
         Parameters

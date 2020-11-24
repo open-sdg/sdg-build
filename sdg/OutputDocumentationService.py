@@ -54,7 +54,8 @@ class OutputDocumentationService:
         self.branding = branding
         self.intro = intro
         self.indicator_url = indicator_url
-        self.baseurl = self.fix_baseurl(baseurl, subfolder)
+        self.data_baseurl = self.get_data_baseurl(baseurl)
+        self.docs_baseurl = self.get_docs_baseurl(baseurl, subfolder)
         self.slugs = []
         self.languages = ['en'] if languages is None else languages
         if translations is not None:
@@ -78,7 +79,21 @@ class OutputDocumentationService:
         return fixed
 
 
-    def fix_baseurl(self, baseurl, subfolder):
+    def get_data_baseurl(self, baseurl):
+        fixed = ''
+        if baseurl is None or baseurl == '':
+            # All links will be relative.
+            return ''
+        fixed = baseurl
+        # Make sure the baseurl starts and ends with a slash.
+        if not fixed.startswith('/'):
+            fixed = '/' + fixed
+        if not fixed.endswith('/'):
+            fixed = fixed + '/'
+        return fixed
+
+
+    def get_docs_baseurl(self, baseurl, subfolder):
         fixed = ''
         if baseurl is None or baseurl == '':
             # All links will be relative.
@@ -104,7 +119,7 @@ class OutputDocumentationService:
             pages.append({
                 'title': title,
                 'filename': self.create_filename(title),
-                'content': output.get_documentation_content(self.languages, self.baseurl),
+                'content': output.get_documentation_content(self.languages, self.data_baseurl),
                 'description': output.get_documentation_description()
             })
             extras = output.get_documentation_extras()
@@ -333,7 +348,7 @@ class OutputDocumentationService:
             }});</script>
         </html>
         """
-        return template.format(branding=self.branding, title=title, content=content, baseurl=self.baseurl)
+        return template.format(branding=self.branding, title=title, content=content, baseurl=self.docs_baseurl)
 
 
     def html_from_dataframe(self, df, escape=False, totals=True):

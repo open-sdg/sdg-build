@@ -13,15 +13,17 @@ SDG Build is a Python package for converting data on the Sustainable Development
 SDG Build can **input** SDG data in the following formats:
 
 * Data in CSV files (long/tidy format)
-* Metadata in YAML files
 * Data (and minimal metadata) from SDMX-JSON and SDMX-ML
 * Data from a CKAN instance
+* Metadata in YAML files
+* Metadata in CSV files
+* Metadata in Excel files
 
 ## Ouputs
 
 SDG Build can **output** SDG data in the following formats:
 
-* A particular JSON structure for data and metadata, expected by the [Open SDG](https://github.com/open-sdg/open-sdg) reporting platform.
+* A particular JSON structure for data and metadata, expected by the [Open SDG](https://open-sdg.org) reporting platform.
 * GeoJSON for mapping (there is not a global standard for SDG GeoJSON at this time, so this is our best guess at a useful structure)
 
 ## Alterations of data and metadata

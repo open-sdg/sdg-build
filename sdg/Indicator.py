@@ -328,6 +328,21 @@ class Indicator:
             return self.has_data()
 
 
+    def is_standalone(self):
+        """Decide whether this indicator is standalone - ie, not part of the SDGs.
+
+        Returns
+        -------
+        boolean
+            True if the indicator should be considered standalone, False otherwise.
+        """
+        standalone = self.get_meta_field_value('standalone')
+        if standalone is None or standalone == False:
+            return False
+        else:
+            return True
+
+
     def get_meta_field_value(self, field):
         """Get the value for a metadata field.
 

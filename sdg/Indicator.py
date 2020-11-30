@@ -161,7 +161,7 @@ class Indicator:
         string
             The number of the goal.
         """
-        return self.inid.split('-')[0]
+        return self.inid if self.is_standalone() else self.inid.split('-')[0]
 
 
     def get_target_id(self):
@@ -172,7 +172,7 @@ class Indicator:
         string
             The target id, dot-delimited.
         """
-        return '.'.join(self.inid.split('-')[0:2])
+        return self.inid if self.is_standalone else '.'.join(self.inid.split('-')[0:2])
 
 
     def get_indicator_id(self):
@@ -183,7 +183,7 @@ class Indicator:
         string
             The indicator id, dot-delimited.
         """
-        return self.inid.replace('-', '.')
+        return self.inid if self.is_standalone() else self.inid.replace('-', '.')
 
 
     def require_meta(self, minimum_metadata=None):

@@ -102,6 +102,8 @@ class OutputSdmxMl(OutputBase):
         for dimension in self.dsd.dimensions:
             if dimension.id in row:
                 values[dimension.id] = row[dimension.id]
+            else:
+                values[dimension.id] = ''
         return values
 
 
@@ -110,6 +112,8 @@ class OutputSdmxMl(OutputBase):
         for attribute in self.dsd.attributes:
             if attribute.id in row:
                 values[attribute.id] = AttributeValue(value_for=attribute, value=row[attribute.id])
+            else:
+                values[attribute.id] = ''
         return values
 
 

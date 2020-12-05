@@ -30,7 +30,8 @@ class OutputSdmxMl(OutputBase):
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-                 indicator_options=None, dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml'):
+                 indicator_options=None, dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
+                 default_values=None):
         """Constructor for OutputSdmxMl.
 
         Parameters
@@ -42,6 +43,10 @@ class OutputSdmxMl(OutputBase):
         dsd : string
             Remote URL of the SDMX DSD (data structure definition) or path to
             local file.
+        default_values : dict
+            Since SDMX output is required to have a value for every dimension/attribute
+            you may need to specify defaults here. If not specified here, defaults for
+            attributes will be '' and defaults for dimensions will be '_T'.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.retrieve_dsd(dsd)
@@ -49,6 +54,7 @@ class OutputSdmxMl(OutputBase):
         if not os.path.exists(sdmx_folder):
             os.makedirs(sdmx_folder, exist_ok=True)
         self.sdmx_folder = sdmx_folder
+        self.default_values = {} if default_values is None else default_values
 
 
     def retrieve_dsd(self, dsd):
@@ -100,21 +106,37 @@ class OutputSdmxMl(OutputBase):
     def get_dimension_values(self, row):
         values = {}
         for dimension in self.dsd.dimensions:
-            if dimension.id in row:
-                values[dimension.id] = row[dimension.id]
-            else:
-                values[dimension.id] = ''
+            value = row[dimension.id] if dimension.id in row else self.get_dimension_default(dimension.id)
+            values[dimension.id] = value
         return values
 
 
     def get_attribute_values(self, row):
         values = {}
         for attribute in self.dsd.attributes:
-            if attribute.id in row:
-                values[attribute.id] = AttributeValue(value_for=attribute, value=row[attribute.id])
-            else:
-                values[attribute.id] = ''
+            value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id)
+            values[attribute.id] = AttributeValue(value_for=attribute, value=value)
         return values
+
+
+    def get_default_values(self):
+        return self.default_values
+
+
+    def get_dimension_default(self, dimension):
+        defaults = self.get_default_values()
+        if dimension in defaults:
+            return defaults[dimension]
+        else:
+            return '_T'
+
+
+    def get_attribute_default(self, attribute):
+        defaults = self.get_default_values()
+        if attribute in defaults:
+            return defaults[attribute]
+        else:
+            return ''
 
 
     def get_documentation_title(self):

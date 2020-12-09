@@ -87,7 +87,7 @@ class OutputSdmxMl(OutputBase):
             if data.empty:
                 continue
 
-            observations = data.apply(self.make_obs, axis=1).to_list()
+            observations = data.apply(self.make_obs, axis=1, indicator=indicator).to_list()
             dataset = DataSet(structured_by=self.dsd, obs=observations)
             msg = DataMessage(data=[dataset], dataflow=dfd)
             sdmx_path = os.path.join(self.sdmx_folder, indicator_id + '.xml')
@@ -103,18 +103,18 @@ class OutputSdmxMl(OutputBase):
         return status
 
 
-    def get_dimension_values(self, row):
+    def get_dimension_values(self, row, indicator):
         values = {}
         for dimension in self.dsd.dimensions:
-            value = row[dimension.id] if dimension.id in row else self.get_dimension_default(dimension.id)
+            value = row[dimension.id] if dimension.id in row else self.get_dimension_default(dimension.id, indicator)
             values[dimension.id] = value
         return values
 
 
-    def get_attribute_values(self, row):
+    def get_attribute_values(self, row, indicator):
         values = {}
         for attribute in self.dsd.attributes:
-            value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id)
+            value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
             values[attribute.id] = AttributeValue(value_for=attribute, value=value)
         return values
 
@@ -123,7 +123,10 @@ class OutputSdmxMl(OutputBase):
         return self.default_values
 
 
-    def get_dimension_default(self, dimension):
+    def get_dimension_default(self, dimension, indicator):
+        indicator_value = indicator.get_meta_field_value(dimension)
+        if indicator_value is not None:
+            return indicator_value
         defaults = self.get_default_values()
         if dimension in defaults:
             return defaults[dimension]
@@ -131,7 +134,10 @@ class OutputSdmxMl(OutputBase):
             return '_T'
 
 
-    def get_attribute_default(self, attribute):
+    def get_attribute_default(self, attribute, indicator):
+        indicator_value = indicator.get_meta_field_value(attribute)
+        if indicator_value is not None:
+            return indicator_value
         defaults = self.get_default_values()
         if attribute in defaults:
             return defaults[attribute]
@@ -143,9 +149,9 @@ class OutputSdmxMl(OutputBase):
         return 'SDMX output'
 
 
-    def make_obs(self, row):
-        key = self.dsd.make_key(Key, self.get_dimension_values(row))
-        attrs = self.get_attribute_values(row)
+    def make_obs(self, row, indicator=None):
+        key = self.dsd.make_key(Key, self.get_dimension_values(row, indicator))
+        attrs = self.get_attribute_values(row, indicator)
         return Observation(
             dimension=key,
             attached_attribute=attrs,

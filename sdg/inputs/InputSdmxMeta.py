@@ -6,6 +6,10 @@ class InputSdmxMeta(InputSdmx):
 
     def execute(self, indicator_options):
         """Fetch all data/metadata from source, fetching a list of indicators."""
+        if self.source is None:
+            # Default to global metadata from the UN SDG Metadata API, querying "G.ALL.1", which
+            # means global (G), all series (ALL), and World (1).
+            self.source = 'https://unstats.un.org/SDGMetadataAPI/api/Metadata/SDMXReport/G.ALL.1'
         self.data = self.parse_xml(self.source)
         indicator_map = self.get_indicator_map()
         for metadata_set in self.get_metadata_sets():

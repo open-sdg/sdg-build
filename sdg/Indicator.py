@@ -257,7 +257,7 @@ class Indicator:
         def translate_data(text, column):
             return translation_helper.translate(text, language, default_group=[column, 'data'])
         def translate_data_columns(text):
-            special_columns = ['Year', 'Value', 'Units']
+            special_columns = self.options.get_non_disaggregation_columns()
             if text in special_columns:
                 return text
             return translation_helper.translate(text, language, default_group='data')

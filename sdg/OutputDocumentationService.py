@@ -325,14 +325,14 @@ class OutputDocumentationService:
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css" integrity="sha256-vFn0MM8utz2N3JoNzRxHXUtfCJLz5Pb9ygBY2exIaqg=" crossorigin="anonymous" />
             <style>
-                .btn-primary {
+                .btn-primary {{
                     background-color: #1D70B8;
                     border-color: #1D70B8;
-                }
-                a {
+                }}
+                a {{
                     color: #1D70B8;
                     text-decoration: underline;
-                }
+                }}
             </style>
         </head>
         <body>

@@ -136,19 +136,15 @@ class DisaggregationReportService:
     def get_disaggregation_link(self, disaggregation_info):
         return '<a href="{}">{}</a>'.format(
             disaggregation_info['filename'],
-            self.translate(disaggregation_info['name'], self.get_default_language())
+            disaggregation_info['name'],
         )
 
 
     def get_disaggregation_value_link(self, disaggregation_value_info):
         return '<a href="{}">{}</a>'.format(
             disaggregation_value_info['filename'],
-            self.translate(disaggregation_value_info['name'], self.get_default_language())
+            disaggregation_value_info['name'],
         )
-
-
-    def get_default_language(self):
-        return self.languages[0]
 
 
     def translate(self, text, language):
@@ -176,12 +172,12 @@ class DisaggregationReportService:
                 'Number of indicators':  num_indicators,
                 'Number of values': num_values,
             }
-            for language in self.get_additional_languages():
+            for language in self.get_languages():
                 row[language] = self.translate(disaggregation, language)
             rows.append(row)
 
         columns = ['Disaggregation']
-        columns.extend(self.get_additional_languages())
+        columns.extend(self.get_languages())
         columns.extend(['Number of indicators', 'Number of values'])
 
         df = pd.DataFrame(rows, columns=columns)
@@ -190,10 +186,8 @@ class DisaggregationReportService:
         return df
 
 
-    def get_additional_languages(self):
-        if len(self.languages) == 1:
-            return []
-        return self.languages[1:]
+    def get_languages(self):
+        return self.languages
 
 
     def get_indicators_dataframe(self):
@@ -222,12 +216,12 @@ class DisaggregationReportService:
                 'Disaggregation combinations using this value': info['values'][value]['instances'],
                 'Number of indicators': len(info['values'][value]['indicators'].keys()),
             }
-            for language in self.get_additional_languages():
+            for language in self.get_languages():
                 row[language] = self.translate(value, language)
             rows.append(row)
 
         columns = ['Value']
-        columns.extend(self.get_additional_languages())
+        columns.extend(self.get_languages())
         columns.extend(['Disaggregation combinations using this value', 'Number of indicators'])
 
         df = pd.DataFrame(rows, columns=columns)

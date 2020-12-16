@@ -313,7 +313,7 @@ class OutputDocumentationService:
     def get_html(self, title, content):
         template = """
         <!DOCTYPE html>
-        <html>
+        <html lang="en">
         <head>
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -324,6 +324,16 @@ class OutputDocumentationService:
             <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css" integrity="sha256-vFn0MM8utz2N3JoNzRxHXUtfCJLz5Pb9ygBY2exIaqg=" crossorigin="anonymous" />
+            <style>
+                .btn-primary {
+                    background-color: #1D70B8;
+                    border-color: #1D70B8;
+                }
+                a {
+                    color: #1D70B8;
+                    text-decoration: underline;
+                }
+            </style>
         </head>
         <body>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">

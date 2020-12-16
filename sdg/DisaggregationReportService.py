@@ -147,11 +147,12 @@ class DisaggregationReportService:
         )
 
 
-    def translate(self, text, language):
+    def translate(self, text, language, group=None):
         if self.translation_helper is None:
             return text
         else:
-            return self.translation_helper.translate(text, language, 'data')
+            default_group = 'data' if group is None else [group, 'data']
+            return self.translation_helper.translate(text, language, default_group)
 
 
     def get_disaggregations_dataframe(self):
@@ -173,7 +174,7 @@ class DisaggregationReportService:
                 'Number of values': num_values,
             }
             for language in self.get_languages():
-                row[language] = self.translate(disaggregation, language)
+                row[language] = self.translate(disaggregation, language, disaggregation)
             rows.append(row)
 
         columns = ['Disaggregation']
@@ -217,7 +218,7 @@ class DisaggregationReportService:
                 'Number of indicators': len(info['values'][value]['indicators'].keys()),
             }
             for language in self.get_languages():
-                row[language] = self.translate(value, language)
+                row[language] = self.translate(value, language, info['name'])
             rows.append(row)
 
         columns = ['Value']

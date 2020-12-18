@@ -107,7 +107,8 @@ class OutputSdmxMl(OutputBase):
         values = {}
         for dimension in self.dsd.dimensions:
             value = row[dimension.id] if dimension.id in row else self.get_dimension_default(dimension.id, indicator)
-            values[dimension.id] = value
+            if value != '':
+                values[dimension.id] = value
         return values
 
 
@@ -115,7 +116,8 @@ class OutputSdmxMl(OutputBase):
         values = {}
         for attribute in self.dsd.attributes:
             value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
-            values[attribute.id] = AttributeValue(value_for=attribute, value=value)
+            if value != '':
+                values[attribute.id] = AttributeValue(value_for=attribute, value=value)
         return values
 
 
@@ -128,6 +130,11 @@ class OutputSdmxMl(OutputBase):
         if indicator_value is not None:
             return indicator_value
         defaults = self.get_default_values()
+        if dimension not in defaults:
+            defaults = {
+                'FREQ': 'A',
+                'REPORTING_TYPE': 'N'
+            }
         if dimension in defaults:
             return defaults[dimension]
         else:

@@ -15,7 +15,7 @@ class OutputDocumentationService:
 
     def __init__(self, outputs, folder='_site', branding='Build docs',
                  languages=None, intro='', translations=None, indicator_url=None,
-                 subfolder=None, baseurl=''):
+                 subfolder=None, baseurl='', translate_disaggregations=False):
         """Constructor for the OutputDocumentationService class.
 
         Parameters
@@ -48,6 +48,9 @@ class OutputDocumentationService:
             "https://example.com/4-1-1.html".
         baseurl : string
             An optional path that all absolute URLs in the data repository start with.
+        translate_disaggregations : boolean
+            Whether or not to include translation columns in the
+            disaggregation report.
         """
         self.outputs = outputs
         self.folder = self.fix_folder(folder, subfolder)
@@ -64,7 +67,7 @@ class OutputDocumentationService:
             self.translation_helper = None
         self.disaggregation_report_service = sdg.DisaggregationReportService(
             self.outputs,
-            languages = self.languages,
+            languages = self.languages if translate_disaggregations else [],
             translation_helper = self.translation_helper,
             indicator_url = self.indicator_url
         )

@@ -17,9 +17,9 @@ class DisaggregationReportService:
             Required list of objects inheriting from OutputBase. Each output
             will receive its own documentation page (or pages).
         languages : list
-            Optional list of language codes. If more than one language is
-            provided, any languages beyond the first will display as translations
-            in additional columns. Defaults to ['en'].
+            Optional list of language codes. If languages are provided, these
+            languages will display as translations in additional columns.
+            Defaults to [].
         translation_helper : TranslationHelper
             Instance of TranslationHelper class to perform translations.
         indicator_url : string
@@ -31,7 +31,7 @@ class DisaggregationReportService:
         self.outputs = outputs
         self.indicator_url = indicator_url
         self.slugs = []
-        self.languages = ['en'] if languages is None else languages
+        self.languages = [] if languages is None else languages
         self.translation_helper = translation_helper
         self.disaggregation_store = None
 

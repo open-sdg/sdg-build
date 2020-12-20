@@ -15,7 +15,7 @@ class OutputDocumentationService:
 
     def __init__(self, outputs, folder='_site', branding='Build docs',
                  languages=None, intro='', translations=None, indicator_url=None,
-                 subfolder=None, baseurl='', extra_disaggregatons=None):
+                 subfolder=None, baseurl='', extra_disaggregations=None):
         """Constructor for the OutputDocumentationService class.
 
         Parameters

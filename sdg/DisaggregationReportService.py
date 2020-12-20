@@ -8,7 +8,7 @@ class DisaggregationReportService:
 
 
     def __init__(self, outputs, languages=None, translation_helper=None,
-                 indicator_url=None):
+                 indicator_url=None, extra_disaggregations=None):
         """Constructor for the DisaggregationReportService class.
 
         Parameters
@@ -27,12 +27,17 @@ class DisaggregationReportService:
             the "[id]" will be replaced with the indicator id (dash-delimited).
             For example, "https://example.com/[id].html" will be replaced with
             "https://example.com/4-1-1.html".
+        extra_disaggregations : list
+            Optional list of columns to include, which would not otherwise be
+            included. Common choices are are units of measurement and series,
+            which some users may prefer to see in the report.
         """
         self.outputs = outputs
         self.indicator_url = indicator_url
         self.slugs = []
         self.languages = ['en'] if languages is None else languages
         self.translation_helper = translation_helper
+        self.extra_disaggregations = [] if extra_disaggregations is None else extra_disaggregations
         self.disaggregation_store = None
 
 
@@ -59,6 +64,7 @@ class DisaggregationReportService:
             if not indicators[indicator_id].is_complete():
                 continue
             non_disaggregation_columns = indicators[indicator_id].options.get_non_disaggregation_columns()
+            non_disaggregation_columns = [col for col in non_disaggregation_columns if col not in self.extra_disaggregations]
             for series in indicators[indicator_id].get_all_series():
                 disaggregations = series.get_disaggregations()
                 for disaggregation in disaggregations:

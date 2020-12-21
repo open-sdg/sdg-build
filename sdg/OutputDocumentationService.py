@@ -2,6 +2,7 @@ import os
 import sdg
 import pandas as pd
 from slugify import slugify
+import humanize
 
 class OutputDocumentationService:
     """HTML generation to document outputs built with this library.
@@ -236,11 +237,15 @@ class OutputDocumentationService:
 
         disaggregation_df = service.get_disaggregations_dataframe()
         disaggregation_table = self.html_from_dataframe(disaggregation_df)
-        disaggregation_download = self.get_csv_download(disaggregation_df, 'disaggregation-report.csv')
+        disaggregation_download_label = 'Download CSV of disaggregations'
+        disaggregation_download_file = 'disaggregation-report.csv'
+        disaggregation_download = self.get_csv_download(disaggregation_df, disaggregation_download_file, label=disaggregation_download_label)
 
         indicator_df = service.get_indicators_dataframe()
         indicator_table = self.html_from_dataframe(indicator_df)
-        indicator_download = self.get_csv_download(indicator_df, 'disaggregation-by-indicator-report.csv')
+        indicator_download_label = 'Download CSV of indicators'
+        indicator_download_file = 'disaggregation-by-indicator-report.csv'
+        indicator_download = self.get_csv_download(indicator_df, indicator_download_file, label=indicator_download_label)
 
         report_html = self.get_html('Disaggregation report', service.get_disaggregation_report_template().format(
             disaggregation_download=disaggregation_download,
@@ -262,11 +267,15 @@ class OutputDocumentationService:
         filename = info['filename']
 
         values_df = service.get_disaggregation_dataframe(info)
-        values_download = self.get_csv_download(values_df, 'values--' + filename.replace('.html', '.csv'))
+        values_download_label = 'Download CSV of values used in this disaggregation'
+        values_download_file = 'values--' + filename.replace('.html', '.csv')
+        values_download = self.get_csv_download(values_df, values_download_file, label=values_download_label)
         values_table = self.html_from_dataframe(values_df)
 
         indicators_df = service.get_disaggregation_indicator_dataframe(info)
-        indicators_download = self.get_csv_download(indicators_df, 'indicators--' + filename.replace('.html', '.csv'))
+        indicators_download_label = 'Download CSV of indicators using this disaggregation'
+        indicators_download_file = 'indicators--' + filename.replace('.html', '.csv')
+        indicators_download = self.get_csv_download(indicators_df, indicators_download_file, label=indicators_download_label)
         indicators_table = self.html_from_dataframe(indicators_df)
 
         detail_html = self.get_html('Disaggregation: ' + disaggregation, service.get_disaggregation_detail_template().format(
@@ -285,7 +294,9 @@ class OutputDocumentationService:
         filename = info['filename']
 
         df = service.get_disaggregation_value_dataframe(info)
-        download = self.get_csv_download(df, filename.replace('.html', '.csv'))
+        download_label = 'Download CSV of indicators using this disaggregation value'
+        download_file = filename.replace('.html', '.csv')
+        download = self.get_csv_download(df, download_file, label=download_label)
         table = self.html_from_dataframe(df)
 
         html = self.get_html(disaggregation + ': ' + disaggregation_value, service.get_disaggregation_value_detail_template().format(
@@ -295,17 +306,30 @@ class OutputDocumentationService:
         self.write_page(filename, html)
 
 
-    def get_csv_download(self, df, filename):
+    def get_csv_filesize(self, filepath):
+        st = os.stat(filepath)
+        return humanize.naturalsize(st.st_size)
+
+
+    def get_csv_download(self, df, filename, label='Download CSV'):
         csv_path = os.path.join(self.folder, filename)
         df = self.disaggregation_report_service.remove_links_from_dataframe(df)
         df.to_csv(csv_path, index=False)
-        return self.get_download_button_template().format(filename=filename)
+        filesize = self.get_csv_filesize(csv_path)
+        fileid = filename.split('.')[0]
+        return self.get_download_button_template().format(
+            filename=filename,
+            filesize=filesize,
+            label=label,
+            fileid=fileid
+        )
 
 
     def get_download_button_template(self):
         return """
         <div class="my-3">
-            <a href="{filename}" class="btn btn-primary">Download CSV</a>
+            <a href="{filename}" role="button" class="btn btn-primary" aria-describedby="{fileid}">{label}</a>
+            <div id="{fileid}" class="download-info">Size: {filesize}</div>
         </div>
         """
 
@@ -333,6 +357,9 @@ class OutputDocumentationService:
                     color: #1D70B8;
                     text-decoration: underline;
                 }}
+                .download-info {{
+                    margin-left: 12px;
+                }}
             </style>
         </head>
         <body>
@@ -353,9 +380,11 @@ class OutputDocumentationService:
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/js/jquery.tablesorter.min.js" integrity="sha256-dtGH1XcAyKopMui5x20KnPxuGuSx9Rs6piJB/4Oqu6I=" crossorigin="anonymous"></script>
-            <script>$(".tablesorter").tablesorter({{
+            <script>
+            $(".tablesorter").tablesorter({{
                 theme: 'bootstrap'
-            }});</script>
+            }}).removeAttr('role');
+            </script>
         </html>
         """
         return template.format(branding=self.branding, title=title, content=content, baseurl=self.docs_baseurl)

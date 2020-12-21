@@ -17,9 +17,9 @@ class DisaggregationReportService:
             Required list of objects inheriting from OutputBase. Each output
             will receive its own documentation page (or pages).
         languages : list
-            Optional list of language codes. If more than one language is
-            provided, any languages beyond the first will display as translations
-            in additional columns. Defaults to ['en'].
+            Optional list of language codes. If languages are provided, these
+            languages will display as translations in additional columns.
+            Defaults to [].
         translation_helper : TranslationHelper
             Instance of TranslationHelper class to perform translations.
         indicator_url : string
@@ -31,7 +31,7 @@ class DisaggregationReportService:
         self.outputs = outputs
         self.indicator_url = indicator_url
         self.slugs = []
-        self.languages = ['en'] if languages is None else languages
+        self.languages = [] if languages is None else languages
         self.translation_helper = translation_helper
         self.disaggregation_store = None
 
@@ -136,26 +136,23 @@ class DisaggregationReportService:
     def get_disaggregation_link(self, disaggregation_info):
         return '<a href="{}">{}</a>'.format(
             disaggregation_info['filename'],
-            self.translate(disaggregation_info['name'], self.get_default_language())
+            disaggregation_info['name'],
         )
 
 
     def get_disaggregation_value_link(self, disaggregation_value_info):
         return '<a href="{}">{}</a>'.format(
             disaggregation_value_info['filename'],
-            self.translate(disaggregation_value_info['name'], self.get_default_language())
+            disaggregation_value_info['name'],
         )
 
 
-    def get_default_language(self):
-        return self.languages[0]
-
-
-    def translate(self, text, language):
+    def translate(self, text, language, group=None):
         if self.translation_helper is None:
             return text
         else:
-            return self.translation_helper.translate(text, language, 'data')
+            default_group = 'data' if group is None else [group, 'data']
+            return self.translation_helper.translate(text, language, default_group)
 
 
     def get_disaggregations_dataframe(self):
@@ -176,12 +173,12 @@ class DisaggregationReportService:
                 'Number of indicators':  num_indicators,
                 'Number of values': num_values,
             }
-            for language in self.get_additional_languages():
-                row[language] = self.translate(disaggregation, language)
+            for language in self.get_languages():
+                row[language] = self.translate(disaggregation, language, disaggregation)
             rows.append(row)
 
         columns = ['Disaggregation']
-        columns.extend(self.get_additional_languages())
+        columns.extend(self.get_languages())
         columns.extend(['Number of indicators', 'Number of values'])
 
         df = pd.DataFrame(rows, columns=columns)
@@ -190,10 +187,8 @@ class DisaggregationReportService:
         return df
 
 
-    def get_additional_languages(self):
-        if len(self.languages) == 1:
-            return []
-        return self.languages[1:]
+    def get_languages(self):
+        return self.languages
 
 
     def get_indicators_dataframe(self):
@@ -222,12 +217,12 @@ class DisaggregationReportService:
                 'Disaggregation combinations using this value': info['values'][value]['instances'],
                 'Number of indicators': len(info['values'][value]['indicators'].keys()),
             }
-            for language in self.get_additional_languages():
-                row[language] = self.translate(value, language)
+            for language in self.get_languages():
+                row[language] = self.translate(value, language, info['name'])
             rows.append(row)
 
         columns = ['Value']
-        columns.extend(self.get_additional_languages())
+        columns.extend(self.get_languages())
         columns.extend(['Disaggregation combinations using this value', 'Number of indicators'])
 
         df = pd.DataFrame(rows, columns=columns)

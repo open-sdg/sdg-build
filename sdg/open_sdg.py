@@ -43,7 +43,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
                    inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
-                   docs_subfolder=None, indicator_downloads=None, docs_baseurl=''):
+                   docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
+                   docs_translate_disaggregations=False):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -70,6 +71,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         docs_baseurl: string. A baseurl to put at the beginning of all absolute links
         indicator_downloads: list. A list of dicts describing calls to the
             write_downloads() method of IndicatorDownloadService
+        docs_translate_disaggregations: boolean. Whether to provide translated columns
+            in the disaggregation report
 
     Returns:
         Boolean status of file writes
@@ -100,6 +103,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'docs_indicator_url': docs_indicator_url,
         'docs_subfolder': docs_subfolder,
         'docs_baseurl': docs_baseurl,
+        'docs_translate_disaggregations': docs_translate_disaggregations,
         'indicator_options': indicator_options,
         'indicator_downloads': indicator_downloads,
     }
@@ -139,6 +143,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         translations=options['translations'],
         indicator_url=options['docs_indicator_url'],
         baseurl=options['docs_baseurl'],
+        translate_disaggregations=options['docs_translate_disaggregations'],
     )
     documentation_service.generate_documentation()
 

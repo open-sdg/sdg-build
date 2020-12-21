@@ -115,8 +115,11 @@ docs_intro: This is a list of examples of endpoints and output that are
   available on this service. Click each of the links below for more information
   on the available output.
 docs_indicator_url: https://my-github-org/my-site-repository/[id]
+# Extra data columns to include in the disaggregation report.
 docs_extra_disaggregations:
   - Units
+# Whether to provide columns for translations in the disaggregation report.
+docs_translate_disaggregations: true
 
 # Indicator downloads
 # -------------------

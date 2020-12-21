@@ -263,17 +263,20 @@ class DisaggregationReportService:
 
     def get_disaggregation_report_template(self):
         return """
-        <div class="list-group list-group-horizontal mb-4">
-            <a class="list-group-item list-group-item-action" href="#by-disaggregation">Jump to list of disaggregations</a>
-            <a class="list-group-item list-group-item-action" href="#by-indicator">Jump to list of indicators</a>
+        <div>
+            <p>Contents:</p>
+            <ul aria-label="Table of contents">
+                <li><a aria-label="Go to list of disaggregations" href="#by-disaggregation">By disaggregation</a></li>
+                <li><a aria-label="Go to list of indicators" href="#by-indicator">By indicator</a></li>
+            </ul>
         </div>
         <div>
-            <h2 id="by-disaggregation">Disaggregations</h2>
+            <h2 id="by-disaggregation">By disaggregation</h2>
             {disaggregation_download}
             {disaggregation_table}
         </div>
         <div>
-            <h2 id="by-indicator">Indicators</h2>
+            <h2 id="by-indicator">By indicator</h2>
             {indicator_download}
             {indicator_table}
         </div>
@@ -282,17 +285,20 @@ class DisaggregationReportService:
 
     def get_disaggregation_detail_template(self):
         return """
-        <div class="list-group list-group-horizontal mb-4">
-            <a class="list-group-item list-group-item-action" href="#values-used">Jump to list of values used in this disaggregation</a>
-            <a class="list-group-item list-group-item-action" href="#indicators-using">Jump to list of indicators using this disaggregation</a>
+        <div>
+            <p>Contents:</p>
+            <ul aria-label="Table of contents">
+                <li><a aria-label="Go to list of values used in disaggregation" href="#values-used">Values used in disaggregation</a></li>
+                <li><a aria-label="Go to list of indicators using disaggregation" href="#indicators-using">Indicators using disaggregation</a></li>
+            </ul>
         </div>
         <div>
-            <h2 id="values-used">Values used in this disaggregation</h2>
+            <h2 id="values-used">Values used in disaggregation</h2>
             {values_download}
             {values_table}
         </div>
         <div>
-            <h2 id="indicators-using">Indicators using this disaggregation</h2>
+            <h2 id="indicators-using">Indicators using disaggregation</h2>
             {indicators_download}
             {indicators_table}
         </div>

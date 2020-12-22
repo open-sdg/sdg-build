@@ -109,6 +109,8 @@ class OutputSdmxMl(OutputBase):
             value = row[dimension.id] if dimension.id in row else self.get_dimension_default(dimension.id, indicator)
             if value != '':
                 values[dimension.id] = value
+        # Hardcode the TIME_PERIOD dimension to the year.
+        values['TIME_PERIOD'] = row['TIME_DETAIL']
         return values
 
 

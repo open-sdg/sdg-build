@@ -110,7 +110,8 @@ class OutputSdmxMl(OutputBase):
             if value != '':
                 values[dimension.id] = value
         # Hardcode the TIME_PERIOD dimension to the year.
-        values['TIME_PERIOD'] = row['TIME_DETAIL']
+        if 'TIME_PERIOD' in values and 'TIME_DETAIL' in row:
+            values['TIME_PERIOD'] = row['TIME_DETAIL']
         return values
 
 

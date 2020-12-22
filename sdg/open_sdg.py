@@ -108,7 +108,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'docs_translate_disaggregations': docs_translate_disaggregations,
         'indicator_options': indicator_options,
         'indicator_downloads': indicator_downloads,
-        'docs_extra_disaggrations': docs_extra_disaggregations,
+        'docs_extra_disaggregations': docs_extra_disaggregations,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)

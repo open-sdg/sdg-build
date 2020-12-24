@@ -51,6 +51,9 @@ class OutputSdmxMl(OutputBase):
             Since SDMX output is required to have a value for every dimension/attribute
             you may need to specify defaults here. If not specified here, defaults for
             attributes will be '' and defaults for dimensions will be '_T'.
+        message_id : string
+            An identifying string to put in front of the "Sender" value in the header
+            of the XML. This id will be followed by a timestamp to ensure uniqueness.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.message_id = message_id

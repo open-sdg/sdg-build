@@ -13,10 +13,11 @@ import pandas as pd
 import numpy as np
 import sdmx
 from sdmx.model import (
+    SeriesKey,
     Key,
     AttributeValue,
     Observation,
-    DataSet,
+    GenericTimeSeriesDataSet,
     DataflowDefinition
 )
 from sdmx.message import (
@@ -87,8 +88,25 @@ class OutputSdmxMl(OutputBase):
             if data.empty:
                 continue
 
-            observations = data.apply(self.make_obs, axis=1, indicator=indicator).to_list()
-            dataset = DataSet(structured_by=self.dsd, obs=observations)
+            serieses = {}
+            for _, row in data.iterrows():
+                series_key = self.dsd.make_key(SeriesKey, self.get_dimension_values(row, indicator))
+                attributes = self.get_attribute_values(row, indicator)
+                dimension_key = self.dsd.make_key(Key, values={
+                    'TIME_PERIOD': row['TIME_DETAIL'],
+                })
+                observation = Observation(
+                    series_key=series_key,
+                    dimension=dimension_key,
+                    attached_attribute=attributes,
+                    value_for=self.dsd.measures[0],
+                    value=row[self.dsd.measures[0].id],
+                )
+                if series_key not in serieses:
+                    serieses[series_key] = []
+                serieses[series_key].append(observation)
+
+            dataset = GenericTimeSeriesDataSet(structured_by=self.dsd, series=serieses)
             msg = DataMessage(data=[dataset], dataflow=dfd)
             sdmx_path = os.path.join(self.sdmx_folder, indicator_id + '.xml')
             with open(sdmx_path, 'wb') as f:
@@ -109,9 +127,6 @@ class OutputSdmxMl(OutputBase):
             value = row[dimension.id] if dimension.id in row else self.get_dimension_default(dimension.id, indicator)
             if value != '':
                 values[dimension.id] = value
-        # Hardcode the TIME_PERIOD dimension to the year.
-        if 'TIME_PERIOD' in values and 'TIME_DETAIL' in row:
-            values['TIME_PERIOD'] = row['TIME_DETAIL']
         return values
 
 
@@ -157,17 +172,6 @@ class OutputSdmxMl(OutputBase):
 
     def get_documentation_title(self):
         return 'SDMX output'
-
-
-    def make_obs(self, row, indicator=None):
-        key = self.dsd.make_key(Key, self.get_dimension_values(row, indicator))
-        attrs = self.get_attribute_values(row, indicator)
-        return Observation(
-            dimension=key,
-            attached_attribute=attrs,
-            value_for=self.dsd.measures[0],
-            value=row[self.dsd.measures[0].id],
-        )
 
 
     def get_documentation_content(self, languages=None):

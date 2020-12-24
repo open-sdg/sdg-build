@@ -12,16 +12,19 @@ import sdg
 import pandas as pd
 import numpy as np
 import sdmx
+from datetime import datetime
 from sdmx.model import (
     SeriesKey,
     Key,
     AttributeValue,
     Observation,
     GenericTimeSeriesDataSet,
-    DataflowDefinition
+    DataflowDefinition,
+    Agency
 )
 from sdmx.message import (
-    DataMessage
+    DataMessage,
+    Header
 )
 from urllib.request import urlretrieve
 from sdg.outputs import OutputBase
@@ -32,7 +35,7 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
-                 default_values=None):
+                 default_values=None, message_id='my-id'):
         """Constructor for OutputSdmxMl.
 
         Parameters
@@ -50,6 +53,7 @@ class OutputSdmxMl(OutputBase):
             attributes will be '' and defaults for dimensions will be '_T'.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
+        self.message_id = message_id
         self.retrieve_dsd(dsd)
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
@@ -107,7 +111,14 @@ class OutputSdmxMl(OutputBase):
                 serieses[series_key].append(observation)
 
             dataset = GenericTimeSeriesDataSet(structured_by=self.dsd, series=serieses)
-            msg = DataMessage(data=[dataset], dataflow=dfd)
+            current_time = datetime.now()
+            header = Header(
+                id=self.message_id + '-' + str(current_time.timestamp()),
+                prepared=current_time,
+                sender=Agency(id='open-sdg/sdg-build@' + sdg.__version__),
+                test=True,
+            )
+            msg = DataMessage(data=[dataset], dataflow=dfd, header=header)
             sdmx_path = os.path.join(self.sdmx_folder, indicator_id + '.xml')
             with open(sdmx_path, 'wb') as f:
                 status = status & f.write(sdmx.to_xml(msg))

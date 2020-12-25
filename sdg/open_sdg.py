@@ -364,6 +364,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputExcelMeta(**params)
     elif input_class == 'InputYamlMeta':
         input_instance = sdg.inputs.InputYamlMeta(**params)
+    elif input_class == 'InputUnSdgsSdmxApi':
+        input_instance = sdg.inputs.InputUnSdgsSdmxApi(**params)
 
     return input_instance
 

@@ -15,7 +15,7 @@ class InputUnSdgsSdmxApi(InputSdmxMl_Structure):
         """
         self.reference_area = reference_area
         if 'source' not in kwargs:
-            kwargs['source'] = 'https://data.un.org/ws/rest/data/IAEG-SDGs,DF_SDG_GLH,1.3/...' + reference_area + '.........../ALL/?detail=full&dimensionAtObservation=TIME_PERIOD'
+            kwargs['source'] = 'https://data.un.org/ws/rest/data/IAEG-SDGs,DF_SDG_GLH,1.3/...' + str(reference_area) + '.........../ALL/?detail=full&dimensionAtObservation=TIME_PERIOD'
         if 'dsd' not in kwargs:
             kwargs['dsd'] = 'https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children'
         if 'drop_dimensions' not in kwargs:

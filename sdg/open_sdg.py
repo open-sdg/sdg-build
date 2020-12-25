@@ -328,11 +328,11 @@ def open_sdg_input_from_dict(params, options):
         'InputSdmxJson',
         'InputSdmxMl_Structure',
         'InputSdmxMl_StructureSpecific',
+        'InputSdmxMl_UnitedNationsApi',
         'InputYamlMdMeta',
         'InputSdmxMl_Multiple',
         'InputExcelMeta',
         'InputYamlMeta',
-        'InputUnSdgsSdmxApi',
     ]
     if input_class not in allowed:
         raise KeyError("Input class '%s' is not one of: %s." % (input_class, ', '.join(allowed)))
@@ -357,6 +357,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputSdmxMl_Structure(**params)
     elif input_class == 'InputSdmxMl_StructureSpecific':
         input_instance = sdg.inputs.InputSdmxMl_StructureSpecific(**params)
+    elif input_class == 'InputSdmxMl_UnitedNationsApi':
+        input_instance = sdg.inputs.InputSdmxMl_UnitedNationsApi(**params)
     elif input_class == 'InputYamlMdMeta':
         input_instance = sdg.inputs.InputYamlMdMeta(**params)
     elif input_class == 'InputSdmxMl_Multiple':
@@ -365,8 +367,6 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputExcelMeta(**params)
     elif input_class == 'InputYamlMeta':
         input_instance = sdg.inputs.InputYamlMeta(**params)
-    elif input_class == 'InputUnSdgsSdmxApi':
-        input_instance = sdg.inputs.InputUnSdgsSdmxApi(**params)
 
     return input_instance
 

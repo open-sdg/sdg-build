@@ -1,6 +1,6 @@
 from sdg.inputs import InputSdmxMl_Structure
 
-class InputUnSdgsSdmxApi(InputSdmxMl_Structure):
+class InputSdmxMl_UnitedNationsApi(InputSdmxMl_Structure):
     """SDG data specifically called from the UN SDGs-SDMX API."""
 
     def __init__(self, reference_area='1', **kwargs):

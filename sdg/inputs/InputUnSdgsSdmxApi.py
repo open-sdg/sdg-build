@@ -20,4 +20,4 @@ class InputUnSdgsSdmxApi(InputSdmxMl_Structure):
             kwargs['dsd'] = 'https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children'
         if 'drop_dimensions' not in kwargs:
             kwargs['drop_dimensions'] = ['DATA_LAST_UPDATE', 'TIME_DETAIL']
-        InputSdmxMl_Structure.__init__(**kwargs)
+        InputSdmxMl_Structure.__init__(self, **kwargs)

@@ -121,7 +121,8 @@ class OutputSdmxMl(OutputBase):
                 sender=Agency(id='open-sdg/sdg-build@' + sdg.__version__),
                 test=True,
             )
-            msg = DataMessage(data=[dataset], dataflow=dfd, header=header)
+            time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
+            msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
             sdmx_path = os.path.join(self.sdmx_folder, indicator_id + '.xml')
             with open(sdmx_path, 'wb') as f:
                 status = status & f.write(sdmx.to_xml(msg))
@@ -138,6 +139,9 @@ class OutputSdmxMl(OutputBase):
     def get_dimension_values(self, row, indicator):
         values = {}
         for dimension in self.dsd.dimensions:
+            # Skip the TIME_PERIOD dimension because it is used as the "observation dimension".
+            if dimension.id == 'TIME_PERIOD':
+                continue
             value = row[dimension.id] if dimension.id in row else self.get_dimension_default(dimension.id, indicator)
             if value != '':
                 values[dimension.id] = value

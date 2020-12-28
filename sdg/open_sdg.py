@@ -451,7 +451,7 @@ def open_sdg_schema_defaults(schema_file='_prose.yml'):
     return [
         {
             'class': 'SchemaInputOpenSdg',
-            'schema_file': schema_file,
+            'schema_path': schema_file,
         }
     ]
 

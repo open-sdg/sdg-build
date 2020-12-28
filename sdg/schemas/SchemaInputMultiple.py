@@ -31,4 +31,19 @@ class SchemaInputMultiple(SchemaInputBase):
 
         for schema in self.schemas:
             self.schema['allOf'].append(schema.schema)
-            self.field_order += schema.field_order
+            for field in schema.get_field_order():
+                self.add_item_to_field_order(field)
+
+
+    def get(self, field, default=None, must_exist=False):
+        value = None
+        for schema in self.schema['allOf']:
+            f = schema['properties'].get(field, default)
+            if f is not None:
+                value = f
+                break
+        if must_exist and value is None:
+            raise ValueError(field + " doesn't exist in schema")
+        if value is None:
+            print(field)
+        return value

@@ -10,7 +10,7 @@ class OutputOpenSdg(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
         reporting_status_extra_fields=None, indicator_options=None,
-        indicator_downloads=None):
+        indicator_downloads=None, reporting_status_types=None):
         """Constructor for OutputOpenSdg.
 
         Parameters
@@ -29,6 +29,7 @@ class OutputOpenSdg(OutputBase):
 
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.reporting_status_grouping_fields = reporting_status_extra_fields
+        self.reporting_status_types = reporting_status_types
         self.indicator_downloads = indicator_downloads
 
 
@@ -82,7 +83,17 @@ class OutputOpenSdg(OutputBase):
         status = status & sdg.json.write_json('all', all_meta, ftype='meta', site_dir=site_dir)
         status = status & sdg.json.write_json('all', all_headline, ftype='headline', site_dir=site_dir)
 
-        stats_reporting = sdg.stats.reporting_status(self.schema, all_meta, self.reporting_status_grouping_fields)
+        # Reporting status.
+        reporting_status_types = self.reporting_status_types
+        # @deprecated start
+        # Backwards compatibility - support getting the reporting status types
+        # from the schema instead of the data config.
+        if len(reporting_status_types) == 0 and self.schema.get('reporting_status') is not None:
+            status_values = self.schema.get_values('reporting_status')
+            value_translation = self.schema.get_value_translation('reporting_status')
+            reporting_status_types = [{'value': value, 'label': value_translation[value]} for value in status_values]
+        # @deprecated end
+        stats_reporting = sdg.stats.reporting_status(reporting_status_types, all_meta, self.reporting_status_grouping_fields)
         status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
 
         disaggregation_status_service = sdg.DisaggregationStatusService(site_dir, self.indicators, self.reporting_status_grouping_fields)

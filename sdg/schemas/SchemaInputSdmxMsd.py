@@ -33,7 +33,7 @@ class SchemaInputSdmxMsd(SchemaInputBase):
             }
             if self.scope is not None:
                 jsonschema_field['scope'] = self.scope
-            schema[concept_id] = jsonschema_field
+            schema['properties'][concept_id] = jsonschema_field
 
         self.schema = schema
 

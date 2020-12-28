@@ -43,7 +43,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
                    inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
-                   docs_subfolder=None, indicator_downloads=None, docs_baseurl=''):
+                   docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
+                   reporting_status_types=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -59,6 +60,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         map_layers: list. A list of dicts describing geojson to process
         reporting_status_extra_fields: list. A list of extra fields to generate
           reporting stats for.
+        reporting_status_types: list. A list of objects for reporting status types,
+          each containing 'value' and 'label'.
         config: str. Path to a YAML config file that overrides other parameters
         inputs: list. A list of dicts describing instances of InputBase
         alter_data: function. A callback function that alters a data Dataframe
@@ -98,6 +101,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'schema': schema,
         'map_layers': map_layers,
         'reporting_status_extra_fields': reporting_status_extra_fields,
+        'reporting_status_types': reporting_status_types,
         'inputs': inputs,
         'docs_branding': docs_branding,
         'docs_intro': docs_intro,
@@ -260,13 +264,18 @@ def open_sdg_prep(options):
         for input in inputs:
             input.add_meta_alteration(options['alter_meta'])
 
-    # Use a Prose.io file for the metadata schema.
+    # Use the specified metadata schema.
     schema = options['schema']
 
     # Indicate any extra fields for the reporting stats, if needed.
     reporting_status_extra_fields = []
     if 'reporting_status_extra_fields' in options:
         reporting_status_extra_fields = options['reporting_status_extra_fields']
+
+    # Indicate the types for the reporting stats.
+    reporting_status_types = []
+    if 'reporting_status_types' in options and options['reporting_status_types'] is not None:
+        reporting_status_types = options['reporting_status_types']
 
     # Create an "output" from these inputs/schema/translations, for Open SDG output.
     opensdg_output = sdg.outputs.OutputOpenSdg(
@@ -275,6 +284,7 @@ def open_sdg_prep(options):
         output_folder=options['site_dir'],
         translations=options['translations'],
         reporting_status_extra_fields=reporting_status_extra_fields,
+        reporting_status_types=reporting_status_types,
         indicator_options=options['indicator_options'],
         indicator_downloads=options['indicator_downloads'])
 
@@ -464,8 +474,8 @@ def open_sdg_schema_from_dict(params, options):
 
     schema_instance = None
     if schema_class == 'SchemaInputOpenSdg':
-        schema_class = sdg.schemas.SchemaInputOpenSdg(**params)
+        schema_instance = sdg.schemas.SchemaInputOpenSdg(**params)
     elif schema_class == 'SchemaInputSdmxMsd':
-        schema_class = sdg.schemas.SchemaInputSdmxMsd(**params)
+        schema_instance = sdg.schemas.SchemaInputSdmxMsd(**params)
 
     return schema_instance

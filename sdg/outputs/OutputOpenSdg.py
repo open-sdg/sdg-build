@@ -88,10 +88,11 @@ class OutputOpenSdg(OutputBase):
         # @deprecated start
         # Backwards compatibility - support getting the reporting status types
         # from the schema instead of the data config.
-        if len(reporting_status_types) == 0 and self.schema.get('reporting_status') is not None:
-            status_values = self.schema.get_values('reporting_status')
-            value_translation = self.schema.get_value_translation('reporting_status')
-            reporting_status_types = [{'value': value, 'label': value_translation[value]} for value in status_values]
+        if reporting_status_types is None or len(reporting_status_types) == 0:
+            if self.schema.get('reporting_status') is not None:
+                status_values = self.schema.get_values('reporting_status')
+                value_translation = self.schema.get_value_translation('reporting_status')
+                reporting_status_types = [{'value': value, 'label': value_translation[value]} for value in status_values]
         # @deprecated end
         stats_reporting = sdg.stats.reporting_status(reporting_status_types, all_meta, self.reporting_status_grouping_fields)
         status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)

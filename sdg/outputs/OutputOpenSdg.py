@@ -91,7 +91,7 @@ class OutputOpenSdg(OutputBase):
         disaggregation_status_service = sdg.DisaggregationStatusService(site_dir, self.indicators, self.reporting_status_grouping_fields)
         disaggregation_status_service.write_json()
 
-        indicator_export_service = sdg.IndicatorExportService(site_dir, self.indicators, self.indicator_export_filename)
+        indicator_export_service = sdg.IndicatorExportService(site_dir, self.indicators, filename=self.indicator_export_filename)
         indicator_export_service.export_all_indicator_data_as_zip_archive()
 
         # Write the indicator downloads.

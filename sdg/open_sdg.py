@@ -298,6 +298,14 @@ def open_sdg_prep(options):
         # Create the output.
         outputs.append(sdg.outputs.OutputGeoJson(**geojson_kwargs))
 
+    # Open SDG also requires data packages.
+    outputs.append(sdg.outputs.OutputDataPackage(
+        inputs=inputs,
+        schema=schema,
+        output_folder=options['site_dir'],
+        translations=options['translations'],
+        indicator_options=options['indicator_options'],
+    ))
     return outputs
 
 

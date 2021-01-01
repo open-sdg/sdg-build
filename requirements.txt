@@ -1,9 +1,9 @@
 pyyaml
 pandas
-numpy
 gitpython
 jsonschema
 requests
 humanize
 unicode-slugify
+frictionless
 git+git://github.com/dougmet/yamlmd

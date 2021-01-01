@@ -13,6 +13,7 @@ from . import open_sdg
 from . import inputs
 from . import outputs
 from . import schemas
+from . import data_schemas
 from . import translations
 from .DisaggregationReportService import DisaggregationReportService
 from .DisaggregationStatusService import DisaggregationStatusService

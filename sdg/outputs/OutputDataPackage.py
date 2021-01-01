@@ -102,11 +102,10 @@ class OutputDataPackage(OutputBase):
             for indicator_id in indicator_ids:
                 descriptor_path = descriptor_endpoint.format(language=language, indicator_id=indicator_id)
                 data_path =  data_endpoint.format(language=language, indicator_id=indicator_id)
-                output += '<li>'
-                output += 'Descriptor: <a href="' + baseurl + descriptor_path + '">' + descriptor_path + '</a>'
-                output += '<br>'
-                output += 'Data: <a href="' + baseurl + data_path + '">' + data_path + '</a>'
-                output += '</li>'
+                output += '<li>' + indicator_id + ':<ul>'
+                output += '<li><a href="' + baseurl + descriptor_path + '">' + descriptor_path + '</a></li>'
+                output += '<li><a href="' + baseurl + data_path + '">' + data_path + '</a></li>'
+                output += '</ul></li>'
         output += '<li>etc...</li>'
         output += '</ul>'
         return output

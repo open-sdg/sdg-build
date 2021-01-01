@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sdg
-import json
 from sdg.outputs import OutputBase
 from sdg.data_schemas import DataSchemaInputIndicator
+from frictionless import Package
+from frictionless import Resource
 from pathlib import Path
 
 class OutputDataPackage(OutputBase):
@@ -30,6 +30,8 @@ class OutputDataPackage(OutputBase):
             a data schema will be inferred from the indicator data.
         package_properties : dict
             Common properties to add to all the data packages.
+        resource_properties : dict
+            Common properties to add to the resource in all data packages.
         """
 
         OutputBase.__init__(self, inputs, schema,
@@ -69,17 +71,15 @@ class OutputDataPackage(OutputBase):
             data_path = os.path.join(package_folder, 'data.csv')
             indicator.data.to_csv(data_path, index=False)
             # Write the descriptor.
-            descriptor = self.package_properties.copy()
-            descriptor['name'] = indicator_id
-            descriptor['title'] = indicator.get_name()
-            resource = self.resource_properties.copy()
-            resource['schema'] = data_schema.get_descriptor()
-            resource['path'] = 'data.csv'
-            descriptor['resources'] = [resource]
-
+            package = Package(self.package_properties)
+            package.name = indicator_id
+            package.title = indicator.get_name()
+            resource = Resource(self.resource_properties)
+            resource.schema = data_schema.get_descriptor()
+            resource.path = 'data.csv'
+            package.add_resource(resource)
             descriptor_path = os.path.join(package_folder, 'datapackage.json')
-            with open(descriptor_path, 'w') as outfile:
-                json.dump(descriptor, outfile)
+            package.to_json(descriptor_path)
 
         return status
 

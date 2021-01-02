@@ -85,6 +85,7 @@ class OutputDataPackage(OutputBase):
             package.to_json(descriptor_path)
             # Add to the datapackage for all resources.
             all_resource = Resource(self.resource_properties)
+            all_resource.schema = data_schema.get_descriptor()
             all_resource.path = indicator_id + '/data.csv'
             all_resource.name = indicator_id
             all_resource.title = indicator.get_name()

@@ -55,6 +55,9 @@ class OutputDataPackage(OutputBase):
         """Write the JSON output expected by Open SDG. Overrides parent."""
         status = True
 
+        all_indicators = Package(self.package_properties)
+        all_indicators.name = 'all'
+        all_indicators.title = 'All indicators'
         for indicator_id in self.get_indicator_ids():
             # Make sure the folder exists.
             package_folder = os.path.join(self.output_folder, 'data-packages', indicator_id)
@@ -80,6 +83,15 @@ class OutputDataPackage(OutputBase):
             package.add_resource(resource)
             descriptor_path = os.path.join(package_folder, 'datapackage.json')
             package.to_json(descriptor_path)
+            # Add to the datapackage for all resources.
+            all_resource = Resource(self.resource_properties)
+            all_resource.path = indicator_id + '/data.csv'
+            all_resource.name = indicator_id
+            all_resource.title = indicator.get_name()
+            all_indicators.add_resource(all_resource)
+
+        all_indicators_path = os.path.join(self.output_folder, 'data-packages', 'all.json')
+        all_indicators.to_json(all_indicators_path)
 
         return status
 
@@ -96,6 +108,7 @@ class OutputDataPackage(OutputBase):
 
         descriptor_endpoint = '{language}/data-packages/{indicator_id}/datapackage.json'
         data_endpoint = '{language}/data-packages/{indicator_id}/data.csv'
+        all_endpoint = '{language}/data-packages/all.json'
         output = '<p>' + self.get_documentation_description() + ' Examples are below:<p>'
         output += '<ul>'
         for language in languages:
@@ -106,6 +119,8 @@ class OutputDataPackage(OutputBase):
                 output += '<li><a href="' + baseurl + descriptor_path + '">' + descriptor_path + '</a></li>'
                 output += '<li><a href="' + baseurl + data_path + '">' + data_path + '</a></li>'
                 output += '</ul></li>'
+            all_path = all_endpoint.format(language=language)
+            output += '<li>All indicators: <a href="' + baseurl + all_path + '">' + all_path + '</a></li>'
         output += '<li>etc...</li>'
         output += '</ul>'
         return output

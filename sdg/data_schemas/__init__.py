@@ -1,4 +1,5 @@
 from .DataSchemaInputBase import DataSchemaInputBase
 from .DataSchemaInputIndicator import DataSchemaInputIndicator
+from .DataSchemaInputTableSchemaYaml import DataSchemaInputTableSchemaYaml
 from .DataSchemaOutputBase import DataSchemaOutputBase
 from .DataSchemaOutputTableSchemaJson import DataSchemaOutputTableSchemaJson

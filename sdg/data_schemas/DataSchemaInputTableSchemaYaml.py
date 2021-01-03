@@ -6,7 +6,7 @@ import yaml
 
 class DataSchemaInputTableSchemaYaml(DataSchemaInputFiles):
     """A class for reading a data schema from a Table Schema in YAML format.
-    The indicator_schema_path is assumed to be a path pattern (glob) showing
+    The source parameter is assumed to be a path pattern (glob) showing
     where the YAML files are."""
 
 

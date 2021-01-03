@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import frictionless
+from pprint import pprint
 
 class DataSchemaInputBase:
     """A base class for importing a data schema, querying it, and validating with it.
@@ -47,9 +48,12 @@ class DataSchemaInputBase:
             df = indicator.data
             schema = self.get_schema_for_indicator(indicator)
             if schema is not None:
-                report = frictionless.validate.validate_table(df, schema=schema)
-                # TODO: Output some feedback of errors.
-                status = report.valid()
+                records = df.to_dict('records')
+                report = frictionless.validate(records, schema=schema)
+                status = report.valid
+                if status == False:
+                    pprint(report)
+                    # TODO: This output needs to be much more concise.
 
         return status
 

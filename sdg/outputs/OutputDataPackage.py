@@ -51,15 +51,19 @@ class OutputDataPackage(OutputBase):
         all_indicators.name = 'all'
         all_indicators.title = 'All indicators'
 
+        backup_data_schema = DataSchemaInputIndicator(source=self.indicators)
         if self.data_schema is None:
-            self.data_schema = DataSchemaInputIndicator(source=self.indicators)
+            self.data_schema = backup_data_schema
+
         for indicator_id in self.get_indicator_ids():
             # Make sure the folder exists.
             package_folder = os.path.join(self.output_folder, 'data-packages', indicator_id)
             Path(package_folder).mkdir(parents=True, exist_ok=True)
 
             indicator = self.get_indicator_by_id(indicator_id).language(language)
-            data_schema = self.data_schema.get_schema_for_indicator(indicator)
+            data_schema_for_indicator = self.data_schema.get_schema_for_indicator(indicator)
+            if data_schema_for_indicator is None:
+                data_schema_for_indicator = backup_data_schema.get_schema_for_indicator(indicator)
 
             # Write the data.
             data_path = os.path.join(package_folder, 'data.csv')
@@ -69,14 +73,14 @@ class OutputDataPackage(OutputBase):
             package.name = indicator_id
             package.title = indicator.get_name()
             resource = Resource(self.resource_properties)
-            resource.schema = data_schema
+            resource.schema = data_schema_for_indicator
             resource.path = 'data.csv'
             package.add_resource(resource)
             descriptor_path = os.path.join(package_folder, 'datapackage.json')
             package.to_json(descriptor_path)
             # Add to the datapackage for all resources.
             all_resource = Resource(self.resource_properties)
-            all_resource.schema = data_schema
+            all_resource.schema = data_schema_for_indicator
             all_resource.path = indicator_id + '/data.csv'
             all_resource.name = indicator_id
             all_resource.title = indicator.get_name()

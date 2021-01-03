@@ -10,24 +10,23 @@ class DataSchemaInputBase:
     """
 
 
-    def __init__(self, schema_path=''):
-        """Create a new SchemaBase object
+    def __init__(self, source=None):
+        """Create a new DataSchemaInputBase object."""
 
-        Parameters
-        ----------
-        schema_path : string
-            A path to the schema file to input
-        """
-
-        self.schema_path = schema_path
-        self.schema = self.load_schema()
+        self.source = source
+        self.schema = self.load_all_schema()
 
 
-    def load_schema(self):
-        """Load the schema. This should be overridden by a subclass.
-        See https://frictionlessdata.io/tooling/python/api-reference/#frictionless-schema
-        """
+    def load_all_schema(self):
+        """Load the schema for all indicators. This should be overridden by a subclass."""
         raise NotImplementedError
+
+
+    def get_schema_for_indicator(self, indicator):
+        indicator_id = indicator.inid
+        if indicator_id in self.schema and self.schema[indicator_id] is not None:
+            return self.schema[indicator_id]
+        return None
 
 
     def validate(self, indicator):
@@ -46,34 +45,14 @@ class DataSchemaInputBase:
         status = True
         if indicator.has_data():
             df = indicator.data
-            report = frictionless.validate.validate_table(df, schema=self.schema)
-            # TODO: Output some feedback of errors.
-            status = report.valid()
+            schema = self.get_schema_for_indicator(indicator)
+            if schema is not None:
+                report = frictionless.validate.validate_table(df, schema=schema)
+                # TODO: Output some feedback of errors.
+                status = report.valid()
 
         return status
 
 
-    def get_descriptor(self):
-        return dict(self.schema)
-
-
-    def get_fields(self):
-        return self.schema.field_names()
-
-
-    def get_values(self, field_name):
-        """Get the allowed values for a field.
-
-        Parameters
-        ----------
-        field_name : string
-            The name of a field to get allowed values for
-
-        Returns
-        -------
-        list
-            List of allowed values
-        """
-        field = self.schema.get_field(field_name)
-        constraints = field.constraints()
-        return constraints['enum'] if 'enum' in constraints else []
+    def get_descriptor(self, indicator):
+        return dict(self.get_schema_for_indicator(indicator))

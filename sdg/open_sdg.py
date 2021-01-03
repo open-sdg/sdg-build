@@ -45,7 +45,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
                    docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
-                   datapackage_properties=None, datapackage_resource_properties=None):
+                   datapackage_properties=None, datapackage_resource_properties=None,
+                   data_schema=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -79,6 +80,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         datapackage_properties: dict. Any properties to add to all datapackages.
         datapackage_resource_properties: dict. Any properties to add to resources in
             all datapackages.
+        data_schema:
 
     Returns:
         Boolean status of file writes
@@ -115,6 +117,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'docs_extra_disaggregations': docs_extra_disaggregations,
         'datapackage_properties': datapackage_properties,
         'datapackage_resource_properties': datapackage_resource_properties,
+        'data_schema': data_schema,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -183,7 +186,8 @@ def open_sdg_indicator_options_from_dict(options):
 
 
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
-        inputs=None, alter_data=None, alter_meta=None, indicator_options=None):
+        inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
+        data_schema=None):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -197,6 +201,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         config: str. Path to a YAML config file that overrides other parameters
         alter_data: function. A callback function that alters a data Dataframe
         alter_meta: function. A callback function that alters a metadata dictionary
+        data_schema:
 
     Returns:
         boolean: True if the check was successful, False if not.
@@ -218,6 +223,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'indicator_downloads': None,
         'datapackage_properties': None,
         'datapackage_resource_properties': None,
+        'data_schema': data_schema,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -307,12 +313,16 @@ def open_sdg_prep(options):
         outputs.append(sdg.outputs.OutputGeoJson(**geojson_kwargs))
 
     # Open SDG also requires data packages.
+    data_schema = None
+    if options['data_schema'] is not None:
+        data_schema = open_sdg_data_schema_from_dict(options['data_schema'], options)
     outputs.append(sdg.outputs.OutputDataPackage(
         inputs=inputs,
         schema=schema,
         output_folder=options['site_dir'],
         translations=options['translations'],
         indicator_options=options['indicator_options'],
+        data_schema=data_schema,
         package_properties=options['datapackage_properties'],
         resource_properties=options['datapackage_resource_properties'],
     ))
@@ -332,6 +342,31 @@ def open_sdg_input_defaults():
             'git_data_dir': 'data',
         }
     ]
+
+
+def open_sdg_data_schema_from_dict(params, options):
+    if 'class' not in params:
+        raise KeyError("The 'data schema' must have a 'class'.")
+    data_schema_class = params['class']
+
+    allowed = [
+        'DataSchemaInputTableSchemaYaml',
+    ]
+    if data_schema_class not in allowed:
+        raise KeyError("Data schema class '%s' is not one of: %s." % (data_schema_class, ', '.join(allowed)))
+
+    # We no longer need the "class" param.
+    del params['class']
+
+    # If using a local "source" we need to prepend our src_dir.
+    if 'source' in params and isinstance(params['source'], str) and not params['source'].startswith('http'):
+        params['source'] = os.path.join(options['src_dir'], params['source'])
+
+    data_schema_instance = None
+    if data_schema_class == 'DataSchemaInputTableSchemaYaml':
+        data_schema_instance = sdg.data_schemas.DataSchemaInputTableSchemaYaml(**params)
+
+    return data_schema_instance
 
 
 def open_sdg_input_from_dict(params, options):

@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 
 from frictionless import Schema
-from sdg.data_schemas import DataSchemaInputBase
+from sdg.data_schemas import DataSchemaInputFiles
 import yaml
 
-class DataSchemaInputTableSchemaYaml(DataSchemaInputBase):
+class DataSchemaInputTableSchemaYaml(DataSchemaInputFiles):
     """A class for reading a data schema from a Table Schema in YAML format.
-    The schema_path parameter should be the path to the YAML file."""
+    The indicator_schema_path is assumed to be a path pattern (glob) showing
+    where the YAML files are."""
 
 
-    def load_schema(self):
-        with open(self.schema_path) as file:
+    def load_schema(self, path):
+        with open(path) as file:
             schema = yaml.load(file, Loader=yaml.FullLoader)
             return Schema(schema)

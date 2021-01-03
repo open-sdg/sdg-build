@@ -12,8 +12,8 @@ class OutputDataPackage(OutputBase):
     """
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-        indicator_options=None, data_schema_all=None, data_schema_per_indicator=None,
-        package_properties=None, resource_properties=None):
+        indicator_options=None, data_schema=None, package_properties=None,
+        resource_properties=None):
         """Constructor for OutputDataPackage.
 
         Parameters
@@ -21,13 +21,8 @@ class OutputDataPackage(OutputBase):
 
         Inherits all the parameters from OutputBase, plus the following:
 
-        data_schema_all : frictionless.schema
-            A data schema that applies to all indicators.
-        data_schema_per_indicator : dict
-            A mapping of indicator IDs to schemas. If an indicator has a schema
-            mapped here, it will be used instead of data_schema_all. If an
-            indicator has no schema mapped here, and data_schema_all is None,
-            a data schema will be inferred from the indicator data.
+        data_schema : DataSchemaInputBase
+            An optional subclass of DataSchemaInputBase
         package_properties : dict
             Common properties to add to all the data packages.
         resource_properties : dict
@@ -39,14 +34,11 @@ class OutputDataPackage(OutputBase):
             translations=translations,
             indicator_options=indicator_options,
         )
-        self.data_schema_all = data_schema_all
-        if data_schema_per_indicator is None:
-            data_schema_per_indicator = {}
+        self.data_schema = data_schema
         if package_properties is None:
             package_properties = {}
         if resource_properties is None:
             resource_properties = {}
-        self.data_schema_per_indicator = data_schema_per_indicator
         self.package_properties = package_properties
         self.resource_properties = resource_properties
 
@@ -58,17 +50,16 @@ class OutputDataPackage(OutputBase):
         all_indicators = Package(self.package_properties)
         all_indicators.name = 'all'
         all_indicators.title = 'All indicators'
+
+        if self.data_schema is None:
+            self.data_schema = DataSchemaInputIndicator(source=self.indicators)
         for indicator_id in self.get_indicator_ids():
             # Make sure the folder exists.
             package_folder = os.path.join(self.output_folder, 'data-packages', indicator_id)
             Path(package_folder).mkdir(parents=True, exist_ok=True)
 
             indicator = self.get_indicator_by_id(indicator_id).language(language)
-            data_schema = self.data_schema_all
-            if indicator_id in self.data_schema_per_indicator:
-                data_schema = self.data_schema_per_indicator[indicator_id]
-            if data_schema is None:
-                data_schema = DataSchemaInputIndicator(schema_path=indicator)
+            data_schema = self.data_schema.get_schema_for_indicator(indicator)
 
             # Write the data.
             data_path = os.path.join(package_folder, 'data.csv')
@@ -78,14 +69,14 @@ class OutputDataPackage(OutputBase):
             package.name = indicator_id
             package.title = indicator.get_name()
             resource = Resource(self.resource_properties)
-            resource.schema = data_schema.get_descriptor()
+            resource.schema = data_schema
             resource.path = 'data.csv'
             package.add_resource(resource)
             descriptor_path = os.path.join(package_folder, 'datapackage.json')
             package.to_json(descriptor_path)
             # Add to the datapackage for all resources.
             all_resource = Resource(self.resource_properties)
-            all_resource.schema = data_schema.get_descriptor()
+            all_resource.schema = data_schema
             all_resource.path = indicator_id + '/data.csv'
             all_resource.name = indicator_id
             all_resource.title = indicator.get_name()

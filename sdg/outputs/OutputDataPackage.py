@@ -88,6 +88,17 @@ class OutputDataPackage(OutputBase):
         return status
 
 
+    def validate(self):
+        """Validate the data for the indicators."""
+
+        status = True
+        if self.data_schema is not None:
+            for inid in self.indicators:
+                status = status & self.data_schema.validate(self.indicators[inid])
+
+        return status
+
+
     def get_documentation_title(self):
         return 'Data packages'
 

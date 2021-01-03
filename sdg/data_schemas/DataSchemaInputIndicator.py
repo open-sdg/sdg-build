@@ -14,8 +14,12 @@ class DataSchemaInputIndicator(DataSchemaInputBase):
         df = indicator.data
         schema = describe_schema(df)
         non_disaggregation_columns = indicator.options.get_non_disaggregation_columns()
+        non_disaggregation_special_columns = [
+            indicator.options.get_series_column(),
+            indicator.options.get_unit_column(),
+        ]
         for column in indicator.data.columns:
-            if column in non_disaggregation_columns:
+            if column in non_disaggregation_columns and column not in non_disaggregation_special_columns:
                 continue
             unique = df[column].unique()
             unique = unique[~pd.isnull(unique)]

@@ -174,7 +174,9 @@ def open_sdg_indicator_options_defaults():
             'Observation status',
             'Unit multiplier',
             'Unit measure'
-        ]
+        ],
+        'series_column': 'Series',
+        'unit_column': 'Units',
     }
 
 
@@ -182,6 +184,10 @@ def open_sdg_indicator_options_from_dict(options):
     options_obj = sdg.IndicatorOptions()
     for column in options['non_disaggregation_columns']:
         options_obj.add_non_disaggregation_columns(column)
+    if 'series_column' in options:
+        options_obj.set_series_column(options['series_column'])
+    if 'unit_column' in options:
+        options_obj.set_unit_column(options['unit_column'])
     return options_obj
 
 

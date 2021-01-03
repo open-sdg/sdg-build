@@ -5,6 +5,7 @@ from sdg.outputs import OutputBase
 from sdg.data_schemas import DataSchemaInputIndicator
 from frictionless import Package
 from frictionless import Resource
+from frictionless import Schema
 from pathlib import Path
 
 class OutputDataPackage(OutputBase):
@@ -65,6 +66,11 @@ class OutputDataPackage(OutputBase):
             if data_schema_for_indicator is None:
                 data_schema_for_indicator = backup_data_schema.get_schema_for_indicator(indicator)
 
+            if language is not None:
+                # Clone the schema so that it can be translated.
+                data_schema_for_indicator = Schema(dict(data_schema_for_indicator))
+                self.translate_data_schema(data_schema_for_indicator, language)
+
             # Write the data.
             data_path = os.path.join(package_folder, 'data.csv')
             indicator.data.to_csv(data_path, index=False)
@@ -90,6 +96,20 @@ class OutputDataPackage(OutputBase):
         all_indicators.to_json(all_indicators_path)
 
         return status
+
+
+    def translate_data_schema(self, schema, language):
+        groups_common = ['data']
+        for field in schema.fields:
+            groups = groups_common + [field.name]
+            # Translate the field titles.
+            field.title = self.translation_helper.translate(field.title, language, groups)
+            # Translate the values.
+            if 'enum' in field.constraints:
+                field.constraints['enum'] = [
+                    self.translation_helper.translate(value, language, groups)
+                    for value in field.constraints['enum']
+                ]
 
 
     def validate(self):

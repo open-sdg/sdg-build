@@ -103,7 +103,7 @@ class OutputDataPackage(OutputBase):
         for field in schema.fields:
             groups = groups_common + [field.name]
             # Translate the field titles.
-            field.title = self.translation_helper.translate(field.title, language, groups)
+            field.title = self.translation_helper.translate(field.name, language, groups)
             # Translate the values.
             if 'enum' in field.constraints:
                 field.constraints['enum'] = [

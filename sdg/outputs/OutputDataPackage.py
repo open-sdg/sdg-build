@@ -3,9 +3,10 @@
 import os
 from sdg.outputs import OutputBase
 from sdg.data_schemas import DataSchemaInputIndicator
-from frictionless import Package
-from frictionless import Resource
 from frictionless import Schema
+from frictionless import Package
+from frictionless import describe_package
+from frictionless import describe_resource
 from pathlib import Path
 
 class OutputDataPackage(OutputBase):
@@ -75,17 +76,21 @@ class OutputDataPackage(OutputBase):
             data_path = os.path.join(package_folder, 'data.csv')
             indicator.data.to_csv(data_path, index=False)
             # Write the descriptor.
-            package = Package(self.package_properties)
+            package = describe_package(data_path)
+            for key in self.package_properties:
+                package[key] = self.package_properties[key]
             package.name = indicator_id
             package.title = indicator.get_name()
-            resource = Resource(self.resource_properties)
-            resource.schema = data_schema_for_indicator
-            resource.path = 'data.csv'
-            package.add_resource(resource)
+            for key in self.resource_properties:
+                package.get_resource('data')[key] = self.resource_properties[key]
+            package.get_resource('data').schema = data_schema_for_indicator
+            package.get_resource('data').path = 'data.csv'
             descriptor_path = os.path.join(package_folder, 'datapackage.json')
             package.to_json(descriptor_path)
             # Add to the datapackage for all resources.
-            all_resource = Resource(self.resource_properties)
+            all_resource = describe_resource(data_path)
+            for key in self.resource_properties:
+                all_resource[key] = self.resource_properties[key]
             all_resource.schema = data_schema_for_indicator
             all_resource.path = indicator_id + '/data.csv'
             all_resource.name = indicator_id

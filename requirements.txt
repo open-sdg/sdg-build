@@ -7,3 +7,4 @@ humanize
 unicode-slugify
 frictionless
 git+git://github.com/dougmet/yamlmd
+git+git://github.com/cldf/csvw@frictionless

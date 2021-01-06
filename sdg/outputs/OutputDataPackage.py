@@ -115,10 +115,19 @@ class OutputDataPackage(OutputBase):
         df.to_csv(path, index=False)
 
 
-    def create_resource(self, schema, data_path, name, title, data_path_override=None):
-        resource = describe_resource(data_path)
+    def apply_package_properties(self, package):
+        for key in self.package_properties:
+            package[key] = self.package_properties[key]
+
+
+    def apply_resource_properties(self, resource):
         for key in self.resource_properties:
             resource[key] = self.resource_properties[key]
+
+
+    def create_resource(self, schema, data_path, name, title, data_path_override=None):
+        resource = describe_resource(data_path)
+        self.apply_resource_properties(resource)
         resource.schema = schema
         resource.path = data_path_override if data_path_override is not None else data_path
         resource.name = name
@@ -128,14 +137,13 @@ class OutputDataPackage(OutputBase):
 
     def create_indicator_package(self, schema, data_path, name, title):
         package = describe_package(data_path)
-        for key in self.package_properties:
-            package[key] = self.package_properties[key]
+        self.apply_package_properties(package)
         package.name = name
         package.title = title
-        for key in self.resource_properties:
-            package.get_resource('data')[key] = self.resource_properties[key]
-        package.get_resource('data').schema = schema
-        package.get_resource('data').path = 'data.csv'
+        resource = package.get_resource('data')
+        self.apply_resource_properties(resource)
+        resource.schema = schema
+        resource.path = 'data.csv'
         return package
 
 

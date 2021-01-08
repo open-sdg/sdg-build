@@ -11,7 +11,7 @@ class OutputCsvw(OutputDataPackage):
 
     def __init__(self, inputs, schema, common_properties=None,
                  table_schema_properties=None, column_properties=None,
-                 **kwargs):
+                 at_properties=None, **kwargs):
         """ Constructor for OutputCsvw.
 
         Parameters
@@ -21,6 +21,8 @@ class OutputCsvw(OutputDataPackage):
         common_properties : None or dict
             Optional dict of common properties to add to the CSVW metadata. For a
             list of support properties see https://w3c.github.io/csvw/metadata/#common-properties
+        at_properties : None or dict
+            Optional dict of "at" properties (those starting with @).
         table_schema_properties : None or dict
             Optional dict of properties to add to the CSVW table schema.
             Supported properties include (but may not be limited to):
@@ -36,11 +38,14 @@ class OutputCsvw(OutputDataPackage):
         OutputDataPackage.__init__(self, inputs, schema, **kwargs)
         if common_properties is None:
             common_properties = {}
+        if at_properties is None:
+            at_properties = {}
         if table_schema_properties is None:
             table_schema_properties = {}
         if column_properties is None:
             column_properties = {}
         self.common_properties = common_properties
+        self.at_properties = at_properties
         self.table_schema_properties = table_schema_properties
         self.column_properties = column_properties
 
@@ -62,6 +67,7 @@ class OutputCsvw(OutputDataPackage):
         csvw_package = DataPackage(package_dict)
         table_group = csvw_package.to_tablegroup()
         self.apply_common_properties(table_group)
+        self.apply_at_properties(table_group)
         self.apply_table_schema_properties(table_group)
         self.apply_column_properties(table_group)
         table_group.to_file(path)
@@ -70,6 +76,11 @@ class OutputCsvw(OutputDataPackage):
     def apply_common_properties(self, table_group):
         for key in self.common_properties:
             table_group.common_props[key] = self.common_properties[key]
+
+
+    def apply_at_properties(self, table_group):
+        for key in self.at_properties:
+            table_group.at_props[key] = self.at_properties[key]
 
 
     def apply_table_schema_properties(self, table_group):

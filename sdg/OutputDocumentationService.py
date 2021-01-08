@@ -191,7 +191,7 @@ class OutputDocumentationService:
                 title=page['title'],
                 description=page['description'],
                 destination=page['filename'],
-                call_to_action='See examples'
+                call_to_action='See examples of ' + page['title']
             )
             card_number += 1
             if card_number % 3 == 0:

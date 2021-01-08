@@ -97,7 +97,7 @@ class OutputDataPackage(OutputBase):
             # Write the descriptor.
             descriptor_path = os.path.join(package_folder, 'datapackage.json')
             indicator_package = self.create_indicator_package(data_schema_for_indicator, data_path, name, title)
-            self.write_indicator_package(indicator_package, descriptor_path)
+            self.write_indicator_package(indicator_package, descriptor_path, language=language)
 
             # Add to the top level package.
             top_level_data_path = indicator_id + '/data.csv'
@@ -105,7 +105,7 @@ class OutputDataPackage(OutputBase):
             self.add_to_top_level_package(top_level_resource)
 
         top_level_descriptor_path = os.path.join(self.output_folder, self.get_base_folder(), 'all.json')
-        self.write_top_level_package(top_level_descriptor_path)
+        self.write_top_level_package(top_level_descriptor_path, language=language)
 
         return status
 
@@ -116,7 +116,7 @@ class OutputDataPackage(OutputBase):
         self.top_level_package.title = title
 
 
-    def write_top_level_package(self, path):
+    def write_top_level_package(self, path, language=None):
         self.top_level_package.to_json(path)
 
 
@@ -169,7 +169,7 @@ class OutputDataPackage(OutputBase):
         return package
 
 
-    def write_indicator_package(self, package, descriptor_path):
+    def write_indicator_package(self, package, descriptor_path, language=None):
         package.to_json(descriptor_path)
 
 

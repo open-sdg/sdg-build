@@ -54,18 +54,23 @@ class OutputCsvw(OutputDataPackage):
         return 'csvw'
 
 
-    def write_indicator_package(self, package, descriptor_path):
-        self.write_csvw_package(package, descriptor_path)
+    def write_indicator_package(self, package, descriptor_path, language=None):
+        self.write_csvw_package(package, descriptor_path, language)
 
 
-    def write_top_level_package(self, path):
-        self.write_csvw_package(self.top_level_package, path)
+    def write_top_level_package(self, path, language=None):
+        self.write_csvw_package(self.top_level_package, path, language)
 
 
-    def write_csvw_package(self, package, path):
+    def write_csvw_package(self, package, path, language=None):
         package_dict = dict(package)
         csvw_package = DataPackage(package_dict)
         table_group = csvw_package.to_tablegroup()
+        if language is not None:
+            table_group.at_props['context'] = [
+                "http://www.w3.org/ns/csvw",
+                { "@language": language }
+            ]
         self.apply_common_properties(table_group)
         self.apply_at_properties(table_group)
         self.apply_table_schema_properties(table_group)

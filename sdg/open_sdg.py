@@ -334,7 +334,7 @@ def open_sdg_prep(options):
 
     # Optionally output CSVW.
     if options['csvw'] is not None:
-        csvw_params = options['csvw']
+        csvw_params = options['csvw'] if options['csvw'] != True else {}
         outputs.append(sdg.outputs.OutputCsvw(
             inputs=inputs,
             schema=schema,

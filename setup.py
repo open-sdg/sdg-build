@@ -14,8 +14,7 @@ setup(name='sdg',
       package_data={'sdg': ['schema_defaults.json']},
       include_package_data=True,
       python_requires='>=3.5',
-      install_requires=['pyyaml', 'gitpython', 'numpy', 'pandas', 'yamlmd', 'jsonschema', 'requests', 'humanize', 'unicode-slugify', 'frictionless', 'csvw'],
+      install_requires=['pyyaml', 'gitpython', 'numpy', 'pandas', 'yamlmd', 'jsonschema', 'requests', 'humanize', 'unicode-slugify', 'frictionless'],
       dependency_links=[
         "git+ssh://git@github.com/dougmet/yamlmd.git@0.1.7",
-        "git+ssh://git@github.com/cldf/csvw.git@frictionless"
     ])

@@ -204,7 +204,7 @@ class OutputDocumentationService:
             title='Disaggregation report',
             description='These tables show information about all the disaggregations used in the data.',
             destination='disaggregations.html',
-            call_to_action='See report'
+            call_to_action='See disaggregation report'
         )
         card_number += 1
         if card_number % 3 == 0:

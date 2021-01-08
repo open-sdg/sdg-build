@@ -45,8 +45,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
                    docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
-                   datapackage_properties=None, datapackage_resource_properties=None,
-                   data_schema=None):
+                   datapackage=None, csvw=None, data_schema=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -77,10 +76,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             that would not otherwise be included in the disaggregation report
         docs_translate_disaggregations: boolean. Whether to provide translated columns
             in the disaggregation report
-        datapackage_properties: dict. Any properties to add to all datapackages.
-        datapackage_resource_properties: dict. Any properties to add to resources in
-            all datapackages.
-        data_schema:
+        datapackage: dict. Dict describing an instance of OutputDataPackage
+        csvw: dict. Dict describing an instance of OutputCsvw
+        data_schema: Dict describing an instance of DataSchemaInputBase subclass
 
     Returns:
         Boolean status of file writes
@@ -115,8 +113,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'indicator_options': indicator_options,
         'indicator_downloads': indicator_downloads,
         'docs_extra_disaggregations': docs_extra_disaggregations,
-        'datapackage_properties': datapackage_properties,
-        'datapackage_resource_properties': datapackage_resource_properties,
+        'datapackage': datapackage,
+        'csvw': csvw,
         'data_schema': data_schema,
     }
     # Allow for a config file to update these.
@@ -207,7 +205,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         config: str. Path to a YAML config file that overrides other parameters
         alter_data: function. A callback function that alters a data Dataframe
         alter_meta: function. A callback function that alters a metadata dictionary
-        data_schema:
+        data_schema: dict . Dict describing an instance of DataSchemaInputBase
 
     Returns:
         boolean: True if the check was successful, False if not.
@@ -227,8 +225,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'translations': [],
         'indicator_options': indicator_options,
         'indicator_downloads': None,
-        'datapackage_properties': None,
-        'datapackage_resource_properties': None,
+        'datapackage': None,
+        'csvw': None,
         'data_schema': data_schema,
     }
     # Allow for a config file to update these.
@@ -318,10 +316,11 @@ def open_sdg_prep(options):
         # Create the output.
         outputs.append(sdg.outputs.OutputGeoJson(**geojson_kwargs))
 
-    # Open SDG also requires data packages.
     data_schema = None
     if options['data_schema'] is not None:
         data_schema = open_sdg_data_schema_from_dict(options['data_schema'], options)
+
+    # Automatically output datapackages.
     outputs.append(sdg.outputs.OutputDataPackage(
         inputs=inputs,
         schema=schema,
@@ -329,9 +328,21 @@ def open_sdg_prep(options):
         translations=options['translations'],
         indicator_options=options['indicator_options'],
         data_schema=data_schema,
-        package_properties=options['datapackage_properties'],
-        resource_properties=options['datapackage_resource_properties'],
+        **options['datapackage'],
     ))
+
+    # Optionally output CSVW.
+    if options['csvw'] is not None:
+        outputs.append(sdg.outputs.OutputCsvw(
+            inputs=inputs,
+            schema=schema,
+            output_folder=options['site_dir'],
+            translations=options['translations'],
+            indicator_options=options['indicator_options'],
+            data_schema=data_schema,
+            **options['datapackage'],
+            **options['csvw'],
+        ))
     return outputs
 
 

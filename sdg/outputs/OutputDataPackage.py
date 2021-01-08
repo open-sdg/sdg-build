@@ -15,7 +15,7 @@ class OutputDataPackage(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
         indicator_options=None, data_schema=None, package_properties=None,
-        resource_properties=None):
+        resource_properties=None, field_properties=None, sorting='alphabetical'):
         """Constructor for OutputDataPackage.
 
         Parameters
@@ -29,6 +29,13 @@ class OutputDataPackage(OutputBase):
             Common properties to add to all the data packages.
         resource_properties : dict
             Common properties to add to the resource in all data packages.
+        field_properties : dict of dicts
+            Properties to add to specific fields, keyed by field name.
+        sorting : string
+            Strategy to use when sorting the columns and values. Options are:
+            - alphabetical: Sort columns/values in alphabetical order
+            - default: Use the default sorting, either from the data_schema or
+              from the position of columns/values in the source data
         """
 
         OutputBase.__init__(self, inputs, schema,
@@ -42,8 +49,12 @@ class OutputDataPackage(OutputBase):
             package_properties = {}
         if resource_properties is None:
             resource_properties = {}
+        if field_properties is None:
+            field_properties = {}
         self.package_properties = package_properties
         self.resource_properties = resource_properties
+        self.field_properties = field_properties
+        self.sorting = sorting
 
 
     def get_base_folder(self):
@@ -72,9 +83,11 @@ class OutputDataPackage(OutputBase):
             if data_schema_for_indicator is None:
                 data_schema_for_indicator = backup_data_schema.get_schema_for_indicator(indicator)
 
+            # Clone the schema so that it can be sorted and translated.
+            data_schema_for_indicator = Schema(dict(data_schema_for_indicator))
+            if self.sorting != 'default':
+                self.sort_data_schema(data_schema_for_indicator)
             if language is not None:
-                # Clone the schema so that it can be translated.
-                data_schema_for_indicator = Schema(dict(data_schema_for_indicator))
                 self.translate_data_schema(data_schema_for_indicator, language)
 
             # Write the data.
@@ -125,6 +138,14 @@ class OutputDataPackage(OutputBase):
             resource[key] = self.resource_properties[key]
 
 
+    def apply_field_properties(self, resource):
+        for field_name in self.field_properties:
+            field = resource.get_field(field_name)
+            if field is not None:
+                for key in self.field_properties[field_name]:
+                    field[key] = self.field_properties[field_name][key]
+
+
     def create_resource(self, schema, data_path, name, title, data_path_override=None):
         resource = describe_resource(data_path)
         self.apply_resource_properties(resource)
@@ -132,6 +153,7 @@ class OutputDataPackage(OutputBase):
         resource.path = data_path_override if data_path_override is not None else data_path
         resource.name = name
         resource.title = title
+        self.apply_field_properties(resource)
         return resource
 
 
@@ -149,6 +171,14 @@ class OutputDataPackage(OutputBase):
 
     def write_indicator_package(self, package, descriptor_path):
         package.to_json(descriptor_path)
+
+
+    def sort_data_schema(self, schema):
+        if self.sorting == 'alphabetical':
+            schema.fields.sort(key=lambda field: field.name)
+            for field in schema.fields:
+                if 'enum' in field.constraints:
+                    field.constraints['enum'].sort()
 
 
     def translate_data_schema(self, schema, language):

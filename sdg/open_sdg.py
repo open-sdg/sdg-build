@@ -320,7 +320,8 @@ def open_sdg_prep(options):
     if options['data_schema'] is not None:
         data_schema = open_sdg_data_schema_from_dict(options['data_schema'], options)
 
-    # Automatically output datapackages.
+    # Output datapackages and possible CSVW.
+    datapackage_params = options['datapackage'] if options['datapackage'] is not None else {}
     outputs.append(sdg.outputs.OutputDataPackage(
         inputs=inputs,
         schema=schema,
@@ -328,11 +329,12 @@ def open_sdg_prep(options):
         translations=options['translations'],
         indicator_options=options['indicator_options'],
         data_schema=data_schema,
-        **options['datapackage'],
+        **datapackage_params,
     ))
 
     # Optionally output CSVW.
     if options['csvw'] is not None:
+        csvw_params = options['csvw']
         outputs.append(sdg.outputs.OutputCsvw(
             inputs=inputs,
             schema=schema,
@@ -340,8 +342,8 @@ def open_sdg_prep(options):
             translations=options['translations'],
             indicator_options=options['indicator_options'],
             data_schema=data_schema,
-            **options['datapackage'],
-            **options['csvw'],
+            **datapackage_params,
+            **csvw_params,
         ))
     return outputs
 

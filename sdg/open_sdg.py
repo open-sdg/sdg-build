@@ -365,7 +365,8 @@ def open_sdg_input_defaults():
 
 def open_sdg_data_schema_from_dict(params, options):
     if 'class' not in params:
-        raise KeyError("The 'data schema' must have a 'class'.")
+        # Default to a table schema YAML input.
+        params['class'] = 'DataSchemaInputTableSchemaYaml'
     data_schema_class = params['class']
 
     allowed = [

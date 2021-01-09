@@ -2,13 +2,13 @@
 
 import os
 from sdg.translations import TranslationInputBase
-from sdg.Debuggable import Debuggable
+from sdg.Loggable import Loggable
 
-class TranslationOutputBase(Debuggable):
+class TranslationOutputBase(Loggable):
     """A base class for exporting translations."""
 
 
-    def __init__(self, inputs, verbose=False):
+    def __init__(self, inputs, logging=None):
         """Constructor for TranslationOutputBase.
 
         Parameters
@@ -16,7 +16,7 @@ class TranslationOutputBase(Debuggable):
         inputs : list
             A list of TranslationInputBase objects
         """
-        Debuggable.__init__(self, verbose=verbose)
+        Loggable.__init__(self, logging=logging)
         self.input = self.merge_inputs(inputs)
 
 

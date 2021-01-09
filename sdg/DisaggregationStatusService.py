@@ -1,13 +1,13 @@
 import os
 import sdg
 import json
-from sdg.Debuggable import Debuggable
+from sdg.Loggable import Loggable
 
-class DisaggregationStatusService(Debuggable):
+class DisaggregationStatusService(Loggable):
     """Service to calculate to what extent the data is disaggregated."""
 
 
-    def __init__(self, site_dir, indicators, extra_fields=None, verbose=False):
+    def __init__(self, site_dir, indicators, extra_fields=None, logging=None):
         """Constructor for the DisaggregationStatusService class.
 
         Parameters
@@ -17,7 +17,7 @@ class DisaggregationStatusService(Debuggable):
         indicators : dict
             Dict of Indicator objects keyed by indicator id.
         """
-        Debuggable.__init__(self, verbose=verbose)
+        Loggable.__init__(self, logging=logging)
         if extra_fields is None:
             extra_fields = []
         self.site_dir = site_dir

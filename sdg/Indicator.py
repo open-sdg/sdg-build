@@ -5,12 +5,12 @@ import pandas as pd
 import numpy as np
 import collections.abc
 from sdg.translations import TranslationHelper
-from sdg.Debuggable import Debuggable
+from sdg.Loggable import Loggable
 
-class Indicator(Debuggable):
+class Indicator(Loggable):
     """Data model for SDG indicators."""
 
-    def __init__(self, inid, name=None, data=None, meta=None, options=None, verbose=False):
+    def __init__(self, inid, name=None, data=None, meta=None, options=None, logging=None):
         """Constructor for the SDG indicator instances.
 
         Parameters
@@ -26,7 +26,7 @@ class Indicator(Debuggable):
         options : IndicatorOptions
             Output-specific options provided by the OutputBase class.
         """
-        Debuggable.__init__(self, verbose=verbose)
+        Loggable.__init__(self, logging=logging)
         self.inid = inid
         self.name = name
         self.data = data
@@ -368,14 +368,14 @@ class Indicator(Debuggable):
         grouping_columns = [column for column in self.data.columns if column not in aggregating_columns]
 
         if len(grouping_columns) == 0:
-            series = sdg.Series({}, self.get_indicator_id(), verbose=self.verbose)
+            series = sdg.Series({}, self.get_indicator_id(), logging=self.logging)
             for index, row in self.data.iterrows():
                 series.add_value(row['Year'], row['Value'])
             return [series]
 
         def row_to_series(row):
             disaggregations = row[grouping_columns].to_dict()
-            series = sdg.Series(disaggregations, self.get_indicator_id(), verbose=self.verbose)
+            series = sdg.Series(disaggregations, self.get_indicator_id(), logging=self.logging)
             for year, value in zip(row['Year'], row['Value']):
                 series.add_value(year, value)
             return series

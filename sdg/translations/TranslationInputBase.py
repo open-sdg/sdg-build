@@ -3,13 +3,13 @@
 import os
 from git import Repo
 from urllib.request import urlopen
-from sdg.Debuggable import Debuggable
+from sdg.Loggable import Loggable
 
-class TranslationInputBase(Debuggable):
+class TranslationInputBase(Loggable):
     """A base class for importing translations."""
 
 
-    def __init__(self, source='', verbose=False):
+    def __init__(self, source='', logging=None):
         """Constructor for the TranslationInputBase class.
 
         Parameters
@@ -17,7 +17,7 @@ class TranslationInputBase(Debuggable):
         source : string
             The source of the translations (see subclass for details)
         """
-        Debuggable.__init__(self, verbose=verbose)
+        Loggable.__init__(self, logging=logging)
         self.source = source
         self.translations = {}
         self.executed = False

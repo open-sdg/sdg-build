@@ -2,14 +2,14 @@ from urllib.request import urlopen
 import pandas as pd
 import numpy as np
 from sdg.Indicator import Indicator
-from sdg.Debuggable import Debuggable
+from sdg.Loggable import Loggable
 
-class InputBase(Debuggable):
+class InputBase(Loggable):
     """Base class for sources of SDG data/metadata."""
 
-    def __init__(self, verbose=False):
+    def __init__(self, logging=None):
         """Constructor for InputBase."""
-        Debuggable.__init__(self, verbose=verbose)
+        Loggable.__init__(self, logging=logging)
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []
@@ -190,7 +190,7 @@ class InputBase(Debuggable):
         """
         data = self.alter_data(data)
         meta = self.alter_meta(meta)
-        indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options, verbose=self.verbose)
+        indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options, logging=self.logging)
         self.indicators[indicator_id] = indicator
 
 

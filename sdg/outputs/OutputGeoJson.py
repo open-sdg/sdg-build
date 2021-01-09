@@ -14,7 +14,7 @@ class OutputGeoJson(OutputBase):
         geojson_file='regions.geojson', name_property='name', id_property='id',
         id_column='GeoCode', output_subfolder='regions', filename_prefix='indicator_',
         exclude_columns=None, id_replacements=None, indicator_options=None,
-        verbose=False):
+        logging=None):
         """Constructor for OutputGeoJson.
 
         Parameters
@@ -61,7 +61,7 @@ class OutputGeoJson(OutputBase):
             id_replacements = {}
 
         OutputBase.__init__(self, inputs, schema, output_folder, translations,
-                            indicator_options, verbose=verbose)
+                            indicator_options, logging=logging)
         self.geojson_file = geojson_file
         self.name_property = name_property
         self.id_property = id_property

@@ -4,15 +4,15 @@ import os
 import json
 import jsonschema
 from sdg import check_csv
-from sdg.Debuggable import Debuggable
+from sdg.Loggable import Loggable
 
-class SchemaInputBase(Debuggable):
+class SchemaInputBase(Loggable):
     """A base class for importing a schema, querying it, and validating with it.
 
     This class assumes imported schema (self.schema) are valid JSON Schema."""
 
 
-    def __init__(self, schema_path='', verbose=False):
+    def __init__(self, schema_path='', logging=None):
         """Create a new SchemaBase object
 
         Parameters
@@ -21,7 +21,7 @@ class SchemaInputBase(Debuggable):
             A path to the schema file to input
         """
 
-        Debuggable.__init__(self, verbose=verbose)
+        Loggable.__init__(self, logging=logging)
         self.schema_path = schema_path
         self.field_order = []
         self.load_schema()

@@ -1,6 +1,7 @@
 import pandas as pd
+from sdg.Debuggable import Debuggable
 
-class Series:
+class Series(Debuggable):
     """Data model for series within SDG indicators.
 
     Indicator data can have multiple combinations of disaggregations, which are
@@ -24,7 +25,7 @@ class Series:
         }
     """
 
-    def __init__(self, disaggregations, indicator_id='Indicator'):
+    def __init__(self, disaggregations, indicator_id='Indicator', verbose=False):
         """Constructor for the SDG series instances.
 
         Parameters
@@ -34,6 +35,7 @@ class Series:
         indicator_id : string
             Optional indicator ID this series is a part of (eg, 1.1.1).
         """
+        Debuggable.__init__(self, verbose=verbose)
         self.disaggregations = disaggregations
         self.values = {}
         self.indicator_id = indicator_id

@@ -18,7 +18,8 @@ class InputSdmx(InputBase):
                  import_translation_keys=False,
                  dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
                  indicator_id_xpath=".//Annotation[AnnotationTitle='Indicator']/AnnotationText",
-                 indicator_name_xpath=".//Annotation[AnnotationTitle='IndicatorTitle']/AnnotationText"):
+                 indicator_name_xpath=".//Annotation[AnnotationTitle='IndicatorTitle']/AnnotationText",
+                 verbose=False):
         """Constructor for InputSdmx.
 
         Parameters
@@ -63,6 +64,7 @@ class InputSdmx(InputBase):
         indicator_name_xpath : string
             An xpath query to find the indicator name within each Series code
         """
+        InputBase.__init__(self, verbose=verbose)
         if drop_dimensions is None:
             drop_dimensions = []
         if dimension_map is None:
@@ -81,7 +83,6 @@ class InputSdmx(InputBase):
         self.indicator_id_xpath = indicator_id_xpath
         self.indicator_name_xpath = indicator_name_xpath
         self.series_dimensions = {}
-        InputBase.__init__(self)
 
 
     def parse_xml(self, location, strip_namespaces=True):

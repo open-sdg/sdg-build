@@ -44,7 +44,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
                    docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
-                   docs_extra_disaggregations=None, docs_translate_disaggregations=False):
+                   docs_extra_disaggregations=None, docs_translate_disaggregations=False,
+                   verbose=False):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -75,6 +76,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             that would not otherwise be included in the disaggregation report
         docs_translate_disaggregations: boolean. Whether to provide translated columns
             in the disaggregation report
+        verbose : boolean. Whether to output debug messages.
 
     Returns:
         Boolean status of file writes
@@ -109,6 +111,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'indicator_options': indicator_options,
         'indicator_downloads': indicator_downloads,
         'docs_extra_disaggregations': docs_extra_disaggregations,
+        'verbose': verbose,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -148,6 +151,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         baseurl=options['docs_baseurl'],
         extra_disaggregations=options['docs_extra_disaggregations'],
         translate_disaggregations=options['docs_translate_disaggregations'],
+        verbose=verbose,
     )
     documentation_service.generate_documentation()
 
@@ -177,7 +181,8 @@ def open_sdg_indicator_options_from_dict(options):
 
 
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
-        inputs=None, alter_data=None, alter_meta=None, indicator_options=None):
+        inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
+        verbose=False):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -191,6 +196,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         config: str. Path to a YAML config file that overrides other parameters
         alter_data: function. A callback function that alters a data Dataframe
         alter_meta: function. A callback function that alters a metadata dictionary
+        verbose: boolean. Whether or not to output debugging messages
 
     Returns:
         boolean: True if the check was successful, False if not.
@@ -210,6 +216,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'translations': [],
         'indicator_options': indicator_options,
         'indicator_downloads': None,
+        'verbose': verbose,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -261,7 +268,7 @@ def open_sdg_prep(options):
 
     # Use a Prose.io file for the metadata schema.
     schema_path = os.path.join(options['src_dir'], options['schema_file'])
-    schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
+    schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path, verbose=options['verbose'])
 
     # Indicate any extra fields for the reporting stats, if needed.
     reporting_status_extra_fields = []
@@ -276,7 +283,8 @@ def open_sdg_prep(options):
         translations=options['translations'],
         reporting_status_extra_fields=reporting_status_extra_fields,
         indicator_options=options['indicator_options'],
-        indicator_downloads=options['indicator_downloads'])
+        indicator_downloads=options['indicator_downloads'],
+        verbose=options['verbose'])
 
     outputs = [opensdg_output]
 
@@ -288,6 +296,7 @@ def open_sdg_prep(options):
             'output_folder': options['site_dir'],
             'translations': options['translations'],
             'indicator_options': options['indicator_options'],
+            'verbose': options['verbose'],
         }
         for key in map_layer:
             geojson_kwargs[key] = map_layer[key]
@@ -342,6 +351,8 @@ def open_sdg_input_from_dict(params, options):
     # For "path_pattern" we need to prepend our src_dir.
     if 'path_pattern' in params:
         params['path_pattern'] = os.path.join(options['src_dir'], params['path_pattern'])
+
+    params['verbose'] = options['verbose']
 
     input_instance = None
     if input_class == 'InputCkan':
@@ -403,6 +414,8 @@ def open_sdg_translation_from_dict(params, options):
 
     # We no longer need the "class" param.
     del params['class']
+
+    params['verbose'] = options['verbose']
 
     # For "source" in TranslationInputYaml/Csv we need to prepend our src_dir.
     if translation_class == 'TranslationInputCsv' or translation_class == 'TranslationInputYaml':

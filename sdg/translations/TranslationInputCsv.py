@@ -13,15 +13,14 @@ class TranslationInputCsv(TranslationInputBase):
     When importing, this class treats the CSV filename as the "group".
     """
 
-    def __init__(self, source='translations'):
+    def __init__(self, source='translations', verbose=False):
         """Constructor for the TranslationInputBase class.
         Parameters
         ----------
         source : string
             The folder containing the CSV files.
         """
-        self.source = source
-        self.translations = {}
+        TranslationInputBase.__init__(self, source=source, verbose=verbose)
 
 
     def parse_csv(self, folder):

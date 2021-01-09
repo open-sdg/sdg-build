@@ -2,12 +2,14 @@ from urllib.request import urlopen
 import pandas as pd
 import numpy as np
 from sdg.Indicator import Indicator
+from sdg.Debuggable import Debuggable
 
-class InputBase:
+class InputBase(Debuggable):
     """Base class for sources of SDG data/metadata."""
 
-    def __init__(self):
+    def __init__(self, verbose=False):
         """Constructor for InputBase."""
+        Debuggable.__init__(self, verbose=verbose)
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []

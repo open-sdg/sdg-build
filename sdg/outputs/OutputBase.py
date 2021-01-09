@@ -2,13 +2,14 @@ import os
 from sdg.IndicatorOptions import IndicatorOptions
 from sdg.translations import TranslationInputBase
 from sdg.translations import TranslationHelper
+from sdg.Debuggable import Debuggable
 
-class OutputBase:
+class OutputBase(Debuggable):
     """Base class for destinations of SDG data/metadata."""
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-                 indicator_options=None):
+                 indicator_options=None, verbose=False):
         """Constructor for OutputBase.
 
         inputs: list
@@ -22,7 +23,10 @@ class OutputBase:
         indicator_options: IndicatorOptions
             Optional options that are passed into each Indicator object.
             Allows particular outputs to affect the data/metadata of indicators.
+        verbose: boolean
+            Whether to display debug messages.
         """
+        Debuggable.__init__(self, verbose=verbose)
         if translations is None:
             translations = []
         self.indicator_options = IndicatorOptions() if indicator_options is None else indicator_options
@@ -47,6 +51,9 @@ class OutputBase:
             If specified, a particular language that this build is using. If
             not specified, it is assumed the build is not translated.
         """
+        self.debug('Starting output: {class_name}')
+        if language is not None:
+            self.debug('Current language: ' + language)
         # Keep a backup of the output folder.
         original_output_folder = self.output_folder
 

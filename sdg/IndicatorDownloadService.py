@@ -4,10 +4,12 @@ import glob
 import re
 from shutil import copyfile
 from pathlib import Path
+from sdg.Debuggable import Debuggable
 
-class IndicatorDownloadService:
-    def __init__(self, output_folder=None):
+class IndicatorDownloadService(Debuggable):
+    def __init__(self, output_folder=None, verbose=False):
         """Constructor for IndicatorDownloadService."""
+        Debuggable.__init__(self, verbose=verbose)
         self.__output_folder = output_folder
         self.__index = {}
 

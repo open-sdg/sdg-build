@@ -4,6 +4,7 @@ __version__ = "0.3.1"
 __author__ = "Doug Ashton <douglas.j.ashton@gmail.com>"
 
 # Load key components
+from .Debuggable import Debuggable
 from . import path
 from . import data
 from . import edges

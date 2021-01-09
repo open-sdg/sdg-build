@@ -2,8 +2,9 @@ import os
 import sdg
 import pandas as pd
 from slugify import slugify
+from sdg.Debuggable import Debuggable
 
-class OutputDocumentationService:
+class OutputDocumentationService(Debuggable):
     """HTML generation to document outputs built with this library.
 
     Note that this is meant to document particular builds, not the library in
@@ -16,7 +17,7 @@ class OutputDocumentationService:
     def __init__(self, outputs, folder='_site', branding='Build docs',
                  languages=None, intro='', translations=None, indicator_url=None,
                  subfolder=None, baseurl='', extra_disaggregations=None,
-                 translate_disaggregations=False):
+                 translate_disaggregations=False, verbose=False):
         """Constructor for the OutputDocumentationService class.
 
         Parameters
@@ -57,6 +58,7 @@ class OutputDocumentationService:
             Whether or not to include translation columns in the
             disaggregation report.
         """
+        Debuggable.__init__(self, verbose=verbose)
         self.outputs = outputs
         self.folder = self.fix_folder(folder, subfolder)
         self.branding = branding

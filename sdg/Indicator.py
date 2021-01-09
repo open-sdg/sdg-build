@@ -5,11 +5,12 @@ import pandas as pd
 import numpy as np
 import collections.abc
 from sdg.translations import TranslationHelper
+from sdg.Debuggable import Debuggable
 
-class Indicator:
+class Indicator(Debuggable):
     """Data model for SDG indicators."""
 
-    def __init__(self, inid, name=None, data=None, meta=None, options=None):
+    def __init__(self, inid, name=None, data=None, meta=None, options=None, verbose=False):
         """Constructor for the SDG indicator instances.
 
         Parameters
@@ -25,6 +26,7 @@ class Indicator:
         options : IndicatorOptions
             Output-specific options provided by the OutputBase class.
         """
+        Debuggable.__init__(self, verbose=verbose)
         self.inid = inid
         self.name = name
         self.data = data

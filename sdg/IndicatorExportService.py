@@ -3,9 +3,10 @@ import git
 import json
 from zipfile import ZipFile
 import humanize
+from sdg.Debuggable import Debuggable
 
-class IndicatorExportService:
-    def __init__(self, site_directory, indicators):
+class IndicatorExportService(Debuggable):
+    def __init__(self, site_directory, indicators, verbose=False):
         """Constructor for IndicatorExportService.
 
         Parameters
@@ -16,6 +17,7 @@ class IndicatorExportService:
         indicators : dict
             A dict of Indicator objects, keyed by indicator id.
         """
+        Debuggable.__init__(self, verbose=verbose)
         self.__site_directory = site_directory
         self.__zip_directory = "%s/zip" % site_directory
         self.__data_directory = "%s/data" % site_directory

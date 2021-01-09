@@ -2,13 +2,14 @@ import os
 import sdg
 import pandas as pd
 from slugify import slugify
+from sdg.Debuggable import Debuggable
 
-class DisaggregationReportService:
+class DisaggregationReportService(Debuggable):
     """Report generation to document disaggregations in data."""
 
 
     def __init__(self, outputs, languages=None, translation_helper=None,
-                 indicator_url=None, extra_disaggregations=None):
+                 indicator_url=None, extra_disaggregations=None, verbose=False):
         """Constructor for the DisaggregationReportService class.
 
         Parameters
@@ -32,6 +33,7 @@ class DisaggregationReportService:
             included. Common choices are are units of measurement and series,
             which some users may prefer to see in the report.
         """
+        Debuggable.__init__(self, verbose=verbose)
         self.outputs = outputs
         self.indicator_url = indicator_url
         self.slugs = []

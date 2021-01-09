@@ -9,7 +9,7 @@ class Loggable:
 
 
     def warn(self, message, **kwargs):
-        if self.logging is not None and 'warnings' in self.logging:
+        if self.logging is not None and 'warn' in self.logging:
             self.log(message, **kwargs)
 
 

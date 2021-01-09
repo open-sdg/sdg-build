@@ -51,9 +51,10 @@ class OutputBase(Debuggable):
             If specified, a particular language that this build is using. If
             not specified, it is assumed the build is not translated.
         """
-        self.debug('Starting output: {class_name}')
+        debug_message = 'Starting output: {class_name}'
         if language is not None:
-            self.debug('Current language: {language}', language=language)
+            debug_message += ' ({language})'
+        self.debug(debug_message, language=language)
         # Keep a backup of the output folder.
         original_output_folder = self.output_folder
 

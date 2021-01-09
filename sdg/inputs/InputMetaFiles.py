@@ -31,6 +31,7 @@ class InputMetaFiles(InputFiles):
 
 
     def execute(self, indicator_options):
+        InputFiles.execute(self, indicator_options)
         """Get the metadata from the files."""
         self.load_metadata_mapping()
         indicator_map = self.get_indicator_map()

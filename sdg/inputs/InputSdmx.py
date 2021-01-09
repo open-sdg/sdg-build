@@ -363,6 +363,7 @@ class InputSdmx(InputBase):
     def execute(self, indicator_options):
         """Execute this input. Overrides parent."""
 
+        InputBase.execute(self, indicator_options)
         # Fetch the response from the SDMX endpoint.
         self.fetch_data()
 

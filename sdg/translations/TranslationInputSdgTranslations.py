@@ -33,6 +33,7 @@ class TranslationInputSdgTranslations(TranslationInputYaml):
 
 
     def execute(self):
+        self.debug('Starting translation input: {class_name}')
         # Clean up from past runs.
         self.clean_up()
         # Clone the repository.

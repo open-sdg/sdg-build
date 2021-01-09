@@ -72,8 +72,9 @@ class Series(Debuggable):
             The numerical value to add.
         """
         if year in self.values:
-            warning = '\nWARNING: {} - Duplicate values for year {}: {} and {} in series: {}'
-            print(warning.format(self.indicator_id, year, value, self.values[year], self.get_disaggregations()))
+            self.debug('WARNING: {inid} - Duplicate values for year {year}: {value1} and {value2} in series: {series}',
+                       inid=self.indicator_id, year=year, value1=value,
+                       value2=self.values[year], series=self.get_disaggregations())
         else:
             self.values[year] = value
 

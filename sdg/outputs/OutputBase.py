@@ -53,7 +53,7 @@ class OutputBase(Debuggable):
         """
         self.debug('Starting output: {class_name}')
         if language is not None:
-            self.debug('Current language: ' + language)
+            self.debug('Current language: {language}', language=language)
         # Keep a backup of the output folder.
         original_output_folder = self.output_folder
 

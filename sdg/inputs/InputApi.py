@@ -70,6 +70,7 @@ class InputApi(InputBase):
 
 
     def execute(self, indicator_options):
+        InputBase.execute(self, indicator_options)
         """Fetch the resource data from the API for each indicator."""
         headers = { 'Accept': 'application/json' }
         for resource_id in self.indicator_id_map:

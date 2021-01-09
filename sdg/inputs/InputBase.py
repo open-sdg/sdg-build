@@ -16,8 +16,7 @@ class InputBase(Debuggable):
 
 
     def execute(self, indicator_options):
-        """Fetch all data/metadata from source, fetching a list of indicators."""
-        raise NotImplementedError
+        self.debug('Starting input: {class_name}')
 
 
     def get_row(self, year, value, disaggregations):
@@ -179,7 +178,7 @@ class InputBase(Debuggable):
         """
         data = self.alter_data(data)
         meta = self.alter_meta(meta)
-        indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options)
+        indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options, verbose=self.verbose)
         self.indicators[indicator_id] = indicator
 
 

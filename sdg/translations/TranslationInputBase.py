@@ -116,4 +116,4 @@ class TranslationInputBase(Debuggable):
 
     def execute(self):
         """Fetch translations from source."""
-        raise NotImplementedError
+        self.debug('Starting translation input: {class_name}')

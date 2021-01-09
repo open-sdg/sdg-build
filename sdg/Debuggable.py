@@ -8,11 +8,10 @@ class Debuggable:
         self.verbose = verbose
 
 
-    def debug(self, message):
+    def debug(self, message, **kwargs):
         if self.verbose:
-            message = message.format(
-                class_name=type(self).__name__,
-            )
+            kwargs['class_name'] = type(self).__name__
+            message = message.format(**kwargs)
             print(Debuggable.get_timestamp() + ' - ' + message)
 
 

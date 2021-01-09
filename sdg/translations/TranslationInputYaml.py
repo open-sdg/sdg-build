@@ -66,4 +66,5 @@ class TranslationInputYaml(TranslationInputBase):
 
 
     def execute(self):
+        TranslationInputBase.execute(self)
         self.parse_yaml(self.source)

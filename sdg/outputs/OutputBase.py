@@ -95,7 +95,7 @@ class OutputBase(Debuggable):
         merged_indicators = {}
         for input in inputs:
             # Fetch the input.
-            input.execute(self.indicator_options)
+            input.execute_once(self.indicator_options)
             # Merge the results.
             for inid in input.indicators:
                 if inid not in merged_indicators:

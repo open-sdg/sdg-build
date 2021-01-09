@@ -13,6 +13,18 @@ class InputBase(Debuggable):
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []
+        self.last_executed_indicator_options = None
+
+
+    def execute_once(self, indicator_options):
+        # To avoid unnecessarily executing the same input multiple times,
+        # track the indicator options and skip execution if they did not
+        # change from the last time.
+        if self.last_executed_indicator_options is not None:
+            if indicator_options == self.last_executed_indicator_options:
+                return
+        self.last_executed_indicator_options = indicator_options
+        self.execute(indicator_options)
 
 
     def execute(self, indicator_options):

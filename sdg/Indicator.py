@@ -243,8 +243,6 @@ class Indicator(Debuggable):
         if language in self.translations:
             return
 
-        self.debug('Translating indicator {inid} into {lang}', inid=self.inid, lang=language)
-
         # Start with an empty indicator.
         indicator = Indicator(inid=self.inid, options=self.options)
 

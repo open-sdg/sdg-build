@@ -62,6 +62,7 @@ class OutputBase(Debuggable):
             language = None
 
         if language:
+            self.debug('Translating indicators into {lang}', lang=language)
             # Temporarily change the output folder.
             self.output_folder = os.path.join(original_output_folder, language)
             # Translate each indicator.

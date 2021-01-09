@@ -76,7 +76,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             that would not otherwise be included in the disaggregation report
         docs_translate_disaggregations: boolean. Whether to provide translated columns
             in the disaggregation report
-        logging : boolean. Whether to output debug messages.
+        logging : list or None. The types of logs to print, including 'warn' and 'debug'.
 
     Returns:
         Boolean status of file writes
@@ -198,7 +198,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         config: str. Path to a YAML config file that overrides other parameters
         alter_data: function. A callback function that alters a data Dataframe
         alter_meta: function. A callback function that alters a metadata dictionary
-        logging: boolean. Whether or not to output debugging messages
+        logging: Noneor list. Type of logs to print, including 'warn' and 'debug'
 
     Returns:
         boolean: True if the check was successful, False if not.

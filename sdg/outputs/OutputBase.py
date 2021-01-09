@@ -23,8 +23,8 @@ class OutputBase(Loggable):
         indicator_options: IndicatorOptions
             Optional options that are passed into each Indicator object.
             Allows particular outputs to affect the data/metadata of indicators.
-        logging: boolean
-            Whether to display debug messages.
+        logging: None or list
+            Type of logs to print, including 'warn' and 'debug'.
         """
         Loggable.__init__(self, logging=logging)
         if translations is None:

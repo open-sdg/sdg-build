@@ -20,6 +20,7 @@ class TranslationInputBase(Debuggable):
         Debuggable.__init__(self, verbose=verbose)
         self.source = source
         self.translations = {}
+        self.executed = False
 
 
     def get_translations(self):
@@ -112,6 +113,13 @@ class TranslationInputBase(Debuggable):
             repo.git.checkout(branch)
         if tag:
             repo.git.checkout(tag)
+
+
+    def execute_once(self):
+        if self.executed == True:
+            return
+        self.execute()
+        self.executed = True
 
 
     def execute(self):

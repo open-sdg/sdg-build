@@ -46,7 +46,7 @@ class TranslationOutputBase(Debuggable):
         merged = TranslationInputBase()
         for input in inputs:
             # Fetch the input.
-            input.execute()
+            input.execute_once()
             # Merge the results.
             translations = input.get_translations()
             for language in translations:

@@ -278,10 +278,10 @@ class InputSdmx(InputBase):
         try:
             df['Value'] = pd.to_numeric(df['Value'], errors='raise')
         except KeyError as e:
-            print('WARNING: Indicator ' + indicator_id + ' did not have a value column - inserting null values.')
+            self.warn('Indicator {inid} did not have a value column - inserting null values.', inid=indicator_id)
             df['Value'] = np.nan
         except ValueError as e:
-            print('WARNING: Indicator ' + indicator_id + ' has a non-numeric value: ' + str(e))
+            self.warn('Indicator {inid} has a non-numeric value: {value}', inid=indicator_id, value=str(e))
         return df
 
 

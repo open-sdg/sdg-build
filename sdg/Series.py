@@ -72,7 +72,7 @@ class Series(Loggable):
             The numerical value to add.
         """
         if year in self.values:
-            self.debug('WARNING: {inid} - Duplicate values for year {year}: {value1} and {value2} in series: {series}',
+            self.warn('{inid} - Duplicate values for year {year}: {value1} and {value2} in series: {series}',
                        inid=self.indicator_id, year=year, value1=value,
                        value2=self.values[year], series=self.get_disaggregations())
         else:

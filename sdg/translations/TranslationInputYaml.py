@@ -36,7 +36,7 @@ class TranslationInputYaml(TranslationInputBase):
         """
         # Safety code for missing folders.
         if not os.path.isdir(folder):
-            print('Warning: Could not import translations from missing folder "%s".' % folder)
+            self.warn('Warning: Could not import translations from missing folder "{folder}".', folder=folder)
             return
 
         # Walk through the translation folder.

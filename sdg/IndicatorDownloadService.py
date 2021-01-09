@@ -41,7 +41,7 @@ class IndicatorDownloadService(Loggable):
         if match:
             return match.group(1).replace('-', '.')
         else:
-            print('Warning - indicator id not parsed from: ' + filename)
+            self.warn('Warning - indicator id not parsed from: {filename}', filename=filename)
             return None
 
 

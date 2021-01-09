@@ -368,14 +368,14 @@ class Indicator(Debuggable):
         grouping_columns = [column for column in self.data.columns if column not in aggregating_columns]
 
         if len(grouping_columns) == 0:
-            series = sdg.Series({}, self.get_indicator_id())
+            series = sdg.Series({}, self.get_indicator_id(), verbose=self.verbose)
             for index, row in self.data.iterrows():
                 series.add_value(row['Year'], row['Value'])
             return [series]
 
         def row_to_series(row):
             disaggregations = row[grouping_columns].to_dict()
-            series = sdg.Series(disaggregations, self.get_indicator_id())
+            series = sdg.Series(disaggregations, self.get_indicator_id(), verbose=self.verbose)
             for year, value in zip(row['Year'], row['Value']):
                 series.add_value(year, value)
             return series

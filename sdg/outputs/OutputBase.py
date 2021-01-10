@@ -93,6 +93,12 @@ class OutputBase(Loggable):
 
     def merge_inputs(self, inputs):
         """Take the results of many inputs and merge into a single dict of indicators."""
+        # In this case of multiple outputs, the same set of inputs may reach
+        # this point multiple times. To avoid repetitive processing, we
+        # we check the first input for already-merged indicators.
+        if inputs[0].has_merged_indicators(inputs):
+            return inputs[0].get_merged_indicators()
+        # Otherwise we continue on.
         merged_indicators = {}
         for input in inputs:
             # Fetch the input.
@@ -121,6 +127,7 @@ class OutputBase(Loggable):
             merged_indicators[inid].set_headline()
             merged_indicators[inid].set_edges()
 
+        inputs[0].set_merged_indicators(merged_indicators, inputs)
         return merged_indicators
 
 

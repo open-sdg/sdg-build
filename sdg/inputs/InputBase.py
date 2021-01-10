@@ -14,6 +14,9 @@ class InputBase(Loggable):
         self.data_alterations = []
         self.meta_alterations = []
         self.last_executed_indicator_options = None
+        self.merged_indicators = None
+        self.previously_merged_inputs = []
+        self.num_previously_merged_inputs = 0
 
 
     def execute_once(self, indicator_options):
@@ -249,3 +252,51 @@ class InputBase(Loggable):
             The alteration function.
         """
         self.meta_alterations.append(alteration)
+
+
+    def has_merged_indicators(self, inputs):
+        """Whether this is the first of a set of already-merged inputs.
+
+        Parameters
+        ----------
+        inputs : list
+            List of InputBase subclasses.
+
+
+        Returns
+        -------
+        boolean
+            Whether or not this input is the first of a set of already-merged inputs.
+        """
+        return all([
+            self.get_merged_indicators() is not None,
+            self == inputs[0],
+            self.previously_merged_inputs == inputs,
+            self.num_previously_merged_inputs == len(inputs),
+        ])
+
+
+    def get_merged_indicators(self):
+        """Return a set of already-merged indicators.
+
+        Returns
+        -------
+        dict or None
+            Dict of Indicator objects keyed by id, if available, else None.
+        """
+        return self.merged_indicators
+
+
+    def set_merged_indicators(self, merged_indicators, inputs):
+        """Set merged indicators for later retrieval.
+
+        Parameters
+        ----------
+        merged_indicators : dict
+            Dict of Indicator objects keyed by id.
+        inputs : list
+            List of InputBase subclasses.
+        """
+        self.merged_indicators = merged_indicators
+        self.previously_merged_inputs = inputs
+        self.num_previously_merged_inputs = len(inputs)

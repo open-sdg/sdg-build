@@ -1,6 +1,5 @@
 pyyaml
 pandas
-numpy
 gitpython
 jsonschema
 requests

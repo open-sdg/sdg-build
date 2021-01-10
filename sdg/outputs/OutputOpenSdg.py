@@ -198,7 +198,7 @@ class OutputOpenSdg(OutputBase):
                 'description': 'JSON files containing metadata for the indicators',
                 'loop_indicators': True,
                 'endpoints': [
-                    '{language}/comb/{indicator_id}.json'
+                    '{language}/meta/{indicator_id}.json'
                 ]
             },
             {

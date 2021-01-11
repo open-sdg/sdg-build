@@ -192,7 +192,7 @@ class OutputSdmxMl(OutputBase):
         return 'SDMX output'
 
 
-    def get_documentation_content(self, languages=None):
+    def get_documentation_content(self, languages=None, baseurl=''):
 
         indicator_ids = self.get_documentation_indicator_ids()
 
@@ -203,7 +203,7 @@ class OutputSdmxMl(OutputBase):
         output += '<li><a href="' + path + '">' + path + '</a></li>'
         for indicator_id in indicator_ids:
             path = endpoint.format(indicator_id=indicator_id)
-            output += '<li><a href="' + path + '">' + path + '</a></li>'
+            output += '<li><a href="' + baseurl + path + '">' + path + '</a></li>'
         output += '<li>etc...</li>'
         output += '</ul>'
 

@@ -100,7 +100,7 @@ class OutputSdmxMl(OutputBase):
                 series_key = self.dsd.make_key(SeriesKey, self.get_dimension_values(row, indicator))
                 attributes = self.get_attribute_values(row, indicator)
                 dimension_key = self.dsd.make_key(Key, values={
-                    'TIME_PERIOD': row['TIME_DETAIL'],
+                    'TIME_PERIOD': str(row['TIME_DETAIL']),
                 })
                 observation = Observation(
                     series_key=series_key,

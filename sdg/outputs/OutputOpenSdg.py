@@ -85,6 +85,9 @@ class OutputOpenSdg(OutputBase):
         stats_reporting = sdg.stats.reporting_status(self.schema, all_meta, self.reporting_status_grouping_fields)
         status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
 
+        disaggregation_status_service = sdg.DisaggregationStatusService(site_dir, self.indicators, self.reporting_status_grouping_fields)
+        disaggregation_status_service.write_json()
+
         indicator_export_service = sdg.IndicatorExportService(site_dir, self.indicators)
         indicator_export_service.export_all_indicator_data_as_zip_archive()
 
@@ -148,7 +151,7 @@ class OutputOpenSdg(OutputBase):
         return 'Open SDG output'
 
 
-    def get_documentation_content(self, languages=None):
+    def get_documentation_content(self, languages=None, baseurl=''):
         if languages is None:
             languages = ['']
 
@@ -195,7 +198,7 @@ class OutputOpenSdg(OutputBase):
                 'description': 'JSON files containing metadata for the indicators',
                 'loop_indicators': True,
                 'endpoints': [
-                    '{language}/comb/{indicator_id}.json'
+                    '{language}/meta/{indicator_id}.json'
                 ]
             },
             {
@@ -241,7 +244,7 @@ class OutputOpenSdg(OutputBase):
                 for indicator_id in indicator_ids:
                     for endpoint in section['endpoints']:
                         path = endpoint.format(language=language, indicator_id=indicator_id)
-                        output += '<li><a href="' + path + '">' + path + '</a></li>'
+                        output += '<li><a href="' + baseurl + path + '">' + path + '</a></li>'
                     if section['loop_indicators'] == False:
                         break
             if section['loop_indicators'] == True:

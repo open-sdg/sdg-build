@@ -14,7 +14,9 @@ class OutputDocumentationService:
 
 
     def __init__(self, outputs, folder='_site', branding='Build docs',
-                 languages=None, intro='', translations=None, indicator_url=None):
+                 languages=None, intro='', translations=None, indicator_url=None,
+                 subfolder=None, baseurl='', extra_disaggregations=None,
+                 translate_disaggregations=False):
         """Constructor for the OutputDocumentationService class.
 
         Parameters
@@ -25,6 +27,9 @@ class OutputDocumentationService:
         folder : string
             Optional folder in which to create the documentation pages. Defaults
             to the "_site" folder.
+        subfolder : string
+            Optional subfolder (beneath the "folder" parameter) in which to
+            create the documentation pages.
         branding : string
             Optional title/heading to use on all documentation pages. Defaults
             to "Build docs".
@@ -42,12 +47,23 @@ class OutputDocumentationService:
             the "[id]" will be replaced with the indicator id (dash-delimited).
             For example, "https://example.com/[id].html" will be replaced with
             "https://example.com/4-1-1.html".
+        baseurl : string
+            An optional path that all absolute URLs in the data repository start with.
+        extra_disaggregations : list
+            An optional list of columns to include in the disaggregation report,
+            which would otherwise not be included. Common options are units of
+            measurement and series.
+        translate_disaggregations : boolean
+            Whether or not to include translation columns in the
+            disaggregation report.
         """
         self.outputs = outputs
-        self.folder = folder
+        self.folder = self.fix_folder(folder, subfolder)
         self.branding = branding
         self.intro = intro
         self.indicator_url = indicator_url
+        self.data_baseurl = self.get_data_baseurl(baseurl)
+        self.docs_baseurl = self.get_docs_baseurl(baseurl, subfolder)
         self.slugs = []
         self.languages = ['en'] if languages is None else languages
         if translations is not None:
@@ -56,10 +72,52 @@ class OutputDocumentationService:
             self.translation_helper = None
         self.disaggregation_report_service = sdg.DisaggregationReportService(
             self.outputs,
-            languages = self.languages,
+            languages = self.languages if translate_disaggregations else [],
             translation_helper = self.translation_helper,
-            indicator_url = self.indicator_url
+            indicator_url = self.indicator_url,
+            extra_disaggregations = extra_disaggregations,
         )
+
+
+    def fix_folder(self, folder, subfolder):
+        fixed = '_site'
+        if folder is not None:
+            fixed = folder
+        if subfolder is not None and subfolder != '':
+            fixed = os.path.join(fixed, subfolder)
+        return fixed
+
+
+    def get_data_baseurl(self, baseurl):
+        fixed = ''
+        if baseurl is None or baseurl == '':
+            # All links will be relative.
+            return ''
+        fixed = baseurl
+        # Make sure the baseurl starts and ends with a slash.
+        if not fixed.startswith('/'):
+            fixed = '/' + fixed
+        if not fixed.endswith('/'):
+            fixed = fixed + '/'
+        return fixed
+
+
+    def get_docs_baseurl(self, baseurl, subfolder):
+        fixed = ''
+        if baseurl is None or baseurl == '':
+            # All links will be relative.
+            return ''
+        fixed = baseurl
+        # Make sure the baseurl starts and ends with a slash.
+        if not fixed.startswith('/'):
+            fixed = '/' + fixed
+        if not fixed.endswith('/'):
+            fixed = fixed + '/'
+        if subfolder is not None and subfolder != '':
+            fixed = fixed + subfolder
+        if not fixed.endswith('/'):
+            fixed = fixed + '/'
+        return fixed
 
 
     def generate_documentation(self):
@@ -70,7 +128,7 @@ class OutputDocumentationService:
             pages.append({
                 'title': title,
                 'filename': self.create_filename(title),
-                'content': output.get_documentation_content(self.languages),
+                'content': output.get_documentation_content(self.languages, self.data_baseurl),
                 'description': output.get_documentation_description()
             })
             extras = output.get_documentation_extras()
@@ -264,7 +322,7 @@ class OutputDocumentationService:
     def get_html(self, title, content):
         template = """
         <!DOCTYPE html>
-        <html>
+        <html lang="en">
         <head>
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -275,11 +333,21 @@ class OutputDocumentationService:
             <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.3/css/theme.bootstrap_4.min.css" integrity="sha256-vFn0MM8utz2N3JoNzRxHXUtfCJLz5Pb9ygBY2exIaqg=" crossorigin="anonymous" />
+            <style>
+                .btn-primary {{
+                    background-color: #1D70B8;
+                    border-color: #1D70B8;
+                }}
+                a {{
+                    color: #1D70B8;
+                    text-decoration: underline;
+                }}
+            </style>
         </head>
         <body>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container">
-                    <a class="navbar-brand" href="index.html">{branding}</a>
+                    <a class="navbar-brand" href="{baseurl}index.html">{branding}</a>
                 </div>
             </nav>
             <main role="main">
@@ -299,7 +367,7 @@ class OutputDocumentationService:
             }});</script>
         </html>
         """
-        return template.format(branding=self.branding, title=title, content=content)
+        return template.format(branding=self.branding, title=title, content=content, baseurl=self.docs_baseurl)
 
 
     def html_from_dataframe(self, df, escape=False, totals=True):

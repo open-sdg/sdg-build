@@ -41,6 +41,7 @@ def reporting_status(schema, all_meta, extra_fields=None):
     ]
     # Convert that into a dataframe.
     meta_df = pd.DataFrame(rows, index=all_meta.keys())
+    meta_df.fillna('status.not_specified', inplace=True)
 
     # Make sure that numeric columns are numeric.
     def value_is_numeric(value):

@@ -161,7 +161,7 @@ class Indicator:
         string
             The number of the goal.
         """
-        return self.inid.split('-')[0]
+        return self.inid if self.is_standalone() else self.inid.split('-')[0]
 
 
     def get_target_id(self):
@@ -172,7 +172,7 @@ class Indicator:
         string
             The target id, dot-delimited.
         """
-        return '.'.join(self.inid.split('-')[0:2])
+        return self.inid if self.is_standalone else '.'.join(self.inid.split('-')[0:2])
 
 
     def get_indicator_id(self):
@@ -183,7 +183,7 @@ class Indicator:
         string
             The indicator id, dot-delimited.
         """
-        return self.inid.replace('-', '.')
+        return self.inid if self.is_standalone() else self.inid.replace('-', '.')
 
 
     def require_meta(self, minimum_metadata=None):
@@ -326,6 +326,21 @@ class Indicator:
         # Otherwise fall back to whether the indicator has data.
         else:
             return self.has_data()
+
+
+    def is_standalone(self):
+        """Decide whether this indicator is standalone - ie, not part of the SDGs.
+
+        Returns
+        -------
+        boolean
+            True if the indicator should be considered standalone, False otherwise.
+        """
+        standalone = self.get_meta_field_value('standalone')
+        if standalone is None or standalone == False:
+            return False
+        else:
+            return True
 
 
     def get_meta_field_value(self, field):

@@ -102,7 +102,9 @@ class DisaggregationReportService:
         indicators = {}
         for output in self.outputs:
             for indicator_id in output.get_indicator_ids():
-                indicators[indicator_id] = output.get_indicator_by_id(indicator_id)
+                indicator = output.get_indicator_by_id(indicator_id)
+                if not indicator.is_standalone():
+                    indicators[indicator_id] = indicator
         return indicators
 
 

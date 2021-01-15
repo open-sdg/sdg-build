@@ -54,6 +54,8 @@ class DisaggregationStatusService:
         goals = {}
         for indicator_id in self.indicators:
             indicator = self.indicators[indicator_id]
+            if indicator.is_standalone():
+                continue
             goal = int(indicator.get_goal_id())
             goals[goal] = True
         goal_ids = list(goals.keys())
@@ -139,6 +141,10 @@ class DisaggregationStatusService:
 
         for indicator_id in self.indicators:
             indicator = self.indicators[indicator_id]
+
+            if indicator.is_standalone():
+                continue
+
             is_notapplicable = self.is_indicator_notapplicable(indicator_id)
             is_complete = self.is_indicator_complete(indicator_id)
             is_inprogress = self.is_indicator_inprogress(indicator_id)

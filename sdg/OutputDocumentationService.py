@@ -236,13 +236,13 @@ class OutputDocumentationService:
         store = self.disaggregation_report_service.get_disaggregation_store()
 
         disaggregation_df = service.get_disaggregations_dataframe()
-        disaggregation_table = self.html_from_dataframe(disaggregation_df)
+        disaggregation_table = self.html_from_dataframe(disaggregation_df, table_id='disaggregation-table')
         disaggregation_download_label = 'Download CSV of disaggregations'
         disaggregation_download_file = 'disaggregation-report.csv'
         disaggregation_download = self.get_csv_download(disaggregation_df, disaggregation_download_file, label=disaggregation_download_label)
 
         indicator_df = service.get_indicators_dataframe()
-        indicator_table = self.html_from_dataframe(indicator_df)
+        indicator_table = self.html_from_dataframe(indicator_df, table_id='indicator-table')
         indicator_download_label = 'Download CSV of indicators'
         indicator_download_file = 'disaggregation-by-indicator-report.csv'
         indicator_download = self.get_csv_download(indicator_df, indicator_download_file, label=indicator_download_label)
@@ -270,13 +270,13 @@ class OutputDocumentationService:
         values_download_label = 'Download CSV of values used in this disaggregation'
         values_download_file = 'values--' + filename.replace('.html', '.csv')
         values_download = self.get_csv_download(values_df, values_download_file, label=values_download_label)
-        values_table = self.html_from_dataframe(values_df)
+        values_table = self.html_from_dataframe(values_df, table_id='values-table')
 
         indicators_df = service.get_disaggregation_indicator_dataframe(info)
         indicators_download_label = 'Download CSV of indicators using this disaggregation'
         indicators_download_file = 'indicators--' + filename.replace('.html', '.csv')
         indicators_download = self.get_csv_download(indicators_df, indicators_download_file, label=indicators_download_label)
-        indicators_table = self.html_from_dataframe(indicators_df)
+        indicators_table = self.html_from_dataframe(indicators_df, table_id='indicators-table')
 
         detail_html = self.get_html('Disaggregation: ' + disaggregation, service.get_disaggregation_detail_template().format(
             values_download=values_download,
@@ -297,7 +297,7 @@ class OutputDocumentationService:
         download_label = 'Download CSV of indicators using this disaggregation value'
         download_file = filename.replace('.html', '.csv')
         download = self.get_csv_download(df, download_file, label=download_label)
-        table = self.html_from_dataframe(df)
+        table = self.html_from_dataframe(df, table_id='disaggregation-value-table')
 
         html = self.get_html(disaggregation + ': ' + disaggregation_value, service.get_disaggregation_value_detail_template().format(
             download=download,
@@ -345,9 +345,9 @@ class OutputDocumentationService:
 
             <title>{title} - {branding}</title>
 
-            <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+            <script defer src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"></script>
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/frankieroberto/sortable-table@master/src/sortable-table.css" />
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/open-sdg/open-sdg-table@0.1.0/open-sdg-table.min.css">
             <style>
                 .btn-primary {{
                     background-color: #1D70B8;
@@ -376,34 +376,38 @@ class OutputDocumentationService:
                     </div>
                 </div>
             </div>
-            <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/gh/open-sdg/open-sdg-table@0.1.0/open-sdg-table.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/gh/frankieroberto/sortable-table@master/src/sortable-table.js"></script>
             <script>
-
-            $(".tablesorter").each(function() {{
-                $(this).find('th').attr('aria-sort', 'none');
-                $(this).find('td').each(function() {{
-                    if (!isNaN($(this).text())) {{
-                        $(this).css('text-align', 'right');
-                    }}
-                }});
-                new SortableTable(this);
-            }});
+            if (typeof sdgBuild !== 'undefined' && sdgBuild.tables) {{
+                var tableIds = Object.keys(sdgBuild.tables);
+                for (var i = 0; i < tableIds.length; i++) {{
+                    var tableId = tableIds[i];
+                    $('#' + tableId).openSdgTable(sdgBuild.tables[tableId]).find('td').each(function() {{
+                        if (!isNaN($(this).text())) {{
+                            $(this).css('text-align', 'right');
+                        }}
+                    }})
+                }}
+            }}
             </script>
         </html>
         """
         return template.format(branding=self.branding, title=title, content=content, baseurl=self.docs_baseurl)
 
 
-    def html_from_dataframe(self, df, escape=False, totals=True):
+    def html_from_dataframe(self, df, table_id='docs-table', escape=False, total=True):
         """Generate an HTML table from a DataFrame.
 
         Paramters
         ---------
         df : DataFrame
             The dataframe itself.
+        table_id : string
+            An identifier for the table, which should be unique on this web page.
         escape : boolean
             Whether or not to escape content. If the cells need to contain
             HTML, this should be False. Defaults to False.
@@ -412,14 +416,25 @@ class OutputDocumentationService:
             Defaults to True.
         """
         html = ''
-        if totals:
-            html = """
+        if total:
+            html += """
                 <div class="total-rows">
                     Total rows: <span class="total">{}</span>
                 </div>
                 """.format(len(df))
-        html += df.to_html(escape=escape, index=False, classes="table table-striped table-bordered tablesorter")
+        html += df.to_html(escape=escape, index=False, classes='table table-striped table-bordered', table_id=table_id)
+        html += self.javascript_from_dataframe(df, table_id)
         return html
+
+
+    def javascript_from_dataframe(self, df, table_id):
+        return """
+            <script type="text/javascript">
+            var sdgBuild = sdgBuild || {{}};
+            sdgBuild.tables = sdgBuild.tables || {{}};
+            sdgBuild.tables['{}'] = {};
+            </script>
+            """.format(table_id, df.to_json(orient='records'))
 
 
     def write_page(self, filename, html):

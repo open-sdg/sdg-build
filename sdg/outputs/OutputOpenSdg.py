@@ -209,7 +209,7 @@ class OutputOpenSdg(OutputBase):
                 'description': 'Zip files containing all indicators in CSV form',
                 'loop_indicators': False,
                 'endpoints': [
-                    '{language}/zip/all_indicators.zip'
+                    '{language}/zip/' + self.indicator_export_filename + '.zip'
                 ]
             },
             {

@@ -73,7 +73,7 @@ class IndicatorExportService:
 
     def __save_zip_file_info(self, zip_file_name):
         info = self.__get_zip_file_info(zip_file_name)
-        json_file_name = zip_file_name.replace('.zip', '.json')
+        json_file_name = 'all_indicators.json'
         with open(os.path.join(self.__zip_directory, json_file_name), 'w') as f:
             json.dump(info, f)
 
@@ -81,7 +81,8 @@ class IndicatorExportService:
         size = self.__get_zip_file_size(zip_file_name)
         info = {
             'size_bytes': size,
-            'size_human': humanize.naturalsize(size)
+            'size_human': humanize.naturalsize(size),
+            'filename': self.__filename + '.zip'
         }
         repo = self.__get_git_repository()
         if repo is not None:

@@ -35,7 +35,7 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
-                 default_values=None, message_id='my-id'):
+                 default_values=None, message_id=''):
         """Constructor for OutputSdmxMl.
 
         Parameters
@@ -52,7 +52,7 @@ class OutputSdmxMl(OutputBase):
             you may need to specify defaults here. If not specified here, defaults for
             attributes will be '' and defaults for dimensions will be '_T'.
         message_id : string
-            An identifying string to put in front of the "Sender" value in the header
+            Optional identifying string to put in the "Sender" value in the header
             of the XML. This id will be followed by a timestamp to ensure uniqueness.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
@@ -116,8 +116,8 @@ class OutputSdmxMl(OutputBase):
             dataset = GenericTimeSeriesDataSet(structured_by=self.dsd, series=serieses)
             current_time = datetime.now()
             header = Header(
-                id=self.message_id + '-' + str(current_time.timestamp()),
-                prepared=current_time,
+                id='IREF' + self.message_id + str(current_time.timestamp()),
+                prepared=current_time.strftime('%Y-%m-%dT%H:%M:%S'),
                 sender=Agency(id='open-sdg/sdg-build@' + sdg.__version__),
                 test=True,
             )

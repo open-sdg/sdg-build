@@ -159,7 +159,7 @@ class InputSdmxMl_Structure(InputSdmx):
 
 
     def omit_observation_attributes(self):
-        return ['OBS_VALUE', 'TIME_PERIOD', 'TIME_DETAIL']
+        return ['OBS_VALUE', 'TIME_PERIOD', 'TIME_DETAIL'] + self.drop_dimensions
 
 
     def fetch_data(self):

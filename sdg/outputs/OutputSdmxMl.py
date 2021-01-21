@@ -80,6 +80,10 @@ class OutputSdmxMl(OutputBase):
         datasets = []
         dfd = DataflowDefinition(id="OPEN_SDG_DFD", structure=self.dsd)
 
+        # SDMX output is language-agnostic. Only the DSD contains language info.
+        if language is not None:
+            language = None
+
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
@@ -98,7 +102,8 @@ class OutputSdmxMl(OutputBase):
             serieses = {}
             for _, row in data.iterrows():
                 series_key = self.dsd.make_key(SeriesKey, self.get_dimension_values(row, indicator))
-                attributes = self.get_attribute_values(row, indicator)
+                series_key.attrib = self.get_series_attribute_values(row, indicator)
+                attributes = self.get_observation_attribute_values(row, indicator)
                 dimension_key = self.dsd.make_key(Key, values={
                     'TIME_PERIOD': str(row['TIME_DETAIL']),
                 })
@@ -114,13 +119,7 @@ class OutputSdmxMl(OutputBase):
                 serieses[series_key].append(observation)
 
             dataset = GenericTimeSeriesDataSet(structured_by=self.dsd, series=serieses)
-            current_time = datetime.now()
-            header = Header(
-                id='IREF' + self.message_id + str(current_time.timestamp()),
-                prepared=current_time.strftime('%Y-%m-%dT%H:%M:%S'),
-                sender=Agency(id='open-sdg/sdg-build@' + sdg.__version__),
-                test=True,
-            )
+            header = self.create_header()
             time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
             msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
             sdmx_path = os.path.join(self.sdmx_folder, indicator_id + '.xml')
@@ -136,6 +135,16 @@ class OutputSdmxMl(OutputBase):
         return status
 
 
+    def create_header(self):
+        current_time = datetime.now()
+        return Header(
+            id='IREF' + self.message_id + str(current_time.timestamp()),
+            test=True,
+            prepared=current_time.strftime('%Y-%m-%dT%H:%M:%S'),
+            sender=Agency(id='open-sdg/sdg-build@' + sdg.__version__),
+        )
+
+
     def get_dimension_values(self, row, indicator):
         values = {}
         for dimension in self.dsd.dimensions:
@@ -148,12 +157,21 @@ class OutputSdmxMl(OutputBase):
         return values
 
 
-    def get_attribute_values(self, row, indicator):
+    def get_observation_attribute_values(self, row, indicator):
+        return self.get_attribute_values(row, indicator, sdmx.model.PrimaryMeasureRelationship)
+
+
+    def get_series_attribute_values(self, row, indicator):
+        return self.get_attribute_values(row, indicator, sdmx.model.DimensionRelationship)
+
+
+    def get_attribute_values(self, row, indicator, related_to):
         values = {}
         for attribute in self.dsd.attributes:
-            value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
-            if value != '':
-                values[attribute.id] = AttributeValue(value_for=attribute, value=value)
+            if attribute.related_to is not None and isinstance(attribute.related_to, related_to):
+                value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
+                if value != '':
+                    values[attribute.id] = AttributeValue(value_for=attribute, value=value)
         return values
 
 

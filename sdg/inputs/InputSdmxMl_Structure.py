@@ -40,11 +40,12 @@ class InputSdmxMl_Structure(InputSdmx):
             dimension_value_id = element.attrib['value']
             dimensions[dimension_id] = dimension_value_id
         # Also gather attributes as if they were dimensions.
-        attribute_elements = series.findall(".//Attributes/Value")
-        for element in attribute_elements:
-            attribute_id = element.attrib['id']
-            attribute_value_id = element.attrib['value']
-            dimensions[attribute_id] = attribute_value_id
+        if self.import_series_attributes:
+            attribute_elements = series.findall(".//Attributes/Value")
+            for element in attribute_elements:
+                attribute_id = element.attrib['id']
+                attribute_value_id = element.attrib['value']
+                dimensions[attribute_id] = attribute_value_id
         return dimensions
 
 
@@ -126,9 +127,39 @@ class InputSdmxMl_Structure(InputSdmx):
             if obsvalue is None:
                 continue
             value = obsvalue.attrib['value']
-            row = self.get_row(year, value, disaggregations)
+            row_disaggregations = self.get_observation_attributes(observation)
+            row_disaggregations.update(disaggregations)
+            row = self.get_row(year, value, row_disaggregations)
             rows.append(row)
         return rows
+
+
+    def get_observation_attributes(self, observation):
+        """Get a dict of attributes from an observation.
+
+        Parameters
+        ----------
+        observation : Element
+            The XML element for the observation
+
+        Returns
+        -------
+        dict
+            Dict of key/value pairs for attributes.
+        """
+        attributes = {}
+        if self.import_observation_attributes:
+            attribute_elements = observation.findall('.//Attributes/Value')
+            for element in attribute_elements:
+                attribute_id = element.attrib['id']
+                if attribute_id not in self.omit_observation_attributes():
+                    attribute_value = element.attrib['value']
+                    attributes[attribute_id] = attribute_value
+        return attributes
+
+
+    def omit_observation_attributes(self):
+        return ['OBS_VALUE', 'TIME_PERIOD', 'TIME_DETAIL']
 
 
     def fetch_data(self):

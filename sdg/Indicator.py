@@ -172,7 +172,7 @@ class Indicator:
         string
             The target id, dot-delimited.
         """
-        return self.inid if self.is_standalone else '.'.join(self.inid.split('-')[0:2])
+        return self.inid if self.is_standalone else '.'.join(self.inid.split('-')[0:1])
 
 
     def get_indicator_id(self):

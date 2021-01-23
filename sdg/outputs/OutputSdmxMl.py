@@ -12,7 +12,8 @@ import sdg
 import pandas as pd
 import numpy as np
 import sdmx
-from datetime import datetime
+import time
+from slugify import slugify
 from sdmx.model import (
     SeriesKey,
     Key,
@@ -35,7 +36,7 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
-                 default_values=None, message_id=''):
+                 default_values=None, header_id=None, sender_id=None):
         """Constructor for OutputSdmxMl.
 
         Parameters
@@ -51,12 +52,17 @@ class OutputSdmxMl(OutputBase):
             Since SDMX output is required to have a value for every dimension/attribute
             you may need to specify defaults here. If not specified here, defaults for
             attributes will be '' and defaults for dimensions will be '_T'.
-        message_id : string
-            Optional identifying string to put in the "Sender" value in the header
-            of the XML. This id will be followed by a timestamp to ensure uniqueness.
+        header_id : string or None
+            Optional identifying string to put in the "ID" element in the header
+            of the XML. If not specified, it will be "IREF" and a timestamp.
+        sender_id : string or None
+            Optional identifying string to put in the "id" attribut of the "Sender" element
+            in the header of the XML. If not specified, it will be the current version
+            of this library.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
-        self.message_id = message_id
+        self.header_id = header_id
+        self.sender_id = sender_id
         self.retrieve_dsd(dsd)
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
@@ -136,12 +142,23 @@ class OutputSdmxMl(OutputBase):
 
 
     def create_header(self):
-        current_time = datetime.now()
+        timestamp = time.time()
+        header_id = self.header_id
+        if header_id is None:
+            header_id = 'IREF' + str(int(timestamp))
+        else:
+            header_id = slugify(header_id)
+        sender_id = self.sender_id
+        if sender_id is None:
+            sender_id = 'open-sdg_sdg-build@' + slugify(sdg.__version__)
+        else:
+            sender_id = slugify(sender_id)
+
         return Header(
-            id='IREF' + self.message_id + str(current_time.timestamp()),
+            id=header_id,
             test=True,
-            prepared=current_time.strftime('%Y-%m-%dT%H:%M:%S'),
-            sender=Agency(id='open-sdg/sdg-build@' + sdg.__version__),
+            prepared=time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(timestamp)),
+            sender=Agency(id=sender_id),
         )
 
 

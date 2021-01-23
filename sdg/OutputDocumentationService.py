@@ -298,8 +298,8 @@ class OutputDocumentationService:
 
     def write_disaggregation_value_detail_page(self, info):
         service = self.disaggregation_report_service
-        disaggregation = info['disaggregation']
-        disaggregation_value = info['name']
+        disaggregation = str(info['disaggregation'])
+        disaggregation_value = str(info['name'])
         filename = info['filename']
 
         df = service.get_disaggregation_value_dataframe(info)

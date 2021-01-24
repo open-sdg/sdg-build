@@ -1,12 +1,3 @@
-"""
-This output assumes the following:
-1. A DSD is already created and available
-2. All columns in the data correspond exactly
-   to dimension IDs.
-3. All values in the columns correspond exactly
-   to codes in those dimensions' codelists.
-"""
-
 import os
 import sdg
 import pandas as pd
@@ -35,9 +26,18 @@ class OutputSdmxMl(OutputBase):
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-                 indicator_options=None, dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
+                 indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
                  default_values=None, header_id=None, sender_id=None):
         """Constructor for OutputSdmxMl.
+
+        This output assumes the following:
+        1. A DSD is already created and available
+        2. All columns in the data correspond exactly to dimension IDs.
+        3. All values in the columns correspond exactly to codes in those dimensions' codelists.
+
+        Notes on translation:
+        SDMX output does not need to be transated. Hence, this output will always appear in
+        an "sdmx" folder, and will never be translated in a language subfolder.
 
         Parameters
         ----------

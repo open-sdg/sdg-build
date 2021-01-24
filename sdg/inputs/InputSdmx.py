@@ -19,7 +19,7 @@ class InputSdmx(InputBase):
                  import_translation_keys=False,
                  import_series_attributes=True,
                  import_observation_attributes=True,
-                 dsd='https://unstats.un.org/sdgs/files/SDG_DSD.xml',
+                 dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
                  indicator_id_xpath=".//Annotation[AnnotationTitle='Indicator']/AnnotationText",
                  indicator_name_xpath=".//Annotation[AnnotationTitle='IndicatorTitle']/AnnotationText"):
         """Constructor for InputSdmx.

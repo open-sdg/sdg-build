@@ -127,7 +127,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     outputs = open_sdg_prep(options)
 
     for output in outputs:
-        if options['languages']:
+        if options['languages'] and output_is_translatable(output):
             # If languages were provide, perform a translated build.
             status = status & output.execute_per_language(options['languages'])
             # Also provide an untranslated build.
@@ -431,3 +431,11 @@ def open_sdg_translation_from_dict(params, options):
         translation_instance = sdg.translations.TranslationInputYaml(**params)
 
     return translation_instance
+
+
+def output_is_translatable(output):
+    # Some types of output should never be translated.
+    if isinstance(output, sdg.outputs.OutputSdmxMl):
+        return False
+    else:
+        return True

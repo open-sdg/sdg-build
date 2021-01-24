@@ -16,7 +16,25 @@ class TranslationInputSdmx(TranslationInputBase):
     attributes themselves, as the 'CONCEPT_NAME' key.
 
     Each translation is put into a group according to the dimension/attribute id.
+
+    Note that if you are using "dimension_map" in an SDMX input to rename columns,
+    you will need to use the same "dimension_map" here.
     """
+
+    def __init__(self, source='', dimension_map=None):
+        """Constructor for the TranslationInputSdmx class.
+
+        Parameters
+        ----------
+        source : string
+            Inherits from TranslationInputBase.
+        dimension_map : dict
+            Meant to correspond with dimension_map from SdmxInputSdmx.
+        """
+        if dimension_map is None:
+            dimension_map = {}
+        self.dimension_map = dimension_map
+        TranslationInputBase.__init__(self, source=source)
 
 
     def parse_xml(self, location, strip_namespaces=True):
@@ -62,6 +80,10 @@ class TranslationInputSdmx(TranslationInputBase):
                 # Not sure why this happens - possibly the "TimeDimension"?
                 continue
             tag_id = tag.attrib['id']
+            if tag_id in self.dimension_map:
+                tag_id = self.dimension_map[tag_id]
+                if tag_id == '':
+                    continue
             concept_id = tag.find('.//ConceptIdentity/Ref').attrib['id']
             concept_xpath = ".//Concept[@id='{}']"
             concept = dsd.find(concept_xpath.format(concept_id))
@@ -84,6 +106,11 @@ class TranslationInputSdmx(TranslationInputBase):
             for code in codes:
                 translations = code.findall('Name')
                 code_key = code.attrib['id']
+                combined_for_dimension_map = tag_id + '|' + code_key
+                if combined_for_dimension_map in self.dimension_map:
+                    code_key = self.dimension_map[combined_for_dimension_map]
+                    if code_key == '':
+                        continue
                 for translation in translations:
                     if 'lang' not in translation.attrib:
                         continue

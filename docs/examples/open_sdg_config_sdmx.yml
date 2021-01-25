@@ -31,7 +31,7 @@ inputs:
     dimension_map:
       UNIT_MEASURE: 'Units'
     dsd: http://cambodgia-statvm1.eastasia.cloudapp.azure.com/SeptemberDisseminateNSIService/rest/dataflow/KH_NIS/DF_SDG_KH/1.1/?references=all
-    import_translation_keys: true
+    import_codes: true
     indicator_id_xpath: .//Name
     indicator_name_xpath: .//Name
     indicator_id_map:

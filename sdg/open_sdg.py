@@ -130,7 +130,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     outputs = open_sdg_prep(options)
 
     for output in outputs:
-        if options['languages']:
+        if options['languages'] and output_is_translatable(output):
             # If languages were provide, perform a translated build.
             status = status & output.execute_per_language(options['languages'])
             # Also provide an untranslated build.
@@ -303,6 +303,17 @@ def open_sdg_prep(options):
         # Create the output.
         outputs.append(sdg.outputs.OutputGeoJson(**geojson_kwargs))
 
+    # Add SDMX output if configured.
+    if 'sdmx_output' in options and 'dsd' in options['sdmx_output']:
+        outputs.append(sdg.outputs.OutputSdmxMl(
+            inputs=inputs,
+            schema=schema,
+            output_folder=options['site_dir'],
+            translations=options['translations'],
+            indicator_options=options['indicator_options'],
+            **options['sdmx_output']
+        ))
+
     return outputs
 
 
@@ -425,3 +436,11 @@ def open_sdg_translation_from_dict(params, options):
         translation_instance = sdg.translations.TranslationInputYaml(**params)
 
     return translation_instance
+
+
+def output_is_translatable(output):
+    # Some types of output should never be translated.
+    if isinstance(output, sdg.outputs.OutputSdmxMl):
+        return False
+    else:
+        return True

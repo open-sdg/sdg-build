@@ -34,7 +34,7 @@ data_input = sdg.inputs.InputSdmxMl_Structure(
     dimension_map=dimension_map,
     dsd=dsd,
     drop_dimensions=drop_dimensions,
-    import_translation_keys=True,
+    import_codes=True,
     indicator_id_xpath=indicator_id_xpath,
     indicator_name_xpath=indicator_name_xpath
 )

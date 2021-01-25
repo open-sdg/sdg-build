@@ -10,7 +10,7 @@ class OutputOpenSdg(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
         reporting_status_extra_fields=None, indicator_options=None,
-        indicator_downloads=None):
+        indicator_downloads=None, indicator_export_filename='all_indicators'):
         """Constructor for OutputOpenSdg.
 
         Parameters
@@ -23,6 +23,8 @@ class OutputOpenSdg(OutputBase):
         indicator_downloads : list
             A list of dicts describing calls to the write_downloads() method of
             IndicatorDownloadService.
+        indicator_export_filename : string
+            A filename (without the extension) for the zipped indicator export.
         """
         if translations is None:
             translations = []
@@ -30,6 +32,7 @@ class OutputOpenSdg(OutputBase):
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.reporting_status_grouping_fields = reporting_status_extra_fields
         self.indicator_downloads = indicator_downloads
+        self.indicator_export_filename = indicator_export_filename
 
 
     def build(self, language=None):
@@ -88,7 +91,7 @@ class OutputOpenSdg(OutputBase):
         disaggregation_status_service = sdg.DisaggregationStatusService(site_dir, self.indicators, self.reporting_status_grouping_fields)
         disaggregation_status_service.write_json()
 
-        indicator_export_service = sdg.IndicatorExportService(site_dir, self.indicators)
+        indicator_export_service = sdg.IndicatorExportService(site_dir, self.indicators, filename=self.indicator_export_filename)
         indicator_export_service.export_all_indicator_data_as_zip_archive()
 
         # Write the indicator downloads.
@@ -198,7 +201,7 @@ class OutputOpenSdg(OutputBase):
                 'description': 'JSON files containing metadata for the indicators',
                 'loop_indicators': True,
                 'endpoints': [
-                    '{language}/comb/{indicator_id}.json'
+                    '{language}/meta/{indicator_id}.json'
                 ]
             },
             {
@@ -206,7 +209,7 @@ class OutputOpenSdg(OutputBase):
                 'description': 'Zip files containing all indicators in CSV form',
                 'loop_indicators': False,
                 'endpoints': [
-                    '{language}/zip/all_indicators.zip'
+                    '{language}/zip/' + self.indicator_export_filename + '.zip'
                 ]
             },
             {

@@ -43,7 +43,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
                    inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
-                   docs_subfolder=None, indicator_downloads=None, docs_baseurl=''):
+                   docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
+                   docs_extra_disaggregations=None, docs_translate_disaggregations=False,
+                   indicator_export_filename='all_indicators'):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -70,6 +72,11 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         docs_baseurl: string. A baseurl to put at the beginning of all absolute links
         indicator_downloads: list. A list of dicts describing calls to the
             write_downloads() method of IndicatorDownloadService
+        docs_extra_disaggregations: list. An optional list of extra columns
+            that would not otherwise be included in the disaggregation report
+        docs_translate_disaggregations: boolean. Whether to provide translated columns
+            in the disaggregation report
+        indicator_export_filename: string. Filename without extension for zip file
 
     Returns:
         Boolean status of file writes
@@ -100,8 +107,11 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'docs_indicator_url': docs_indicator_url,
         'docs_subfolder': docs_subfolder,
         'docs_baseurl': docs_baseurl,
+        'docs_translate_disaggregations': docs_translate_disaggregations,
         'indicator_options': indicator_options,
         'indicator_downloads': indicator_downloads,
+        'docs_extra_disaggregations': docs_extra_disaggregations,
+        'indicator_export_filename': indicator_export_filename,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -120,7 +130,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     outputs = open_sdg_prep(options)
 
     for output in outputs:
-        if options['languages']:
+        if options['languages'] and output_is_translatable(output):
             # If languages were provide, perform a translated build.
             status = status & output.execute_per_language(options['languages'])
             # Also provide an untranslated build.
@@ -139,6 +149,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         translations=options['translations'],
         indicator_url=options['docs_indicator_url'],
         baseurl=options['docs_baseurl'],
+        extra_disaggregations=options['docs_extra_disaggregations'],
+        translate_disaggregations=options['docs_translate_disaggregations'],
     )
     documentation_service.generate_documentation()
 
@@ -204,6 +216,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'translations': [],
         'indicator_options': indicator_options,
         'indicator_downloads': None,
+        'indicator_export_filename': None,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -270,7 +283,8 @@ def open_sdg_prep(options):
         translations=options['translations'],
         reporting_status_extra_fields=reporting_status_extra_fields,
         indicator_options=options['indicator_options'],
-        indicator_downloads=options['indicator_downloads'])
+        indicator_downloads=options['indicator_downloads'],
+        indicator_export_filename=options['indicator_export_filename'])
 
     outputs = [opensdg_output]
 
@@ -291,6 +305,17 @@ def open_sdg_prep(options):
             geojson_kwargs['geojson_file'] = geojson_file
         # Create the output.
         outputs.append(sdg.outputs.OutputGeoJson(**geojson_kwargs))
+
+    # Add SDMX output if configured.
+    if 'sdmx_output' in options and 'dsd' in options['sdmx_output']:
+        outputs.append(sdg.outputs.OutputSdmxMl(
+            inputs=inputs,
+            schema=schema,
+            output_folder=options['site_dir'],
+            translations=options['translations'],
+            indicator_options=options['indicator_options'],
+            **options['sdmx_output']
+        ))
 
     return outputs
 
@@ -414,3 +439,11 @@ def open_sdg_translation_from_dict(params, options):
         translation_instance = sdg.translations.TranslationInputYaml(**params)
 
     return translation_instance
+
+
+def output_is_translatable(output):
+    # Some types of output should never be translated.
+    if isinstance(output, sdg.outputs.OutputSdmxMl):
+        return False
+    else:
+        return True

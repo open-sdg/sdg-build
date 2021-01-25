@@ -8,7 +8,7 @@ class DisaggregationReportService:
 
 
     def __init__(self, outputs, languages=None, translation_helper=None,
-                 indicator_url=None):
+                 indicator_url=None, extra_disaggregations=None):
         """Constructor for the DisaggregationReportService class.
 
         Parameters
@@ -17,9 +17,9 @@ class DisaggregationReportService:
             Required list of objects inheriting from OutputBase. Each output
             will receive its own documentation page (or pages).
         languages : list
-            Optional list of language codes. If more than one language is
-            provided, any languages beyond the first will display as translations
-            in additional columns. Defaults to ['en'].
+            Optional list of language codes. If languages are provided, these
+            languages will display as translations in additional columns.
+            Defaults to [].
         translation_helper : TranslationHelper
             Instance of TranslationHelper class to perform translations.
         indicator_url : string
@@ -27,12 +27,17 @@ class DisaggregationReportService:
             the "[id]" will be replaced with the indicator id (dash-delimited).
             For example, "https://example.com/[id].html" will be replaced with
             "https://example.com/4-1-1.html".
+        extra_disaggregations : list
+            Optional list of columns to include, which would not otherwise be
+            included. Common choices are are units of measurement and series,
+            which some users may prefer to see in the report.
         """
         self.outputs = outputs
         self.indicator_url = indicator_url
         self.slugs = []
-        self.languages = ['en'] if languages is None else languages
+        self.languages = [] if languages is None else languages
         self.translation_helper = translation_helper
+        self.extra_disaggregations = [] if extra_disaggregations is None else extra_disaggregations
         self.disaggregation_store = None
 
 
@@ -59,6 +64,7 @@ class DisaggregationReportService:
             if not indicators[indicator_id].is_complete():
                 continue
             non_disaggregation_columns = indicators[indicator_id].options.get_non_disaggregation_columns()
+            non_disaggregation_columns = [col for col in non_disaggregation_columns if col not in self.extra_disaggregations]
             for series in indicators[indicator_id].get_all_series():
                 disaggregations = series.get_disaggregations()
                 for disaggregation in disaggregations:
@@ -96,7 +102,9 @@ class DisaggregationReportService:
         indicators = {}
         for output in self.outputs:
             for indicator_id in output.get_indicator_ids():
-                indicators[indicator_id] = output.get_indicator_by_id(indicator_id)
+                indicator = output.get_indicator_by_id(indicator_id)
+                if not indicator.is_standalone():
+                    indicators[indicator_id] = indicator
         return indicators
 
 
@@ -136,26 +144,23 @@ class DisaggregationReportService:
     def get_disaggregation_link(self, disaggregation_info):
         return '<a href="{}">{}</a>'.format(
             disaggregation_info['filename'],
-            self.translate(disaggregation_info['name'], self.get_default_language())
+            disaggregation_info['name'],
         )
 
 
     def get_disaggregation_value_link(self, disaggregation_value_info):
         return '<a href="{}">{}</a>'.format(
             disaggregation_value_info['filename'],
-            self.translate(disaggregation_value_info['name'], self.get_default_language())
+            disaggregation_value_info['name'],
         )
 
 
-    def get_default_language(self):
-        return self.languages[0]
-
-
-    def translate(self, text, language):
+    def translate(self, text, language, group=None):
         if self.translation_helper is None:
             return text
         else:
-            return self.translation_helper.translate(text, language, 'data')
+            default_group = 'data' if group is None else [group, 'data']
+            return self.translation_helper.translate(text, language, default_group)
 
 
     def get_disaggregations_dataframe(self):
@@ -176,12 +181,12 @@ class DisaggregationReportService:
                 'Number of indicators':  num_indicators,
                 'Number of values': num_values,
             }
-            for language in self.get_additional_languages():
-                row[language] = self.translate(disaggregation, language)
+            for language in self.get_languages():
+                row[language] = self.translate(disaggregation, language, disaggregation)
             rows.append(row)
 
         columns = ['Disaggregation']
-        columns.extend(self.get_additional_languages())
+        columns.extend(self.get_languages())
         columns.extend(['Number of indicators', 'Number of values'])
 
         df = pd.DataFrame(rows, columns=columns)
@@ -190,10 +195,8 @@ class DisaggregationReportService:
         return df
 
 
-    def get_additional_languages(self):
-        if len(self.languages) == 1:
-            return []
-        return self.languages[1:]
+    def get_languages(self):
+        return self.languages
 
 
     def get_indicators_dataframe(self):
@@ -222,12 +225,12 @@ class DisaggregationReportService:
                 'Disaggregation combinations using this value': info['values'][value]['instances'],
                 'Number of indicators': len(info['values'][value]['indicators'].keys()),
             }
-            for language in self.get_additional_languages():
-                row[language] = self.translate(value, language)
+            for language in self.get_languages():
+                row[language] = self.translate(value, language, info['name'])
             rows.append(row)
 
         columns = ['Value']
-        columns.extend(self.get_additional_languages())
+        columns.extend(self.get_languages())
         columns.extend(['Disaggregation combinations using this value', 'Number of indicators'])
 
         df = pd.DataFrame(rows, columns=columns)
@@ -263,17 +266,20 @@ class DisaggregationReportService:
 
     def get_disaggregation_report_template(self):
         return """
-        <div class="list-group list-group-horizontal mb-4">
-            <a class="list-group-item list-group-item-action" href="#by-disaggregation">By disaggregation</a>
-            <a class="list-group-item list-group-item-action" href="#by-indicator">By indicator</a>
+        <div role="navigation" aria-describedby="contents-heading">
+            <h2 id="contents-heading">On this page</h2>
+            <ul>
+                <li><a href="#by-disaggregation">By disaggregation</a></li>
+                <li><a href="#by-indicator">By indicator</a></li>
+            </ul>
         </div>
         <div>
-            <h2 id="by-disaggregation">By disaggregation</h2>
+            <h2 id="by-disaggregation" tabindex="-1">By disaggregation</h2>
             {disaggregation_download}
             {disaggregation_table}
         </div>
         <div>
-            <h2 id="by-indicator">By indicator</h2>
+            <h2 id="by-indicator" tabindex="-1">By indicator</h2>
             {indicator_download}
             {indicator_table}
         </div>
@@ -282,17 +288,20 @@ class DisaggregationReportService:
 
     def get_disaggregation_detail_template(self):
         return """
-        <div class="list-group list-group-horizontal mb-4">
-            <a class="list-group-item list-group-item-action" href="#values-used">Values used in disaggregation</a>
-            <a class="list-group-item list-group-item-action" href="#indicators-using">Indicators using disaggregation</a>
+        <div role="navigation" aria-describedby="contents-heading">
+            <h2 id="contents-heading">On this page</h2>
+            <ul>
+                <li><a href="#values-used">Values used in disaggregation</a></li>
+                <li><a href="#indicators-using">Indicators using disaggregation</a></li>
+            </ul>
         </div>
         <div>
-            <h2 id="values-used">Values used in disaggregation</h2>
+            <h2 id="values-used" tabindex="-1">Values used in disaggregation</h2>
             {values_download}
             {values_table}
         </div>
         <div>
-            <h2 id="indicators-using">Indicators using disaggregation</h2>
+            <h2 id="indicators-using" tabindex="-1">Indicators using disaggregation</h2>
             {indicators_download}
             {indicators_table}
         </div>

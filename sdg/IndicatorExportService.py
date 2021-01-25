@@ -6,7 +6,7 @@ import humanize
 from sdg.Loggable import Loggable
 
 class IndicatorExportService(Loggable):
-    def __init__(self, site_directory, indicators, logging=None):
+    def __init__(self, site_directory, indicators, logging=None, filename='all_indicators'):
         """Constructor for IndicatorExportService.
 
         Parameters
@@ -22,11 +22,12 @@ class IndicatorExportService(Loggable):
         self.__zip_directory = "%s/zip" % site_directory
         self.__data_directory = "%s/data" % site_directory
         self.__indicators = indicators
+        self.__filename = filename
 
     def export_all_indicator_data_as_zip_archive(self):
         self.__create_zip_folder_at_site_directory()
         csv_files = self.__get_all_indicator_csv_files()
-        self.__create_zip_file("all_indicators.zip", csv_files)
+        self.__create_zip_file(self.__filename + ".zip", csv_files)
 
     def __create_zip_folder_at_site_directory(self):
         directory = "%s/zip" % self.__site_directory
@@ -74,7 +75,7 @@ class IndicatorExportService(Loggable):
 
     def __save_zip_file_info(self, zip_file_name):
         info = self.__get_zip_file_info(zip_file_name)
-        json_file_name = zip_file_name.replace('.zip', '.json')
+        json_file_name = 'all_indicators.json'
         with open(os.path.join(self.__zip_directory, json_file_name), 'w') as f:
             json.dump(info, f)
 
@@ -82,7 +83,8 @@ class IndicatorExportService(Loggable):
         size = self.__get_zip_file_size(zip_file_name)
         info = {
             'size_bytes': size,
-            'size_human': humanize.naturalsize(size)
+            'size_human': humanize.naturalsize(size),
+            'filename': self.__filename + '.zip'
         }
         repo = self.__get_git_repository()
         if repo is not None:

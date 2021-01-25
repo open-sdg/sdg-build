@@ -5,4 +5,5 @@ jsonschema
 requests
 humanize
 unicode-slugify
+natsort
 git+git://github.com/dougmet/yamlmd

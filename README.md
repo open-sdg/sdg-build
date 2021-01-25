@@ -8,6 +8,10 @@ SDG Build is a Python package for converting data on the Sustainable Development
 2. Output of SDG data to various machine-readable formats, for interoperability with other systems
 3. Validation of the data and metadata for quality control
 
+## Dependencies
+
+* Python 3.7 or higher
+
 ## Inputs
 
 SDG Build can **input** SDG data in the following formats:

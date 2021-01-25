@@ -1,0 +1,25 @@
+# This configuration imports from SDMX-ML Structure Specific and outputs to SDMX-ML Structure.
+
+languages:
+  - en
+src_dir: 'tests'
+
+inputs:
+  - class: InputSdmxMl_StructureSpecific
+    source: tests/sdmx/1-1-1.xml
+    import_codes: true
+    drop_singleton_dimensions: false
+
+translations:
+  - class: TranslationInputSdgTranslations
+    source: https://github.com/open-sdg/sdg-translations.git
+    tag: master
+  - class: TranslationInputSdmx
+    source: https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children
+
+site_dir: _site
+schema_file: _prose.yml
+reporting_status_extra_fields: []
+
+sdmx_output:
+  dsd: https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children

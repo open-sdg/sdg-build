@@ -289,7 +289,7 @@ def open_sdg_prep(options):
         reporting_status_extra_fields=reporting_status_extra_fields,
         indicator_options=options['indicator_options'],
         indicator_downloads=options['indicator_downloads'],
-        logging=options['logging'])
+        logging=options['logging'],
         indicator_export_filename=options['indicator_export_filename'])
 
     outputs = [opensdg_output]

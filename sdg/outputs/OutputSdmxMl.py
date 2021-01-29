@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import sdmx
 import time
+from shutil import copyfile
 from slugify import slugify
 from sdmx.model import (
     SeriesKey,
@@ -12,7 +13,8 @@ from sdmx.model import (
     Observation,
     GenericTimeSeriesDataSet,
     DataflowDefinition,
-    Agency
+    Agency,
+    Code,
 )
 from sdmx.message import (
     DataMessage,
@@ -27,13 +29,22 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None):
+                 default_values=None, header_id=None, sender_id=None, extend_dsd=False,
+                 dsd_languages=None):
         """Constructor for OutputSdmxMl.
 
-        This output assumes the following:
-        1. A DSD is already created and available
-        2. All columns in the data correspond exactly to dimension IDs.
-        3. All values in the columns correspond exactly to codes in those dimensions' codelists.
+        This output can be used for two different use-cases:
+        1. You already have an SDMX DSD but you need to create SDMX.
+           This use-case requires the following:
+           a. All columns in the data must correspond exactly to dimension IDs.
+           b. All values in the columns must correspond exactly to codes in those
+              dimensions' codelists.
+        2. You need to create both the SDMX DSD and the SDMX. This use-case
+           requires the following:
+           a. The columns in the data are limited to dimensions/attributes in the
+              global DSD.
+           b. Any values in the columns that are not part of global codelists are
+              suitable for extending the global codelist.
 
         Notes on translation:
         SDMX output does not need to be transated. Hence, this output will always appear in
@@ -59,10 +70,20 @@ class OutputSdmxMl(OutputBase):
             Optional identifying string to put in the "id" attribut of the "Sender" element
             in the header of the XML. If not specified, it will be the current version
             of this library.
+        extend_dsd : boolean
+            Whether the DSD will be altered if there are disaggregation values that are not
+            in the DSD codelists. Defaults to False.
+        dsd_languages : list or none
+            When extending the DSD, this informs the class what languages should be added
+            when appending codes to codelists. Not used unless extend_dsd is True.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.header_id = header_id
         self.sender_id = sender_id
+        self.extend_dsd = extend_dsd
+        if dsd_languages is None:
+            dsd_languages = ['en']
+        self.dsd_languages = dsd_languages
         self.retrieve_dsd(dsd)
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
@@ -72,12 +93,65 @@ class OutputSdmxMl(OutputBase):
 
 
     def retrieve_dsd(self, dsd):
+
         if dsd.startswith('http'):
-            urlretrieve(dsd, 'SDG_DSD.xml')
-            dsd = 'SDG_DSD.xml'
+            urlretrieve(dsd, 'dsd.xml')
+            dsd = 'dsd.xml'
+        else:
+            copyfile(dsd, 'dsd.xml')
         msg = sdmx.read_sdmx(dsd)
         dsd_object = msg.structure[0]
+        self.dsd_msg = msg
         self.dsd = dsd_object
+        self.extend_dsd_codelists()
+
+
+    def extend_dsd_codelists(self):
+        if not self.extend_dsd:
+            return
+
+        # Compile all the new possible codes we may need to add.
+        new_codes = {}
+        for indicator_id in self.get_indicator_ids():
+            indicator = self.get_indicator_by_id(indicator_id)
+            serieses = indicator.get_all_series()
+            for series in serieses:
+                disaggregations = series.get_disaggregations()
+                for concept in disaggregations:
+                    if concept not in new_codes:
+                        new_codes[concept] = []
+                    code = disaggregations[concept]
+                    if code == '':
+                        continue
+                    if code not in new_codes[concept]:
+                        new_codes[concept].append(code)
+
+        # Look for concepts that exist as attributes or dimensions in the DSD.
+        for concept in new_codes:
+            codelist = None
+            dimension_matches = [dim for dim in self.dsd.dimensions if dim.id == concept]
+            attribute_matches = [att for att in self.dsd.attributes if att.id == concept]
+            if len(dimension_matches) > 0:
+                codelist = dimension_matches[0].local_representation.enumerated
+            elif len(attribute_matches) > 0:
+                codelist = attribute_matches[0].local_representation.enumerated
+
+            # If found, add any codes necessary.
+            if codelist is not None:
+                for code_id in new_codes[concept]:
+                    existing_code = [c for c in codelist if c.id == code_id]
+                    # Only add codes if they don't already exist.
+                    if len(existing_code) == 0:
+                        code = Code(id=code_id)
+                        for language in self.dsd_languages:
+                            translated = self.translation_helper.translate(code_id, language, [concept, 'data'])
+                            code.name[language] = translated
+                            code.description[language] = translated
+                        codelist.append(code)
+
+        # Go ahead and overwrite the DSD file now.
+        with open('dsd.xml', 'wb') as f:
+            f.write(sdmx.to_xml(self.dsd_msg))
 
 
     def build(self, language=None):
@@ -137,6 +211,11 @@ class OutputSdmxMl(OutputBase):
         all_sdmx_path = os.path.join(self.sdmx_folder, 'all.xml')
         with open(all_sdmx_path, 'wb') as f:
             status = status & f.write(sdmx.to_xml(msg))
+
+        # Copy the DSD.
+        dsd_filename = 'dsd.xml'
+        dsd_path = os.path.join(self.sdmx_folder, dsd_filename)
+        copyfile(dsd_filename, dsd_path)
 
         return status
 
@@ -241,6 +320,12 @@ class OutputSdmxMl(OutputBase):
             output += '<li><a href="' + baseurl + path + '">' + path + '</a></li>'
         output += '<li>etc...</li>'
         output += '</ul>'
+
+        path = endpoint.format(indicator_id='dsd')
+        output += '<p>'
+        output += 'Data structure definition (DSD): '
+        output += '<a href="' + baseurl + path + '">' + path + '</a>'
+        output += '</p>'
 
         return output
 

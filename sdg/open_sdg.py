@@ -304,15 +304,16 @@ def open_sdg_prep(options):
         outputs.append(sdg.outputs.OutputGeoJson(**geojson_kwargs))
 
     # Add SDMX output if configured.
-    if 'sdmx_output' in options and 'dsd' in options['sdmx_output']:
-        outputs.append(sdg.outputs.OutputSdmxMl(
-            inputs=inputs,
-            schema=schema,
-            output_folder=options['site_dir'],
-            translations=options['translations'],
-            indicator_options=options['indicator_options'],
-            **options['sdmx_output']
-        ))
+    if 'sdmx_output' in options:
+        if 'dsd' in options['sdmx_output'] or 'extend_dsd' in options['sdmx_output']:
+            outputs.append(sdg.outputs.OutputSdmxMl(
+                inputs=inputs,
+                schema=schema,
+                output_folder=options['site_dir'],
+                translations=options['translations'],
+                indicator_options=options['indicator_options'],
+                **options['sdmx_output']
+            ))
 
     return outputs
 

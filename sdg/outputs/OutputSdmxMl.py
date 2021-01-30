@@ -140,14 +140,18 @@ class OutputSdmxMl(OutputBase):
             if codelist is not None:
                 for code_id in new_codes[concept]:
                     existing_code = [c for c in codelist if c.id == code_id]
+                    code = None
                     # Only add codes if they don't already exist.
                     if len(existing_code) == 0:
                         code = Code(id=code_id)
-                        for language in self.dsd_languages:
-                            translated = self.translation_helper.translate(code_id, language, [concept, 'data'])
-                            code.name[language] = translated
-                            code.description[language] = translated
                         codelist.append(code)
+                    else:
+                        code = existing_code[0]
+                    # See if anything needs to be translated.
+                    for language in self.dsd_languages:
+                        translated = self.translation_helper.translate(code_id, language, [concept, 'data'])
+                        if language not in code.name.localizations:
+                            code.name[language] = translated
 
         # Go ahead and overwrite the DSD file now.
         with open('dsd.xml', 'wb') as f:

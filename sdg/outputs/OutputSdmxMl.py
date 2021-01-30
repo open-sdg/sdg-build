@@ -170,7 +170,7 @@ class OutputSdmxMl(OutputBase):
                 continue
             value = row[dimension.id] if dimension.id in row else self.get_dimension_default(dimension.id, indicator)
             if value != '':
-                values[dimension.id] = value
+                values[dimension.id] = str(value)
         return values
 
 
@@ -188,7 +188,7 @@ class OutputSdmxMl(OutputBase):
             if attribute.related_to is not None and isinstance(attribute.related_to, related_to):
                 value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
                 if value != '':
-                    values[attribute.id] = AttributeValue(value_for=attribute, value=value)
+                    values[attribute.id] = AttributeValue(value_for=attribute, value=str(value))
         return values
 
 

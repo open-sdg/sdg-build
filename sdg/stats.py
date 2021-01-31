@@ -33,14 +33,18 @@ def reporting_status(schema, all_meta, extra_fields=None):
                       'translation_key': value_translation[status]}
                     for status in status_values]
 
+    # Omit any standalone indicators.
+    indicators = {k: v for (k, v) in all_meta.items() if 'standalone' not in v or v['standalone'] == False }
+
     # Pick out only the fields we want from each indicators metadata
     fields = ['reporting_status'] + grouping_fields
     rows = [
         {k: meta.get(k) for k in fields}
-        for (key, meta) in all_meta.items()
+        for (key, meta) in indicators.items()
     ]
     # Convert that into a dataframe.
-    meta_df = pd.DataFrame(rows, index=all_meta.keys())
+    meta_df = pd.DataFrame(rows, index=indicators.keys())
+    meta_df.fillna('status.not_specified', inplace=True)
 
     # Make sure that numeric columns are numeric.
     def value_is_numeric(value):

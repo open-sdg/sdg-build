@@ -132,3 +132,10 @@ indicator_downloads:
     output_folder: data-csv
     # The "indicator_id_pattern" is optional, default below:
     indicator_id_pattern: indicator_(.*)
+
+# Indicator export (zip file)
+# ---------------------------
+# This controls the filename of the zipped file of indicator data.
+# The file extension (.zip) is not needed. The defualt, if omitted,
+# is below:
+indicator_export_filename: all_indicators

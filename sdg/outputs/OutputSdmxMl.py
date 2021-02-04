@@ -15,6 +15,8 @@ from sdmx.model import (
     DataflowDefinition,
     Agency,
     Code,
+    PrimaryMeasureRelationship,
+    DimensionRelationship,
 )
 from sdmx.message import (
     DataMessage,
@@ -258,17 +260,22 @@ class OutputSdmxMl(OutputBase):
 
 
     def get_observation_attribute_values(self, row, indicator):
-        return self.get_attribute_values(row, indicator, sdmx.model.PrimaryMeasureRelationship)
+        return self.get_attribute_values(row, indicator, 'observation')
 
 
     def get_series_attribute_values(self, row, indicator):
-        return self.get_attribute_values(row, indicator, sdmx.model.DimensionRelationship)
+        return self.get_attribute_values(row, indicator, 'series')
 
 
-    def get_attribute_values(self, row, indicator, related_to):
+    def get_attribute_values(self, row, indicator, relationship_type):
         values = {}
         for attribute in self.dsd.attributes:
-            if attribute.related_to is not None and isinstance(attribute.related_to, related_to):
+            valid_attribute = False
+            if relationship_type == 'series' and isinstance(attribute.related_to, DimensionRelationship):
+                valid_attribute = True
+            elif relationship_type == 'observation' and attribute.related_to is PrimaryMeasureRelationship:
+                valid_attribute = True
+            if valid_attribute:
                 value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
                 if value != '':
                     values[attribute.id] = AttributeValue(value_for=attribute, value=value)

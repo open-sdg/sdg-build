@@ -155,6 +155,9 @@ class OutputSdmxMl(OutputBase):
                         if language not in code.name.localizations:
                             code.name[language] = translated
 
+        # Customize the header since it has been altered.
+        self.dsd_msg.header = self.create_header()
+
         # Go ahead and overwrite the DSD file now.
         with open('dsd.xml', 'wb') as f:
             f.write(sdmx.to_xml(self.dsd_msg))

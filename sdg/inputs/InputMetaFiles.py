@@ -36,6 +36,7 @@ class InputMetaFiles(InputFiles):
         for inid in indicator_map:
             meta = self.read_meta(indicator_map[inid])
             self.apply_metadata_mapping(meta)
+            self.fix_booleans(meta)
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta, options=indicator_options)
 
@@ -62,7 +63,18 @@ class InputMetaFiles(InputFiles):
             if os.path.isfile(translated_filepath):
                 translated_meta = self.read_meta_at_path(translated_filepath)
                 self.apply_metadata_mapping(translated_meta)
+                self.fix_booleans(translated_meta)
                 meta[language] = translated_meta
+
+
+    def fix_booleans(self, meta):
+        for key in meta:
+            value = meta[key]
+            if isinstance(value, str):
+                if value.lower() == 'true':
+                    meta[key] = True
+                elif value.lower() == 'false':
+                    meta[key] = False
 
 
     def add_git_dates(self, meta, filepath):
@@ -88,7 +100,7 @@ class InputMetaFiles(InputFiles):
             data_update = self.get_git_update(data_filepath)
             updates['national_data_update_url_text'] = data_update['date'] + ': see changes on GitHub'
             updates['national_data_update_url'] = data_update['commit_url']
-        
+
         return updates
 
 
@@ -96,7 +108,7 @@ class InputMetaFiles(InputFiles):
         """Change into the working directory of the file (it might be a submodule)
         and get the latest git history"""
         folder = os.path.split(filepath)[0]
-        
+
         repo = git.Repo(folder, search_parent_directories=True)
         # Need to translate relative to the repo root (this may be a submodule)
         repo_dir = os.path.relpath(repo.working_dir, os.getcwd())
@@ -108,12 +120,12 @@ class InputMetaFiles(InputFiles):
         remote = repo.remote().url
         remote_bare = re.sub('^.*github\.com(:|\/)', '', remote).replace('.git','')
         commit_url = 'https://github.com/'+remote_bare+'/commit/'+git_sha
-        
+
         return {
             'date': git_date,
             'commit_url': commit_url
         }
-    
+
 
     def load_metadata_mapping(self):
         mapping = None
@@ -136,6 +148,6 @@ class InputMetaFiles(InputFiles):
     def apply_metadata_mapping(self, metadata):
         for human_key in self.metadata_mapping:
             machine_key = self.metadata_mapping[human_key]
-            if human_key in metadata:
+            if human_key in metadata and human_key != machine_key:
                 metadata[machine_key] = metadata[human_key]
                 del metadata[human_key]

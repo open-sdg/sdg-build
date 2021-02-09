@@ -344,6 +344,7 @@ def open_sdg_input_from_dict(params, options):
         'InputSdmxJson',
         'InputSdmxMl_Structure',
         'InputSdmxMl_StructureSpecific',
+        'InputSdmxMl_UnitedNationsApi',
         'InputYamlMdMeta',
         'InputSdmxMl_Multiple',
         'InputExcelMeta',
@@ -372,6 +373,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputSdmxMl_Structure(**params)
     elif input_class == 'InputSdmxMl_StructureSpecific':
         input_instance = sdg.inputs.InputSdmxMl_StructureSpecific(**params)
+    elif input_class == 'InputSdmxMl_UnitedNationsApi':
+        input_instance = sdg.inputs.InputSdmxMl_UnitedNationsApi(**params)
     elif input_class == 'InputYamlMdMeta':
         input_instance = sdg.inputs.InputYamlMdMeta(**params)
     elif input_class == 'InputSdmxMl_Multiple':

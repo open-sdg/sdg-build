@@ -167,7 +167,10 @@ def open_sdg_indicator_options_defaults():
             'GeoCode',
             'Observation status',
             'Unit multiplier',
-            'Unit measure'
+            'Unit measure',
+            # Support common SDMX codes.
+            'UNIT_MEASURE',
+            'SERIES',
         ]
     }
 

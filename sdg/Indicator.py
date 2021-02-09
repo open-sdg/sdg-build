@@ -257,7 +257,11 @@ class Indicator:
         def translate_data(text, column):
             return translation_helper.translate(text, language, default_group=[column, 'data'])
         def translate_data_columns(text):
-            special_columns = ['Year', 'Value', 'Units', 'Series']
+            # We only want to translate disaggregation columns, for the most part. However,
+            # a special case is the COMPOSITE_BREAKDOWN disaggregation, often found in SDMX.
+            # We assume that this will be altered at the presentation layer, so we do not
+            # translated it here.
+            special_columns = self.options.get_non_disaggregation_columns() + ['COMPOSITE_BREAKDOWN']
             if text in special_columns:
                 return text
             return translation_helper.translate(text, language, default_group=[text, 'data'])

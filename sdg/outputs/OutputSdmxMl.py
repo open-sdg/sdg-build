@@ -160,7 +160,7 @@ class OutputSdmxMl(OutputBase):
 
         # Go ahead and overwrite the DSD file now.
         with open('dsd.xml', 'wb') as f:
-            f.write(sdmx.to_xml(self.dsd_msg))
+            f.write(sdmx.to_xml(self.dsd_msg, encoding='utf-8', pretty_print=True))
 
 
     def build(self, language=None):
@@ -358,3 +358,16 @@ class OutputSdmxMl(OutputBase):
 
         # Need to figure out SDMX validation.
         return True
+
+
+    # Only use examples that actually have data.
+    def get_documentation_indicator_ids(self):
+        indicator_ids = []
+        for indicator_id in self.get_indicator_ids():
+            if len(indicator_ids) > 2:
+                break
+            indicator = self.get_indicator_by_id(indicator_id)
+            if not indicator.has_data():
+                continue
+            indicator_ids.append(indicator_id)
+        return indicator_ids

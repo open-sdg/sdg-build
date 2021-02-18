@@ -10,7 +10,7 @@ class OutputOpenSdg(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
         reporting_status_extra_fields=None, indicator_options=None,
-        indicator_downloads=None, indicator_export_filename='all_indicators'):
+        indicator_downloads=None, logging=None, indicator_export_filename='all_indicators'):
         """Constructor for OutputOpenSdg.
 
         Parameters
@@ -29,7 +29,8 @@ class OutputOpenSdg(OutputBase):
         if translations is None:
             translations = []
 
-        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
+        OutputBase.__init__(self, inputs, schema, output_folder, translations,
+                            indicator_options, logging=logging)
         self.reporting_status_grouping_fields = reporting_status_extra_fields
         self.indicator_downloads = indicator_downloads
         self.indicator_export_filename = indicator_export_filename

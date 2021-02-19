@@ -13,3 +13,4 @@ from .InputSdmxMl_StructureSpecific import InputSdmxMl_StructureSpecific
 from .InputSdmxMl_Multiple import InputSdmxMl_Multiple
 from .InputApi import InputApi
 from .InputCkan import InputCkan
+from .InputSdmxMl_UnitedNationsApi import InputSdmxMl_UnitedNationsApi

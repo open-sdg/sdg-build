@@ -2,13 +2,14 @@ import os
 from sdg.IndicatorOptions import IndicatorOptions
 from sdg.translations import TranslationInputBase
 from sdg.translations import TranslationHelper
+from sdg.Loggable import Loggable
 
-class OutputBase:
+class OutputBase(Loggable):
     """Base class for destinations of SDG data/metadata."""
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-                 indicator_options=None):
+                 indicator_options=None, logging=None):
         """Constructor for OutputBase.
 
         inputs: list
@@ -22,7 +23,10 @@ class OutputBase:
         indicator_options: IndicatorOptions
             Optional options that are passed into each Indicator object.
             Allows particular outputs to affect the data/metadata of indicators.
+        logging: None or list
+            Type of logs to print, including 'warn' and 'debug'.
         """
+        Loggable.__init__(self, logging=logging)
         if translations is None:
             translations = []
         self.indicator_options = IndicatorOptions() if indicator_options is None else indicator_options
@@ -47,6 +51,10 @@ class OutputBase:
             If specified, a particular language that this build is using. If
             not specified, it is assumed the build is not translated.
         """
+        debug_message = 'Starting output: {class_name}'
+        if language is not None:
+            debug_message += ' ({language})'
+        self.debug(debug_message, language=language)
         # Keep a backup of the output folder.
         original_output_folder = self.output_folder
 
@@ -55,6 +63,7 @@ class OutputBase:
             language = None
 
         if language:
+            self.debug('Translating indicators into {lang}', lang=language)
             # Temporarily change the output folder.
             self.output_folder = os.path.join(original_output_folder, language)
             # Translate each indicator.
@@ -84,10 +93,16 @@ class OutputBase:
 
     def merge_inputs(self, inputs):
         """Take the results of many inputs and merge into a single dict of indicators."""
+        # In this case of multiple outputs, the same set of inputs may reach
+        # this point multiple times. To avoid repetitive processing, we
+        # we check the first input for already-merged indicators.
+        if inputs[0].has_merged_indicators(inputs):
+            return inputs[0].get_merged_indicators()
+        # Otherwise we continue on.
         merged_indicators = {}
         for input in inputs:
             # Fetch the input.
-            input.execute(self.indicator_options)
+            input.execute_once(self.indicator_options)
             # Merge the results.
             for inid in input.indicators:
                 if inid not in merged_indicators:
@@ -112,6 +127,7 @@ class OutputBase:
             merged_indicators[inid].set_headline()
             merged_indicators[inid].set_edges()
 
+        inputs[0].set_merged_indicators(merged_indicators, inputs)
         return merged_indicators
 
 

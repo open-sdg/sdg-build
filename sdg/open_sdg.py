@@ -46,7 +46,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
                    datapackage=None, csvw=None, data_schema=None,
-                   indicator_export_filename='all_indicators'):
+                   logging=None, indicator_export_filename='all_indicators'):
+
     """Read each input file and edge file and write out json.
 
     Args:
@@ -80,6 +81,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         datapackage: dict. Dict describing an instance of OutputDataPackage
         csvw: dict. Dict describing an instance of OutputCsvw
         data_schema: Dict describing an instance of DataSchemaInputBase subclass
+        logging : list or None. The types of logs to print, including 'warn' and 'debug'.
         indicator_export_filename: string. Filename without extension for zip file
 
     Returns:
@@ -93,6 +95,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         translations = open_sdg_translation_defaults()
     if indicator_options is None:
         indicator_options = open_sdg_indicator_options_defaults()
+    if logging is None:
+        logging = ['warnings']
 
     status = True
 
@@ -118,6 +122,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'datapackage': datapackage,
         'csvw': csvw,
         'data_schema': data_schema,
+        'logging': logging,
         'indicator_export_filename': indicator_export_filename,
     }
     # Allow for a config file to update these.
@@ -158,6 +163,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         baseurl=options['docs_baseurl'],
         extra_disaggregations=options['docs_extra_disaggregations'],
         translate_disaggregations=options['docs_translate_disaggregations'],
+        logging=logging,
     )
     documentation_service.generate_documentation()
 
@@ -174,7 +180,10 @@ def open_sdg_indicator_options_defaults():
             'GeoCode',
             'Observation status',
             'Unit multiplier',
-            'Unit measure'
+            'Unit measure',
+             # Support common SDMX codes.
+            'UNIT_MEASURE',
+            'SERIES',
         ],
         'series_column': 'Series',
         'unit_column': 'Units',
@@ -194,7 +203,7 @@ def open_sdg_indicator_options_from_dict(options):
 
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
         inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
-        data_schema=None):
+        data_schema=None, logging=None):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -209,6 +218,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         alter_data: function. A callback function that alters a data Dataframe
         alter_meta: function. A callback function that alters a metadata dictionary
         data_schema: dict . Dict describing an instance of DataSchemaInputBase
+        logging: Noneor list. Type of logs to print, including 'warn' and 'debug'
 
     Returns:
         boolean: True if the check was successful, False if not.
@@ -231,6 +241,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'datapackage': None,
         'csvw': None,
         'data_schema': data_schema,
+        'logging': logging,
         'indicator_export_filename': None,
     }
     # Allow for a config file to update these.
@@ -283,7 +294,7 @@ def open_sdg_prep(options):
 
     # Use a Prose.io file for the metadata schema.
     schema_path = os.path.join(options['src_dir'], options['schema_file'])
-    schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
+    schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path, logging=options['logging'])
 
     # Indicate any extra fields for the reporting stats, if needed.
     reporting_status_extra_fields = []
@@ -299,6 +310,7 @@ def open_sdg_prep(options):
         reporting_status_extra_fields=reporting_status_extra_fields,
         indicator_options=options['indicator_options'],
         indicator_downloads=options['indicator_downloads'],
+        logging=options['logging'],
         indicator_export_filename=options['indicator_export_filename'])
 
     outputs = [opensdg_output]
@@ -311,6 +323,7 @@ def open_sdg_prep(options):
             'output_folder': options['site_dir'],
             'translations': options['translations'],
             'indicator_options': options['indicator_options'],
+            'logging': options['logging'],
         }
         for key in map_layer:
             geojson_kwargs[key] = map_layer[key]
@@ -417,6 +430,7 @@ def open_sdg_input_from_dict(params, options):
         'InputSdmxJson',
         'InputSdmxMl_Structure',
         'InputSdmxMl_StructureSpecific',
+        'InputSdmxMl_UnitedNationsApi',
         'InputYamlMdMeta',
         'InputSdmxMl_Multiple',
         'InputExcelMeta',
@@ -432,6 +446,8 @@ def open_sdg_input_from_dict(params, options):
     if 'path_pattern' in params:
         params['path_pattern'] = os.path.join(options['src_dir'], params['path_pattern'])
 
+    params['logging'] = options['logging']
+
     input_instance = None
     if input_class == 'InputCkan':
         input_instance = sdg.inputs.InputCkan(**params)
@@ -445,6 +461,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputSdmxMl_Structure(**params)
     elif input_class == 'InputSdmxMl_StructureSpecific':
         input_instance = sdg.inputs.InputSdmxMl_StructureSpecific(**params)
+    elif input_class == 'InputSdmxMl_UnitedNationsApi':
+        input_instance = sdg.inputs.InputSdmxMl_UnitedNationsApi(**params)
     elif input_class == 'InputYamlMdMeta':
         input_instance = sdg.inputs.InputYamlMdMeta(**params)
     elif input_class == 'InputSdmxMl_Multiple':
@@ -492,6 +510,8 @@ def open_sdg_translation_from_dict(params, options):
 
     # We no longer need the "class" param.
     del params['class']
+
+    params['logging'] = options['logging']
 
     # For "source" in TranslationInputYaml/Csv we need to prepend our src_dir.
     if translation_class == 'TranslationInputCsv' or translation_class == 'TranslationInputYaml':

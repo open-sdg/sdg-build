@@ -2,20 +2,36 @@ from urllib.request import urlopen
 import pandas as pd
 import numpy as np
 from sdg.Indicator import Indicator
+from sdg.Loggable import Loggable
 
-class InputBase:
+class InputBase(Loggable):
     """Base class for sources of SDG data/metadata."""
 
-    def __init__(self):
+    def __init__(self, logging=None):
         """Constructor for InputBase."""
+        Loggable.__init__(self, logging=logging)
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []
+        self.last_executed_indicator_options = None
+        self.merged_indicators = None
+        self.previously_merged_inputs = []
+        self.num_previously_merged_inputs = 0
+
+
+    def execute_once(self, indicator_options):
+        # To avoid unnecessarily executing the same input multiple times,
+        # track the indicator options and skip execution if they did not
+        # change from the last time.
+        if self.last_executed_indicator_options is not None:
+            if indicator_options == self.last_executed_indicator_options:
+                return
+        self.last_executed_indicator_options = indicator_options
+        self.execute(indicator_options)
 
 
     def execute(self, indicator_options):
-        """Fetch all data/metadata from source, fetching a list of indicators."""
-        raise NotImplementedError
+        self.debug('Starting input: {class_name}')
 
 
     def get_row(self, year, value, disaggregations):
@@ -177,7 +193,7 @@ class InputBase:
         """
         data = self.alter_data(data)
         meta = self.alter_meta(meta)
-        indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options)
+        indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options, logging=self.logging)
         self.indicators[indicator_id] = indicator
 
 
@@ -236,3 +252,51 @@ class InputBase:
             The alteration function.
         """
         self.meta_alterations.append(alteration)
+
+
+    def has_merged_indicators(self, inputs):
+        """Whether this is the first of a set of already-merged inputs.
+
+        Parameters
+        ----------
+        inputs : list
+            List of InputBase subclasses.
+
+
+        Returns
+        -------
+        boolean
+            Whether or not this input is the first of a set of already-merged inputs.
+        """
+        return all([
+            self.get_merged_indicators() is not None,
+            self == inputs[0],
+            self.previously_merged_inputs == inputs,
+            self.num_previously_merged_inputs == len(inputs),
+        ])
+
+
+    def get_merged_indicators(self):
+        """Return a set of already-merged indicators.
+
+        Returns
+        -------
+        dict or None
+            Dict of Indicator objects keyed by id, if available, else None.
+        """
+        return self.merged_indicators
+
+
+    def set_merged_indicators(self, merged_indicators, inputs):
+        """Set merged indicators for later retrieval.
+
+        Parameters
+        ----------
+        merged_indicators : dict
+            Dict of Indicator objects keyed by id.
+        inputs : list
+            List of InputBase subclasses.
+        """
+        self.merged_indicators = merged_indicators
+        self.previously_merged_inputs = inputs
+        self.num_previously_merged_inputs = len(inputs)

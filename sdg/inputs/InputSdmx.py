@@ -21,7 +21,8 @@ class InputSdmx(InputBase):
                  import_observation_attributes=True,
                  dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
                  indicator_id_xpath=".//Annotation[AnnotationTitle='Indicator']/AnnotationText",
-                 indicator_name_xpath=".//Annotation[AnnotationTitle='IndicatorTitle']/AnnotationText"):
+                 indicator_name_xpath=".//Annotation[AnnotationTitle='IndicatorTitle']/AnnotationText",
+                 logging=None):
         """Constructor for InputSdmx.
 
         Parameters
@@ -63,6 +64,7 @@ class InputSdmx(InputBase):
         indicator_name_xpath : string
             An xpath query to find the indicator name within each Series code
         """
+        InputBase.__init__(self, logging=logging)
         if drop_dimensions is None:
             drop_dimensions = []
         if dimension_map is None:
@@ -86,7 +88,6 @@ class InputSdmx(InputBase):
         self.indicator_id_xpath = indicator_id_xpath
         self.indicator_name_xpath = indicator_name_xpath
         self.series_dimensions = {}
-        InputBase.__init__(self)
 
 
     def parse_xml(self, location, strip_namespaces=True):
@@ -282,10 +283,10 @@ class InputSdmx(InputBase):
         try:
             df['Value'] = pd.to_numeric(df['Value'], errors='raise')
         except KeyError as e:
-            print('WARNING: Indicator ' + indicator_id + ' did not have a value column - inserting null values.')
+            self.warn('Indicator {inid} did not have a value column - inserting null values.', inid=indicator_id)
             df['Value'] = np.nan
         except ValueError as e:
-            print('WARNING: Indicator ' + indicator_id + ' has a non-numeric value: ' + str(e))
+            self.warn('Indicator {inid} has a non-numeric value: {value}', inid=indicator_id, value=str(e))
         return df
 
 
@@ -367,6 +368,7 @@ class InputSdmx(InputBase):
     def execute(self, indicator_options):
         """Execute this input. Overrides parent."""
 
+        InputBase.execute(self, indicator_options)
         # Fetch the response from the SDMX endpoint.
         self.fetch_data()
 

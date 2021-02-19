@@ -5,11 +5,12 @@ import pandas as pd
 import numpy as np
 import collections.abc
 from sdg.translations import TranslationHelper
+from sdg.Loggable import Loggable
 
-class Indicator:
+class Indicator(Loggable):
     """Data model for SDG indicators."""
 
-    def __init__(self, inid, name=None, data=None, meta=None, options=None):
+    def __init__(self, inid, name=None, data=None, meta=None, options=None, logging=None):
         """Constructor for the SDG indicator instances.
 
         Parameters
@@ -25,6 +26,7 @@ class Indicator:
         options : IndicatorOptions
             Output-specific options provided by the OutputBase class.
         """
+        Loggable.__init__(self, logging=logging)
         self.inid = inid
         self.name = name
         self.data = data
@@ -33,6 +35,7 @@ class Indicator:
         self.set_headline()
         self.set_edges()
         self.translations = {}
+        self.serieses = None
 
 
     def has_name(self):
@@ -369,7 +372,7 @@ class Indicator:
         return self.meta[field]
 
 
-    def get_all_series(self):
+    def get_all_series(self, use_cache=True):
         """Get all of the series present in this indicator's data.
 
         Returns
@@ -380,19 +383,23 @@ class Indicator:
         # Safety code for empty dataframes.
         if self.data.empty:
             return []
+        # Cache for efficiency.
+        if self.serieses is not None and use_cache:
+            return self.serieses
+
         # Assume "disaggregations" are everything except 'Year' and 'Value'.
         aggregating_columns = ['Year', 'Value']
         grouping_columns = [column for column in self.data.columns if column not in aggregating_columns]
 
         if len(grouping_columns) == 0:
-            series = sdg.Series({}, self.get_indicator_id())
+            series = sdg.Series({}, self.get_indicator_id(), logging=self.logging)
             for index, row in self.data.iterrows():
                 series.add_value(row['Year'], row['Value'])
             return [series]
 
         def row_to_series(row):
             disaggregations = row[grouping_columns].to_dict()
-            series = sdg.Series(disaggregations, self.get_indicator_id())
+            series = sdg.Series(disaggregations, self.get_indicator_id(), logging=self.logging)
             for year, value in zip(row['Year'], row['Value']):
                 series.add_value(year, value)
             return series
@@ -403,4 +410,5 @@ class Indicator:
         grouped = grouped.groupby(grouping_columns, as_index=False)[aggregating_columns].agg(lambda x: list(x))
         # Convert to a list of Series objects.
         grouped['series_objects'] = grouped.apply(row_to_series, axis=1)
-        return grouped['series_objects'].tolist()
+        self.serieses = grouped['series_objects'].tolist()
+        return self.serieses

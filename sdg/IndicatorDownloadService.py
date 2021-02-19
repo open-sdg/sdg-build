@@ -4,10 +4,12 @@ import glob
 import re
 from shutil import copyfile
 from pathlib import Path
+from sdg.Loggable import Loggable
 
-class IndicatorDownloadService:
-    def __init__(self, output_folder=None):
+class IndicatorDownloadService(Loggable):
+    def __init__(self, output_folder=None, logging=None):
         """Constructor for IndicatorDownloadService."""
+        Loggable.__init__(self, logging=logging)
         self.__output_folder = output_folder
         self.__index = {}
 
@@ -39,7 +41,7 @@ class IndicatorDownloadService:
         if match:
             return match.group(1).replace('-', '.')
         else:
-            print('Warning - indicator id not parsed from: ' + filename)
+            self.warn('Warning - indicator id not parsed from: {filename}', filename=filename)
             return None
 
 

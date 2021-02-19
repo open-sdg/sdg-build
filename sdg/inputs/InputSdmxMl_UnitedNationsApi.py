@@ -53,7 +53,7 @@ class InputSdmxMl_UnitedNationsApi(InputSdmxMl_Structure):
 
         prefix = 'https://data.un.org/ws/rest/data/IAEG-SDGs,DF_SDG_GLH,1.3/'
         suffix = '/ALL/?detail=full&dimensionAtObservation=TIME_PERIOD'
-        values = map(lambda x: self.dimension_query[x] if x in self.dimension_query else '', params)
+        values = map(lambda x: str(self.dimension_query[x]) if x in self.dimension_query else '', params)
         query = '.'.join(values)
 
         return prefix + query + suffix

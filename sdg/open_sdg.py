@@ -45,7 +45,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
                    docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
-                   indicator_export_filename='all_indicators'):
+                   logging=None, indicator_export_filename='all_indicators'):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -77,6 +77,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             that would not otherwise be included in the disaggregation report
         docs_translate_disaggregations: boolean. Whether to provide translated columns
             in the disaggregation report
+        logging : list or None. The types of logs to print, including 'warn' and 'debug'.
         indicator_export_filename: string. Filename without extension for zip file
 
     Returns:
@@ -92,6 +93,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         schema = open_sdg_schema_defaults(schema_file)
     if indicator_options is None:
         indicator_options = open_sdg_indicator_options_defaults()
+    if logging is None:
+        logging = ['warnings']
 
     status = True
 
@@ -115,6 +118,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'indicator_options': indicator_options,
         'indicator_downloads': indicator_downloads,
         'docs_extra_disaggregations': docs_extra_disaggregations,
+        'logging': logging,
         'indicator_export_filename': indicator_export_filename,
     }
     # Allow for a config file to update these.
@@ -156,6 +160,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         baseurl=options['docs_baseurl'],
         extra_disaggregations=options['docs_extra_disaggregations'],
         translate_disaggregations=options['docs_translate_disaggregations'],
+        logging=logging,
     )
     documentation_service.generate_documentation()
 
@@ -172,7 +177,10 @@ def open_sdg_indicator_options_defaults():
             'GeoCode',
             'Observation status',
             'Unit multiplier',
-            'Unit measure'
+            'Unit measure',
+            # Support common SDMX codes.
+            'UNIT_MEASURE',
+            'SERIES',
         ]
     }
 
@@ -185,7 +193,8 @@ def open_sdg_indicator_options_from_dict(options):
 
 
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
-        inputs=None, alter_data=None, alter_meta=None, indicator_options=None, schema=None):
+        inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
+        schema=None, logging=None):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -200,6 +209,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         config: str. Path to a YAML config file that overrides other parameters
         alter_data: function. A callback function that alters a data Dataframe
         alter_meta: function. A callback function that alters a metadata dictionary
+        logging: Noneor list. Type of logs to print, including 'warn' and 'debug'
 
     Returns:
         boolean: True if the check was successful, False if not.
@@ -222,6 +232,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'translations': [],
         'indicator_options': indicator_options,
         'indicator_downloads': None,
+        'logging': logging,
         'indicator_export_filename': None,
     }
     # Allow for a config file to update these.
@@ -290,6 +301,7 @@ def open_sdg_prep(options):
         reporting_status_extra_fields=reporting_status_extra_fields,
         indicator_options=options['indicator_options'],
         indicator_downloads=options['indicator_downloads'],
+        logging=options['logging'],
         indicator_export_filename=options['indicator_export_filename'])
 
     outputs = [opensdg_output]
@@ -302,6 +314,7 @@ def open_sdg_prep(options):
             'output_folder': options['site_dir'],
             'translations': options['translations'],
             'indicator_options': options['indicator_options'],
+            'logging': options['logging'],
         }
         for key in map_layer:
             geojson_kwargs[key] = map_layer[key]
@@ -353,6 +366,7 @@ def open_sdg_input_from_dict(params, options):
         'InputSdmxJson',
         'InputSdmxMl_Structure',
         'InputSdmxMl_StructureSpecific',
+        'InputSdmxMl_UnitedNationsApi',
         'InputYamlMdMeta',
         'InputSdmxMl_Multiple',
         'InputExcelMeta',
@@ -369,6 +383,8 @@ def open_sdg_input_from_dict(params, options):
     if 'path_pattern' in params:
         params['path_pattern'] = os.path.join(options['src_dir'], params['path_pattern'])
 
+    params['logging'] = options['logging']
+
     input_instance = None
     if input_class == 'InputCkan':
         input_instance = sdg.inputs.InputCkan(**params)
@@ -382,6 +398,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputSdmxMl_Structure(**params)
     elif input_class == 'InputSdmxMl_StructureSpecific':
         input_instance = sdg.inputs.InputSdmxMl_StructureSpecific(**params)
+    elif input_class == 'InputSdmxMl_UnitedNationsApi':
+        input_instance = sdg.inputs.InputSdmxMl_UnitedNationsApi(**params)
     elif input_class == 'InputYamlMdMeta':
         input_instance = sdg.inputs.InputYamlMdMeta(**params)
     elif input_class == 'InputSdmxMl_Multiple':
@@ -432,6 +450,8 @@ def open_sdg_translation_from_dict(params, options):
 
     # We no longer need the "class" param.
     del params['class']
+
+    params['logging'] = options['logging']
 
     # For "source" in TranslationInputYaml/Csv we need to prepend our src_dir.
     if translation_class == 'TranslationInputCsv' or translation_class == 'TranslationInputYaml':

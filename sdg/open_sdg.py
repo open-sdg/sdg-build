@@ -346,6 +346,9 @@ def open_sdg_input_defaults():
 
 
 def open_sdg_input_from_dict(params, options):
+    # If it is already a class, return it.
+    if isinstance(params, sdg.inputs.InputBase):
+        return params
     if 'class' not in params:
         raise KeyError("Each 'input' must have a 'class'.")
     input_class = params['class']

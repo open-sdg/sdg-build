@@ -77,6 +77,8 @@ class InputBase(Loggable):
         cols = df.columns.tolist()
         cols.pop(cols.index('Year'))
         cols.pop(cols.index('Value'))
+        for col in cols:
+            df[col] = df[col].map(str)
         cols = ['Year'] + cols + ['Value']
         return df[cols]
 
@@ -93,7 +95,7 @@ class InputBase(Loggable):
         Dataframe
             The same dataframe with rearranged columns
         """
-        return df.replace([None, ""], np.NaN)
+        return df.replace([None, "", "nan"], np.NaN)
 
 
     def fetch_file(self, location):

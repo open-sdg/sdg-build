@@ -11,6 +11,7 @@ from .InputSdmxJson import InputSdmxJson
 from .InputSdmxMl_Structure import InputSdmxMl_Structure
 from .InputSdmxMl_StructureSpecific import InputSdmxMl_StructureSpecific
 from .InputSdmxMl_Multiple import InputSdmxMl_Multiple
+from .InputSdmxMeta import InputSdmxMeta
 from .InputApi import InputApi
 from .InputCkan import InputCkan
 from .InputSdmxMl_UnitedNationsApi import InputSdmxMl_UnitedNationsApi

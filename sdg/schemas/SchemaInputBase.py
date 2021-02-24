@@ -12,18 +12,22 @@ class SchemaInputBase(Loggable):
     This class assumes imported schema (self.schema) are valid JSON Schema."""
 
 
-    def __init__(self, schema_path='', logging=None):
+    def __init__(self, schema_path='', logging=None, scope=None):
         """Create a new SchemaBase object
 
         Parameters
         ----------
         schema_path : string
             A path to the schema file to input
+        scope : string
+            An optional 'scope' to apply to all metadata fields
         """
 
         Loggable.__init__(self, logging=logging)
         self.schema_path = schema_path
+        self.scope = scope
         self.field_order = []
+        self.schema = None
         self.load_schema()
         self.load_validator()
 

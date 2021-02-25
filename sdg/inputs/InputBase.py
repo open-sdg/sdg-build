@@ -226,9 +226,11 @@ class InputBase(Loggable):
         ---------
         meta : dict or None
         """
-        # If empty or None, do nothing.
         if not meta or meta is None:
-            return meta
+            if len(self.meta_alterations) > 0:
+                meta = {}
+            else:
+                return meta
         for alteration in self.meta_alterations:
             meta = alteration(meta)
         return meta

@@ -39,7 +39,7 @@ def open_sdg_config(config_file, defaults):
 
 
 def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
-                   languages=None, translations=None, map_layers=None,
+                   schema=None, languages=None, translations=None, map_layers=None,
                    reporting_status_extra_fields=None, config='open_sdg_config.yml',
                    inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
@@ -54,7 +54,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         src_dir: str. Directory root for the project where data and meta data
             folders are
         site_dir: str. Directory to build the site to
-        schema_file: str. Location of schema file relative to src_dir
+        schema_file: str. Location of schema file relative to src_dir (@deprecated)
+        schema: list. A list of SchemaInputBase descendants.
         languages: list. A list of language codes, for translated builds
         translations: list. A list of dicts describing instances of TranslationInputBase
         map_layers: list. A list of dicts describing geojson to process
@@ -88,6 +89,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         inputs = open_sdg_input_defaults()
     if translations is None:
         translations = open_sdg_translation_defaults()
+    if schema is None:
+        schema = open_sdg_schema_defaults(schema_file)
     if indicator_options is None:
         indicator_options = open_sdg_indicator_options_defaults()
     if logging is None:
@@ -102,6 +105,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'schema_file': schema_file,
         'languages': languages,
         'translations': translations,
+        'schema': schema,
         'map_layers': map_layers,
         'reporting_status_extra_fields': reporting_status_extra_fields,
         'inputs': inputs,
@@ -120,8 +124,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
 
-    # Convert the translations.
+    # Convert the translations and schemas.
     options['translations'] = open_sdg_translations_from_options(options)
+    options['schema'] = open_sdg_schema_from_options(options)
 
     # Pass along our data/meta alterations.
     options['alter_data'] = alter_data
@@ -189,7 +194,7 @@ def open_sdg_indicator_options_from_dict(options):
 
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
         inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
-        logging=None):
+        schema=None, logging=None):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -199,7 +204,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
 
         src_dir: str. Directory root for the project where data and meta data
             folders are
-        schema_file: Location of schema file relative to src_dir
+        schema_file: Location of schema file relative to src_dir (@deprecated)
+        schema: list. List of SchemaInputBase descendants.
         config: str. Path to a YAML config file that overrides other parameters
         alter_data: function. A callback function that alters a data Dataframe
         alter_meta: function. A callback function that alters a metadata dictionary
@@ -210,6 +216,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
     """
     if inputs is None:
         inputs = open_sdg_input_defaults()
+    if schema is None:
+        schema = open_sdg_schema_defaults(schema_file)
     if indicator_options is None:
         indicator_options = open_sdg_indicator_options_defaults()
 
@@ -218,6 +226,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'src_dir': src_dir,
         'site_dir': '_site',
         'schema_file': schema_file,
+        'schema': schema,
         'map_layers': [],
         'inputs': inputs,
         'translations': [],
@@ -231,6 +240,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
 
     # Convert the translations.
     options['translations'] = open_sdg_translations_from_options(options)
+    options['schema'] = open_sdg_schema_from_options(options)
 
     # Pass along our data/meta alterations.
     options['alter_data'] = alter_data
@@ -274,9 +284,8 @@ def open_sdg_prep(options):
         for input in inputs:
             input.add_meta_alteration(options['alter_meta'])
 
-    # Use a Prose.io file for the metadata schema.
-    schema_path = os.path.join(options['src_dir'], options['schema_file'])
-    schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path, logging=options['logging'])
+    # Use the specified metadata schema.
+    schema = options['schema']
 
     # Indicate any extra fields for the reporting stats, if needed.
     reporting_status_extra_fields = []
@@ -362,6 +371,7 @@ def open_sdg_input_from_dict(params, options):
         'InputSdmxMl_Multiple',
         'InputExcelMeta',
         'InputYamlMeta',
+        'InputSdmxMeta',
     ]
     if input_class not in allowed:
         raise KeyError("Input class '%s' is not one of: %s." % (input_class, ', '.join(allowed)))
@@ -398,6 +408,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputExcelMeta(**params)
     elif input_class == 'InputYamlMeta':
         input_instance = sdg.inputs.InputYamlMeta(**params)
+    elif input_class == 'InputSdmxMeta':
+        input_instance = sdg.inputs.InputSdmxMeta(**params)
 
     return input_instance
 
@@ -430,6 +442,7 @@ def open_sdg_translation_from_dict(params, options):
         'TranslationInputCsv',
         'TranslationInputSdgTranslations',
         'TranslationInputSdmx',
+        'TranslationInputSdmxMsd',
         'TranslationInputYaml',
     ]
     if translation_class not in allowed:
@@ -452,10 +465,55 @@ def open_sdg_translation_from_dict(params, options):
         translation_instance = sdg.translations.TranslationInputSdgTranslations(**params)
     elif translation_class == 'TranslationInputSdmx':
         translation_instance = sdg.translations.TranslationInputSdmx(**params)
+    elif translation_class == 'TranslationInputSdmxMsd':
+        translation_instance = sdg.translations.TranslationInputSdmxMsd(**params)
     elif translation_class == 'TranslationInputYaml':
         translation_instance = sdg.translations.TranslationInputYaml(**params)
 
     return translation_instance
+
+
+def open_sdg_schema_defaults(schema_file='_prose.yml'):
+    return [
+        {
+            'class': 'SchemaInputOpenSdg',
+            'schema_path': schema_file,
+        }
+    ]
+
+
+def open_sdg_schema_from_options(options):
+    schema = [open_sdg_schema_from_dict(s_dict, options) for s_dict in options['schema']]
+    return sdg.schemas.SchemaInputMultiple(schema)
+
+
+def open_sdg_schema_from_dict(params, options):
+
+    if 'class' not in params:
+        raise KeyError("Each 'schema' must have a 'class'.")
+    schema_class = params['class']
+
+    allowed = [
+        'SchemaInputOpenSdg',
+        'SchemaInputSdmxMsd',
+    ]
+    if schema_class not in allowed:
+        raise KeyError("Schema class '%s' is not one of: %s." % (schema_class, ', '.join(allowed)))
+
+    # We no longer need the "class" param.
+    del params['class']
+
+    # For "schema_path" we need to prepend our src_dir.
+    if 'schema_path' in params and not params['schema_path'].startswith('http'):
+        params['schema_path'] = os.path.join(options['src_dir'], params['schema_path'])
+
+    schema_instance = None
+    if schema_class == 'SchemaInputOpenSdg':
+        schema_instance = sdg.schemas.SchemaInputOpenSdg(**params)
+    elif schema_class == 'SchemaInputSdmxMsd':
+        schema_instance = sdg.schemas.SchemaInputSdmxMsd(**params)
+
+    return schema_instance
 
 
 def output_is_translatable(output):

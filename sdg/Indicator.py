@@ -105,6 +105,7 @@ class Indicator(Loggable):
 
         if self.has_data():
             self.data = pd.concat([self.data, val], sort=False)
+            self.enforce_column_order()
         else:
             self.data = val
         self.set_headline()
@@ -215,10 +216,18 @@ class Indicator(Loggable):
         """Ensure at least an empty dataset for this indicator."""
         if self.data is None:
             df = pd.DataFrame({'Year':[], 'Value':[]})
-            # Enforce the order of columns.
-            cols = ['Year', 'Value']
-            df = df[cols]
             self.data = df
+            self.enforce_column_order()
+
+
+    def enforce_column_order(self):
+        if self.has_data():
+            df = self.data
+            cols = df.columns.tolist()
+            cols.pop(cols.index('Year'))
+            cols.pop(cols.index('Value'))
+            cols = ['Year'] + cols + ['Value']
+            self.data = df[cols]
 
 
     def language(self, language=None):

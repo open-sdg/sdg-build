@@ -103,7 +103,10 @@ class Indicator(Loggable):
         if val is None or not isinstance(val, pd.DataFrame) or val.empty:
             return
 
-        self.data = val
+        if self.has_data():
+            self.data = pd.concat([self.data, val], sort=False)
+        else:
+            self.data = val
         self.set_headline()
         self.set_edges()
 

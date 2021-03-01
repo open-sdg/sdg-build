@@ -123,7 +123,7 @@ class DisaggregationReportService(Loggable):
         string
             The title converted into a unique *.html filename
         """
-        slug = prefix + slugify(title)
+        slug = prefix + slugify(str(title))
         if slug in self.slugs:
             slug = slug + '_'
         if len(slug) > 100:

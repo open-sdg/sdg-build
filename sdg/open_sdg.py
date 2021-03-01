@@ -89,8 +89,6 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         inputs = open_sdg_input_defaults()
     if translations is None:
         translations = open_sdg_translation_defaults()
-    if schema is None:
-        schema = open_sdg_schema_defaults(schema_file)
     if indicator_options is None:
         indicator_options = open_sdg_indicator_options_defaults()
     if logging is None:
@@ -123,6 +121,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
+
+    if options['schema'] is None:
+        options['schema'] = open_sdg_schema_defaults(options['schema_file'])
 
     # Convert the translations and schemas.
     options['translations'] = open_sdg_translations_from_options(options)
@@ -216,8 +217,6 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
     """
     if inputs is None:
         inputs = open_sdg_input_defaults()
-    if schema is None:
-        schema = open_sdg_schema_defaults(schema_file)
     if indicator_options is None:
         indicator_options = open_sdg_indicator_options_defaults()
 
@@ -237,6 +236,9 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
+
+    if options['schema'] is None:
+        options['schema'] = open_sdg_schema_defaults(options['schema_file'])
 
     # Convert the translations.
     options['translations'] = open_sdg_translations_from_options(options)

@@ -78,7 +78,7 @@ class InputBase(Loggable):
         cols.pop(cols.index('Year'))
         cols.pop(cols.index('Value'))
         for col in cols:
-            df[col] = df[col].map(str)
+            df[col] = df[col].map(str, na_action='ignore')
         cols = ['Year'] + cols + ['Value']
         return df[cols]
 

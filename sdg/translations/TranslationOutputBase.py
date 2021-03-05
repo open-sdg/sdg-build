@@ -2,12 +2,13 @@
 
 import os
 from sdg.translations import TranslationInputBase
+from sdg.Loggable import Loggable
 
-class TranslationOutputBase:
+class TranslationOutputBase(Loggable):
     """A base class for exporting translations."""
 
 
-    def __init__(self, inputs):
+    def __init__(self, inputs, logging=None):
         """Constructor for TranslationOutputBase.
 
         Parameters
@@ -15,6 +16,7 @@ class TranslationOutputBase:
         inputs : list
             A list of TranslationInputBase objects
         """
+        Loggable.__init__(self, logging=logging)
         self.input = self.merge_inputs(inputs)
 
 
@@ -44,7 +46,7 @@ class TranslationOutputBase:
         merged = TranslationInputBase()
         for input in inputs:
             # Fetch the input.
-            input.execute()
+            input.execute_once()
             # Merge the results.
             translations = input.get_translations()
             for language in translations:

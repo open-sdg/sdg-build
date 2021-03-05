@@ -2,13 +2,14 @@ import os
 import sdg
 import pandas as pd
 from slugify import slugify
+from sdg.Loggable import Loggable
 
-class DisaggregationReportService:
+class DisaggregationReportService(Loggable):
     """Report generation to document disaggregations in data."""
 
 
     def __init__(self, outputs, languages=None, translation_helper=None,
-                 indicator_url=None, extra_disaggregations=None):
+                 indicator_url=None, extra_disaggregations=None, logging=None):
         """Constructor for the DisaggregationReportService class.
 
         Parameters
@@ -32,6 +33,7 @@ class DisaggregationReportService:
             included. Common choices are are units of measurement and series,
             which some users may prefer to see in the report.
         """
+        Loggable.__init__(self, logging=logging)
         self.outputs = outputs
         self.indicator_url = indicator_url
         self.slugs = []
@@ -121,7 +123,7 @@ class DisaggregationReportService:
         string
             The title converted into a unique *.html filename
         """
-        slug = prefix + slugify(title)
+        slug = prefix + slugify(str(title))
         if slug in self.slugs:
             slug = slug + '_'
         if len(slug) > 100:

@@ -9,10 +9,10 @@ Aggregate information for reporting statistics
 import pandas as pd
 
 
-def reporting_status(schema, all_meta, extra_fields=None):
+def reporting_status(reporting_status_types, all_meta, extra_fields=None):
     """
     Args:
-        schema: An object of class "Schema" containing the metadata schema
+        reporting_status_types: A list of value/label status types
         all_meta: A dictionary containing all metadata items
         extra_fields: List of fields to group stats by, in addition to goal
 
@@ -26,9 +26,9 @@ def reporting_status(schema, all_meta, extra_fields=None):
     if 'sdg_goal' not in grouping_fields:
         grouping_fields.append('sdg_goal')
 
-    # Generate a report of the possible statuses, both value and translations.
-    status_values = schema.get_values('reporting_status')
-    value_translation = schema.get_value_translation('reporting_status')
+    # Generate a report of the possible statuses.
+    status_values = [status['value'] for status in reporting_status_types]
+    value_translation = {status['value']: status['label'] for status in reporting_status_types}
     status_report = [{'value': status,
                       'translation_key': value_translation[status]}
                     for status in status_values]

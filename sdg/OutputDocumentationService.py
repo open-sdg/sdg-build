@@ -2,9 +2,10 @@ import os
 import sdg
 import pandas as pd
 from slugify import slugify
+from sdg.Loggable import Loggable
 import humanize
 
-class OutputDocumentationService:
+class OutputDocumentationService(Loggable):
     """HTML generation to document outputs built with this library.
 
     Note that this is meant to document particular builds, not the library in
@@ -17,7 +18,7 @@ class OutputDocumentationService:
     def __init__(self, outputs, folder='_site', branding='Build docs',
                  languages=None, intro='', translations=None, indicator_url=None,
                  subfolder=None, baseurl='', extra_disaggregations=None,
-                 translate_disaggregations=False):
+                 translate_disaggregations=False, logging=None):
         """Constructor for the OutputDocumentationService class.
 
         Parameters
@@ -58,6 +59,7 @@ class OutputDocumentationService:
             Whether or not to include translation columns in the
             disaggregation report.
         """
+        Loggable.__init__(self, logging=logging)
         self.outputs = outputs
         self.folder = self.fix_folder(folder, subfolder)
         self.branding = branding
@@ -298,8 +300,8 @@ class OutputDocumentationService:
 
     def write_disaggregation_value_detail_page(self, info):
         service = self.disaggregation_report_service
-        disaggregation = info['disaggregation']
-        disaggregation_value = info['name']
+        disaggregation = str(info['disaggregation'])
+        disaggregation_value = str(info['name'])
         filename = info['filename']
 
         df = service.get_disaggregation_value_dataframe(info)

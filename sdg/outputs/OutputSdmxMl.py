@@ -10,7 +10,7 @@ from sdmx.model import (
     Key,
     AttributeValue,
     Observation,
-    GenericTimeSeriesDataSet,
+    StructureSpecificTimeSeriesDataSet,
     DataflowDefinition,
     Agency
 )
@@ -124,7 +124,7 @@ class OutputSdmxMl(OutputBase):
                     serieses[series_key] = []
                 serieses[series_key].append(observation)
 
-            dataset = GenericTimeSeriesDataSet(structured_by=self.dsd, series=serieses)
+            dataset = StructureSpecificTimeSeriesDataSet(structured_by=self.dsd, series=serieses)
             header = self.create_header()
             time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
             msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)

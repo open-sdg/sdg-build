@@ -15,4 +15,7 @@ class InputJsonStat(InputApi):
 
 
     def get_indicator_name(self, indicator_id, resource_id, json_response):
-        return json_response['dataset']['label']
+        try:
+            return json_response['dataset']['label']
+        except:
+            return indicator_id

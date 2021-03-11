@@ -14,4 +14,5 @@ from .InputSdmxMl_Multiple import InputSdmxMl_Multiple
 from .InputSdmxMeta import InputSdmxMeta
 from .InputApi import InputApi
 from .InputCkan import InputCkan
+from .InputJsonStat import InputJsonStat
 from .InputSdmxMl_UnitedNationsApi import InputSdmxMl_UnitedNationsApi

@@ -14,7 +14,7 @@ class InputApi(InputBase):
     "add_data_alteration" to add a callback function that corrects the format.
     """
 
-    def __init__(self, endpoint, indicator_id_map, logging=None):
+    def __init__(self, endpoint, indicator_id_map, logging=None, post_data=None):
         """Constructor for InputApi input.
 
         Parameters
@@ -23,9 +23,13 @@ class InputApi(InputBase):
             The remote URL of the endpoint for fetching indicators.
         indicator_id_map : dict
             Map of API ids (such as "resource ids) to indicator ids.
+        post_data : dict
+            If passed, the request will be a POST instead of GET with the
+            dict as the request payload.
         """
         self.endpoint = endpoint
         self.indicator_id_map = indicator_id_map
+        self.post_data = post_data
         InputBase.__init__(self, logging=logging)
 
 
@@ -76,7 +80,10 @@ class InputApi(InputBase):
         for resource_id in self.indicator_id_map:
             # Fetch the data.
             url = self.generate_api_call(resource_id)
-            r = requests.get(url, headers=headers)
+            if self.post_data is not None:
+                r = requests.post(url, headers=headers, data=self.post_data)
+            else:
+                r = requests.get(url, headers=headers)
             json = r.json()
 
             # Create the indicator.

@@ -4,6 +4,7 @@ import requests
 import json
 from sdg.inputs import InputBase
 from sdg.Indicator import Indicator
+import time
 
 class InputApi(InputBase):
     """Sources of SDG data that are in a remote API.
@@ -16,7 +17,7 @@ class InputApi(InputBase):
     """
 
     def __init__(self, endpoint, indicator_id_map, logging=None, post_data=None,
-                 year_column=None, value_column=None):
+                 year_column=None, value_column=None, sleep=None):
         """Constructor for InputApi input.
 
         Parameters
@@ -35,12 +36,15 @@ class InputApi(InputBase):
             A column to change to "Year".
         value_column : string
             A column to change to "Value".
+        sleep : int
+            Number of seconds to wait in between each request.
         """
         self.endpoint = endpoint
         self.indicator_id_map = indicator_id_map
         self.post_data = post_data
         self.year_column = year_column
         self.value_column = value_column
+        self.sleep = sleep
         InputBase.__init__(self, logging=logging)
 
 
@@ -128,3 +132,6 @@ class InputApi(InputBase):
             data = self.fix_data(data)
             name = self.get_indicator_name(inid, resource_id, json_response)
             self.add_indicator(inid, data=data, name=name, options=indicator_options)
+
+            if self.sleep is not None:
+                time.sleep(self.sleep)

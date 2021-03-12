@@ -66,6 +66,29 @@ class InputSdmxMl_StructureSpecific(InputSdmxMl_Structure):
         for observation in observations:
             year = observation.attrib['TIME_PERIOD']
             value = observation.attrib['OBS_VALUE']
-            row = self.get_row(year, value, disaggregations)
+            row_disaggregations = self.get_observation_attributes(observation)
+            row_disaggregations.update(disaggregations)
+            row = self.get_row(year, value, row_disaggregations)
             rows.append(row)
         return rows
+
+
+    def get_observation_attributes(self, observation):
+        """Get a dict of attributes from an observation.
+
+        Parameters
+        ----------
+        observation : Element
+            The XML element for the observation
+
+        Returns
+        -------
+        dict
+            Dict of key/value pairs for attributes.
+        """
+        attributes = {}
+        if self.import_observation_attributes:
+            for attribute in observation.attrib:
+                if attribute not in self.omit_observation_attributes():
+                    attributes[attribute] = observation.attrib[attribute]
+            return attributes

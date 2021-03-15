@@ -27,10 +27,13 @@ class OutputDataPackage(OutputBase):
             An optional subclass of DataSchemaInputBase
         package_properties : dict
             Common properties to add to all the data packages.
+            Note that this can also be set per-indicator in a "datapackage" metadata property.
         resource_properties : dict
             Common properties to add to the resource in all data packages.
+            Note that this can also be set per-indicator in a "datapackage" metadata property.
         field_properties : dict of dicts
             Properties to add to specific fields, keyed by field name.
+            Note that this can also be set per-indicator in a "datapackage" metadata property.
         sorting : string
             Strategy to use when sorting the columns and values. Options are:
             - alphabetical: Sort columns/values in alphabetical order
@@ -55,6 +58,7 @@ class OutputDataPackage(OutputBase):
         self.resource_properties = resource_properties
         self.field_properties = field_properties
         self.sorting = sorting
+        self.per_indicator_metadata_field = 'datapackage'
 
 
     def get_base_folder(self):
@@ -77,8 +81,6 @@ class OutputDataPackage(OutputBase):
             Path(package_folder).mkdir(parents=True, exist_ok=True)
 
             indicator = self.get_indicator_by_id(indicator_id).language(language)
-            name = indicator_id
-            title = indicator.get_name()
             data_schema_for_indicator = self.data_schema.get_schema_for_indicator(indicator)
             if data_schema_for_indicator is None:
                 data_schema_for_indicator = backup_data_schema.get_schema_for_indicator(indicator)
@@ -96,12 +98,12 @@ class OutputDataPackage(OutputBase):
 
             # Write the descriptor.
             descriptor_path = os.path.join(package_folder, 'datapackage.json')
-            indicator_package = self.create_indicator_package(data_schema_for_indicator, data_path, name, title)
-            self.write_indicator_package(indicator_package, descriptor_path, language=language)
+            indicator_package = self.create_indicator_package(data_schema_for_indicator, data_path, indicator_id, indicator)
+            self.write_indicator_package(indicator_package, descriptor_path, indicator, language=language)
 
             # Add to the top level package.
             top_level_data_path = indicator_id + '/data.csv'
-            top_level_resource = self.create_resource(data_schema_for_indicator, data_path, name, title, top_level_data_path)
+            top_level_resource = self.create_resource(data_schema_for_indicator, data_path, indicator_id, indicator, top_level_data_path)
             self.add_to_top_level_package(top_level_resource)
 
         top_level_descriptor_path = os.path.join(self.output_folder, self.get_base_folder(), 'all.json')
@@ -128,48 +130,60 @@ class OutputDataPackage(OutputBase):
         df.to_csv(path, index=False)
 
 
-    def apply_package_properties(self, package):
+    def apply_package_properties(self, package, indicator):
         for key in self.package_properties:
             package[key] = self.package_properties[key]
+        indicator_props = self.get_properties_per_indicator(indicator, 'package_properties')
+        for key in indicator_props:
+            package[key] = indicator_props[key]
 
 
-    def apply_resource_properties(self, resource):
+    def apply_resource_properties(self, resource, indicator):
         for key in self.resource_properties:
             resource[key] = self.resource_properties[key]
+        indicator_props = self.get_properties_per_indicator(indicator, 'resource_properties')
+        for key in indicator_props:
+            resource[key] = indicator_props[key]
 
 
-    def apply_field_properties(self, resource):
+    def apply_field_properties(self, resource, indicator):
         for field_name in self.field_properties:
             field = resource.get_field(field_name)
             if field is not None:
                 for key in self.field_properties[field_name]:
                     field[key] = self.field_properties[field_name][key]
+        indicator_props = self.get_properties_per_indicator(indicator, 'field_properties')
+        for field_name in indicator_props:
+            field = resource.get_field(field_name)
+            if field is not None:
+                for key in indicator_props[field_name]:
+                    field[key] = indicator_props[field_name][key]
 
 
-    def create_resource(self, schema, data_path, name, title, data_path_override=None):
+    def create_resource(self, schema, data_path, indicator_id, indicator, data_path_override=None):
         resource = describe_resource(data_path)
-        self.apply_resource_properties(resource)
+        self.apply_resource_properties(resource, indicator)
         resource.schema = schema
         resource.path = data_path_override if data_path_override is not None else data_path
-        resource.name = name
-        resource.title = title
-        self.apply_field_properties(resource)
+        resource.name = indicator_id
+        resource.title = indicator.get_name()
+        self.apply_field_properties(resource, indicator)
         return resource
 
 
-    def create_indicator_package(self, schema, data_path, name, title):
+    def create_indicator_package(self, schema, data_path, indicator_id, indicator):
         package = describe_package(data_path)
-        self.apply_package_properties(package)
-        package.name = name
-        package.title = title
+        self.apply_package_properties(package, indicator)
+        package.name = indicator_id
+        package.title = indicator.get_name()
         resource = package.get_resource('data')
-        self.apply_resource_properties(resource)
+        self.apply_resource_properties(resource, indicator)
         resource.schema = schema
         resource.path = 'data.csv'
         return package
 
 
-    def write_indicator_package(self, package, descriptor_path, language=None):
+    def write_indicator_package(self, package, descriptor_path, indicator, language=None):
         package.to_json(descriptor_path)
 
 
@@ -193,6 +207,18 @@ class OutputDataPackage(OutputBase):
                     self.translation_helper.translate(value, language, groups)
                     for value in field.constraints['enum']
                 ]
+
+
+    def get_properties_per_indicator(self, indicator, property_type):
+        if indicator is None:
+            return {}
+
+        per_indicator = indicator.get_meta_field_value(self.per_indicator_metadata_field)
+
+        if per_indicator is not None and property_type in per_indicator:
+            return per_indicator[property_type]
+        else:
+            return {}
 
 
     def validate(self):

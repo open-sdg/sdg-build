@@ -186,7 +186,7 @@ def open_sdg_indicator_options_defaults():
             'Observation status',
             'Unit multiplier',
             'Unit measure',
-            # Support common SDMX codes.
+             # Support common SDMX codes.
             'UNIT_MEASURE',
             'SERIES',
         ],

@@ -365,7 +365,6 @@ def open_sdg_prep(options):
         csvw_params = options['csvw'] if options['csvw'] != True else {}
         outputs.append(sdg.outputs.OutputCsvw(
             data_schema=data_schema,
-            **datapackage_params,
             **csvw_params,
         ))
 

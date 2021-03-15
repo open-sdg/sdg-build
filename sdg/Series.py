@@ -1,6 +1,7 @@
 import pandas as pd
+from sdg.Loggable import Loggable
 
-class Series:
+class Series(Loggable):
     """Data model for series within SDG indicators.
 
     Indicator data can have multiple combinations of disaggregations, which are
@@ -24,7 +25,7 @@ class Series:
         }
     """
 
-    def __init__(self, disaggregations, indicator_id='Indicator'):
+    def __init__(self, disaggregations, indicator_id='Indicator', logging=None):
         """Constructor for the SDG series instances.
 
         Parameters
@@ -34,6 +35,7 @@ class Series:
         indicator_id : string
             Optional indicator ID this series is a part of (eg, 1.1.1).
         """
+        Loggable.__init__(self, logging=logging)
         self.disaggregations = disaggregations
         self.values = {}
         self.indicator_id = indicator_id
@@ -70,8 +72,9 @@ class Series:
             The numerical value to add.
         """
         if year in self.values:
-            warning = '\nWARNING: {} - Duplicate values for year {}: {} and {} in series: {}'
-            print(warning.format(self.indicator_id, year, value, self.values[year], self.get_disaggregations()))
+            self.warn('{inid} - Duplicate values for year {year}: {value1} and {value2} in series: {series}',
+                       inid=self.indicator_id, year=year, value1=value,
+                       value2=self.values[year], series=self.get_disaggregations())
         else:
             self.values[year] = value
 

@@ -5,11 +5,12 @@ import pandas as pd
 import numpy as np
 import collections.abc
 from sdg.translations import TranslationHelper
+from sdg.Loggable import Loggable
 
-class Indicator:
+class Indicator(Loggable):
     """Data model for SDG indicators."""
 
-    def __init__(self, inid, name=None, data=None, meta=None, options=None):
+    def __init__(self, inid, name=None, data=None, meta=None, options=None, logging=None):
         """Constructor for the SDG indicator instances.
 
         Parameters
@@ -25,6 +26,7 @@ class Indicator:
         options : IndicatorOptions
             Output-specific options provided by the OutputBase class.
         """
+        Loggable.__init__(self, logging=logging)
         self.inid = inid
         self.name = name
         self.data = data
@@ -33,6 +35,7 @@ class Indicator:
         self.set_headline()
         self.set_edges()
         self.translations = {}
+        self.serieses = None
 
 
     def has_name(self):
@@ -161,7 +164,7 @@ class Indicator:
         string
             The number of the goal.
         """
-        return self.inid.split('-')[0]
+        return self.inid if self.is_standalone() else self.inid.split('-')[0]
 
 
     def get_target_id(self):
@@ -172,7 +175,7 @@ class Indicator:
         string
             The target id, dot-delimited.
         """
-        return '.'.join(self.inid.split('-')[0:2])
+        return self.inid if self.is_standalone() else '.'.join(self.inid.split('-')[0:2])
 
 
     def get_indicator_id(self):
@@ -183,7 +186,7 @@ class Indicator:
         string
             The indicator id, dot-delimited.
         """
-        return self.inid.replace('-', '.')
+        return self.inid if self.is_standalone() else self.inid.replace('-', '.')
 
 
     def require_meta(self, minimum_metadata=None):
@@ -257,10 +260,14 @@ class Indicator:
         def translate_data(text, column):
             return translation_helper.translate(text, language, default_group=[column, 'data'])
         def translate_data_columns(text):
-            special_columns = ['Year', 'Value', 'Units']
+            # We only want to translate disaggregation columns, for the most part. However,
+            # a special case is the COMPOSITE_BREAKDOWN disaggregation, often found in SDMX.
+            # We assume that this will be altered at the presentation layer, so we do not
+            # translated it here.
+            special_columns = self.options.get_non_disaggregation_columns() + ['COMPOSITE_BREAKDOWN']
             if text in special_columns:
                 return text
-            return translation_helper.translate(text, language, default_group='data')
+            return translation_helper.translate(text, language, default_group=[text, 'data'])
 
         # Translate the name.
         indicator.set_name(translate_meta(self.name))
@@ -328,6 +335,21 @@ class Indicator:
             return self.has_data()
 
 
+    def is_standalone(self):
+        """Decide whether this indicator is standalone - ie, not part of the SDGs.
+
+        Returns
+        -------
+        boolean
+            True if the indicator should be considered standalone, False otherwise.
+        """
+        standalone = self.get_meta_field_value('standalone')
+        if standalone is None or standalone == False:
+            return False
+        else:
+            return True
+
+
     def get_meta_field_value(self, field):
         """Get the value for a metadata field.
 
@@ -350,7 +372,7 @@ class Indicator:
         return self.meta[field]
 
 
-    def get_all_series(self):
+    def get_all_series(self, use_cache=True):
         """Get all of the series present in this indicator's data.
 
         Returns
@@ -361,19 +383,23 @@ class Indicator:
         # Safety code for empty dataframes.
         if self.data.empty:
             return []
+        # Cache for efficiency.
+        if self.serieses is not None and use_cache:
+            return self.serieses
+
         # Assume "disaggregations" are everything except 'Year' and 'Value'.
         aggregating_columns = ['Year', 'Value']
         grouping_columns = [column for column in self.data.columns if column not in aggregating_columns]
 
         if len(grouping_columns) == 0:
-            series = sdg.Series({}, self.get_indicator_id())
+            series = sdg.Series({}, self.get_indicator_id(), logging=self.logging)
             for index, row in self.data.iterrows():
                 series.add_value(row['Year'], row['Value'])
             return [series]
 
         def row_to_series(row):
             disaggregations = row[grouping_columns].to_dict()
-            series = sdg.Series(disaggregations, self.get_indicator_id())
+            series = sdg.Series(disaggregations, self.get_indicator_id(), logging=self.logging)
             for year, value in zip(row['Year'], row['Value']):
                 series.add_value(year, value)
             return series
@@ -384,4 +410,5 @@ class Indicator:
         grouped = grouped.groupby(grouping_columns, as_index=False)[aggregating_columns].agg(lambda x: list(x))
         # Convert to a list of Series objects.
         grouped['series_objects'] = grouped.apply(row_to_series, axis=1)
-        return grouped['series_objects'].tolist()
+        self.serieses = grouped['series_objects'].tolist()
+        return self.serieses

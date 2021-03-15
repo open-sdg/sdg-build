@@ -1,5 +1,6 @@
 pyyaml
 pandas
+sdmx1
 gitpython
 jsonschema
 requests

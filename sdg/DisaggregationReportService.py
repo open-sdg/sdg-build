@@ -2,13 +2,14 @@ import os
 import sdg
 import pandas as pd
 from slugify import slugify
+from sdg.Loggable import Loggable
 
-class DisaggregationReportService:
+class DisaggregationReportService(Loggable):
     """Report generation to document disaggregations in data."""
 
 
     def __init__(self, outputs, languages=None, translation_helper=None,
-                 indicator_url=None, extra_disaggregations=None):
+                 indicator_url=None, extra_disaggregations=None, logging=None):
         """Constructor for the DisaggregationReportService class.
 
         Parameters
@@ -32,6 +33,7 @@ class DisaggregationReportService:
             included. Common choices are are units of measurement and series,
             which some users may prefer to see in the report.
         """
+        Loggable.__init__(self, logging=logging)
         self.outputs = outputs
         self.indicator_url = indicator_url
         self.slugs = []
@@ -102,7 +104,9 @@ class DisaggregationReportService:
         indicators = {}
         for output in self.outputs:
             for indicator_id in output.get_indicator_ids():
-                indicators[indicator_id] = output.get_indicator_by_id(indicator_id)
+                indicator = output.get_indicator_by_id(indicator_id)
+                if not indicator.is_standalone():
+                    indicators[indicator_id] = indicator
         return indicators
 
 
@@ -119,7 +123,7 @@ class DisaggregationReportService:
         string
             The title converted into a unique *.html filename
         """
-        slug = prefix + slugify(title)
+        slug = prefix + slugify(str(title))
         if slug in self.slugs:
             slug = slug + '_'
         if len(slug) > 100:
@@ -264,17 +268,20 @@ class DisaggregationReportService:
 
     def get_disaggregation_report_template(self):
         return """
-        <div class="list-group list-group-horizontal mb-4">
-            <a class="list-group-item list-group-item-action" href="#by-disaggregation">By disaggregation</a>
-            <a class="list-group-item list-group-item-action" href="#by-indicator">By indicator</a>
+        <div role="navigation" aria-describedby="contents-heading">
+            <h2 id="contents-heading">On this page</h2>
+            <ul>
+                <li><a href="#by-disaggregation">By disaggregation</a></li>
+                <li><a href="#by-indicator">By indicator</a></li>
+            </ul>
         </div>
         <div>
-            <h2 id="by-disaggregation">By disaggregation</h2>
+            <h2 id="by-disaggregation" tabindex="-1">By disaggregation</h2>
             {disaggregation_download}
             {disaggregation_table}
         </div>
         <div>
-            <h2 id="by-indicator">By indicator</h2>
+            <h2 id="by-indicator" tabindex="-1">By indicator</h2>
             {indicator_download}
             {indicator_table}
         </div>
@@ -283,17 +290,20 @@ class DisaggregationReportService:
 
     def get_disaggregation_detail_template(self):
         return """
-        <div class="list-group list-group-horizontal mb-4">
-            <a class="list-group-item list-group-item-action" href="#values-used">Values used in disaggregation</a>
-            <a class="list-group-item list-group-item-action" href="#indicators-using">Indicators using disaggregation</a>
+        <div role="navigation" aria-describedby="contents-heading">
+            <h2 id="contents-heading">On this page</h2>
+            <ul>
+                <li><a href="#values-used">Values used in disaggregation</a></li>
+                <li><a href="#indicators-using">Indicators using disaggregation</a></li>
+            </ul>
         </div>
         <div>
-            <h2 id="values-used">Values used in disaggregation</h2>
+            <h2 id="values-used" tabindex="-1">Values used in disaggregation</h2>
             {values_download}
             {values_table}
         </div>
         <div>
-            <h2 id="indicators-using">Indicators using disaggregation</h2>
+            <h2 id="indicators-using" tabindex="-1">Indicators using disaggregation</h2>
             {indicators_download}
             {indicators_table}
         </div>

@@ -364,6 +364,11 @@ def open_sdg_prep(options):
     if options['csvw'] is not None:
         csvw_params = options['csvw'] if options['csvw'] != True else {}
         outputs.append(sdg.outputs.OutputCsvw(
+            inputs=inputs,
+            schema=schema,
+            output_folder=options['site_dir'],
+            translations=options['translations'],
+            indicator_options=options['indicator_options'],
             data_schema=data_schema,
             **csvw_params,
         ))

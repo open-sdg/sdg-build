@@ -103,7 +103,7 @@ class OutputSdmxMl(OutputBase):
                                 if data.at[i, col] in concept_map['CSV_cellvalue'].to_list():
                                     data.at[i, col]=concept_map['SDMX_codelist_item'].loc[concept_map['CSV_cellvalue']==data.at[i, col]].item()
                             newcol=concept_map['SDMX_concept'].loc[concept_map['CSV_colname']==col].iloc[0]
-                            data.rename(columns={col:newcol}, inplace=True)
+                            data = data.rename(columns={col:newcol})
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={

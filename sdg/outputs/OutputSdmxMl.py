@@ -27,7 +27,7 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None):
+                 default_values=None, header_id=None, sender_id=None, sdmx_mapping=None):
         """Constructor for OutputSdmxMl.
 
         This output assumes the following:
@@ -60,7 +60,7 @@ class OutputSdmxMl(OutputBase):
             in the header of the XML. If not specified, it will be the current version
             of this library.
         """
-        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
+        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options, sdmx_mapping)
         self.header_id = header_id
         self.sender_id = sender_id
         self.retrieve_dsd(dsd)
@@ -80,7 +80,7 @@ class OutputSdmxMl(OutputBase):
         self.dsd = dsd_object
 
 
-    def build(self, language=None, sdmx_mapping=None):
+    def build(self, language=None):
         """Write the SDMX output. Overrides parent."""
         status = True
         datasets = []
@@ -95,7 +95,7 @@ class OutputSdmxMl(OutputBase):
             data = indicator.data.copy()
             
             if sdmx_mapping is not None:
-                sdmx_mapping=pd.read_csv(sdmx_mapping)
+                sdmx_mapping=pd.read_csv(self.sdmx_mapping)
                 for col in data.columns:
                     if col not in ["Year", "Value"]:
                         for i in data.index:

@@ -199,8 +199,8 @@ class OutputSdmxMl(OutputBase):
             print("ATTRIBUTE:"+str(attribute))
             print("ATTRIBUTE.RELATED_TO:"+str(attribute.related_to))
             print("RELATED_TO:"+str(related_to))
-            print("TYPE(ATTRIBUTE.RELATED_TO):"+type(attribute.related_to))
-            print("TYPE(RELATED_TO):"+type(related_to))
+            print("TYPE(ATTRIBUTE.RELATED_TO):"+str(type(attribute.related_to)))
+            print("TYPE(RELATED_TO):"+str(type(related_to)))
             if attribute.related_to is not None and isinstance(attribute.related_to, related_to):
                 value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
                 if value != '':

@@ -29,7 +29,7 @@ class OutputSdmxMl(OutputBase):
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
                  default_values=None, header_id=None, sender_id=None,
-                 constrain_data=True):
+                 constrain_data=False):
         """Constructor for OutputSdmxMl.
 
         This output assumes the following:
@@ -63,7 +63,7 @@ class OutputSdmxMl(OutputBase):
             of this library.
         constrain_data : boolean
             Whether to use the DSD to remove any rows of data that are not compliant.
-            Defaults to True.
+            Defaults to False.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.header_id = header_id

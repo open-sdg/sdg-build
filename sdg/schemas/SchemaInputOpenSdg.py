@@ -51,7 +51,7 @@ class SchemaInputOpenSdg(SchemaInputBase):
                     }
                 },
                 'then': {
-                    'required': ['graph_title', 'graph_type']
+                    'required': ['graph_type']
                 }
             }
         ]

@@ -120,6 +120,16 @@ class Indicator(Loggable):
                 self.meta = self.deepUpdate(self.meta, val)
             else:
                 self.meta = val
+                
+    def has_graph_titles(self):
+        """Check to see if the indicator has graph_titles.
+
+        Returns
+        -------
+        boolean
+            True if the indicator has graph_titles.
+        """
+        return self.graph_titles is not None
 
 
     def deepUpdate(self, d, u):

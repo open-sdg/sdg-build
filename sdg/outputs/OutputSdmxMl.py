@@ -94,7 +94,7 @@ class OutputSdmxMl(OutputBase):
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
             
-            if sdmx_mapping is not None:
+            if self.sdmx_mapping is not None:
                 sdmx_mapping=pd.read_csv(self.sdmx_mapping)
                 for col in data.columns:
                     if col not in ["Year", "Value"]:

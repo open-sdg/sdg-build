@@ -60,10 +60,11 @@ class OutputSdmxMl(OutputBase):
             in the header of the XML. If not specified, it will be the current version
             of this library.
         """
-        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options, concept_map)
+        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.header_id = header_id
         self.sender_id = sender_id
         self.retrieve_dsd(dsd)
+        self.concept_map = concept_map
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
             os.makedirs(sdmx_folder, exist_ok=True)

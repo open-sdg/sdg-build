@@ -152,8 +152,8 @@ class OutputOpenSdg(OutputBase):
         # Add names only if the indicator has one.
         if indicator.has_name():
             minimum['indicator_name'] = indicator.get_name()
-            minimum['graph_title'] = indicator.get_name()
-
+            if indicator.get_meta_field_value('graph_titles') is None:
+                minimum['graph_title'] = indicator.get_name()
         return minimum
 
 

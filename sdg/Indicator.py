@@ -415,11 +415,12 @@ class Indicator(Loggable):
         return self.serieses
 
 
-    def get_data_matching_schema(self, schema, use_cache=True):
+    def get_data_matching_schema(self, data_schema, use_cache=True):
         # Safety code for empty dataframes.
         if self.data.empty:
-            return []
+            return self.data
         # Cache for efficiency.
+        schema = data_schema.get_schema_for_indicator(self)
         cache_key = str(schema.to_dict())
         if use_cache and cache_key in self.data_matching_schema:
             return self.data_matching_schema[cache_key]
@@ -433,7 +434,7 @@ class Indicator(Loggable):
             matches = True
             for col in columns_in_both:
                 allowed_values = schema.get_field(col).constraints['enum']
-                if row[col] not in allowed_values:
+                if row[col] not in allowed_values and not pd.isna(row[col]):
                     matches = False
             return matches
 

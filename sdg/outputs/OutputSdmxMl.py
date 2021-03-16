@@ -27,7 +27,7 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None, sdmx_mapping=None):
+                 default_values=None, header_id=None, sender_id=None, concept_map=None):
         """Constructor for OutputSdmxMl.
 
         This output assumes the following:
@@ -60,7 +60,7 @@ class OutputSdmxMl(OutputBase):
             in the header of the XML. If not specified, it will be the current version
             of this library.
         """
-        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options, sdmx_mapping)
+        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options, concept_map)
         self.header_id = header_id
         self.sender_id = sender_id
         self.retrieve_dsd(dsd)
@@ -94,14 +94,15 @@ class OutputSdmxMl(OutputBase):
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
             
-            if self.sdmx_mapping is not None:
-                sdmx_mapping=pd.read_csv(self.sdmx_mapping)
+            if self.concept_map is not None:
+                concept_map=pd.read_csv(self.concept_map)
                 for col in data.columns:
-                    if col not in ["Year", "Value"]:
-                        for i in data.index:
-                            data.at[i, col]=sdmx_mapping['SDMX_codelist_item'].loc[sdmx_mapping['CSV_cellvalue']==data.at[i, col]].item()
-                        newcol=sdmx_mapping['SDMX_concept'].loc[sdmx_mapping['CSV_colname']==col].item()
-                        data.rename(columns={col:newcol}, inplace=True)
+                    if col in concept_map['CSV_colname'].to_list():
+                            for i in data.index:
+                                if data.at[i, col] in concept_map['CSV_cellvalue'].to_list():
+                                    data.at[i, col]=concept_map['SDMX_codelist_item'].loc[concept_map['CSV_cellvalue']==data.at[i, col]].item()
+                            newcol=concept_map['SDMX_concept'].loc[concept_map['CSV_colname']==col].iloc[0]
+                            data.rename(columns={col:newcol}, inplace=True)
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={

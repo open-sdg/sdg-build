@@ -15,6 +15,7 @@ class DataSchemaInputBase:
         """Create a new DataSchemaInputBase object."""
 
         self.source = source
+        self.schema_fallback = None
         self.schema = self.load_all_schema()
 
 
@@ -27,6 +28,8 @@ class DataSchemaInputBase:
         indicator_id = indicator.inid
         if indicator_id in self.schema and self.schema[indicator_id] is not None:
             return self.schema[indicator_id]
+        if self.schema_fallback is not None:
+            return self.schema_fallback
         return None
 
 

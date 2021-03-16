@@ -196,9 +196,9 @@ class OutputSdmxMl(OutputBase):
     def get_attribute_values(self, row, indicator, related_to):
         values = {}
         for attribute in self.dsd.attributes:
-            print("ATTRIBUTE:"+attribute)
-            print("ATTRIBUTE.RELATED_TO:"+attribute.related_to)
-            print("RELATED_TO:"+related_to)
+            print("ATTRIBUTE:"+str(attribute))
+            print("ATTRIBUTE.RELATED_TO:"+str(attribute.related_to))
+            print("RELATED_TO:"+str(related_to))
             print("TYPE(ATTRIBUTE.RELATED_TO):"+type(attribute.related_to))
             print("TYPE(RELATED_TO):"+type(related_to))
             if attribute.related_to is not None and isinstance(attribute.related_to, related_to):

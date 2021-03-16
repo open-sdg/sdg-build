@@ -80,7 +80,7 @@ class OutputSdmxMl(OutputBase):
         self.dsd = dsd_object
 
 
-    def build(self, language=None):
+    def build(self, language=None, sdmx_mapping=None):
         """Write the SDMX output. Overrides parent."""
         status = True
         datasets = []
@@ -93,6 +93,15 @@ class OutputSdmxMl(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
+            
+            if sdmx_mapping is not None:
+                sdmx_mapping=pd.read_csv(sdmx_mapping)
+                for col in data.columns:
+                    if col not in ["Year", "Value"]:
+                        for i in data.index:
+                            data.at[i, col]=sdmx_mapping['SDMX_codelist_item'].loc[sdmx_mapping['CSV_cellvalue']==data.at[i, col]].item()
+                        newcol=sdmx_mapping['SDMX_concept'].loc[sdmx_mapping['CSV_colname']==col].item()
+                        data.rename(columns={col:newcol}, inplace=True)
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={

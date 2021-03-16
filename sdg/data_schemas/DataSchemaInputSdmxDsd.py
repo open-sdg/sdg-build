@@ -7,13 +7,18 @@ from frictionless import Schema
 
 class DataSchemaInputSdmxDsd(DataSchemaInputBase):
     """A class for importing a single schema from an SDMX DSD.
-    The source parameter should be a path or URL to a SDMX DSD."""
+    The source parameter should be a path or URL to a SDMX DSD, or an
+    sdmx.model.DataStructureDefinition object."""
 
 
     def load_all_schema(self):
         if self.source is None:
             self.source = 'https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children'
-        dsd = self.retrieve_dsd(self.source)
+        if isinstance(self.source, str):
+            dsd = self.retrieve_dsd(self.source)
+        else:
+            # Assume the DSD was passed in directly.
+            dsd = self.source
         schema = {'fields': []}
         for dimension in dsd.dimensions:
             # Skip the TIME_PERIOD dimension because it is used as the "observation dimension".

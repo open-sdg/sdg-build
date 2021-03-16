@@ -36,6 +36,7 @@ class Indicator(Loggable):
         self.set_edges()
         self.translations = {}
         self.serieses = None
+        self.data_matching_schema = {}
 
 
     def has_name(self):
@@ -412,3 +413,32 @@ class Indicator(Loggable):
         grouped['series_objects'] = grouped.apply(row_to_series, axis=1)
         self.serieses = grouped['series_objects'].tolist()
         return self.serieses
+
+
+    def get_data_matching_schema(self, schema, use_cache=True):
+        # Safety code for empty dataframes.
+        if self.data.empty:
+            return []
+        # Cache for efficiency.
+        cache_key = str(schema.to_dict())
+        if use_cache and cache_key in self.data_matching_schema:
+            return self.data_matching_schema[cache_key]
+
+        omit_columns = ['Year', 'Value']
+        columns_in_data = [col for col in self.data.columns.to_list() if col not in omit_columns]
+        columns_in_schema = [field.name for field in schema.fields]
+        columns_in_both = [value for value in columns_in_data if value in columns_in_schema]
+
+        def row_matches_schema(row):
+            matches = True
+            for col in columns_in_both:
+                allowed_values = schema.get_field(col).constraints['enum']
+                if row[col] not in allowed_values:
+                    matches = False
+            return matches
+
+        mask = self.data.apply(row_matches_schema, axis=1)
+        df = self.data[mask]
+
+        self.data_matching_schema[cache_key] = df
+        return df

@@ -20,6 +20,7 @@ from sdmx.message import (
 )
 from urllib.request import urlretrieve
 from sdg.outputs import OutputBase
+from sdg.data_schemas import DataSchemaInputSdmxDsd
 
 class OutputSdmxMl(OutputBase):
     """Output SDG data/metadata in SDMX-ML."""
@@ -27,7 +28,8 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None):
+                 default_values=None, header_id=None, sender_id=None,
+                 constrain_data=True):
         """Constructor for OutputSdmxMl.
 
         This output assumes the following:
@@ -59,11 +61,16 @@ class OutputSdmxMl(OutputBase):
             Optional identifying string to put in the "id" attribut of the "Sender" element
             in the header of the XML. If not specified, it will be the current version
             of this library.
+        constrain_data : boolean
+            Whether to use the DSD to remove any rows of data that are not compliant.
+            Defaults to True.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.header_id = header_id
         self.sender_id = sender_id
+        self.constrain_data = constrain_data
         self.retrieve_dsd(dsd)
+        self.data_schema = DataSchemaInputSdmxDsd(source=self.dsd)
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
             os.makedirs(sdmx_folder, exist_ok=True)
@@ -93,6 +100,11 @@ class OutputSdmxMl(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
+
+            if self.constrain_data:
+                data = indicator.get_data_matching_schema(self.data_schema)
+            else:
+                data = indicator.data.copy()
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={

@@ -196,6 +196,8 @@ class OutputSdmxMl(OutputBase):
     def get_attribute_values(self, row, indicator, related_to):
         values = {}
         for attribute in self.dsd.attributes:
+            print(attribute.related_to)
+            print(related_to)
             if attribute.related_to is not None and isinstance(attribute.related_to, related_to):
                 value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
                 if value != '':

@@ -1,5 +1,19 @@
 # Changes
 
+### 1.3.0
+
+* Allow numeric disaggregaton #198
+* Use only 2 segments for the auto target id #196
+* Allow missing metadata to be altered #194
+* Performance optimizations and logging option #192
+* Allow the export filename to be configured #189
+* Allow missing values in reporting status extra fields #188
+* Input from the UN SDGs-SDMX API #187
+* Better handling of common SDMX data fields #182
+* Input for SDMX metadata #180
+* Standalone indicators #179
+* SDMX output for SDMX-compliant datasets #177
+
 ### 1.2.0
 
 * Output documentation baseurl (#178)

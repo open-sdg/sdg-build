@@ -191,9 +191,11 @@ class OutputSdmxMl(OutputBase):
             # Skip the TIME_PERIOD dimension because it is used as the "observation dimension".
             if dimension.id == 'TIME_PERIOD':
                 continue
-            value = row[dimension.id] if dimension.id in row else self.get_dimension_default(dimension.id, indicator)
-            if value != '':
-                values[dimension.id] = value
+            if dimension.id in row and row[dimension.id] != '':
+                value = row[dimension.id]
+            else:
+                value = self.get_dimension_default(dimension.id, indicator)
+            values[dimension.id] = str(value
         return values
 
 

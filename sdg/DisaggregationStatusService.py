@@ -56,6 +56,7 @@ class DisaggregationStatusService(Loggable):
         goals = {}
         for indicator_id in self.indicators:
             indicator = self.indicators[indicator_id]
+            print(indicator_id)
             if indicator.is_standalone():
                 continue
             goal = int(indicator.get_goal_id())

@@ -195,7 +195,7 @@ class OutputSdmxMl(OutputBase):
                 value = row[dimension.id]
             else:
                 value = self.get_dimension_default(dimension.id, indicator)
-            values[dimension.id] = str(value
+            values[dimension.id] = str(value)
         return values
 
 

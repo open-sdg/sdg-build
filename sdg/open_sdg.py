@@ -335,6 +335,7 @@ def open_sdg_prep(options):
             output_folder=options['site_dir'],
             translations=options['translations'],
             indicator_options=options['indicator_options'],
+            structure_specific=True,
             **options['sdmx_output']
         ))
 

@@ -11,8 +11,11 @@ from sdmx.model import (
     AttributeValue,
     Observation,
     GenericTimeSeriesDataSet,
+    StructureSpecificTimeSeriesDataSet,
     DataflowDefinition,
-    Agency
+    Agency,
+    PrimaryMeasureRelationship,
+    DimensionRelationship,
 )
 from sdmx.message import (
     DataMessage,
@@ -28,8 +31,9 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None,
+                 default_values=None, header_id=None, sender_id=None, structure_specific=False,
                  constrain_data=False):
+
         """Constructor for OutputSdmxMl.
 
         This output assumes the following:
@@ -61,6 +65,8 @@ class OutputSdmxMl(OutputBase):
             Optional identifying string to put in the "id" attribut of the "Sender" element
             in the header of the XML. If not specified, it will be the current version
             of this library.
+        structure_specific : boolean
+            Whether to output as StructureSpecific instead of Generic data.
         constrain_data : boolean
             Whether to use the DSD to remove any rows of data that are not compliant.
             Defaults to False.
@@ -68,6 +74,7 @@ class OutputSdmxMl(OutputBase):
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.header_id = header_id
         self.sender_id = sender_id
+        self.structure_specific = structure_specific
         self.constrain_data = constrain_data
         self.retrieve_dsd(dsd)
         self.data_schema = DataSchemaInputSdmxDsd(source=self.dsd)
@@ -136,7 +143,7 @@ class OutputSdmxMl(OutputBase):
                     serieses[series_key] = []
                 serieses[series_key].append(observation)
 
-            dataset = GenericTimeSeriesDataSet(structured_by=self.dsd, series=serieses)
+            dataset = self.create_dataset(serieses)
             header = self.create_header()
             time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
             msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
@@ -174,30 +181,42 @@ class OutputSdmxMl(OutputBase):
         )
 
 
+    def create_dataset(self, serieses):
+        dataset_class = StructureSpecificTimeSeriesDataSet if self.structure_specific else GenericTimeSeriesDataSet
+        return dataset_class(structured_by=self.dsd, series=serieses)
+
+
     def get_dimension_values(self, row, indicator):
         values = {}
         for dimension in self.dsd.dimensions:
             # Skip the TIME_PERIOD dimension because it is used as the "observation dimension".
             if dimension.id == 'TIME_PERIOD':
                 continue
-            value = row[dimension.id] if dimension.id in row else self.get_dimension_default(dimension.id, indicator)
-            if value != '':
-                values[dimension.id] = value
+            if dimension.id in row and row[dimension.id] != '':
+                value = row[dimension.id]
+            else:
+                value = self.get_dimension_default(dimension.id, indicator)
+            values[dimension.id] = str(value)
         return values
 
 
     def get_observation_attribute_values(self, row, indicator):
-        return self.get_attribute_values(row, indicator, sdmx.model.PrimaryMeasureRelationship)
+        return self.get_attribute_values(row, indicator, 'observation')
 
 
     def get_series_attribute_values(self, row, indicator):
-        return self.get_attribute_values(row, indicator, sdmx.model.DimensionRelationship)
+        return self.get_attribute_values(row, indicator, 'series')
 
 
-    def get_attribute_values(self, row, indicator, related_to):
+    def get_attribute_values(self, row, indicator, relationship_type):
         values = {}
         for attribute in self.dsd.attributes:
-            if attribute.related_to is not None and isinstance(attribute.related_to, related_to):
+            valid_attribute = False
+            if relationship_type == 'series' and isinstance(attribute.related_to, DimensionRelationship):
+                valid_attribute = True
+            elif relationship_type == 'observation' and attribute.related_to is PrimaryMeasureRelationship:
+                valid_attribute = True
+            if valid_attribute:
                 value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
                 if value != '':
                     values[attribute.id] = AttributeValue(value_for=attribute, value=value)

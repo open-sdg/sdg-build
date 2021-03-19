@@ -74,9 +74,8 @@ class InputWordMeta(InputMetaFiles):
 
     def parse_footnotes(self, node, d):
         parsed = []
-        footnote_hrefs = []
-        anchors = d(node).find('a')
-        footnotes = [d(d(anchor).attr('href')) for anchor in anchors if self.is_footnote(anchor, d)]
+        anchors = [anchor for anchor in d(node).find('a') if self.is_footnote(anchor, d)]
+        footnotes = [d(d(anchor).attr('href')) for anchor in anchors]
         numbers = [self.parse_footnote_number(d(anchor).text()) for anchor in anchors]
 
         for idx, footnote in enumerate(footnotes):

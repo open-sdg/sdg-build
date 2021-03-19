@@ -71,7 +71,6 @@ class OutputSdmxMl(OutputBase):
         self.sender_id = sender_id
         self.structure_specific = structure_specific
         self.retrieve_dsd(dsd)
-        self.concept_map = concept_map
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
             os.makedirs(sdmx_folder, exist_ok=True)
@@ -101,16 +100,6 @@ class OutputSdmxMl(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
-            
-            if self.concept_map is not None:
-                concept_map=pd.read_csv(self.concept_map)
-                for col in data.columns:
-                    if col in concept_map['CSV_colname'].to_list():
-                            for i in data.index:
-                                if data.at[i, col] in concept_map['CSV_cellvalue'].to_list():
-                                    data.at[i, col]=concept_map['SDMX_codelist_item'].loc[concept_map['CSV_colname']==col].loc[concept_map['CSV_cellvalue']==data.at[i, col]].iloc[0]
-                            newcol=concept_map['SDMX_concept'].loc[concept_map['CSV_colname']==col].iloc[0]
-                            data.rename(columns={col:newcol}, inplace=True)
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={

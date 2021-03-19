@@ -11,6 +11,7 @@ from sdmx.model import (
     AttributeValue,
     Observation,
     GenericTimeSeriesDataSet,
+    StructureSpecificTimeSeriesDataSet,
     DataflowDefinition,
     Agency,
     PrimaryMeasureRelationship,
@@ -29,7 +30,8 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None):
+                 default_values=None, header_id=None, sender_id=None, structure_specific=False):
+
         """Constructor for OutputSdmxMl.
 
         This output assumes the following:
@@ -61,10 +63,13 @@ class OutputSdmxMl(OutputBase):
             Optional identifying string to put in the "id" attribut of the "Sender" element
             in the header of the XML. If not specified, it will be the current version
             of this library.
+        structure_specific : boolean
+            Whether to output as StructureSpecific instead of Generic data.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.header_id = header_id
         self.sender_id = sender_id
+        self.structure_specific = structure_specific
         self.retrieve_dsd(dsd)
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
@@ -126,7 +131,7 @@ class OutputSdmxMl(OutputBase):
                     serieses[series_key] = []
                 serieses[series_key].append(observation)
 
-            dataset = GenericTimeSeriesDataSet(structured_by=self.dsd, series=serieses)
+            dataset = self.create_dataset(serieses)
             header = self.create_header()
             time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
             msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
@@ -162,6 +167,11 @@ class OutputSdmxMl(OutputBase):
             prepared=time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(timestamp)),
             sender=Agency(id=sender_id),
         )
+
+
+    def create_dataset(self, serieses):
+        dataset_class = StructureSpecificTimeSeriesDataSet if self.structure_specific else GenericTimeSeriesDataSet
+        return dataset_class(structured_by=self.dsd, series=serieses)
 
 
     def get_dimension_values(self, row, indicator):

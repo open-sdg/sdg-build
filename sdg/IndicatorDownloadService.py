@@ -32,6 +32,8 @@ class IndicatorDownloadService(Loggable):
                     self.__index[indicator_id] = {
                         button_label: {}
                     }
+                if button_label not in self.__index[indicator_id]:
+                    self.__index[indicator_id][button_label] = {}
                 self.__index[indicator_id][button_label]['href'] = os.path.join(original_output_folder, filename)
 
 

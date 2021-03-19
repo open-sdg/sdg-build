@@ -3,9 +3,10 @@ import git
 import json
 from zipfile import ZipFile
 import humanize
+from sdg.Loggable import Loggable
 
-class IndicatorExportService:
-    def __init__(self, site_directory, indicators, filename='all_indicators'):
+class IndicatorExportService(Loggable):
+    def __init__(self, site_directory, indicators, logging=None, filename='all_indicators'):
         """Constructor for IndicatorExportService.
 
         Parameters
@@ -16,6 +17,7 @@ class IndicatorExportService:
         indicators : dict
             A dict of Indicator objects, keyed by indicator id.
         """
+        Loggable.__init__(self, logging=logging)
         self.__site_directory = site_directory
         self.__zip_directory = "%s/zip" % site_directory
         self.__data_directory = "%s/data" % site_directory

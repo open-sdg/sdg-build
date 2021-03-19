@@ -6,7 +6,8 @@ from pyquery import PyQuery as pq
 
 class InputWordMeta(InputMetaFiles):
     """Sources of SDG metadata that are local Word files using a standard
-    template that is compliant with the SDMX MSD."""
+    template that is compliant with the SDMX MSD. This is coded to work with
+    this template: https://github.com/sdmx-sdgs/metadata (currently v3.2) """
 
     def read_meta_at_path(self, filepath):
         meta = {}

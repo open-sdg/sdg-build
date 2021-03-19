@@ -329,13 +329,14 @@ def open_sdg_prep(options):
 
     # Add SDMX output if configured.
     if 'sdmx_output' in options and 'dsd' in options['sdmx_output']:
+        if 'structure_specific' not in options['sdmx_output']:
+            options['sdmx_output'] = True
         outputs.append(sdg.outputs.OutputSdmxMl(
             inputs=inputs,
             schema=schema,
             output_folder=options['site_dir'],
             translations=options['translations'],
             indicator_options=options['indicator_options'],
-            structure_specific=True,
             **options['sdmx_output']
         ))
 

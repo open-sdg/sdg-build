@@ -90,7 +90,7 @@ class OutputSdmxMl(OutputBase):
     def build(self, language=None):
         """Write the SDMX output. Overrides parent."""
         status = True
-        datasets = []
+        all_serieses = []
         dfd = DataflowDefinition(id="OPEN_SDG_DFD", structure=self.dsd)
         time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
         header = self.create_header()
@@ -138,9 +138,10 @@ class OutputSdmxMl(OutputBase):
             sdmx_path = os.path.join(self.sdmx_folder, indicator_id + '.xml')
             with open(sdmx_path, 'wb') as f:
                 status = status & f.write(sdmx.to_xml(msg))
-            datasets.append(dataset)
+            all_serieses = all_serieses + serieses
 
-        msg = DataMessage(data=datasets, dataflow=dfd, header=header, observation_dimension=time_period)
+        dataset = self.create_dataset(all_serieses)
+        msg = DataMessage(data=dataset, dataflow=dfd, header=header, observation_dimension=time_period)
         all_sdmx_path = os.path.join(self.sdmx_folder, 'all.xml')
         with open(all_sdmx_path, 'wb') as f:
             status = status & f.write(sdmx.to_xml(msg))

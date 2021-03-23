@@ -141,7 +141,7 @@ class OutputSdmxMl(OutputBase):
             all_serieses.update(serieses)
 
         dataset = self.create_dataset(all_serieses)
-        msg = DataMessage(data=dataset, dataflow=dfd, header=header, observation_dimension=time_period)
+        msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
         all_sdmx_path = os.path.join(self.sdmx_folder, 'all.xml')
         with open(all_sdmx_path, 'wb') as f:
             status = status & f.write(sdmx.to_xml(msg))

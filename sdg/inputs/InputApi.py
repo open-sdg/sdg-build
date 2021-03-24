@@ -121,7 +121,7 @@ class InputApi(InputBase):
         InputBase.execute(self, indicator_options)
         """Fetch the resource data from the API for each indicator."""
 
-        for resource_id in self.indicator_id_map:
+        for resource_id in self.get_indicator_id_map():
             # Fetch the data.
             url = self.generate_api_call(resource_id)
             json_response = self.fetch_json_response(url)
@@ -135,3 +135,7 @@ class InputApi(InputBase):
 
             if self.sleep is not None:
                 time.sleep(self.sleep)
+
+
+    def get_indicator_id_map(self):
+        return self.indicator_id_map if self.indicator_id_map is not None else {}

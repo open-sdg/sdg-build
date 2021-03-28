@@ -133,6 +133,16 @@ class OutputSdmxMl(OutputBase):
                     if code not in new_codes[concept]:
                         new_codes[concept].append(code)
 
+        # Validate codes.
+        invalid_codes = []
+        for concept in new_codes:
+            for code_id in new_codes[concept]:
+                if not self.is_code_valid(code_id):
+                    invalid_codes.append(code_id)
+        if len(invalid_codes) > 0:
+            message = 'These SDMX codes appear to be invalid and should be fixed in your data:\n{codes}'
+            self.warn(message.format(codes='\n'.join(invalid_codes)))
+
         # Look for concepts that exist as attributes or dimensions in the DSD.
         for concept in new_codes:
             codelist = None
@@ -166,6 +176,12 @@ class OutputSdmxMl(OutputBase):
         # Go ahead and overwrite the DSD file now.
         with open('dsd.xml', 'wb') as f:
             f.write(sdmx.to_xml(self.dsd_msg, encoding='utf-8', pretty_print=True))
+
+
+    def is_code_valid(self, code):
+        if ' ' in code:
+            return False
+        return True
 
 
     def build(self, language=None):

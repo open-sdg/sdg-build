@@ -2,23 +2,26 @@
 
 import os
 from git import Repo
-from urllib.request import urlopen
+from urllib.request import urlopen, Request
 from sdg.Loggable import Loggable
 
 class TranslationInputBase(Loggable):
     """A base class for importing translations."""
 
 
-    def __init__(self, source='', logging=None):
+    def __init__(self, source='', logging=None, request_params=None):
         """Constructor for the TranslationInputBase class.
 
         Parameters
         ----------
         source : string
             The source of the translations (see subclass for details)
+        request_params: dict or None
+            Optional parameters to pass to any remote HTTP requests
         """
         Loggable.__init__(self, logging=logging)
         self.source = source
+        self.request_params = request_params
         self.translations = {}
         self.executed = False
 
@@ -84,7 +87,10 @@ class TranslationInputBase(Loggable):
         file = None
         data = None
         if location.startswith('http'):
-            file = urlopen(location)
+            if self.request_params is not None:
+                file = urlopen(Request(location, **self.request_params))
+            else:
+                file = urlopen(location)
             data = file.read().decode('utf-8')
         else:
             file = open(location)

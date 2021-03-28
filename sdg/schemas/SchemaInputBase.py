@@ -5,6 +5,7 @@ import json
 import jsonschema
 from sdg import check_csv
 from sdg.Loggable import Loggable
+from urllib.request import urlopen, Request
 
 class SchemaInputBase(Loggable):
     """A base class for importing a schema, querying it, and validating with it.
@@ -12,7 +13,7 @@ class SchemaInputBase(Loggable):
     This class assumes imported schema (self.schema) are valid JSON Schema."""
 
 
-    def __init__(self, schema_path='', logging=None, scope=None):
+    def __init__(self, schema_path='', logging=None, scope=None, request_params=None):
         """Create a new SchemaBase object
 
         Parameters
@@ -21,9 +22,12 @@ class SchemaInputBase(Loggable):
             A path to the schema file to input
         scope : string
             An optional 'scope' to apply to all metadata fields
+        request_params: dict or None
+            Optional parameters to pass to any remote HTTP requests
         """
 
         Loggable.__init__(self, logging=logging)
+        self.request_params = request_params
         self.schema_path = schema_path
         self.scope = scope
         self.field_order = []
@@ -199,3 +203,26 @@ class SchemaInputBase(Loggable):
             A list of field names in a particular order
         """
         return self.field_order if len(self.field_order) > 0 else self.schema['properties'].keys()
+
+
+    def fetch_file(self, location):
+        """Fetch a file, either on disk, or on the Internet.
+
+        Parameters
+        ----------
+        location : String
+            Either an http address, or a path on disk
+        """
+        file = None
+        data = None
+        if location.startswith('http'):
+            if self.request_params is not None:
+                file = urlopen(Request(location, **self.request_params))
+            else:
+                file = urlopen(location)
+            data = file.read().decode('utf-8')
+        else:
+            file = open(location)
+            data = file.read()
+        file.close()
+        return data

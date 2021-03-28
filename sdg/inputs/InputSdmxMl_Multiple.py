@@ -11,7 +11,7 @@ class InputSdmxMl_Multiple(InputFiles):
 
 
     def __init__(self, path_pattern='', data_alterations=None,
-                 meta_alterations=None, logging=None, **kwargs):
+                 meta_alterations=None, **kwargs):
         """ Constructor for InputSdmxMultiple.
 
         Parameters
@@ -25,7 +25,7 @@ class InputSdmxMl_Multiple(InputFiles):
         kwargs
             All the other keyword parameters to be passed to InputSdmx classes
         """
-        InputFiles.__init__(self, path_pattern, logging=logging)
+        InputFiles.__init__(self, path_pattern, **kwargs)
         if data_alterations is None:
             data_alterations = []
         if meta_alterations is None:

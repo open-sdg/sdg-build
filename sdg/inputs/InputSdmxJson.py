@@ -194,8 +194,11 @@ class InputSdmxJson(InputSdmx):
         if self.source.startswith('http'):
             # For remote sources, assume it is an API that requires a particular
             # "Accept" header in order to return JSON.
-            headers = { 'Accept': 'application/json' }
-            r = requests.get(self.source, headers=headers)
+            params = self.request_params if self.request_params is not None else {}
+            if 'headers' not in params:
+                params['headers'] = {}
+            params['headers']['Accept'] = 'application/json'
+            r = requests.get(self.source, **params)
             self.data = r.json()
         else:
             # For local sources, just load the JSON file and parse it.

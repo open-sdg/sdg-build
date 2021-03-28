@@ -107,6 +107,12 @@ class InputSdmx(InputBase):
             for _, el in it:
                 if '}' in el.tag:
                     el.tag = el.tag.split('}', 1)[1]
+                # Strip namespaces from attributes too.
+                for at in list(el.attrib.keys()):
+                    if '}' in at:
+                        newat = at.split('}', 1)[1]
+                        el.attrib[newat] = el.attrib[at]
+                        del el.attrib[at]
         return it.root
 
 

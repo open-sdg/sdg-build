@@ -19,6 +19,8 @@ SDG Build can **input** SDG data in the following formats:
 * Data in CSV files (long/tidy format)
 * Data (and minimal metadata) from SDMX-JSON and SDMX-ML
 * Data from a CKAN instance
+* Data in JSON-Stat format from an API
+* Data from a PxWeb API instance
 * Metadata in YAML files
 * Metadata in CSV files
 * Metadata in Excel files

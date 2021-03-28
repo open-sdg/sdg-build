@@ -119,8 +119,7 @@ class InputApi(InputBase):
 
     def execute(self, indicator_options):
         InputBase.execute(self, indicator_options)
-        """Fetch the resource data from the API for each indicator."""
-
+        self.add_data_alteration(self.fix_data)
         for resource_id in self.get_indicator_id_map():
             # Fetch the data.
             url = self.generate_api_call(resource_id)
@@ -129,13 +128,16 @@ class InputApi(InputBase):
             # Create the indicator.
             inid = self.get_indicator_id(resource_id, json_response)
             data = self.indicator_data_from_json(json_response)
-            data = self.fix_data(data)
             name = self.get_indicator_name(inid, resource_id, json_response)
             self.add_indicator(inid, data=data, name=name, options=indicator_options)
 
-            if self.sleep is not None:
-                time.sleep(self.sleep)
+            self.wait_for_next_request()
 
 
     def get_indicator_id_map(self):
         return self.indicator_id_map if self.indicator_id_map is not None else {}
+
+
+    def wait_for_next_request(self):
+        if self.sleep is not None:
+            time.sleep(self.sleep)

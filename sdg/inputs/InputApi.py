@@ -102,11 +102,16 @@ class InputApi(InputBase):
 
     def fetch_json_response(self, url):
         headers = { 'Accept': 'application/json' }
-        if self.post_data is not None:
-            r = requests.post(url, headers=headers, data=json.dumps(self.post_data))
+        post_data = self.get_post_data()
+        if post_data is not None:
+            r = requests.post(url, headers=headers, data=json.dumps(post_data))
         else:
             r = requests.get(url, headers=headers)
         return r.json()
+
+
+    def get_post_data(self):
+        return self.post_data
 
 
     def fix_data(self, df):

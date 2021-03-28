@@ -10,6 +10,11 @@ class InputPxWebApi(InputJsonStat):
         tables = self.get_all_tables_from_endpoint(self.endpoint)
         return tables
 
+
+    def get_post_data(self):
+        return {"query": []} if self.post_data is None else self.post_data
+
+
     def get_all_tables_from_endpoint(self, endpoint):
         all_tables = []
         self.wait_for_next_request()

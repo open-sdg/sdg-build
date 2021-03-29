@@ -119,10 +119,11 @@ class OutputSdmxMl(OutputBase):
             
             # Map column values to SDMX codes within specific dimensions/attributes
             if self.code_map is not None:
-                code_map=pd.read_csv(self.code_map)            
-                for i in data.index:
-                    if data.at[i, col] in code_map['Text'].to_list():
-                        data.at[i, col]=code_map['Value'].loc[code_map['Dimension']==col].loc[code_map['Text']==data.at[i, col]].iloc[0]
+                code_map=pd.read_csv(self.code_map)
+                for col in data.columns:
+                    for i in data.index:
+                        if data.at[i, col] in code_map['Text'].to_list():
+                            data.at[i, col]=code_map['Value'].loc[code_map['Dimension']==col].loc[code_map['Text']==data.at[i, col]].iloc[0]
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={

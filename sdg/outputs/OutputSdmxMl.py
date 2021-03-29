@@ -30,14 +30,14 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None, structure_specific=False):
+                 default_values=None, header_id=None, sender_id=None, structure_specific=False, column_map=None, code_map=None):
 
         """Constructor for OutputSdmxMl.
 
         This output assumes the following:
         1. A DSD is already created and available
-        2. All columns in the data correspond exactly to dimension IDs.
-        3. All values in the columns correspond exactly to codes in those dimensions' codelists.
+        2. All columns in the data correspond exactly to dimension IDs or a concept mapping is specified
+        3. All values in the columns correspond exactly to codes in those dimensions' codelists or a code mapping is specified
 
         Notes on translation:
         SDMX output does not need to be transated. Hence, this output will always appear in
@@ -65,12 +65,18 @@ class OutputSdmxMl(OutputBase):
             of this library.
         structure_specific : boolean
             Whether to output as StructureSpecific instead of Generic data.
+        column_map: string
+            Remote URL of CSV column mapping or path to local CSV column mapping file
+        code_map: string
+            Remote URL of CSV code mapping or path to local CSV code mapping file
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.header_id = header_id
         self.sender_id = sender_id
         self.structure_specific = structure_specific
         self.retrieve_dsd(dsd)
+        self.column_map = column_map
+        self.code_map = code_map
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
             os.makedirs(sdmx_folder, exist_ok=True)
@@ -102,6 +108,21 @@ class OutputSdmxMl(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
+            
+            # Map column names to SDMX dimension/attribute names
+            if self.column_map is not None:
+                column_map=pd.read_csv(self.column_map)
+                for col in data.columns:
+                    if col in column_map['Text'].to_list():
+                        newcol=column_map['Value'].loc[column_map['Text']==col].iloc[0]
+                        data.rename(columns={col:newcol}, inplace=True)
+            
+            # Map column values to SDMX codes within specific dimensions/attributes
+            if self.code_map is not None:
+                code_map=pd.read_csv(self.code_map)            
+                for i in data.index:
+                    if data.at[i, col] in code_map['Text'].to_list():
+                        data.at[i, col]=code_map['Value'].loc[code_map['Dimension']==col].loc[code_map['Text']==data.at[i, col]].iloc[0]
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={

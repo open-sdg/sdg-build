@@ -109,7 +109,7 @@ class OutputSdmxMl(OutputBase):
                 column_map=pd.read_csv(self.column_map)
                 for col in data.columns:
                     if col in column_map['Text'].to_list():
-                        newcol=column_map['Value'].loc[column_map'Text']==col].iloc[0]
+                        newcol=column_map['Value'].loc[column_map['Text']==col].iloc[0]
                         data.rename(columns={col:newcol}, inplace=True)
             
             if self.code_map is not None:

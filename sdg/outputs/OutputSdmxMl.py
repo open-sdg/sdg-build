@@ -30,7 +30,7 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None, structure_specific=False, concept_map=None):
+                 default_values=None, header_id=None, sender_id=None, structure_specific=False, column_map: None, code_map: None):
 
         """Constructor for OutputSdmxMl.
 
@@ -71,7 +71,8 @@ class OutputSdmxMl(OutputBase):
         self.sender_id = sender_id
         self.structure_specific = structure_specific
         self.retrieve_dsd(dsd)
-        self.concept_map = concept_map
+        self.column_map = column_map
+        self.code_map = code_map
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
             os.makedirs(sdmx_folder, exist_ok=True)
@@ -104,15 +105,20 @@ class OutputSdmxMl(OutputBase):
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
             
-            if self.concept_map is not None:
-                concept_map=pd.read_csv(self.concept_map)
+            if self.column_map is not None:
+                column_map=pd.read_csv(self.column_map)
                 for col in data.columns:
-                    if col in concept_map['CSV_colname'].to_list():
-                            for i in data.index:
-                                if data.at[i, col] in concept_map['CSV_cellvalue'].to_list():
-                                    data.at[i, col]=concept_map['SDMX_codelist_item'].loc[concept_map['CSV_colname']==col].loc[concept_map['CSV_cellvalue']==data.at[i, col]].iloc[0]
-                            newcol=concept_map['SDMX_concept'].loc[concept_map['CSV_colname']==col].iloc[0]
-                            data.rename(columns={col:newcol}, inplace=True)
+                    if col in column_map['Text'].to_list():
+                        newcol=column_map['Value'].loc[column_map'Text']==col].iloc[0]
+                        data.rename(columns={col:newcol}, inplace=True)
+            
+            if self.code_map is not None:
+                code_map=pd.read_csv(self.code_map)            
+                for i in data.index:
+                    if data.at[i, col] in code_map['Text'].to_list():
+                        data.at[i, col]=code_map['Value'].loc[code_map['Dimension']==col].loc[code_map['Text']==data.at[i, col]].iloc[0]
+                        
+                            
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={

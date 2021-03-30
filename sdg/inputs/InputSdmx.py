@@ -370,7 +370,10 @@ class InputSdmx(InputBase):
 
         InputBase.execute(self, indicator_options)
         # Fetch the response from the SDMX endpoint.
-        self.fetch_data()
+        try:
+            self.fetch_data()
+        except:
+            raise Exception('SDMX source could not be fetched: ' + self.source)
 
         # SDMX divides the data into series, but we want to divide
         # the data into indicators. Indicators contain multiple series,

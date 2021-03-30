@@ -29,6 +29,7 @@ SDG Build can **output** SDG data in the following formats:
 
 * A particular JSON structure for data and metadata, expected by the [Open SDG](https://open-sdg.org) reporting platform.
 * GeoJSON for mapping (there is not a global standard for SDG GeoJSON at this time, so this is our best guess at a useful structure)
+* SDMX-ML output
 
 ## Alterations of data and metadata
 

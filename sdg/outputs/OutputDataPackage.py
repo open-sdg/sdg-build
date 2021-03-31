@@ -120,6 +120,8 @@ class OutputDataPackage(OutputBase):
 
     def write_top_level_package(self, path, language=None):
         self.top_level_package.to_json(path)
+        # Workaround for https://github.com/frictionlessdata/frictionless-py/issues/788
+        os.chmod(path, 0o644)
 
 
     def add_to_top_level_package(self, resource):
@@ -185,6 +187,8 @@ class OutputDataPackage(OutputBase):
 
     def write_indicator_package(self, package, descriptor_path, indicator, language=None):
         package.to_json(descriptor_path)
+        # Workaround for https://github.com/frictionlessdata/frictionless-py/issues/788
+        os.chmod(descriptor_path, 0o644)
 
 
     def sort_data_schema(self, schema):

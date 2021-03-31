@@ -7,6 +7,8 @@ class InputJsonStat(InputApi):
     """
 
     def indicator_data_from_json(self, json_response):
+        if json_response is None:
+            return None
         """Convert a an JSON-Stat response into a DataFrame for indicator data."""
         ordered_json = collections.OrderedDict(json_response)
         dataset = pyjstat.Dataset.read(ordered_json)

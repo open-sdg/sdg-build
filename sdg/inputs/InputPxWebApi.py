@@ -8,6 +8,9 @@ class InputPxWebApi(InputJsonStat):
         if self.indicator_id_map is not None:
             return self.indicator_id_map
         tables = self.get_all_tables_from_endpoint(self.endpoint)
+        self.warn('The indicator_id_map parameter was not supplied, and there will likely be errors.')
+        self.warn('To help you generate an indicator_id_map, here are the tables that were manually compiled:')
+        self.warn(str(tables))
         return tables
 
 

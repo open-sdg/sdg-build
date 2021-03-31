@@ -415,31 +415,36 @@ class Indicator(Loggable):
         return self.serieses
 
 
-    def get_data_matching_schema(self, data_schema, use_cache=True):
+    def get_data_matching_schema(self, data_schema, data=None, use_cache=True):
+        if data is None:
+            data = self.data
         # Safety code for empty dataframes.
-        if self.data.empty:
-            return self.data
+        if data.empty:
+            return data
         # Cache for efficiency.
         schema = data_schema.get_schema_for_indicator(self)
         cache_key = str(schema.to_dict())
         if use_cache and cache_key in self.data_matching_schema:
             return self.data_matching_schema[cache_key]
 
-        omit_columns = ['Year', 'Value']
-        columns_in_data = [col for col in self.data.columns.to_list() if col not in omit_columns]
+        columns_in_data = data.columns.to_list()
         columns_in_schema = [field.name for field in schema.fields]
-        columns_in_both = [value for value in columns_in_data if value in columns_in_schema]
 
         def row_matches_schema(row):
             matches = True
-            for col in columns_in_both:
-                allowed_values = schema.get_field(col).constraints['enum']
-                if row[col] not in allowed_values and not pd.isna(row[col]):
+            for col in columns_in_data:
+                schema_field = schema.get_field(col) if col in columns_in_schema else None
+                there_is_data = not pd.isna(row[col])
+                if schema_field is None and there_is_data:
                     matches = False
+                elif schema_field is not None and 'enum' in schema_field.constraints:
+                    allowed_values = schema_field.constraints['enum']
+                    if row[col] not in allowed_values and there_is_data:
+                        matches = False
             return matches
 
-        mask = self.data.apply(row_matches_schema, axis=1)
-        df = self.data[mask]
+        mask = data.apply(row_matches_schema, axis=1)
+        df = data[mask]
 
         self.data_matching_schema[cache_key] = df
         return df

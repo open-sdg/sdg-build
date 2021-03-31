@@ -115,7 +115,7 @@ class OutputSdmxMl(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
-            
+
             # Map column names to SDMX dimension/attribute names
             if self.column_map is not None:
                 column_map=pd.read_csv(self.column_map)
@@ -123,7 +123,7 @@ class OutputSdmxMl(OutputBase):
                     if col in column_map['Text'].to_list():
                         newcol=column_map['Value'].loc[column_map['Text']==col].iloc[0]
                         data.rename(columns={col:newcol}, inplace=True)
-            
+
             # Map column values to SDMX codes within specific dimensions/attributes
             if self.code_map is not None:
                 code_map=pd.read_csv(self.code_map)
@@ -132,11 +132,6 @@ class OutputSdmxMl(OutputBase):
                         if data.at[i, col] in code_map['Text'].to_list():
                             data.at[i, col]=code_map['Value'].loc[code_map['Dimension']==col].loc[code_map['Text']==data.at[i, col]].iloc[0]
 
-            if self.constrain_data:
-                data = indicator.get_data_matching_schema(self.data_schema)
-            else:
-                data = indicator.data.copy()
-
             # Some hardcoded dataframe changes.
             data = data.rename(columns={
                 'Value': 'OBS_VALUE',
@@ -144,6 +139,10 @@ class OutputSdmxMl(OutputBase):
                 'Series': 'SERIES',
                 'Year': 'TIME_DETAIL',
             })
+
+            if self.constrain_data:
+                data = indicator.get_data_matching_schema(self.data_schema, data=data)
+
             data = data.replace(np.nan, '', regex=True)
             if data.empty:
                 continue

@@ -45,6 +45,12 @@ class DataSchemaInputSdmxDsd(DataSchemaInputBase):
                 }
             schema['fields'].append(field)
 
+        # We can assume there is one primary measure.
+        schema['fields'].append({
+            'name': dsd.measures[0].id,
+            'title': 'Observation value',
+        })
+
         # For the SDMX DSD, we use a single schema for all indicators.
         self.schema_fallback = Schema(schema)
         # Return an empty dict for the indicator-specific schema.

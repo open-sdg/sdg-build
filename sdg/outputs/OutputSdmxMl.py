@@ -251,7 +251,7 @@ class OutputSdmxMl(OutputBase):
 
     def get_dimension_default(self, dimension, indicator):
         indicator_value = indicator.get_meta_field_value(dimension)
-        if indicator_value is not None:
+        if indicator_value is not None and self.is_value_allowed(indicator_value, dimension, indicator):
             return indicator_value
         defaults = self.get_default_values()
         if dimension not in defaults:
@@ -267,13 +267,32 @@ class OutputSdmxMl(OutputBase):
 
     def get_attribute_default(self, attribute, indicator):
         indicator_value = indicator.get_meta_field_value(attribute)
-        if indicator_value is not None:
+        if indicator_value is not None and self.is_value_allowed(indicator_value, attribute, indicator):
             return indicator_value
         defaults = self.get_default_values()
         if attribute in defaults:
             return defaults[attribute]
         else:
             return ''
+
+
+    def is_value_allowed(self, value, field, indicator):
+        if not self.constrain_data:
+            return True
+        schema = self.data_schema.get_schema_for_indicator(indicator)
+        columns_in_schema = [field.name for field in schema.fields]
+        if field not in columns_in_schema:
+            return False
+        schema_field = schema.get_field(field)
+        if schema_field is None:
+            return False
+        if 'enum' in schema_field.constraints:
+            allowed_values = schema_field.constraints['enum']
+            if value in allowed_values:
+                return True
+        else:
+            return True
+        return False
 
 
     def get_documentation_title(self):

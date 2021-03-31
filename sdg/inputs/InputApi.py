@@ -107,7 +107,10 @@ class InputApi(InputBase):
             r = requests.post(url, headers=headers, data=json.dumps(post_data))
         else:
             r = requests.get(url, headers=headers)
-        return r.json()
+        try:
+            return r.json()
+        except:
+            return None
 
 
     def get_post_data(self):
@@ -133,6 +136,8 @@ class InputApi(InputBase):
             # Create the indicator.
             inid = self.get_indicator_id(resource_id, json_response)
             data = self.indicator_data_from_json(json_response)
+            if data is None:
+                continue
             name = self.get_indicator_name(inid, resource_id, json_response)
             self.add_indicator(inid, data=data, name=name, options=indicator_options)
 

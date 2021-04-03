@@ -230,7 +230,7 @@ class OutputSdmxMl(OutputBase):
             if valid_attribute:
                 value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
                 if value != '':
-                    values[attribute.id] = AttributeValue(value_for=attribute, value=value)
+                    values[attribute.id] = AttributeValue(value_for=attribute, value=str(value))
         return values
 
 

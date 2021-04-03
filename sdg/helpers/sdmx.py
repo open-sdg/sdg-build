@@ -48,7 +48,7 @@ def parse_xml(path=None, request_params=None):
                 newat = at.split('}', 1)[1]
                 el.attrib[newat] = el.attrib[at]
                 del el.attrib[at]
-    if path not in cache[path]:
+    if path not in cache:
         cache[path] = {}
     cache[path]['parse_xml'] = it.root
     return it.root

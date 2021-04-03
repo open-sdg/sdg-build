@@ -7,7 +7,7 @@ from sdg.Loggable import Loggable
 class InputBase(Loggable):
     """Base class for sources of SDG data/metadata."""
 
-    def __init__(self, logging=None, request_params=None, populate_series=False):
+    def __init__(self, logging=None, request_params=None):
         """Constructor for InputBase.
 
         Parameters
@@ -16,12 +16,9 @@ class InputBase(Loggable):
             The level of logs to produce
         request_params: dict or None
             Optional parameters to pass to any remote HTTP requests
-        populate_series: boolean
-            Whether to automatically add a data column for series.
         """
         Loggable.__init__(self, logging=logging)
         self.request_params = request_params
-        self.populate_series = populate_series
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []

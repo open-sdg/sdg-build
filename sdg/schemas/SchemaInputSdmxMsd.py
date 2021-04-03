@@ -37,3 +37,15 @@ class SchemaInputSdmxMsd(SchemaInputBase):
             schema['properties'][concept_id] = jsonschema_field
 
         self.schema = schema
+
+
+    # @deprecated start
+    def parse_xml(self, location, strip_namespaces=True):
+        return helpers.sdmx.parse_xml(location)
+    # @deprecated end
+
+
+    # @deprecated start
+    def fetch_file(self, location):
+        return helpers.files.read_file(location)
+    # @deprecated end

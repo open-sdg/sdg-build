@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from sdg.Indicator import Indicator
 from sdg.Loggable import Loggable
+from sdg import helpers
 
 class InputBase(Loggable):
     """Base class for sources of SDG data/metadata."""
@@ -118,6 +119,12 @@ class InputBase(Loggable):
             The same dataframe with rearranged columns
         """
         return df.replace([None, "", "nan"], np.NaN)
+
+
+    # @deprecated start
+    def fetch_file(self, location):
+        return helpers.files.read_file(location)
+    # @deprecated end
 
 
     def normalize_indicator_id(self, indicator_id):

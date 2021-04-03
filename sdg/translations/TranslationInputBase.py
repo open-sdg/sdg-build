@@ -4,6 +4,7 @@ import os
 from git import Repo
 from urllib.request import urlopen
 from sdg.Loggable import Loggable
+from sdg import helpers
 
 class TranslationInputBase(Loggable):
     """A base class for importing translations."""
@@ -74,6 +75,12 @@ class TranslationInputBase(Loggable):
         """
         self.add_group(language, group)
         self.translations[language][group][key] = value
+
+
+    # @deprecated start
+    def fetch_file(self, location):
+        return helpers.files.read_file(location)
+    # @deprecated end
 
 
     def clone_repo(self, repo_url, folder='temp', tag=None, branch=None):

@@ -38,6 +38,12 @@ class TranslationInputSdmx(TranslationInputBase):
         TranslationInputBase.__init__(self, source=source, **kwargs)
 
 
+    # @deprecated start
+    def parse_xml(self, location, strip_namespaces=True):
+        return helpers.sdmx.parse_xml(location)
+    # @deprecated end
+
+
     def execute(self):
         TranslationInputBase.execute(self)
         dsd = helpers.sdmx.parse_xml(self.source, self.request_params)

@@ -1,4 +1,5 @@
 import sdg
+from sdg import helpers
 from sdg.inputs import InputBase
 from xml.etree import ElementTree as ET
 from io import StringIO
@@ -73,7 +74,7 @@ class InputSdmx(InputBase):
             indicator_id_map = {}
 
         self.source = source
-        self.dsd = sdg.helpers.sdmx.parse_xml(dsd, self.request_params)
+        self.dsd = helpers.sdmx.parse_xml(dsd, self.request_params)
         self.drop_dimensions = drop_dimensions
         self.drop_singleton_dimensions = drop_singleton_dimensions
         self.dimension_map = dimension_map
@@ -88,6 +89,12 @@ class InputSdmx(InputBase):
         self.indicator_id_xpath = indicator_id_xpath
         self.indicator_name_xpath = indicator_name_xpath
         self.series_dimensions = {}
+
+
+    # @deprecated start
+    def parse_xml(self, location, strip_namespaces=True):
+        return helpers.sdmx.parse_xml(location)
+    # @deprecated end
 
 
     def dimension_id_to_codelist_id(self, dimension_id):

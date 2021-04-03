@@ -207,7 +207,7 @@ class InputBase(Loggable):
         """
         data = self.alter_data(data)
         meta = self.alter_meta(meta)
-        indicator_id = self.normalize_indicator_id(indicator)
+        indicator_id = self.normalize_indicator_id(indicator_id)
         if name is not None:
             name = self.normalize_indicator_name(name, indicator_id)
         indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options, logging=self.logging)

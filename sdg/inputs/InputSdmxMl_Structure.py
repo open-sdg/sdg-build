@@ -2,6 +2,7 @@ import pandas as pd
 import sdg
 import requests
 from sdg.inputs import InputSdmx
+from sdg import helpers
 
 class InputSdmxMl_Structure(InputSdmx):
     """Sources of SDG data that are SDMX-ML format.
@@ -164,4 +165,4 @@ class InputSdmxMl_Structure(InputSdmx):
 
     def fetch_data(self):
         """Fetch the data from the source."""
-        self.data = self.parse_xml(self.source)
+        self.data = helpers.sdmx.parse_xml(self.source, self.request_params)

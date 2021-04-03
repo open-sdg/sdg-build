@@ -7,9 +7,21 @@ from sdg.Loggable import Loggable
 class InputBase(Loggable):
     """Base class for sources of SDG data/metadata."""
 
-    def __init__(self, logging=None):
-        """Constructor for InputBase."""
+    def __init__(self, logging=None, request_params=None, populate_series=False):
+        """Constructor for InputBase.
+
+        Parameters
+        ----------
+        logging : string
+            The level of logs to produce
+        request_params: dict or None
+            Optional parameters to pass to any remote HTTP requests
+        populate_series: boolean
+            Whether to automatically add a data column for series.
+        """
         Loggable.__init__(self, logging=logging)
+        self.request_params = request_params
+        self.populate_series = populate_series
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []
@@ -96,26 +108,6 @@ class InputBase(Loggable):
             The same dataframe with rearranged columns
         """
         return df.replace([None, "", "nan"], np.NaN)
-
-
-    def fetch_file(self, location):
-        """Fetch a file, either on disk, or on the Internet.
-
-        Parameters
-        ----------
-        location : String
-            Either an http address, or a path on disk
-        """
-        file = None
-        data = None
-        if location.startswith('http'):
-            file = urlopen(location)
-            data = file.read().decode('utf-8')
-        else:
-            file = open(location)
-            data = file.read()
-        file.close()
-        return data
 
 
     def normalize_indicator_id(self, indicator_id):

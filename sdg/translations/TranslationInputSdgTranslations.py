@@ -19,7 +19,7 @@ class TranslationInputSdgTranslations(TranslationInputYaml):
     """
 
     def __init__(self, tag=None, branch=None, source='https://github.com/open-sdg/sdg-translations.git',
-                 logging=None):
+                 **kwargs):
         """Constructor for the TranslationInputBase class.
 
         Parameters
@@ -27,7 +27,7 @@ class TranslationInputSdgTranslations(TranslationInputYaml):
         source : string
             The source of the translations (see subclass for details)
         """
-        TranslationInputYaml.__init__(self, source=source, logging=logging)
+        TranslationInputYaml.__init__(self, source=source, **kwargs)
         self.tag = tag
         self.branch = branch
 

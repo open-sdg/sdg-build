@@ -5,13 +5,13 @@ from sdg.inputs import InputBase
 class InputFiles(InputBase):
     """Sources of SDG data/metadata that are local files on disk."""
 
-    def __init__(self, path_pattern='', logging=None):
+    def __init__(self, path_pattern='', **kwargs):
         """Constructor for InputYamlMdMeta.
 
         Keyword arguments:
         path_pattern -- path (glob) pattern describing where the files are
         """
-        InputBase.__init__(self, logging=logging)
+        InputBase.__init__(self, **kwargs)
         self.path_pattern = path_pattern
 
     def convert_filename_to_indicator_id(self, filename):

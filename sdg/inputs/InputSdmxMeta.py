@@ -1,5 +1,6 @@
 import pandas as pd
 from sdg.inputs import InputSdmx
+from sdg import helpers
 
 class InputSdmxMeta(InputSdmx):
     """Sources of SDG metadata that are SDMX messages."""
@@ -10,7 +11,7 @@ class InputSdmxMeta(InputSdmx):
             # Default to global metadata from the UN SDG Metadata API, querying "G.ALL.1", which
             # means global (G), all series (ALL), and World (1).
             self.source = 'https://unstats.un.org/SDGMetadataAPI/api/Metadata/SDMXReport/G.ALL.1'
-        self.data = self.parse_xml(self.source)
+        self.data = helpers.sdmx.parse_xml(self.source, self.request_params)
         indicator_map = self.get_indicator_map()
         for metadata_set in self.get_metadata_sets():
             series_id = self.get_series_for_metadata_set(metadata_set)

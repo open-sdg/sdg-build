@@ -31,11 +31,11 @@ def get_dsd(path=None, request_params=None):
     return dsd_object
 
 
-def get_dsd_xml(path=None, request_params=None):
+def parse_xml(path=None, request_params=None):
     if path is None:
         path = get_dsd_url()
-    if path in cache and 'get_dsd_xml' in cache[path]:
-        return cache[path]['get_dsd_xml']
+    if path in cache and 'parse_xml' in cache[path]:
+        return cache[path]['parse_xml']
 
     xml = files.read_file(path, request_params=request_params)
     it = ET.iterparse(StringIO(xml))
@@ -50,7 +50,7 @@ def get_dsd_xml(path=None, request_params=None):
                 del el.attrib[at]
     if path not in cache[path]:
         cache[path] = {}
-    cache[path]['get_dsd_xml'] = it.root
+    cache[path]['parse_xml'] = it.root
     return it.root
 
 

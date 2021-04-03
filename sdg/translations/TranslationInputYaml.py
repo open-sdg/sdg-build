@@ -15,7 +15,7 @@ class TranslationInputYaml(TranslationInputBase):
     When importing, this class treats the YAML filename as the "group".
     """
 
-    def __init__(self, source='translations', logging=None):
+    def __init__(self, source='translations', **kwargs):
         """Constructor for the TranslationInputBase class.
 
         Parameters
@@ -23,7 +23,7 @@ class TranslationInputYaml(TranslationInputBase):
         source : string
             The folder containing the YAML files.
         """
-        TranslationInputBase.__init__(self, source=source, logging=logging)
+        TranslationInputBase.__init__(self, source=source, **kwargs)
 
 
     def parse_yaml(self, folder):

@@ -3,7 +3,7 @@ from sdg.schemas import SchemaInputBase
 class SchemaInputMultiple(SchemaInputBase):
     """Input schema from multiple other schemas."""
 
-    def __init__(self, schemas=None):
+    def __init__(self, schemas=None, **kwargs):
         """Create a new SchemaBase object
 
         Parameters
@@ -19,7 +19,7 @@ class SchemaInputMultiple(SchemaInputBase):
             raise Exception('SchemaInputMultiple requires at least one schema.')
 
         self.schemas = schemas
-        SchemaInputBase.__init__(self)
+        SchemaInputBase.__init__(self, **kwargs)
 
 
     def load_schema(self):

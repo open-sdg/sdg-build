@@ -19,10 +19,10 @@ class InputSdmx(InputBase):
                  import_translation_keys=False,
                  import_series_attributes=True,
                  import_observation_attributes=True,
-                 dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
+                 dsd=None,
                  indicator_id_xpath=".//Annotation[AnnotationTitle='Indicator']/AnnotationText",
                  indicator_name_xpath=".//Annotation[AnnotationTitle='IndicatorTitle']/AnnotationText",
-                 logging=None):
+                 **kwargs):
         """Constructor for InputSdmx.
 
         Parameters
@@ -64,7 +64,7 @@ class InputSdmx(InputBase):
         indicator_name_xpath : string
             An xpath query to find the indicator name within each Series code
         """
-        InputBase.__init__(self, logging=logging)
+        InputBase.__init__(self, **kwargs)
         if drop_dimensions is None:
             drop_dimensions = []
         if dimension_map is None:
@@ -73,7 +73,7 @@ class InputSdmx(InputBase):
             indicator_id_map = {}
 
         self.source = source
-        self.dsd = self.parse_xml(dsd)
+        self.dsd = sdg.helpers.sdmx.parse_xml(dsd, self.request_params)
         self.drop_dimensions = drop_dimensions
         self.drop_singleton_dimensions = drop_singleton_dimensions
         self.dimension_map = dimension_map
@@ -88,26 +88,6 @@ class InputSdmx(InputBase):
         self.indicator_id_xpath = indicator_id_xpath
         self.indicator_name_xpath = indicator_name_xpath
         self.series_dimensions = {}
-
-
-    def parse_xml(self, location, strip_namespaces=True):
-        """Fetch and parse an XML file.
-
-        Parameters
-        ----------
-        location : string
-            Remote URL of the XML file or path to local file.
-        strip_namespaces : boolean
-            Whether or not to strip namespaces. This is helpful in cases where
-            different implementations may use different namespaces/prefixes.
-        """
-        xml = self.fetch_file(location)
-        it = ET.iterparse(StringIO(xml))
-        if strip_namespaces:
-            for _, el in it:
-                if '}' in el.tag:
-                    el.tag = el.tag.split('}', 1)[1]
-        return it.root
 
 
     def dimension_id_to_codelist_id(self, dimension_id):

@@ -9,16 +9,19 @@ class TranslationInputBase(Loggable):
     """A base class for importing translations."""
 
 
-    def __init__(self, source='', logging=None):
+    def __init__(self, source='', logging=None, request_params=None):
         """Constructor for the TranslationInputBase class.
 
         Parameters
         ----------
         source : string
             The source of the translations (see subclass for details)
+        request_params: dict or None
+            Optional parameters to pass to any remote HTTP requests
         """
         Loggable.__init__(self, logging=logging)
         self.source = source
+        self.request_params = request_params
         self.translations = {}
         self.executed = False
 
@@ -71,26 +74,6 @@ class TranslationInputBase(Loggable):
         """
         self.add_group(language, group)
         self.translations[language][group][key] = value
-
-
-    def fetch_file(self, location):
-        """Fetch a file, either on disk, or on the Internet.
-
-        Parameters
-        ----------
-        location : String
-            Either an http address, or a path on disk
-        """
-        file = None
-        data = None
-        if location.startswith('http'):
-            file = urlopen(location)
-            data = file.read().decode('utf-8')
-        else:
-            file = open(location)
-            data = file.read()
-        file.close()
-        return data
 
 
     def clone_repo(self, repo_url, folder='temp', tag=None, branch=None):

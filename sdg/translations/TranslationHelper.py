@@ -7,7 +7,7 @@ class TranslationHelper(TranslationOutputBase):
     """A class for helping with translation-related activities."""
 
 
-    def __init__(self, inputs, logging=None):
+    def __init__(self, inputs, **kwargs):
         """Constructor for the TranslationHelper.
 
         Parameters
@@ -15,7 +15,7 @@ class TranslationHelper(TranslationOutputBase):
         inputs : list
             A list of TranslationInputBase objects
         """
-        TranslationOutputBase.__init__(self, inputs, logging=logging)
+        TranslationOutputBase.__init__(self, inputs, **kwargs)
         self.generate_translation_keys()
 
 

@@ -3,6 +3,7 @@ from urllib.request import urlopen
 from xml.etree import ElementTree as ET
 from io import StringIO
 from sdg.schemas import SchemaInputBase
+from sdg import helpers
 
 class SchemaInputSdmxMsd(SchemaInputBase):
     """Input schema from SDMX MSD."""
@@ -16,7 +17,7 @@ class SchemaInputSdmxMsd(SchemaInputBase):
             "properties": {}
         }
 
-        msd = self.parse_xml(self.schema_path)
+        msd = helpers.sdmx.parse_xml(self.schema_path, self.request_params)
         for concept in msd.findall('.//Concept'):
             concept_id = concept.attrib['id']
             self.add_item_to_field_order(concept_id)
@@ -36,42 +37,3 @@ class SchemaInputSdmxMsd(SchemaInputBase):
             schema['properties'][concept_id] = jsonschema_field
 
         self.schema = schema
-
-    def parse_xml(self, location, strip_namespaces=True):
-        """Fetch and parse an XML file.
-
-        Parameters
-        ----------
-        location : string
-            Remote URL of the XML file or path to local file.
-        strip_namespaces : boolean
-            Whether or not to strip namespaces. This is helpful in cases where
-            different implementations may use different namespaces/prefixes.
-        """
-        xml = self.fetch_file(location)
-        it = ET.iterparse(StringIO(xml))
-        if strip_namespaces:
-            for _, el in it:
-                if '}' in el.tag:
-                    el.tag = el.tag.split('}', 1)[1]
-        return it.root
-
-
-    def fetch_file(self, location):
-        """Fetch a file, either on disk, or on the Internet.
-
-        Parameters
-        ----------
-        location : String
-            Either an http address, or a path on disk
-        """
-        file = None
-        data = None
-        if location.startswith('http'):
-            file = urlopen(location)
-            data = file.read().decode('utf-8')
-        else:
-            file = open(location)
-            data = file.read()
-        file.close()
-        return data

@@ -23,14 +23,16 @@ from sdmx.message import (
 )
 from urllib.request import urlretrieve
 from sdg.outputs import OutputBase
+from sdg import helpers
 
 class OutputSdmxMl(OutputBase):
     """Output SDG data/metadata in SDMX-ML."""
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-                 indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None, structure_specific=False, column_map=None, code_map=None):
+                 indicator_options=None, dsd=None, default_values=None,
+                 header_id=None, sender_id=None, structure_specific=False,
+                 column_map=None, code_map=None, request_params=None):
 
         """Constructor for OutputSdmxMl.
 
@@ -74,7 +76,7 @@ class OutputSdmxMl(OutputBase):
         self.header_id = header_id
         self.sender_id = sender_id
         self.structure_specific = structure_specific
-        self.retrieve_dsd(dsd)
+        self.retrieve_dsd(dsd, request_params)
         self.column_map = column_map
         self.code_map = code_map
         sdmx_folder = os.path.join(output_folder, 'sdmx')
@@ -84,13 +86,8 @@ class OutputSdmxMl(OutputBase):
         self.default_values = {} if default_values is None else default_values
 
 
-    def retrieve_dsd(self, dsd):
-        if dsd.startswith('http'):
-            urlretrieve(dsd, 'SDG_DSD.xml')
-            dsd = 'SDG_DSD.xml'
-        msg = sdmx.read_sdmx(dsd)
-        dsd_object = msg.structure[0]
-        self.dsd = dsd_object
+    def retrieve_dsd(self, dsd, request_params=None):
+        self.dsd = helpers.sdmx.get_dsd(dsd, request_params=request_params)
 
 
     def build(self, language=None):
@@ -108,7 +105,7 @@ class OutputSdmxMl(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
-            
+
             # Map column names to SDMX dimension/attribute names
             if self.column_map is not None:
                 column_map=pd.read_csv(self.column_map)
@@ -116,7 +113,7 @@ class OutputSdmxMl(OutputBase):
                     if col in column_map['Text'].to_list():
                         newcol=column_map['Value'].loc[column_map['Text']==col].iloc[0]
                         data.rename(columns={col:newcol}, inplace=True)
-            
+
             # Map column values to SDMX codes within specific dimensions/attributes
             if self.code_map is not None:
                 code_map=pd.read_csv(self.code_map)

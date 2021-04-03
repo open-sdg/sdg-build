@@ -15,7 +15,6 @@ def get_dsd(path=None, request_params=None):
     if path is None:
         path = get_dsd_url()
     if path in cache and 'get_dsd' in cache[path]:
-        print('using cache')
         return cache[path]['get_dsd']
     if path.startswith('http'):
         filename = 'SDG_DSD.xml'

@@ -16,12 +16,25 @@ class InputBase(Loggable):
             The level of logs to produce
         request_params: dict or None
             Optional parameters to pass to any remote HTTP requests
+        indicator_id_alter: function or None
+            If passed, this function will be used to normalize indicator ids.
+            The function should return a string, and is passed two parameters:
+            * indicator_id (string) : The raw indicator id
+            * input_object (InputBase descendant) : This object itself
+        indicator_name_alter: function or None
+            If passed, this function will be used to normalize indicator ids.
+            The function should return a string, and is passed two parameters:
+            * indicator_name (string) : The raw indicator name
+            * indicator_id (string) : The indicator id
+            * input_object (InputBase descendant) : This object itself
         """
         Loggable.__init__(self, logging=logging)
         self.request_params = request_params
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []
+        self.indicator_id_alterations = []
+        self.indicator_name_alterations = []
         self.last_executed_indicator_options = None
         self.merged_indicators = None
         self.previously_merged_inputs = []
@@ -115,6 +128,11 @@ class InputBase(Loggable):
         indicator_id : string
             The raw indicator ID
         """
+        if len(self.indicator_id_alterations) > 0:
+            for alteration in self.indicator_id_alterations:
+                indicator_id = alteration(indicator_id, input_object=self)
+            return indicator_id
+
         # If there are multiple words, assume the first word is the id.
         words = indicator_id.split(" ")
         indicator_id = words[0]
@@ -135,6 +153,11 @@ class InputBase(Loggable):
         indicator_id : string
             The indicator id (eg, 1.1.1, 1-1-1, etc.) for this indicator
         """
+        if len(self.indicator_name_alterations) > 0:
+            for alteration in self.indicator_name_alterations:
+                indicator_name = alteration(indicator_name, indicator_id, input_object=self)
+            return indicator_name
+
         # Sometimes the indicator names includes the indicator id, so
         # remove it here. Both dash or dot-delimited.
         dashes = indicator_id.replace('.', '-')
@@ -184,6 +207,9 @@ class InputBase(Loggable):
         """
         data = self.alter_data(data)
         meta = self.alter_meta(meta)
+        indicator_id = self.normalize_indicator_id(indicator)
+        if name is not None:
+            name = self.normalize_indicator_name(name, indicator_id)
         indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options, logging=self.logging)
         self.indicators[indicator_id] = indicator
 
@@ -245,6 +271,28 @@ class InputBase(Loggable):
             The alteration function.
         """
         self.meta_alterations.append(alteration)
+
+
+    def add_indicator_id_alteration(self, alteration):
+        """Add an alteration for indicator id.
+
+        Parameters
+        ----------
+        alteration : function
+            The alteration function.
+        """
+        self.indicator_id_alterations.append(alteration)
+
+
+    def add_indicator_name_alteration(self, alteration):
+        """Add an alteration for indicator name.
+
+        Parameters
+        ----------
+        alteration : function
+            The alteration function.
+        """
+        self.indicator_name_alterations.append(alteration)
 
 
     def has_merged_indicators(self, inputs):

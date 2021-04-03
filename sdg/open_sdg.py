@@ -45,7 +45,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_branding='Build docs', docs_intro='', docs_indicator_url=None,
                    docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
-                   logging=None, indicator_export_filename='all_indicators'):
+                   logging=None, indicator_export_filename='all_indicators',
+                   alter_indicator_id=None, alter_indicator_name=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -79,6 +80,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             in the disaggregation report
         logging : list or None. The types of logs to print, including 'warn' and 'debug'.
         indicator_export_filename: string. Filename without extension for zip file
+        alter_indicator_id: function. A callback function that alters the indicator id
+        alter_indicator_name: function. A callback function that alters the indicator name
 
     Returns:
         Boolean status of file writes
@@ -129,9 +132,11 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     options['translations'] = open_sdg_translations_from_options(options)
     options['schema'] = open_sdg_schema_from_options(options)
 
-    # Pass along our data/meta alterations.
+    # Pass along our data/meta/indicator alterations.
     options['alter_data'] = alter_data
     options['alter_meta'] = alter_meta
+    options['alter_indicator_id'] = alter_indicator_id
+    options['alter_indicator_name'] = alter_indicator_name
 
     # Convert the indicator options.
     options['indicator_options'] = open_sdg_indicator_options_from_dict(options['indicator_options'])
@@ -195,7 +200,7 @@ def open_sdg_indicator_options_from_dict(options):
 
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
         inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
-        schema=None, logging=None):
+        schema=None, logging=None, alter_indicator_id=None, alter_indicator_name=None):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -211,6 +216,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         alter_data: function. A callback function that alters a data Dataframe
         alter_meta: function. A callback function that alters a metadata dictionary
         logging: Noneor list. Type of logs to print, including 'warn' and 'debug'
+        alter_indicator_id: function. A callback function that alters the indicator id
+        alter_indicator_name: function. A callback function that alters the indicator name
 
     Returns:
         boolean: True if the check was successful, False if not.
@@ -244,9 +251,11 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
     options['translations'] = open_sdg_translations_from_options(options)
     options['schema'] = open_sdg_schema_from_options(options)
 
-    # Pass along our data/meta alterations.
+    # Pass along our data/meta/indicator alterations.
     options['alter_data'] = alter_data
     options['alter_meta'] = alter_meta
+    options['alter_indicator_id'] = alter_indicator_id
+    options['alter_indicator_name'] = alter_indicator_name
 
     # Convert the indicator options.
     options['indicator_options'] = open_sdg_indicator_options_from_dict(options['indicator_options'])
@@ -285,6 +294,12 @@ def open_sdg_prep(options):
     if callable(options['alter_meta']):
         for input in inputs:
             input.add_meta_alteration(options['alter_meta'])
+    if callable(options['alter_indicator_id']):
+        for input in inputs:
+            input.add_indicator_id_alteration(options['alter_indicator_id'])
+    if callable(options['alter_indicator_name']):
+        for input in inputs:
+            input.add_indicator_name_alteration(options['alter_indicator_name'])
 
     # Use the specified metadata schema.
     schema = options['schema']

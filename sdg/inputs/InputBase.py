@@ -289,6 +289,8 @@ class InputBase(Loggable):
                 except:
                     # Handle callbacks without the context parameter.
                     indicator_id = alteration(indicator_id)
+        # Always make sure that dots are replaced with dashes.
+        indicator_id = indicator_id.replace('.', '-')
         return indicator_id
 
 

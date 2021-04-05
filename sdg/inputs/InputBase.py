@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from sdg.Indicator import Indicator
 from sdg.Loggable import Loggable
+from sdg import helpers
 
 class InputBase(Loggable):
     """Base class for sources of SDG data/metadata."""
@@ -99,23 +100,7 @@ class InputBase(Loggable):
 
 
     def fetch_file(self, location):
-        """Fetch a file, either on disk, or on the Internet.
-
-        Parameters
-        ----------
-        location : String
-            Either an http address, or a path on disk
-        """
-        file = None
-        data = None
-        if location.startswith('http'):
-            file = urlopen(location)
-            data = file.read().decode('utf-8')
-        else:
-            file = open(location)
-            data = file.read()
-        file.close()
-        return data
+        return helpers.files.read_file(location)
 
 
     def normalize_indicator_id(self, indicator_id):

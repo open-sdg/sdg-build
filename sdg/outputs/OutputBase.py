@@ -9,7 +9,7 @@ class OutputBase(Loggable):
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-                 indicator_options=None, logging=None):
+                 indicator_options=None, logging=None, request_params=None):
         """Constructor for OutputBase.
 
         inputs: list
@@ -25,8 +25,11 @@ class OutputBase(Loggable):
             Allows particular outputs to affect the data/metadata of indicators.
         logging: None or list
             Type of logs to print, including 'warn' and 'debug'.
+        request_params : dict or None
+            Optional dict of parameters to be passed to remote file fetches
         """
         Loggable.__init__(self, logging=logging)
+        self.request_params = request_params
         if translations is None:
             translations = []
         self.indicator_options = IndicatorOptions() if indicator_options is None else indicator_options

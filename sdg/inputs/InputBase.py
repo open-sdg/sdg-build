@@ -8,9 +8,10 @@ from sdg import helpers
 class InputBase(Loggable):
     """Base class for sources of SDG data/metadata."""
 
-    def __init__(self, logging=None):
+    def __init__(self, logging=None, request_params=None):
         """Constructor for InputBase."""
         Loggable.__init__(self, logging=logging)
+        self.request_params = request_params
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []
@@ -100,7 +101,7 @@ class InputBase(Loggable):
 
 
     def fetch_file(self, location):
-        return helpers.files.read_file(location)
+        return helpers.files.read_file(location, request_params=self.request_params)
 
 
     def normalize_indicator_id(self, indicator_id):

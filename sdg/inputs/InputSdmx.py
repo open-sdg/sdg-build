@@ -23,7 +23,8 @@ class InputSdmx(InputBase):
                  dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
                  indicator_id_xpath=".//Annotation[AnnotationTitle='Indicator']/AnnotationText",
                  indicator_name_xpath=".//Annotation[AnnotationTitle='IndicatorTitle']/AnnotationText",
-                 logging=None):
+                 logging=None,
+                 request_params=None):
         """Constructor for InputSdmx.
 
         Parameters
@@ -92,7 +93,7 @@ class InputSdmx(InputBase):
 
 
     def parse_xml(self, location, strip_namespaces=True):
-        return helpers.sdmx.parse_xml(location)
+        return helpers.sdmx.parse_xml(location, request_params=self.request_params)
 
 
     def dimension_id_to_codelist_id(self, dimension_id):

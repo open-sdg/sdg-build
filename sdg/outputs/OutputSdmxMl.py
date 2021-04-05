@@ -32,7 +32,7 @@ class OutputSdmxMl(OutputBase):
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd=None, default_values=None,
                  header_id=None, sender_id=None, structure_specific=False,
-                 column_map=None, code_map=None):
+                 column_map=None, code_map=None, request_params=None):
 
         """Constructor for OutputSdmxMl.
 
@@ -72,7 +72,8 @@ class OutputSdmxMl(OutputBase):
         code_map: string
             Remote URL of CSV code mapping or path to local CSV code mapping file
         """
-        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
+        OutputBase.__init__(self, inputs, schema, output_folder, translations,
+            indicator_options, request_params=request_params)
         self.header_id = header_id
         self.sender_id = sender_id
         self.structure_specific = structure_specific
@@ -87,7 +88,7 @@ class OutputSdmxMl(OutputBase):
 
 
     def retrieve_dsd(self, dsd):
-        self.dsd = helpers.sdmx.get_dsd(dsd)
+        self.dsd = helpers.sdmx.get_dsd(dsd, request_params=self.request_params)
 
 
     def build(self, language=None):

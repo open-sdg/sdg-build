@@ -12,7 +12,8 @@ class SchemaInputBase(Loggable):
     This class assumes imported schema (self.schema) are valid JSON Schema."""
 
 
-    def __init__(self, schema_path='', logging=None, scope=None):
+    def __init__(self, schema_path='', logging=None, scope=None,
+        request_params=None):
         """Create a new SchemaBase object
 
         Parameters
@@ -21,11 +22,14 @@ class SchemaInputBase(Loggable):
             A path to the schema file to input
         scope : string
             An optional 'scope' to apply to all metadata fields
+        request_params : dict or None
+            Optional dict of parameters to be passed to remote file fetches
         """
 
         Loggable.__init__(self, logging=logging)
         self.schema_path = schema_path
         self.scope = scope
+        self.request_params = request_params
         self.field_order = []
         self.schema = None
         self.load_schema()

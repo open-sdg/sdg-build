@@ -10,7 +10,7 @@ class TranslationInputBase(Loggable):
     """A base class for importing translations."""
 
 
-    def __init__(self, source='', logging=None):
+    def __init__(self, source='', logging=None, request_params=None):
         """Constructor for the TranslationInputBase class.
 
         Parameters
@@ -19,6 +19,7 @@ class TranslationInputBase(Loggable):
             The source of the translations (see subclass for details)
         """
         Loggable.__init__(self, logging=logging)
+        self.request_params = request_params
         self.source = source
         self.translations = {}
         self.executed = False
@@ -75,7 +76,7 @@ class TranslationInputBase(Loggable):
 
 
     def fetch_file(self, location):
-        return helpers.files.read_file(location)
+        return helpers.files.read_file(location, request_params=self.request_params)
 
 
     def clone_repo(self, repo_url, folder='temp', tag=None, branch=None):

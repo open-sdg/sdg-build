@@ -39,8 +39,8 @@ class SchemaInputSdmxMsd(SchemaInputBase):
         self.schema = schema
 
     def parse_xml(self, location, strip_namespaces=True):
-        return helpers.sdmx.parse_xml(location)
+        return helpers.sdmx.parse_xml(location, request_params=self.request_params)
 
 
     def fetch_file(self, location):
-        return helpers.files.read_file(location)
+        return helpers.files.read_file(location, request_params=self.request_params)

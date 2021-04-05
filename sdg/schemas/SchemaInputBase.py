@@ -23,7 +23,9 @@ class SchemaInputBase(Loggable):
         scope : string
             An optional 'scope' to apply to all metadata fields
         request_params : dict or None
-            Optional dict of parameters to be passed to remote file fetches
+            Optional dict of parameters to be passed to remote file fetches.
+            Corresponds to the options passed to a urllib.request.Request.
+            @see https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
         """
 
         Loggable.__init__(self, logging=logging)

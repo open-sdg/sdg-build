@@ -31,10 +31,10 @@ SDG Build can **output** SDG data in the following formats:
 
 ## Alterations of data, metadata, indicator ID, and indicator name
 
-Sometimes you may need to alter each indicator's data/metadata/id/name before importing into this library. This can be done after instantiating the input objects, with `add_data_alteration`, `add_meta_alteration`, `add_indicator_id_alteration`, and
-`add_indicator_name_alteration`.
+Sometimes you may need to alter each indicator's data/metadata/id/name before importing into this library. This can be done after instantiating the input objects, with `add_data_alteration`, `add_meta_alteration`, `add_indicator_id_alteration`, and `add_indicator_name_alteration`. Each of these takes a callback function as a parameter.
 
-In these functions, all four of the following parameters are passed:
+In these callback functions, the thing to be altered is passed as the first parameter, followed by the an optional "context" dict, containing the other three items. These
+"context" dicts contain:
 
 * data : Pandas Dataframe (or None)
 * meta : dict (or None)
@@ -44,21 +44,24 @@ In these functions, all four of the following parameters are passed:
 Here are some examples of using these:
 
 ```
-def my_indicator_id_alteration(indicator_id, indicator_name=None, data=None, meta=None):
-  # Maybe we need to remove a particular string from the ids.
-  return indicator_id.replace('foo', '')
+def my_indicator_id_alteration(indicator_id, context):
+  # Control a particular indicator id by checking the name.
+  if context['indicator_name'] == 'My particular indicator name':
+    return 'my-particular-indicator-id'
+  else:
+    return indicator_id
 
-def my_indicator_name_alteration(indicator_name, indicator_id=None, data=None, meta=None):
+def my_indicator_name_alteration(indicator_name, context):
   # Maybe we need to use a particular metadata field for the name.
-  return meta['my_name_field']
+  return context['meta']['my_name_field']
 
-def my_data_alteration(data, indicator_name=None, indicator_id=None, meta=None):
+def my_data_alteration(data, context):
   # Maybe we need to drop an unnecessary column in the data.
   return df.drop('unnecessary_column', axis='columns')
 
-def my_meta_alteration(meta, indicator_name=None, indicator_id=None, data=None):
-  # Maybe we need to drop an unnecessary field in the metadata.
-  del meta['unnecessary_field']
+def my_meta_alteration(meta, context):
+  # Maybe we need to set the indicator ID as a particular field.
+  meta['my_id_field'] = context['indicator_id']
   return meta
 
 my_input.add_indicator_id_alteration(my_indicator_id_alteration)

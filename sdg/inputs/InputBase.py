@@ -208,8 +208,8 @@ class InputBase(Loggable):
             The indicator options
         """
         # Perform alterations in this order: id, name, data, meta
-        indicator_id = self.normalize_indicator_id(indicator_id, indicator_name=name, data=data, meta=meta)
-        name = self.normalize_indicator_name(name, indicator_id, data=data, meta=meta)
+        indicator_id = self.alter_indicator_id(indicator_id, indicator_name=name, data=data, meta=meta)
+        name = self.alter_indicator_name(name, indicator_id, data=data, meta=meta)
         data = self.alter_data(data, indicator_id=indicator_id, indicator_name=name, meta=meta)
         meta = self.alter_meta(meta, indicator_id=indicator_id, indicator_name=name, data=data)
         indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options, logging=self.logging)
@@ -251,6 +251,38 @@ class InputBase(Loggable):
         for alteration in self.meta_alterations:
             meta = alteration(meta=meta, indicator_id=indicator_id, indicator_name=indicator_name, data=data)
         return meta
+
+
+    def alter_indicator_id(self, indicator_id, indicator_name=None, data=None, meta=None):
+        """Alter an indicator id (1-1-1, 1-2-1, etc).
+
+        Parameters
+        ----------
+        indicator_id : string
+            The raw indicator ID
+        """
+        # Perform any alterations on the indicator id.
+        if len(self.indicator_id_alterations) > 0:
+            for alteration in self.indicator_id_alterations:
+                indicator_id = alteration(indicator_id=indicator_id, indicator_name=indicator_name, data=data, meta=meta)
+        return indicator_id
+
+
+    def alter_indicator_name(self, indicator_name, indicator_id, data=None, meta=None):
+        """Alter an indicator name.
+
+        Parameters
+        ----------
+        indicator_name : string
+            The raw indicator name
+        indicator_id : string
+            The indicator id (eg, 1.1.1, 1-1-1, etc.) for this indicator
+        """
+        # Perform any alterations on the indicator id.
+        if len(self.indicator_name_alterations) > 0:
+            for alteration in self.indicator_name_alterations:
+                indicator_name = alteration(indicator_name=indicator_name, indicator_id=indicator_id, data=data, meta=meta)
+        return indicator_name
 
 
     def add_data_alteration(self, alteration):

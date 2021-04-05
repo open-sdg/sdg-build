@@ -225,6 +225,8 @@ class InputSdmx(InputBase):
                 # If indicator_ids are not hardcoded, try to get them from the DSD.
                 indicator_ids = code.findall(self.indicator_id_xpath)
                 indicator_ids = [element.text for element in indicator_ids]
+            # Normalize the indicator ids.
+            indicator_ids = [self.normalize_indicator_id(inid) for inid in indicator_ids]
             # Now get the indicator names from the DSD.
             indicator_names = code.findall(self.indicator_name_xpath)
             # Before going further, make sure there is an indicator name for
@@ -243,7 +245,7 @@ class InputSdmx(InputBase):
             for index, element in enumerate(indicator_names):
 
                 indicator_id = indicator_ids[index]
-                indicator_name = element.text
+                indicator_name = self.normalize_indicator_name(element.text, indicator_id)
                 code_map[indicator_id] = indicator_name
             series_to_indicators[code_id] = code_map
         # Cache it for later.

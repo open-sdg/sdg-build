@@ -22,7 +22,6 @@ class InputOpenDataPlatform(InputBase):
         for item in parsed['data']:
             indicator_id = self.normalize_indicator_id(self.get_indicator_id(item))
             indicator_name = self.normalize_indicator_name(self.get_indicator_name(item), indicator_id)
-            indicator_name = indicator_name.strip(':').strip('.').strip()
             if indicator_id not in indicators:
                 indicators[indicator_id] = []
             dimensions = self.get_dimensions(item)

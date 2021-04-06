@@ -7,6 +7,8 @@ jsonschema
 requests
 humanize
 unicode-slugify
+mammoth
+pyquery
 frictionless
 csvw
 git+git://github.com/dougmet/yamlmd

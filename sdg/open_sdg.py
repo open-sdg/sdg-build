@@ -448,6 +448,7 @@ def open_sdg_input_from_dict(params, options):
         'InputExcelMeta',
         'InputYamlMeta',
         'InputSdmxMeta',
+        'InputWordMeta',
     ]
     if input_class not in allowed:
         raise KeyError("Input class '%s' is not one of: %s." % (input_class, ', '.join(allowed)))
@@ -486,6 +487,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputYamlMeta(**params)
     elif input_class == 'InputSdmxMeta':
         input_instance = sdg.inputs.InputSdmxMeta(**params)
+    elif input_class == 'InputWordMeta':
+        input_instance = sdg.inputs.InputWordMeta(**params)
 
     return input_instance
 

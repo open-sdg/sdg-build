@@ -47,7 +47,7 @@ class InputOpenDataPlatform(InputBase):
                 continue
             try:
                 prop_id = row[prop]['id']
-                dimensions[prop_id] = row[prop]['id']
+                dimensions[prop] = row[prop]['id']
             except:
                 pass
         return dimensions

@@ -120,7 +120,7 @@ class InputBase(Loggable):
         return data
 
 
-    def normalize_indicator_id(self, indicator_id, indicator_name=None, data=None, meta=None):
+    def normalize_indicator_id(self, indicator_id):
         """Normalize an indicator id (1-1-1, 1-2-1, etc).
 
         Parameters
@@ -128,12 +128,6 @@ class InputBase(Loggable):
         indicator_id : string
             The raw indicator ID
         """
-        # Perform any alterations on the indicator id.
-        if len(self.indicator_id_alterations) > 0:
-            for alteration in self.indicator_id_alterations:
-                indicator_id = alteration(indicator_id=indicator_id, indicator_name=indicator_name, data=data, meta=meta)
-            return indicator_id
-        # Otherwise fallback to a general best-effort approach.
         # If there are multiple words, assume the first word is the id.
         words = indicator_id.split(" ")
         indicator_id = words[0]
@@ -144,7 +138,7 @@ class InputBase(Loggable):
         return indicator_id
 
 
-    def normalize_indicator_name(self, indicator_name, indicator_id, data=None, meta=None):
+    def normalize_indicator_name(self, indicator_name, indicator_id):
         """Normalize an indicator name.
 
         Parameters
@@ -154,12 +148,6 @@ class InputBase(Loggable):
         indicator_id : string
             The indicator id (eg, 1.1.1, 1-1-1, etc.) for this indicator
         """
-        # Perform any alterations on the indicator id.
-        if len(self.indicator_name_alterations) > 0:
-            for alteration in self.indicator_name_alterations:
-                indicator_name = alteration(indicator_name=indicator_name, indicator_id=indicator_id, data=data, meta=meta)
-            return indicator_name
-        # Otherwise fallback to a general best-effort approach.
         # Sometimes the indicator names includes the indicator id, so
         # remove it here. Both dash or dot-delimited.
         dashes = indicator_id.replace('.', '-')

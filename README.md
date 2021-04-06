@@ -1,7 +1,5 @@
 # SDG Build
 
-[![Build Status](https://travis-ci.com/open-sdg/sdg-build.svg?branch=master)](https://travis-ci.org/open-sdg/sdg-build)
-
 SDG Build is a Python package for converting data on the Sustainable Development Goals (SDG) from one format into another. This is mainly useful to an SDG reporting platform, by providing these benefits:
 
 1. Input of SDG data from various machine-readable formats, for human-friendly visualisation and display
@@ -31,6 +29,7 @@ SDG Build can **output** SDG data in the following formats:
 
 * A particular JSON structure for data and metadata, expected by the [Open SDG](https://open-sdg.org) reporting platform.
 * GeoJSON for mapping (there is not a global standard for SDG GeoJSON at this time, so this is our best guess at a useful structure)
+* SDMX-ML output
 
 ## Alterations of data and metadata
 

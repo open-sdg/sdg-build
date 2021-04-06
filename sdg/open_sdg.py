@@ -46,6 +46,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
                    logging=None, indicator_export_filename='all_indicators',
+                   datapackage=None, csvw=None, data_schema=None,
                    alter_indicator_id=None, alter_indicator_name=None):
     """Read each input file and edge file and write out json.
 
@@ -80,6 +81,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             that would not otherwise be included in the disaggregation report
         docs_translate_disaggregations: boolean. Whether to provide translated columns
             in the disaggregation report
+        datapackage: dict. Dict describing an instance of OutputDataPackage
+        csvw: dict. Dict describing an instance of OutputCsvw
+        data_schema: Dict describing an instance of DataSchemaInputBase subclass
         logging : list or None. The types of logs to print, including 'warn' and 'debug'.
         indicator_export_filename: string. Filename without extension for zip file
 
@@ -119,6 +123,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'indicator_options': indicator_options,
         'indicator_downloads': indicator_downloads,
         'docs_extra_disaggregations': docs_extra_disaggregations,
+        'datapackage': datapackage,
+        'csvw': csvw,
+        'data_schema': data_schema,
         'logging': logging,
         'indicator_export_filename': indicator_export_filename,
     }
@@ -184,10 +191,12 @@ def open_sdg_indicator_options_defaults():
             'Observation status',
             'Unit multiplier',
             'Unit measure',
-            # Support common SDMX codes.
+             # Support common SDMX codes.
             'UNIT_MEASURE',
             'SERIES',
-        ]
+        ],
+        'series_column': 'Series',
+        'unit_column': 'Units',
     }
 
 
@@ -195,12 +204,17 @@ def open_sdg_indicator_options_from_dict(options):
     options_obj = sdg.IndicatorOptions()
     for column in options['non_disaggregation_columns']:
         options_obj.add_non_disaggregation_columns(column)
+    if 'series_column' in options:
+        options_obj.set_series_column(options['series_column'])
+    if 'unit_column' in options:
+        options_obj.set_unit_column(options['unit_column'])
     return options_obj
 
 
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
         inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
-        schema=None, logging=None, alter_indicator_id=None, alter_indicator_name=None):
+        data_schema=None, schema=None, logging=None,
+        alter_indicator_id=None, alter_indicator_name=None):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -217,6 +231,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         alter_meta: function. A callback function that alters a metadata dictionary
         alter_indicator_id: function. A callback function that alters the indicator id
         alter_indicator_name: function. A callback function that alters the indicator name
+        data_schema: dict . Dict describing an instance of DataSchemaInputBase
         logging: Noneor list. Type of logs to print, including 'warn' and 'debug'
 
     Returns:
@@ -238,6 +253,9 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'translations': [],
         'indicator_options': indicator_options,
         'indicator_downloads': None,
+        'datapackage': None,
+        'csvw': None,
+        'data_schema': data_schema,
         'logging': logging,
         'indicator_export_filename': None,
     }
@@ -342,6 +360,35 @@ def open_sdg_prep(options):
         # Create the output.
         outputs.append(sdg.outputs.OutputGeoJson(**geojson_kwargs))
 
+    data_schema = None
+    if options['data_schema'] is not None:
+        data_schema = open_sdg_data_schema_from_dict(options['data_schema'], options)
+
+    # Output datapackages and possible CSVW.
+    datapackage_params = options['datapackage'] if options['datapackage'] is not None else {}
+    outputs.append(sdg.outputs.OutputDataPackage(
+        inputs=inputs,
+        schema=schema,
+        output_folder=options['site_dir'],
+        translations=options['translations'],
+        indicator_options=options['indicator_options'],
+        data_schema=data_schema,
+        **datapackage_params,
+    ))
+
+    # Optionally output CSVW.
+    if options['csvw'] is not None:
+        csvw_params = options['csvw'] if options['csvw'] != True else {}
+        outputs.append(sdg.outputs.OutputCsvw(
+            inputs=inputs,
+            schema=schema,
+            output_folder=options['site_dir'],
+            translations=options['translations'],
+            indicator_options=options['indicator_options'],
+            data_schema=data_schema,
+            **csvw_params,
+        ))
+
     # Add SDMX output if configured.
     if 'sdmx_output' in options and 'dsd' in options['sdmx_output']:
         if 'structure_specific' not in options['sdmx_output']:
@@ -371,6 +418,32 @@ def open_sdg_input_defaults():
             'git_data_dir': 'data',
         }
     ]
+
+
+def open_sdg_data_schema_from_dict(params, options):
+    if 'class' not in params:
+        # Default to a table schema YAML input.
+        params['class'] = 'DataSchemaInputTableSchemaYaml'
+    data_schema_class = params['class']
+
+    allowed = [
+        'DataSchemaInputTableSchemaYaml',
+    ]
+    if data_schema_class not in allowed:
+        raise KeyError("Data schema class '%s' is not one of: %s." % (data_schema_class, ', '.join(allowed)))
+
+    # We no longer need the "class" param.
+    del params['class']
+
+    # If using a local "source" we need to prepend our src_dir.
+    if 'source' in params and isinstance(params['source'], str) and not params['source'].startswith('http'):
+        params['source'] = os.path.join(options['src_dir'], params['source'])
+
+    data_schema_instance = None
+    if data_schema_class == 'DataSchemaInputTableSchemaYaml':
+        data_schema_instance = sdg.data_schemas.DataSchemaInputTableSchemaYaml(**params)
+
+    return data_schema_instance
 
 
 def open_sdg_input_from_dict(params, options):

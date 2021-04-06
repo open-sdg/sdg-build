@@ -5,8 +5,12 @@ from sdg.inputs import InputBase
 class InputOpenDataPlatform(InputBase):
 
 
-    def __init__(self, source=None, logging=None):
+    def __init__(self, source=None, logging=None, unit_key='unit',
+                 unit_multiplier_key='scale', indicator_key='indicator'):
         InputBase.__init__(self, logging=logging)
+        self.unit_key = unit_key
+        self.unit_multiplier_key = unit_multiplier_key
+        self.indicator_key = indicator_key
         self.source = source
 
 
@@ -28,8 +32,8 @@ class InputOpenDataPlatform(InputBase):
                 value = item['values'][idx]
                 if value is not None:
                     disaggregations = dimensions.copy()
-                    disaggregations[self.get_unit_key()] = self.get_unit(item)
-                    disaggregations[self.get_unit_multiplier_key()] = self.get_unit_multiplier(item)
+                    disaggregations[self.unit_key] = self.get_unit(item)
+                    disaggregations[self.unit_multiplier_key] = self.get_unit_multiplier(item)
                     row = self.get_row(year, value, disaggregations)
                     indicators[indicator_id].append(row)
                 idx += 1
@@ -61,24 +65,16 @@ class InputOpenDataPlatform(InputBase):
 
 
     def get_unit(self, row):
-        return row[self.get_unit_key()]
-
-
-    def get_unit_key(self):
-        return 'unit'
+        return row[self.unit_key]
 
 
     def get_unit_multiplier(self, row):
-        return row[self.get_unit_multiplier_key()]
-
-
-    def get_unit_multiplier_key(self):
-        return 'scale'
+        return row[self.unit_multiplier_key]
 
 
     def get_indicator_id(self, row):
-        return row['indicator']['id']
+        return row[self.indicator_key]['id']
 
 
     def get_indicator_name(self, row):
-        return row['indicator']['name']
+        return row[self.indicator_key]['name']

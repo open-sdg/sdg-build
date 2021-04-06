@@ -23,6 +23,7 @@ from sdmx.message import (
 )
 from urllib.request import urlretrieve
 from sdg.outputs import OutputBase
+from sdg.data_schemas import DataSchemaInputSdmxDsd
 
 class OutputSdmxMl(OutputBase):
     """Output SDG data/metadata in SDMX-ML."""
@@ -30,7 +31,8 @@ class OutputSdmxMl(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None, structure_specific=False, column_map=None, code_map=None):
+                 default_values=None, header_id=None, sender_id=None, structure_specific=False,
+                 column_map=None, code_map=None, constrain_data=False):
 
         """Constructor for OutputSdmxMl.
 
@@ -69,12 +71,17 @@ class OutputSdmxMl(OutputBase):
             Remote URL of CSV column mapping or path to local CSV column mapping file
         code_map: string
             Remote URL of CSV code mapping or path to local CSV code mapping file
+        constrain_data : boolean
+            Whether to use the DSD to remove any rows of data that are not compliant.
+            Defaults to False.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.header_id = header_id
         self.sender_id = sender_id
         self.structure_specific = structure_specific
+        self.constrain_data = constrain_data
         self.retrieve_dsd(dsd)
+        self.data_schema = DataSchemaInputSdmxDsd(source=self.dsd)
         self.column_map = column_map
         self.code_map = code_map
         sdmx_folder = os.path.join(output_folder, 'sdmx')
@@ -108,7 +115,7 @@ class OutputSdmxMl(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
-            
+
             # Map column names to SDMX dimension/attribute names
             if self.column_map is not None:
                 column_map=pd.read_csv(self.column_map)
@@ -116,7 +123,7 @@ class OutputSdmxMl(OutputBase):
                     if col in column_map['Text'].to_list():
                         newcol=column_map['Value'].loc[column_map['Text']==col].iloc[0]
                         data.rename(columns={col:newcol}, inplace=True)
-            
+
             # Map column values to SDMX codes within specific dimensions/attributes
             if self.code_map is not None:
                 code_map=pd.read_csv(self.code_map)
@@ -132,6 +139,10 @@ class OutputSdmxMl(OutputBase):
                 'Series': 'SERIES',
                 'Year': 'TIME_DETAIL',
             })
+
+            if self.constrain_data:
+                data = indicator.get_data_matching_schema(self.data_schema, data=data)
+
             data = data.replace(np.nan, '', regex=True)
             if data.empty:
                 continue

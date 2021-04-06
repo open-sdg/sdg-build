@@ -36,6 +36,7 @@ class Indicator(Loggable):
         self.set_edges()
         self.translations = {}
         self.serieses = None
+        self.data_matching_schema = {}
 
 
     def has_name(self):
@@ -412,3 +413,38 @@ class Indicator(Loggable):
         grouped['series_objects'] = grouped.apply(row_to_series, axis=1)
         self.serieses = grouped['series_objects'].tolist()
         return self.serieses
+
+
+    def get_data_matching_schema(self, data_schema, data=None, use_cache=True):
+        if data is None:
+            data = self.data
+        # Safety code for empty dataframes.
+        if data.empty:
+            return data
+        # Cache for efficiency.
+        schema = data_schema.get_schema_for_indicator(self)
+        cache_key = str(schema.to_dict())
+        if use_cache and cache_key in self.data_matching_schema:
+            return self.data_matching_schema[cache_key]
+
+        columns_in_data = data.columns.to_list()
+        columns_in_schema = [field.name for field in schema.fields]
+
+        def row_matches_schema(row):
+            matches = True
+            for col in columns_in_data:
+                schema_field = schema.get_field(col) if col in columns_in_schema else None
+                there_is_data = not pd.isna(row[col])
+                if schema_field is None and there_is_data:
+                    matches = False
+                elif schema_field is not None and 'enum' in schema_field.constraints:
+                    allowed_values = schema_field.constraints['enum']
+                    if row[col] not in allowed_values and there_is_data:
+                        matches = False
+            return matches
+
+        mask = data.apply(row_matches_schema, axis=1)
+        df = data[mask]
+
+        self.data_matching_schema[cache_key] = df
+        return df

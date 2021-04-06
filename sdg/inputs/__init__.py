@@ -6,6 +6,7 @@ from .InputExcelMeta import InputExcelMeta
 from .InputCsvData import InputCsvData
 from .InputYamlMdMeta import InputYamlMdMeta
 from .InputYamlMeta import InputYamlMeta
+from .InputWordMeta import InputWordMeta
 from .InputSdmx import InputSdmx
 from .InputSdmxJson import InputSdmxJson
 from .InputSdmxMl_Structure import InputSdmxMl_Structure

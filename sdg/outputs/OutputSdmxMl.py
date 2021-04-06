@@ -24,6 +24,7 @@ from sdmx.message import (
 from urllib.request import urlretrieve
 from sdg.outputs import OutputBase
 from sdg import helpers
+from sdg.data_schemas import DataSchemaInputSdmxDsd
 
 class OutputSdmxMl(OutputBase):
     """Output SDG data/metadata in SDMX-ML."""
@@ -32,7 +33,8 @@ class OutputSdmxMl(OutputBase):
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd=None, default_values=None,
                  header_id=None, sender_id=None, structure_specific=False,
-                 column_map=None, code_map=None, request_params=None):
+                 column_map=None, code_map=None, constrain_data=False,
+                 request_params=None):
 
         """Constructor for OutputSdmxMl.
 
@@ -71,13 +73,18 @@ class OutputSdmxMl(OutputBase):
             Remote URL of CSV column mapping or path to local CSV column mapping file
         code_map: string
             Remote URL of CSV code mapping or path to local CSV code mapping file
+        constrain_data : boolean
+            Whether to use the DSD to remove any rows of data that are not compliant.
+            Defaults to False.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations,
             indicator_options, request_params=request_params)
         self.header_id = header_id
         self.sender_id = sender_id
         self.structure_specific = structure_specific
+        self.constrain_data = constrain_data
         self.retrieve_dsd(dsd)
+        self.data_schema = DataSchemaInputSdmxDsd(source=self.dsd)
         self.column_map = column_map
         self.code_map = code_map
         sdmx_folder = os.path.join(output_folder, 'sdmx')
@@ -130,6 +137,10 @@ class OutputSdmxMl(OutputBase):
                 'Series': 'SERIES',
                 'Year': 'TIME_DETAIL',
             })
+
+            if self.constrain_data:
+                data = indicator.get_data_matching_schema(self.data_schema, data=data)
+
             data = data.replace(np.nan, '', regex=True)
             if data.empty:
                 continue

@@ -28,8 +28,8 @@ class InputOpenDataPlatform(InputBase):
                 value = item['values'][idx]
                 if value is not None:
                     disaggregations = dimensions.copy()
-                    disaggregations['UNIT_MEASURE'] = self.get_unit(item)
-                    disaggregations['UNIT_MULT'] = self.get_unit_multiplier(item)
+                    disaggregations[self.get_unit_key()] = self.get_unit(item)
+                    disaggregations[self.get_unit_multiplier_key()] = self.get_unit_multiplier(item)
                     row = self.get_row(year, value, disaggregations)
                     indicators[indicator_id].append(row)
                 idx += 1
@@ -46,7 +46,6 @@ class InputOpenDataPlatform(InputBase):
             if prop in non_dimension_props:
                 continue
             try:
-                prop_id = row[prop]['id']
                 dimensions[prop] = row[prop]['id']
             except:
                 pass
@@ -62,11 +61,19 @@ class InputOpenDataPlatform(InputBase):
 
 
     def get_unit(self, row):
-        return row['unit']
+        return row[self.get_unit_key()]
+
+
+    def get_unit_key(self):
+        return 'unit'
 
 
     def get_unit_multiplier(self, row):
-        return row['scale']
+        return row[self.get_unit_multiplier_key()]
+
+
+    def get_unit_multiplier_key(self):
+        return 'scale'
 
 
     def get_indicator_id(self, row):

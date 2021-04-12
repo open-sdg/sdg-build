@@ -83,6 +83,14 @@ class InputMetaFiles(InputFiles):
         git_update = self.get_git_dates(meta, filepath)
         for k in git_update.keys():
             meta[k] = git_update[k]
+        # @deprecated start
+        # For now continue to populate the deprecated link fields:
+        # * national_metadata_update_url / national_metadata_update_url_text
+        # * national_data_update_url / national_data_update_url_text
+        deprecated_fields = self.get_git_updates(meta, filepath)
+        for k in deprecated_fields.keys():
+            meta[k] = deprecated_fields[k]
+        # @deprecated end
 
 
     def get_git_dates(self, meta, filepath):
@@ -115,10 +123,7 @@ class InputMetaFiles(InputFiles):
 
 
     # @deprecated start
-    # This method is no longer used, but left in in case it
-    # was used by downstream subclasses.
     def get_git_updates(self, meta, filepath):
-        print('The get_git_updates() method is deprecated and will be removed in 2.0.0.')
         meta_update = self.get_git_update(filepath)
         updates = {
             'national_metadata_update_url_text': meta_update['date'] + ': see changes on GitHub',
@@ -140,12 +145,9 @@ class InputMetaFiles(InputFiles):
     # @deprecated end
 
     # @deprecated start
-    # This method is no longer used, but left in in case it
-    # was used by downstream subclasses.
     def get_git_update(self, filepath):
         """Change into the working directory of the file (it might be a submodule)
         and get the latest git history"""
-        print('The get_git_update() method is deprecated and will be removed in 2.0.0.')
         folder = os.path.split(filepath)[0]
 
         repo = git.Repo(folder, search_parent_directories=True)

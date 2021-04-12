@@ -68,32 +68,38 @@ def __get_series_from_series_code(series, dsd):
 
 
 def __get_annotation_text(concept, annotation_title):
+    matches = []
     try:
-        annotation = next(item for item in concept.annotations if item.title == annotation_title)
-        return str(annotation.text)
+        for item in concept.annotations:
+            if item.title == annotation_title:
+                matches.append(str(item.text))
     except:
-        return None
+        pass
+    return matches
 
 
 def get_indicator_id_from_series_code(series_code, dsd_path=None, request_params=None):
     """Convert a series code to an indicator ID (eg, "1.1.1")."""
     dsd = get_dsd(dsd_path, request_params=request_params)
     series = __get_series_from_series_code(series_code, dsd)
-    return __get_annotation_text(series, 'Indicator')
+    matches = __get_annotation_text(series, 'Indicator')
+    return matches[0] if len(matches) > 0 else None
 
 
 def get_indicator_code_from_series_code(series_code, dsd_path=None, request_params=None):
     """Convert a series code to an indicator code (eg, "C010101")."""
     dsd = get_dsd(dsd_path, request_params=request_params)
     series = __get_series_from_series_code(series_code, dsd)
-    return __get_annotation_text(series, 'IndicatorCode')
+    matches = __get_annotation_text(series, 'IndicatorCode')
+    return matches[0] if len(matches) > 0 else None
 
 
 def get_indicator_title_from_series_code(series_code, dsd_path=None, request_params=None):
     """Convert a series code to an indicator title (eg, "Proportion of the...")."""
     dsd = get_dsd(dsd_path, request_params=request_params)
     series = __get_series_from_series_code(series_code, dsd)
-    return __get_annotation_text(series, 'IndicatorTitle')
+    matches = __get_annotation_text(series, 'IndicatorTitle')
+    return matches[0] if len(matches) > 0 else None
 
 
 def __get_series_from_indicator_id(indicator_id, dsd):
@@ -102,9 +108,11 @@ def __get_series_from_indicator_id(indicator_id, dsd):
     try:
         dimension = next(item for item in dsd.dimensions if item.id == 'SERIES')
         for code in dimension.local_representation.enumerated:
-            candidate = normalize_indicator_id(__get_annotation_text(code, 'Indicator'))
-            if candidate == indicator_id:
-                return code
+            matches = __get_annotation_text(code, 'Indicator')
+            for annotation_text in matches:
+                candidate = normalize_indicator_id(annotation_text)
+                if candidate == indicator_id:
+                    return code
     except:
         return None
 
@@ -113,9 +121,10 @@ def __get_series_by_annotation_text(annotation_title, annotation_text, dsd):
     try:
         dimension = next(item for item in dsd.dimensions if item.id == 'SERIES')
         for code in dimension.local_representation.enumerated:
-            candidate = __get_annotation_text(code, annotation_title)
-            if candidate == annotation_text:
-                return code
+            matches = __get_annotation_text(code, annotation_title)
+            for candidate in matches:
+                if candidate == annotation_text:
+                    return code
     except:
         return None
 

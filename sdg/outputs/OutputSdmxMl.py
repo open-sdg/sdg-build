@@ -25,6 +25,7 @@ from sdmx.message import (
 )
 from urllib.request import urlretrieve
 from sdg.outputs import OutputBase
+from sdg.data_schemas import DataSchemaInputSdmxDsd
 
 class OutputSdmxMl(OutputBase):
     """Output SDG data/metadata in SDMX-ML."""
@@ -33,6 +34,7 @@ class OutputSdmxMl(OutputBase):
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
                  default_values=None, header_id=None, sender_id=None, structure_specific=False,
+                 column_map=None, code_map=None, constrain_data=False,
                  extend_dsd=False, dsd_languages=None):
 
         """Constructor for OutputSdmxMl.
@@ -82,6 +84,13 @@ class OutputSdmxMl(OutputBase):
         dsd_languages : list or none
             When extending the DSD, this informs the class what languages should be added
             when appending codes to codelists. Not used unless extend_dsd is True.
+        column_map: string
+            Remote URL of CSV column mapping or path to local CSV column mapping file
+        code_map: string
+            Remote URL of CSV code mapping or path to local CSV code mapping file
+        constrain_data : boolean
+            Whether to use the DSD to remove any rows of data that are not compliant.
+            Defaults to False.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
         self.header_id = header_id
@@ -91,7 +100,12 @@ class OutputSdmxMl(OutputBase):
         if dsd_languages is None:
             dsd_languages = ['en']
         self.dsd_languages = dsd_languages
+        self.constrain_data = constrain_data
         self.retrieve_dsd(dsd)
+        self.extend_dsd_codelists(dsd)
+        self.data_schema = DataSchemaInputSdmxDsd(source=self.dsd)
+        self.column_map = column_map
+        self.code_map = code_map
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
             os.makedirs(sdmx_folder, exist_ok=True)
@@ -110,10 +124,9 @@ class OutputSdmxMl(OutputBase):
         dsd_object = msg.structure[0]
         self.dsd_msg = msg
         self.dsd = dsd_object
-        self.extend_dsd_codelists()
 
 
-    def extend_dsd_codelists(self):
+    def extend_dsd_codelists(self, dsd):
         if not self.extend_dsd:
             return
 
@@ -187,8 +200,10 @@ class OutputSdmxMl(OutputBase):
     def build(self, language=None):
         """Write the SDMX output. Overrides parent."""
         status = True
-        datasets = []
+        all_serieses = {}
         dfd = DataflowDefinition(id="OPEN_SDG_DFD", structure=self.dsd)
+        time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
+        header = self.create_header()
 
         # SDMX output is language-agnostic. Only the DSD contains language info.
         if language is not None:
@@ -198,6 +213,22 @@ class OutputSdmxMl(OutputBase):
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
 
+            # Map column names to SDMX dimension/attribute names
+            if self.column_map is not None:
+                column_map=pd.read_csv(self.column_map)
+                for col in data.columns:
+                    if col in column_map['Text'].to_list():
+                        newcol=column_map['Value'].loc[column_map['Text']==col].iloc[0]
+                        data.rename(columns={col:newcol}, inplace=True)
+
+            # Map column values to SDMX codes within specific dimensions/attributes
+            if self.code_map is not None:
+                code_map=pd.read_csv(self.code_map)
+                for col in data.columns:
+                    for i in data.index:
+                        if data.at[i, col] in code_map['Text'].to_list():
+                            data.at[i, col]=code_map['Value'].loc[code_map['Dimension']==col].loc[code_map['Text']==data.at[i, col]].iloc[0]
+
             # Some hardcoded dataframe changes.
             data = data.rename(columns={
                 'Value': 'OBS_VALUE',
@@ -205,6 +236,10 @@ class OutputSdmxMl(OutputBase):
                 'Series': 'SERIES',
                 'Year': 'TIME_DETAIL',
             })
+
+            if self.constrain_data:
+                data = indicator.get_data_matching_schema(self.data_schema, data=data)
+
             data = data.replace(np.nan, '', regex=True)
             if data.empty:
                 continue
@@ -229,15 +264,14 @@ class OutputSdmxMl(OutputBase):
                 serieses[series_key].append(observation)
 
             dataset = self.create_dataset(serieses)
-            header = self.create_header()
-            time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
             msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
             sdmx_path = os.path.join(self.sdmx_folder, indicator_id + '.xml')
             with open(sdmx_path, 'wb') as f:
                 status = status & f.write(sdmx.to_xml(msg))
-            datasets.append(dataset)
+            all_serieses.update(serieses)
 
-        msg = DataMessage(data=datasets, dataflow=dfd)
+        dataset = self.create_dataset(all_serieses)
+        msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
         all_sdmx_path = os.path.join(self.sdmx_folder, 'all.xml')
         with open(all_sdmx_path, 'wb') as f:
             status = status & f.write(sdmx.to_xml(msg))
@@ -309,7 +343,7 @@ class OutputSdmxMl(OutputBase):
             if valid_attribute:
                 value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
                 if value != '':
-                    values[attribute.id] = AttributeValue(value_for=attribute, value=value)
+                    values[attribute.id] = AttributeValue(value_for=attribute, value=str(value))
         return values
 
 

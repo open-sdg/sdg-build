@@ -11,13 +11,13 @@ def get_dsd_url():
     return 'https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children'
 
 
-def get_dsd_message(path=None, request_params=None):
+def get_sdmx_message(path=None, request_params=None):
     if path is None:
         path = get_dsd_url()
-    if path in cache and 'get_dsd_message' in cache[path]:
-        return cache[path]['get_dsd_message']
+    if path in cache and 'get_sdmx_message' in cache[path]:
+        return cache[path]['get_sdmx_message']
     if path.startswith('http'):
-        filename = 'SDG_DSD.xml'
+        filename = 'SDG_MESSAGE.xml'
         files.download_remote_file(path, filename)
         msg = sdmx.read_sdmx(filename)
         os.remove(filename)
@@ -25,7 +25,7 @@ def get_dsd_message(path=None, request_params=None):
         msg = sdmx.read_sdmx(path)
     if path not in cache:
         cache[path] = {}
-    cache[path]['get_dsd_message'] = msg
+    cache[path]['get_sdmx_message'] = msg
     return msg
 
 
@@ -34,7 +34,7 @@ def get_dsd(path=None, request_params=None):
         path = get_dsd_url()
     if path in cache and 'get_dsd' in cache[path]:
         return cache[path]['get_dsd']
-    msg = get_dsd_message(path=path, request_params=request_params)
+    msg = get_sdmx_message(path=path, request_params=request_params)
     dsd_object = msg.structure[0]
     if path not in cache:
         cache[path] = {}

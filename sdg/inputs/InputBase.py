@@ -225,6 +225,8 @@ class InputBase(Loggable):
             except:
                 # Handle callbacks without the context parameter.
                 data = alteration(data)
+        if data is None:
+            raise Exception('Data alteration functions should return the altered dataframe.')
         # Always do these hardcoded steps.
         data = self.fix_dataframe_columns(data)
         data = self.fix_empty_values(data)
@@ -254,6 +256,8 @@ class InputBase(Loggable):
             except:
                 # Handle callbacks without the context parameter.
                 meta = alteration(meta)
+        if meta is None:
+            raise Exception('Metadata alteration functions should return the altered dict.')
         return meta
 
 

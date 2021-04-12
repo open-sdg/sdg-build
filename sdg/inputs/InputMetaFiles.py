@@ -80,12 +80,45 @@ class InputMetaFiles(InputFiles):
 
 
     def add_git_dates(self, meta, filepath):
-        git_update = self.get_git_updates(meta, filepath)
+        git_update = self.get_git_dates(meta, filepath)
         for k in git_update.keys():
             meta[k] = git_update[k]
 
 
+    def get_git_dates(self, meta, filepath):
+        updates = {}
+        updates['national_metadata_last_updated'] = self.get_git_date(filepath)
+        if 'data_filename' in meta:
+            data_filename = meta['data_filename']
+        else:
+            indicator_id = self.convert_path_to_indicator_id(filepath)
+            data_filename = self.git_data_filemask.replace('*', indicator_id)
+        src_dir = os.path.dirname(os.path.dirname(self.path_pattern))
+        data_filepath = os.path.join(src_dir, self.git_data_dir, data_filename)
+        if os.path.isfile(data_filepath):
+            updates['national_data_last_updated'] = self.get_git_date(data_filepath)
+
+        return updates
+
+
+    def get_git_date(self, filepath):
+        """Change into the working directory of the file (it might be a submodule)
+        and get the latest git history"""
+        folder = os.path.split(filepath)[0]
+
+        repo = git.Repo(folder, search_parent_directories=True)
+        # Need to translate relative to the repo root (this may be a submodule)
+        repo_dir = os.path.relpath(repo.working_dir, os.getcwd())
+        filepath = os.path.relpath(filepath, repo_dir)
+        commit = next(repo.iter_commits(paths=filepath, max_count=1))
+        return str(commit.committed_datetime.date())
+
+
+    # @deprecated start
+    # This method is no longer used, but left in in case it
+    # was used by downstream subclasses.
     def get_git_updates(self, meta, filepath):
+        print('The get_git_updates() method is deprecated and will be removed in 2.0.0.')
         meta_update = self.get_git_update(filepath)
         updates = {
             'national_metadata_update_url_text': meta_update['date'] + ': see changes on GitHub',
@@ -104,11 +137,15 @@ class InputMetaFiles(InputFiles):
             updates['national_data_update_url'] = data_update['commit_url']
 
         return updates
+    # @deprecated end
 
-
+    # @deprecated start
+    # This method is no longer used, but left in in case it
+    # was used by downstream subclasses.
     def get_git_update(self, filepath):
         """Change into the working directory of the file (it might be a submodule)
         and get the latest git history"""
+        print('The get_git_update() method is deprecated and will be removed in 2.0.0.')
         folder = os.path.split(filepath)[0]
 
         repo = git.Repo(folder, search_parent_directories=True)
@@ -127,6 +164,7 @@ class InputMetaFiles(InputFiles):
             'date': git_date,
             'commit_url': commit_url
         }
+    # @deprecated end
 
 
     def load_metadata_mapping(self):

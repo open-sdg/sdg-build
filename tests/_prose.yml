@@ -107,12 +107,12 @@ prose:
             element: text
             label: "Other information"
             scope: national
-      - name: "national_data_last_updated"
+      - name: "national_data_updated_date"
         field:
             element: hidden
             label: "Data last updated"
             scope: national
-      - name: "national_metadata_last_updated"
+      - name: "national_metadata_updated_date"
         field:
             element: hidden
             label: "Metadata last updated"

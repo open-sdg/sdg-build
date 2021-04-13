@@ -95,7 +95,7 @@ class InputMetaFiles(InputFiles):
 
     def get_git_dates(self, meta, filepath):
         updates = {}
-        updates['national_metadata_last_updated'] = self.get_git_date(filepath)
+        updates['national_metadata_updated_date'] = self.get_git_date(filepath)
         if 'data_filename' in meta:
             data_filename = meta['data_filename']
         else:
@@ -104,7 +104,7 @@ class InputMetaFiles(InputFiles):
         src_dir = os.path.dirname(os.path.dirname(self.path_pattern))
         data_filepath = os.path.join(src_dir, self.git_data_dir, data_filename)
         if os.path.isfile(data_filepath):
-            updates['national_data_last_updated'] = self.get_git_date(data_filepath)
+            updates['national_data_updated_date'] = self.get_git_date(data_filepath)
 
         return updates
 

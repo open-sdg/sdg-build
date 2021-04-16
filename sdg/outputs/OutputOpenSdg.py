@@ -153,6 +153,11 @@ class OutputOpenSdg(OutputBase):
         if indicator.has_name():
             minimum['indicator_name'] = indicator.get_name()
             minimum['graph_title'] = indicator.get_name()
+        # Or fall back to translation keys.
+        else:
+            translation_key = 'global_indicators.' + indicator.get_indicator()
+            minimum['indicator_name'] = translation_key
+            minimum['graph_title'] = translation_key
 
         return minimum
 

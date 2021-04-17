@@ -127,7 +127,7 @@ class InputApi(InputBase):
 
     def execute(self, indicator_options):
         InputBase.execute(self, indicator_options)
-        self.add_data_alteration(self.fix_data)
+        self.data_alterations.insert(0, self.fix_data)
         for resource_id in self.get_indicator_id_map():
             # Fetch the data.
             url = self.generate_api_call(resource_id)

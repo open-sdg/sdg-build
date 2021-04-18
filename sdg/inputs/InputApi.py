@@ -117,27 +117,24 @@ class InputApi(InputBase):
         return self.post_data
 
 
-    def fix_data(self, df):
-        if self.year_column is not None:
-            df = df.rename(columns={self.year_column: 'Year'})
-        if self.value_column is not None:
-            df = df.rename(columns={self.value_column: 'Value'})
-        return self.fix_dataframe_columns(df)
-
-
     def execute(self, indicator_options):
         InputBase.execute(self, indicator_options)
-        self.data_alterations.insert(0, self.fix_data)
         for resource_id in self.get_indicator_id_map():
-            # Fetch the data.
+
             url = self.generate_api_call(resource_id)
             json_response = self.fetch_json_response(url)
 
-            # Create the indicator.
             inid = self.get_indicator_id(resource_id, json_response)
             data = self.indicator_data_from_json(json_response)
             if data is None:
                 continue
+
+            columns = data.columns.to_list()
+            if self.year_column is not None and self.year_column in columns:
+                data = data.rename(columns={self.year_column: 'Year'})
+            if self.value_column is not None and self.value_column in columns:
+                data = data.rename(columns={self.value_column: 'Value'})
+
             name = self.get_indicator_name(inid, resource_id, json_response)
             self.add_indicator(inid, data=data, name=name, options=indicator_options)
 

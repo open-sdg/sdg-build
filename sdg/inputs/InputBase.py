@@ -74,13 +74,19 @@ class InputBase(Loggable):
             The same dataframe with rearranged columns
         """
 
-        cols = df.columns.tolist()
-        cols.pop(cols.index('Year'))
-        cols.pop(cols.index('Value'))
-        for col in cols:
-            df[col] = df[col].map(str, na_action='ignore')
-        cols = ['Year'] + cols + ['Value']
-        return df[cols]
+        try:
+            cols = df.columns.tolist()
+            cols.pop(cols.index('Year'))
+            cols.pop(cols.index('Value'))
+            for col in cols:
+                df[col] = df[col].map(str, na_action='ignore')
+            cols = ['Year'] + cols + ['Value']
+            return df[cols]
+        except Exception as e:
+            self.warn('Unable to fix Year/Value columns. Exception below:')
+            self.warn(str(e))
+            return df
+
 
     def fix_empty_values(self, df):
         """Ensure that empty values are np.NaN rather than None or "".

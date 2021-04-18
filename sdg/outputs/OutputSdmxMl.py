@@ -137,7 +137,7 @@ class OutputSdmxMl(OutputBase):
                 'Value': 'OBS_VALUE',
                 'Units': 'UNIT_MEASURE',
                 'Series': 'SERIES',
-                'Year': 'TIME_DETAIL',
+                'Year': 'TIME_PERIOD',
             })
 
             if self.constrain_data:
@@ -153,7 +153,7 @@ class OutputSdmxMl(OutputBase):
                 series_key.attrib = self.get_series_attribute_values(row, indicator)
                 attributes = self.get_observation_attribute_values(row, indicator)
                 dimension_key = self.dsd.make_key(Key, values={
-                    'TIME_PERIOD': str(row['TIME_DETAIL']),
+                    'TIME_PERIOD': str(row['TIME_PERIOD']),
                 })
                 observation = Observation(
                     series_key=series_key,

@@ -27,8 +27,6 @@ class InputApi(InputBase):
         """
         self.endpoint = endpoint
         self.indicator_id_map = indicator_id_map
-        self.column_map = column_map
-        self.code_map = code_map
         InputBase.__init__(self, logging=logging, column_map=column_map,
             code_map=code_map)
 

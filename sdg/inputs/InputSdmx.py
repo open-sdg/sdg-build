@@ -22,7 +22,8 @@ class InputSdmx(InputBase):
                  dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
                  indicator_id_xpath=".//Annotation[AnnotationTitle='Indicator']/AnnotationText",
                  indicator_name_xpath=".//Annotation[AnnotationTitle='IndicatorTitle']/AnnotationText",
-                 logging=None):
+                 logging=None,
+                 column_map=None, code_map=None):
         """Constructor for InputSdmx.
 
         Parameters
@@ -64,7 +65,8 @@ class InputSdmx(InputBase):
         indicator_name_xpath : string
             An xpath query to find the indicator name within each Series code
         """
-        InputBase.__init__(self, logging=logging)
+        InputBase.__init__(self, logging=logging, column_map=column_map,
+            code_map=code_map)
         if drop_dimensions is None:
             drop_dimensions = []
         if dimension_map is None:

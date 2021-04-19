@@ -6,8 +6,10 @@ class InputOpenDataPlatform(InputBase):
 
 
     def __init__(self, source=None, logging=None, unit_key='unit',
-                 unit_multiplier_key='scale', indicator_key='indicator'):
-        InputBase.__init__(self, logging=logging)
+                 unit_multiplier_key='scale', indicator_key='indicator',
+                 column_map=None, code_map=None):
+        InputBase.__init__(self, logging=logging, column_map=column_map,
+            code_map=code_map)
         self.unit_key = unit_key
         self.unit_multiplier_key = unit_multiplier_key
         self.indicator_key = indicator_key

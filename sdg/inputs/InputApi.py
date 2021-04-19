@@ -14,7 +14,8 @@ class InputApi(InputBase):
     "add_data_alteration" to add a callback function that corrects the format.
     """
 
-    def __init__(self, endpoint, indicator_id_map, logging=None):
+    def __init__(self, endpoint, indicator_id_map, logging=None,
+                 column_map=None, code_map=None):
         """Constructor for InputApi input.
 
         Parameters
@@ -26,7 +27,10 @@ class InputApi(InputBase):
         """
         self.endpoint = endpoint
         self.indicator_id_map = indicator_id_map
-        InputBase.__init__(self, logging=logging)
+        self.column_map = column_map
+        self.code_map = code_map
+        InputBase.__init__(self, logging=logging, column_map=column_map,
+            code_map=code_map)
 
 
     def indicator_data_from_json(self, json):

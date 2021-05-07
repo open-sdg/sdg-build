@@ -171,19 +171,22 @@ def get_series_code_from_indicator_title(indicator_title, dsd_path=None, request
         return None
 
 
-def get_unit_code_from_series_code(series_code, dsd_path=None, request_params=None):
+def get_unit_code_from_series_code(series_code, dsd_path=None, request_params=None, fallback='NUMBER'):
     """Perform a best-effort imprecise conversion of a series code into a unit code."""
     dsd = get_dsd(dsd_path, request_params=request_params)
-    series = __get_series_from_series_code(series_code, dsd)
-    series_name = str(series.name).lower()
-    unit_attribute = next(item for item in dsd.attributes if item.id == 'UNIT_MEASURE')
+    try:
+        series = __get_series_from_series_code(series_code, dsd)
+        series_name = str(series.name).lower()
+        unit_attribute = next(item for item in dsd.attributes if item.id == 'UNIT_MEASURE')
+    except:
+        return fallback
     percent_code = None
 
     for unit in unit_attribute.local_representation.enumerated:
         unit_name = str(unit.name).lower()
-        if unit_name == 'number':
-            # Skip "NUMBER" because it will be a fallback and sometimes appears
-            # in other unit names.
+        if unit_name == fallback.lower():
+            # Skip the fallback in case it appears in other unit names and causes
+            # a false match (as "NUMBER" does).
             continue
         if 'percent' in unit_name:
             percent_code = unit.id
@@ -195,4 +198,4 @@ def get_unit_code_from_series_code(series_code, dsd_path=None, request_params=No
         return percent_code
 
     # Finally a default fallback.
-    return 'NUMBER'
+    return fallback

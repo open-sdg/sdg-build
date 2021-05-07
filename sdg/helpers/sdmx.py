@@ -169,3 +169,30 @@ def get_series_code_from_indicator_title(indicator_title, dsd_path=None, request
         return series.id
     except:
         return None
+
+
+def get_unit_code_from_series_code(series_code, dsd_path=None, request_params=None):
+    """Perform a best-effort imprecise conversion of a series code into a unit code."""
+    dsd = get_dsd(dsd_path, request_params=request_params)
+    series = __get_series_from_series_code(series_code, dsd)
+    series_name = str(series.name).lower()
+    unit_attribute = next(item for item in dsd.attributes if item.id == 'UNIT_MEASURE')
+    percent_code = None
+
+    for unit in unit_attribute.local_representation.enumerated:
+        unit_name = str(unit.name).lower()
+        if unit_name == 'number':
+            # Skip "NUMBER" because it will be a fallback and sometimes appears
+            # in other unit names.
+            continue
+        if 'percent' in unit_name:
+            percent_code = unit.id
+        if unit_name in series_name:
+            return unit.id
+
+    # Some additional fallbacks.
+    if 'proportion' in series_name and percent_code is not None:
+        return percent_code
+
+    # Finally a default fallback.
+    return 'NUMBER'

@@ -62,7 +62,7 @@ class InputOpenDataPlatform(InputBase):
         end = int(row['endDate'][0:4])
         if start == end:
             return [start]
-        return list(range(start, end))
+        return list(range(start, end + 1))
 
 
     def get_unit(self, row):

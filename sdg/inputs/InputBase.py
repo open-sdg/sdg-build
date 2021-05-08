@@ -7,8 +7,18 @@ from sdg.Loggable import Loggable
 class InputBase(Loggable):
     """Base class for sources of SDG data/metadata."""
 
-    def __init__(self, logging=None, column_map=None, code_map=None):
-        """Constructor for InputBase."""
+    def __init__(self, logging=None, column_map=None, code_map=None, meta_suffix=None):
+        """Constructor for InputBase.
+        logging : list
+            List of types of log message to output. Values can include 'debug' or 'warn'.
+        column_map: string
+            Remote URL of CSV column mapping or path to local CSV column mapping file
+        code_map: string
+            Remote URL of CSV code mapping or path to local CSV code mapping file
+        meta_suffix: string
+            String to add to each metadata key. Intended usage is to allow identical
+            sets of metadata - one for global and one for national.
+        """
         Loggable.__init__(self, logging=logging)
         self.indicators = {}
         self.data_alterations = []
@@ -19,6 +29,7 @@ class InputBase(Loggable):
         self.num_previously_merged_inputs = 0
         self.column_map = column_map
         self.code_map = code_map
+        self.meta_suffix = meta_suffix
 
 
     def execute_once(self, indicator_options):
@@ -238,6 +249,10 @@ class InputBase(Loggable):
                 return meta
         for alteration in self.meta_alterations:
             meta = alteration(meta)
+        if self.meta_suffix is not None:
+            for key in meta:
+                meta[key + self.meta_suffix] = meta[key]
+                del meta[key]
         return meta
 
 

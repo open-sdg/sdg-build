@@ -250,9 +250,10 @@ class InputBase(Loggable):
         for alteration in self.meta_alterations:
             meta = alteration(meta)
         if self.meta_suffix is not None:
-            for key in meta:
-                meta[key + self.meta_suffix] = meta[key]
-                del meta[key]
+            for key in list(meta.keys()):
+                if not key.endswith(self.meta_suffix):
+                    meta[key + self.meta_suffix] = meta[key]
+                    del meta[key]
         return meta
 
 

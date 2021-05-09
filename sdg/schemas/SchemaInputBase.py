@@ -12,7 +12,7 @@ class SchemaInputBase(Loggable):
     This class assumes imported schema (self.schema) are valid JSON Schema."""
 
 
-    def __init__(self, schema_path='', logging=None, scope=None):
+    def __init__(self, schema_path='', logging=None, scope=None, meta_suffix=None):
         """Create a new SchemaBase object
 
         Parameters
@@ -21,11 +21,15 @@ class SchemaInputBase(Loggable):
             A path to the schema file to input
         scope : string
             An optional 'scope' to apply to all metadata fields
+        meta_suffix : string
+            A suffix to add to each metadata key. Useful when using the same
+            schema for both global and national metadata, for example.
         """
 
         Loggable.__init__(self, logging=logging)
         self.schema_path = schema_path
         self.scope = scope
+        self.meta_suffix = meta_suffix
         self.field_order = []
         self.schema = None
         self.load_schema()
@@ -199,3 +203,21 @@ class SchemaInputBase(Loggable):
             A list of field names in a particular order
         """
         return self.field_order if len(self.field_order) > 0 else self.schema['properties'].keys()
+
+
+    def alter_key(self, key):
+        """Make any changes to a key before adding it to the schema.
+
+        Parameters
+        ----------
+        key : string
+            The key to alter
+
+        Returns
+        -------
+        string
+            The altered key
+        """
+        if self.meta_suffix is not None:
+            key = key + self.meta_suffix
+        return key

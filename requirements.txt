@@ -1,6 +1,6 @@
 pyyaml
 pandas
-pydantic==1.7.3
+pydantic==1.7.4
 sdmx1
 gitpython
 jsonschema

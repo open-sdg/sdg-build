@@ -32,7 +32,7 @@ class OutputSdmxMl(OutputBase):
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
                  indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
                  default_values=None, header_id=None, sender_id=None, structure_specific=False,
-                 column_map=None, code_map=None, constrain_data=False):
+                 column_map=None, code_map=None, constrain_data=False, logging=None):
 
         """Constructor for OutputSdmxMl.
 
@@ -75,7 +75,7 @@ class OutputSdmxMl(OutputBase):
             Whether to use the DSD to remove any rows of data that are not compliant.
             Defaults to False.
         """
-        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
+        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options, logging=logging)
         self.header_id = header_id
         self.sender_id = sender_id
         self.structure_specific = structure_specific
@@ -141,7 +141,10 @@ class OutputSdmxMl(OutputBase):
             })
 
             if self.constrain_data:
+                before = data.size
                 data = indicator.get_data_matching_schema(self.data_schema, data=data)
+                after = data.size
+                self.warn('Removed ' + str(before - after) + ' (out of ' + str(before) + ') rows when constraining data for ' + indicator_id)
 
             data = data.replace(np.nan, '', regex=True)
             if data.empty:

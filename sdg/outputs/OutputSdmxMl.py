@@ -270,6 +270,12 @@ class OutputSdmxMl(OutputBase):
         if indicator_value is not None:
             return indicator_value
         defaults = self.get_default_values()
+        if attribute not in defaults:
+            defaults = {
+                'UNIT_MULT': '0',
+                'UNIT_MEASURE': 'NUMBER',
+                'OBS_STATUS': 'A',
+            }
         if attribute in defaults:
             return defaults[attribute]
         else:

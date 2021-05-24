@@ -97,7 +97,14 @@ class InputBase(Loggable):
         Dataframe
             The same dataframe with rearranged columns
         """
-        return df.replace([None, "", "nan"], np.NaN)
+        to_replace = {
+            None: np.NaN,
+            "": np.NaN,
+            "nan": np.NaN
+        }
+        for col in df.columns:
+            df[col].replace(to_replace=to_replace, inplace=True)
+        return df
 
 
     def fetch_file(self, location):

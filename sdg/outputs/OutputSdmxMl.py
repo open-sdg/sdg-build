@@ -116,21 +116,8 @@ class OutputSdmxMl(OutputBase):
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
 
-            # Map column names to SDMX dimension/attribute names
-            if self.column_map is not None:
-                column_map=pd.read_csv(self.column_map)
-                for col in data.columns:
-                    if col in column_map['Text'].to_list():
-                        newcol=column_map['Value'].loc[column_map['Text']==col].iloc[0]
-                        data.rename(columns={col:newcol}, inplace=True)
-
-            # Map column values to SDMX codes within specific dimensions/attributes
-            if self.code_map is not None:
-                code_map=pd.read_csv(self.code_map)
-                for col in data.columns:
-                    for i in data.index:
-                        if data.at[i, col] in code_map['Text'].to_list():
-                            data.at[i, col]=code_map['Value'].loc[code_map['Dimension']==col].loc[code_map['Text']==data.at[i, col]].iloc[0]
+            self.apply_column_map(data)
+            self.apply_code_map(data)
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={
@@ -280,6 +267,26 @@ class OutputSdmxMl(OutputBase):
             return defaults[attribute]
         else:
             return ''
+
+
+    def apply_column_map(self, data):
+        if self.column_map is not None:
+            column_map=pd.read_csv(self.column_map)
+            column_dict = dict(zip(column_map['Text'], column_map['Value']))
+            data.rename(columns=column_dict, inplace=True)
+        return data
+
+
+    def apply_code_map(self, data):
+        if self.code_map is not None:
+            code_map=pd.read_csv(self.code_map)
+            code_dict = {}
+            for _, row in code_map.iterrows():
+                if row['Dimension'] not in code_dict:
+                    code_dict[row['Dimension']] = {}
+                code_dict[row['Dimension']][row['Text']] = row['Value']
+            data.replace(to_replace=code_dict, value=None, inplace=True)
+        return data
 
 
     def get_documentation_title(self):

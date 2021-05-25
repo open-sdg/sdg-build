@@ -97,13 +97,12 @@ class InputBase(Loggable):
         Dataframe
             The same dataframe with rearranged columns
         """
-        to_replace = {
-            None: np.NaN,
-            "": np.NaN,
-            "nan": np.NaN
-        }
         for col in df.columns:
-            df[col].replace(to_replace=to_replace, inplace=True)
+            for to_find in [None, "", "nan"]:
+                try:
+                    df[col].replace(to_replace={ to_find: np.NaN }, inplace=True)
+                except Exception as e:
+                    pass
         return df
 
 

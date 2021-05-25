@@ -23,6 +23,7 @@ from sdmx.message import (
 )
 from urllib.request import urlretrieve
 from sdg.outputs import OutputBase
+from sdg import helpers
 from sdg.data_schemas import DataSchemaInputSdmxDsd
 
 class OutputSdmxMl(OutputBase):
@@ -30,9 +31,10 @@ class OutputSdmxMl(OutputBase):
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-                 indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None, structure_specific=False,
-                 column_map=None, code_map=None, constrain_data=False):
+                 indicator_options=None, dsd=None, default_values=None,
+                 header_id=None, sender_id=None, structure_specific=False,
+                 column_map=None, code_map=None, constrain_data=False,
+                 request_params=None):
 
         """Constructor for OutputSdmxMl.
 
@@ -75,7 +77,8 @@ class OutputSdmxMl(OutputBase):
             Whether to use the DSD to remove any rows of data that are not compliant.
             Defaults to False.
         """
-        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
+        OutputBase.__init__(self, inputs, schema, output_folder, translations,
+            indicator_options, request_params=request_params)
         self.header_id = header_id
         self.sender_id = sender_id
         self.structure_specific = structure_specific
@@ -92,12 +95,7 @@ class OutputSdmxMl(OutputBase):
 
 
     def retrieve_dsd(self, dsd):
-        if dsd.startswith('http'):
-            urlretrieve(dsd, 'SDG_DSD.xml')
-            dsd = 'SDG_DSD.xml'
-        msg = sdmx.read_sdmx(dsd)
-        dsd_object = msg.structure[0]
-        self.dsd = dsd_object
+        self.dsd = helpers.sdmx.get_dsd(dsd, request_params=self.request_params)
 
 
     def build(self, language=None):

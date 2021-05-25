@@ -3,13 +3,23 @@ import pandas as pd
 import numpy as np
 from sdg.Indicator import Indicator
 from sdg.Loggable import Loggable
+from sdg import helpers
 
 class InputBase(Loggable):
-    """Base class for sources of SDG data/metadata."""
+    """Base class for sources of SDG data/metadata.
 
-    def __init__(self, logging=None, column_map=None, code_map=None):
+    logging: None or list
+        Type of logs to print, including 'warn' and 'debug'.
+    request_params : dict or None
+        Optional dict of parameters to be passed to remote file fetches.
+        Corresponds to the options passed to a urllib.request.Request.
+        @see https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
+    """
+
+    def __init__(self, logging=None, column_map=None, code_map=None, request_params=None):
         """Constructor for InputBase."""
         Loggable.__init__(self, logging=logging)
+        self.request_params = request_params
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []
@@ -107,23 +117,7 @@ class InputBase(Loggable):
 
 
     def fetch_file(self, location):
-        """Fetch a file, either on disk, or on the Internet.
-
-        Parameters
-        ----------
-        location : String
-            Either an http address, or a path on disk
-        """
-        file = None
-        data = None
-        if location.startswith('http'):
-            file = urlopen(location)
-            data = file.read().decode('utf-8')
-        else:
-            file = open(location)
-            data = file.read()
-        file.close()
-        return data
+        return helpers.files.read_file(location, request_params=self.request_params)
 
 
     def normalize_indicator_id(self, indicator_id):

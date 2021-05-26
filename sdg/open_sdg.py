@@ -491,7 +491,7 @@ def open_sdg_input_from_dict(params, options):
     elif input_class == 'InputWordMeta':
         input_instance = sdg.inputs.InputWordMeta(**params)
     elif input_class == 'InputSdgMetadata':
-        input_instance = sdg.inputs.InputSdgMetdata(**params)
+        input_instance = sdg.inputs.InputSdgMetadata(**params)
 
     return input_instance
 

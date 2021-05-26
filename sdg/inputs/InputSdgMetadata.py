@@ -126,7 +126,8 @@ class InputSdgMetadata(InputBase):
                 extension = file_parts[1]
                 if extension != '.yml':
                     continue
-                indicators[indicator_id] = {}
+                if indicator_id not in indicators:
+                    indicators[indicator_id] = {}
                 with open(os.path.join(root, file), 'r', encoding='utf-8') as stream:
                     try:
                         yamldata = yaml.load(stream, Loader=yaml.FullLoader)

@@ -11,8 +11,8 @@ class InputSdgMetadata(InputBase):
     """This class imports metadata from SDG Metadata (or similar) repos.
 
     The "SDG Metadata" style can be described like this:
-    1. A Git repository (passed as the "source" parameter)
-    2. Repo contains a folder called "translations" (can be configured)
+    1. A Git repository or local folder (passed as the "source" parameter)
+    2. If a Git repo, repo contains a folder called "translations" (can be configured)
     3. Each subfolder of "translations" is a language code (eg, "en")
     4. Within each subfolder are YAML files containing metadata.
     5. The metadata files are named according to the indicator (eg, 1-1-1.yml).
@@ -23,7 +23,7 @@ class InputSdgMetadata(InputBase):
     """
 
     def __init__(self, tag=None, branch=None, source='https://github.com/worldbank/sdg-metadata.git',
-                 folder='translations', default_language='en', logging=None):
+                 repo_subfolder='translations', default_language='en', logging=None):
         """Constructor for the InputSdgMetadata class.
 
         Parameters
@@ -33,8 +33,8 @@ class InputSdgMetadata(InputBase):
         branch : string
             The branch to use on the remote Git repository (alias for 'tag')
         source : string
-            The Git URL for cloning the repository (should end with .git)
-        folder : string
+            The local folder or Git URL for cloning the repository (should end with .git)
+        repo_subfolder : string
             The subfolder inside the repository to use
         default_language : string
             The language which should be considered the default.
@@ -43,23 +43,25 @@ class InputSdgMetadata(InputBase):
         self.tag = tag
         self.branch = branch
         self.source = source
-        self.folder = folder
+        self.repo_subfolder = repo_subfolder
         self.default_language = default_language
 
 
     def execute(self, indicator_options):
         self.debug('Starting metadata input: {class_name}')
-        # Clean up from past runs.
-        self.clean_up()
-        # Clone the repository.
-        self.clone_repo(repo_url=self.source, tag=self.tag, branch=self.branch)
-        # Walk through the translation folder.
-        translation_folder = os.path.join('temp', self.folder)
-        indicators = self.parse_yaml(translation_folder)
+        use_git_repo = self.source.startswith('http')
+        if use_git_repo:
+            self.clean_up()
+            self.clone_repo(repo_url=self.source, tag=self.tag, branch=self.branch)
+            metadata_folder = os.path.join('temp', self.repo_subfolder)
+        else:
+            metadata_folder = self.source
+        indicators = self.parse_yaml(metadata_folder)
         for inid in indicators:
             self.add_indicator(inid, meta=indicators[inid], options=indicator_options)
         # Clean up afterwards.
-        self.clean_up()
+        if use_git_repo:
+            self.clean_up()
 
 
     def clean_up(self):

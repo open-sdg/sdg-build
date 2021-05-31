@@ -17,3 +17,4 @@ from .InputApi import InputApi
 from .InputCkan import InputCkan
 from .InputSdmxMl_UnitedNationsApi import InputSdmxMl_UnitedNationsApi
 from .InputOpenDataPlatform import InputOpenDataPlatform
+from .InputOpenDataPlatformMeta import InputOpenDataPlatformMeta

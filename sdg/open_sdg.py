@@ -449,6 +449,7 @@ def open_sdg_input_from_dict(params, options):
         'InputYamlMeta',
         'InputSdmxMeta',
         'InputOpenDataPlatform',
+        'InputOpenDataPlatformMeta',
         'InputWordMeta',
     ]
     if input_class not in allowed:
@@ -490,6 +491,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputSdmxMeta(**params)
     elif input_class == 'InputOpenDataPlatform':
         input_instance = sdg.inputs.InputOpenDataPlatform(**params)
+    elif input_class == 'InputOpenDataPlatformMeta':
+        input_instance = sdg.inputs.InputOpenDataPlatformMeta(**params)
     elif input_class == 'InputWordMeta':
         input_instance = sdg.inputs.InputWordMeta(**params)
 

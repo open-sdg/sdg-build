@@ -20,7 +20,6 @@ class InputOpenDataPlatform(InputBase):
         payload = self.fetch_file(self.source)
         parsed = json.loads(payload)
         indicators = {}
-        names = {}
         for item in parsed['data']:
             indicator_id = self.normalize_indicator_id(self.get_indicator_id(item))
             indicator_name = self.normalize_indicator_name(self.get_indicator_name(item), indicator_id)

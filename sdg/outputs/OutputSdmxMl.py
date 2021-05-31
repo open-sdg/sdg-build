@@ -23,6 +23,7 @@ from sdmx.message import (
 )
 from urllib.request import urlretrieve
 from sdg.outputs import OutputBase
+from sdg import helpers
 from sdg.data_schemas import DataSchemaInputSdmxDsd
 
 class OutputSdmxMl(OutputBase):
@@ -30,9 +31,10 @@ class OutputSdmxMl(OutputBase):
 
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
-                 indicator_options=None, dsd='https://registry.sdmx.org/ws/public/sdmxapi/rest/datastructure/IAEG-SDGs/SDG/latest/?format=sdmx-2.1&detail=full&references=children',
-                 default_values=None, header_id=None, sender_id=None, structure_specific=False,
-                 column_map=None, code_map=None, constrain_data=False):
+                 indicator_options=None, dsd=None, default_values=None,
+                 header_id=None, sender_id=None, structure_specific=False,
+                 column_map=None, code_map=None, constrain_data=False,
+                 request_params=None):
 
         """Constructor for OutputSdmxMl.
 
@@ -75,7 +77,8 @@ class OutputSdmxMl(OutputBase):
             Whether to use the DSD to remove any rows of data that are not compliant.
             Defaults to False.
         """
-        OutputBase.__init__(self, inputs, schema, output_folder, translations, indicator_options)
+        OutputBase.__init__(self, inputs, schema, output_folder, translations,
+            indicator_options, request_params=request_params)
         self.header_id = header_id
         self.sender_id = sender_id
         self.structure_specific = structure_specific
@@ -92,12 +95,7 @@ class OutputSdmxMl(OutputBase):
 
 
     def retrieve_dsd(self, dsd):
-        if dsd.startswith('http'):
-            urlretrieve(dsd, 'SDG_DSD.xml')
-            dsd = 'SDG_DSD.xml'
-        msg = sdmx.read_sdmx(dsd)
-        dsd_object = msg.structure[0]
-        self.dsd = dsd_object
+        self.dsd = helpers.sdmx.get_dsd(dsd, request_params=self.request_params)
 
 
     def build(self, language=None):
@@ -116,21 +114,8 @@ class OutputSdmxMl(OutputBase):
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             data = indicator.data.copy()
 
-            # Map column names to SDMX dimension/attribute names
-            if self.column_map is not None:
-                column_map=pd.read_csv(self.column_map)
-                for col in data.columns:
-                    if col in column_map['Text'].to_list():
-                        newcol=column_map['Value'].loc[column_map['Text']==col].iloc[0]
-                        data.rename(columns={col:newcol}, inplace=True)
-
-            # Map column values to SDMX codes within specific dimensions/attributes
-            if self.code_map is not None:
-                code_map=pd.read_csv(self.code_map)
-                for col in data.columns:
-                    for i in data.index:
-                        if data.at[i, col] in code_map['Text'].to_list():
-                            data.at[i, col]=code_map['Value'].loc[code_map['Dimension']==col].loc[code_map['Text']==data.at[i, col]].iloc[0]
+            self.apply_column_map(data)
+            self.apply_code_map(data)
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={
@@ -270,10 +255,36 @@ class OutputSdmxMl(OutputBase):
         if indicator_value is not None:
             return indicator_value
         defaults = self.get_default_values()
+        if attribute not in defaults:
+            defaults = {
+                'UNIT_MULT': '0',
+                'UNIT_MEASURE': 'NUMBER',
+                'OBS_STATUS': 'A',
+            }
         if attribute in defaults:
             return defaults[attribute]
         else:
             return ''
+
+
+    def apply_column_map(self, data):
+        if self.column_map is not None:
+            column_map=pd.read_csv(self.column_map)
+            column_dict = dict(zip(column_map['Text'], column_map['Value']))
+            data.rename(columns=column_dict, inplace=True)
+        return data
+
+
+    def apply_code_map(self, data):
+        if self.code_map is not None:
+            code_map=pd.read_csv(self.code_map)
+            code_dict = {}
+            for _, row in code_map.iterrows():
+                if row['Dimension'] not in code_dict:
+                    code_dict[row['Dimension']] = {}
+                code_dict[row['Dimension']][row['Text']] = row['Value']
+            data.replace(to_replace=code_dict, value=None, inplace=True)
+        return data
 
 
     def get_documentation_title(self):

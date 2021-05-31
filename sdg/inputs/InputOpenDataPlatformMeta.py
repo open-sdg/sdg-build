@@ -36,6 +36,9 @@ class InputOpenDataPlatformMeta(InputBase):
         for human_key in self.metadata_mapping:
             machine_key = self.metadata_mapping[human_key]
             if human_key in metadata and human_key != machine_key:
+                # If it has already been mapped, skip it.
+                if machine_key in metadata and metadata[machine_key] is not None:
+                    continue
                 metadata[machine_key] = metadata[human_key]
                 del metadata[human_key]
 
@@ -47,9 +50,26 @@ class InputOpenDataPlatformMeta(InputBase):
         for item in parsed['data']:
             meta = item.copy()
             self.apply_metadata_mapping(meta)
-            indicator_id = self.normalize_indicator_id(self.get_indicator_id(meta))
-            indicator_name = self.normalize_indicator_name(self.get_indicator_name(meta), indicator_id)
-            self.add_indicator(indicator_id, name=indicator_name, meta=meta, options=indicator_options)
+            try:
+                indicator_id = self.normalize_indicator_id(self.get_indicator_id(meta))
+                # Safety check that we got a real indicator id.
+                assert len(indicator_id.split('-')) >= 3
+                indicator_name = self.normalize_indicator_name(self.get_indicator_name(meta), indicator_id)
+                self.add_indicator(indicator_id, name=indicator_name, meta=meta, options=indicator_options)
+            except Exception as e:
+                print('Unable to parse an indicator in InputOpenDataPlatformMeta. Error below:')
+                print(e)
+
+
+    def normalize_indicator_id(self, indicator_id):
+        normalized = InputBase.normalize_indicator_id(self, indicator_id)
+        # A common issue is when an extra fourth part gets added.
+        parts = normalized.split('-')
+        if len(parts) == 4 and len(parts[3]) > 2:
+            # Assume the part is uneeded.
+            parts.pop()
+            normalized = '-'.join(parts)
+        return normalized
 
 
     def get_indicator_id(self, row):

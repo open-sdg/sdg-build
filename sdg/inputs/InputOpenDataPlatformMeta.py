@@ -47,8 +47,8 @@ class InputOpenDataPlatformMeta(InputBase):
         for item in parsed['data']:
             meta = item.copy()
             self.apply_metadata_mapping(meta)
-            indicator_id = self.normalize_indicator_id(self.get_indicator_id(item))
-            indicator_name = self.normalize_indicator_name(self.get_indicator_name(item), indicator_id)
+            indicator_id = self.normalize_indicator_id(self.get_indicator_id(meta))
+            indicator_name = self.normalize_indicator_name(self.get_indicator_name(meta), indicator_id)
             self.add_indicator(indicator_id, name=indicator_name, meta=meta, options=indicator_options)
 
 

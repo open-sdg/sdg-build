@@ -190,6 +190,17 @@ class Indicator(Loggable):
         return self.inid if self.is_standalone() else self.inid.replace('-', '.')
 
 
+    def get_slug(self):
+        """Get the dash-delimited id for this indicator (eg, for use in URLs).
+
+        Returns
+        -------
+        string
+            The indicator id, dash-delimited.
+        """
+        return self.inid
+
+
     def require_meta(self, minimum_metadata=None):
         """Ensure the metadata for this indicator has minimum necessary values.
 

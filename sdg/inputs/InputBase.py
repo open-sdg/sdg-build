@@ -3,13 +3,23 @@ import pandas as pd
 import numpy as np
 from sdg.Indicator import Indicator
 from sdg.Loggable import Loggable
+from sdg import helpers
 
 class InputBase(Loggable):
-    """Base class for sources of SDG data/metadata."""
+    """Base class for sources of SDG data/metadata.
 
-    def __init__(self, logging=None):
+    logging: None or list
+        Type of logs to print, including 'warn' and 'debug'.
+    request_params : dict or None
+        Optional dict of parameters to be passed to remote file fetches.
+        Corresponds to the options passed to a urllib.request.Request.
+        @see https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
+    """
+
+    def __init__(self, logging=None, column_map=None, code_map=None, request_params=None):
         """Constructor for InputBase."""
         Loggable.__init__(self, logging=logging)
+        self.request_params = request_params
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []
@@ -17,6 +27,8 @@ class InputBase(Loggable):
         self.merged_indicators = None
         self.previously_merged_inputs = []
         self.num_previously_merged_inputs = 0
+        self.column_map = column_map
+        self.code_map = code_map
 
 
     def execute_once(self, indicator_options):
@@ -95,27 +107,17 @@ class InputBase(Loggable):
         Dataframe
             The same dataframe with rearranged columns
         """
-        return df.replace([None, "", "nan"], np.NaN)
+        for col in df.columns:
+            for to_find in [None, "", "nan"]:
+                try:
+                    df[col].replace(to_replace={ to_find: np.NaN }, inplace=True)
+                except Exception as e:
+                    pass
+        return df
 
 
     def fetch_file(self, location):
-        """Fetch a file, either on disk, or on the Internet.
-
-        Parameters
-        ----------
-        location : String
-            Either an http address, or a path on disk
-        """
-        file = None
-        data = None
-        if location.startswith('http'):
-            file = urlopen(location)
-            data = file.read().decode('utf-8')
-        else:
-            file = open(location)
-            data = file.read()
-        file.close()
-        return data
+        return helpers.files.read_file(location, request_params=self.request_params)
 
 
     def normalize_indicator_id(self, indicator_id):
@@ -209,6 +211,9 @@ class InputBase(Loggable):
         # If empty or None, do nothing.
         if data is None or not isinstance(data, pd.DataFrame) or data.empty:
             return data
+        # Apply any mappings.
+        data = self.apply_column_map(data)
+        data = self.apply_code_map(data)
         # Perform any alterations on the data.
         for alteration in self.data_alterations:
             data = alteration(data)
@@ -304,3 +309,23 @@ class InputBase(Loggable):
         self.merged_indicators = merged_indicators
         self.previously_merged_inputs = inputs
         self.num_previously_merged_inputs = len(inputs)
+
+
+    def apply_column_map(self, data):
+        if self.column_map is not None:
+            column_map=pd.read_csv(self.column_map)
+            column_dict = dict(zip(column_map['Text'], column_map['Value']))
+            data.rename(columns=column_dict, inplace=True)
+        return data
+
+
+    def apply_code_map(self, data):
+        if self.code_map is not None:
+            code_map=pd.read_csv(self.code_map)
+            code_dict = {}
+            for _, row in code_map.iterrows():
+                if row['Dimension'] not in code_dict:
+                    code_dict[row['Dimension']] = {}
+                code_dict[row['Dimension']][row['Text']] = row['Value']
+            data.replace(to_replace=code_dict, value=None, inplace=True)
+        return data

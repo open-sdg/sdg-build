@@ -6,7 +6,7 @@ class InputExcelMeta(InputMetaFiles):
 
     def __init__(self, path_pattern='', git=True, git_data_dir='data',
                  git_data_filemask='indicator_*.csv', metadata_mapping=None,
-                 sheet_number=0, logging=None):
+                 sheet_number=0, logging=None, column_map=None, code_map=None):
         """Constructor for InputExcelMeta.
 
         Keyword arguments:
@@ -16,7 +16,8 @@ class InputExcelMeta(InputMetaFiles):
                             git_data_dir=git_data_dir,
                             git_data_filemask=git_data_filemask,
                             metadata_mapping=metadata_mapping,
-                            logging=logging)
+                            logging=logging,
+                            column_map=column_map, code_map=code_map)
         self.sheet_number = sheet_number
 
 

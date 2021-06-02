@@ -3,6 +3,7 @@
 from xml.etree import ElementTree as ET
 from io import StringIO
 from sdg.translations import TranslationInputBase
+from sdg import helpers
 
 class TranslationInputSdmx(TranslationInputBase):
     """A class for importing translations from an SDMX DSD.
@@ -21,7 +22,8 @@ class TranslationInputSdmx(TranslationInputBase):
     you will need to use the same "dimension_map" here.
     """
 
-    def __init__(self, source='', dimension_map=None, logging=None):
+    def __init__(self, source='', dimension_map=None, logging=None,
+        request_params=None):
         """Constructor for the TranslationInputSdmx class.
 
         Parameters
@@ -34,34 +36,12 @@ class TranslationInputSdmx(TranslationInputBase):
         if dimension_map is None:
             dimension_map = {}
         self.dimension_map = dimension_map
-        TranslationInputBase.__init__(self, source=source, logging=logging)
+        TranslationInputBase.__init__(self, source=source, logging=logging,
+            request_params=request_params)
 
 
     def parse_xml(self, location, strip_namespaces=True):
-        """Fetch and parse an XML file.
-
-        Parameters
-        ----------
-        location : string
-            Remote URL of the XML file or path to local file.
-        strip_namespaces : boolean
-            Whether or not to strip namespaces. This is helpful in cases where
-            different implementations may use different namespaces/prefixes.
-        """
-        xml = self.fetch_file(location)
-        it = ET.iterparse(StringIO(xml))
-        if strip_namespaces:
-            for _, el in it:
-                if '}' in el.tag:
-                    el.tag = el.tag.split('}', 1)[1]
-                for attrib in list(el.attrib.keys()):
-                    if '}' in attrib:
-                        val = el.attrib[attrib]
-                        del el.attrib[attrib]
-                        attrib = attrib.split('}', 1)[1]
-                        el.attrib[attrib] = val
-
-        return it.root
+        return helpers.sdmx.parse_xml(location, request_params=self.request_params)
 
 
     def execute(self):

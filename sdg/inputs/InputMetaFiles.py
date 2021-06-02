@@ -9,7 +9,7 @@ class InputMetaFiles(InputFiles):
 
     def __init__(self, path_pattern='', git=True, git_data_dir='data',
                  git_data_filemask='indicator_*.csv', metadata_mapping=None,
-                 logging=None):
+                 logging=None, column_map=None, code_map=None):
         """Constructor for InputMetaFiles.
 
         Keyword arguments:
@@ -23,7 +23,8 @@ class InputMetaFiles(InputFiles):
         metadata_mapping -- a dict mapping human-readable labels to machine keys
           or a path to a CSV file
         """
-        InputFiles.__init__(self, path_pattern, logging=logging)
+        InputFiles.__init__(self, path_pattern, logging=logging,
+            column_map=column_map, code_map=code_map)
         self.git = git
         self.git_data_dir = git_data_dir
         self.git_data_filemask = git_data_filemask
@@ -80,11 +81,49 @@ class InputMetaFiles(InputFiles):
 
 
     def add_git_dates(self, meta, filepath):
-        git_update = self.get_git_updates(meta, filepath)
+        git_update = self.get_git_dates(meta, filepath)
         for k in git_update.keys():
             meta[k] = git_update[k]
+        # @deprecated start
+        # For now continue to populate the deprecated link fields:
+        # * national_metadata_update_url / national_metadata_update_url_text
+        # * national_data_update_url / national_data_update_url_text
+        deprecated_fields = self.get_git_updates(meta, filepath)
+        for k in deprecated_fields.keys():
+            meta[k] = deprecated_fields[k]
+        # @deprecated end
 
 
+    def get_git_dates(self, meta, filepath):
+        updates = {}
+        updates['national_metadata_updated_date'] = self.get_git_date(filepath)
+        if 'data_filename' in meta:
+            data_filename = meta['data_filename']
+        else:
+            indicator_id = self.convert_path_to_indicator_id(filepath)
+            data_filename = self.git_data_filemask.replace('*', indicator_id)
+        src_dir = os.path.dirname(os.path.dirname(self.path_pattern))
+        data_filepath = os.path.join(src_dir, self.git_data_dir, data_filename)
+        if os.path.isfile(data_filepath):
+            updates['national_data_updated_date'] = self.get_git_date(data_filepath)
+
+        return updates
+
+
+    def get_git_date(self, filepath):
+        """Change into the working directory of the file (it might be a submodule)
+        and get the latest git history"""
+        folder = os.path.split(filepath)[0]
+
+        repo = git.Repo(folder, search_parent_directories=True)
+        # Need to translate relative to the repo root (this may be a submodule)
+        repo_dir = os.path.relpath(repo.working_dir, os.getcwd())
+        filepath = os.path.relpath(filepath, repo_dir)
+        commit = next(repo.iter_commits(paths=filepath, max_count=1))
+        return str(commit.committed_datetime.date())
+
+
+    # @deprecated start
     def get_git_updates(self, meta, filepath):
         meta_update = self.get_git_update(filepath)
         updates = {
@@ -104,8 +143,9 @@ class InputMetaFiles(InputFiles):
             updates['national_data_update_url'] = data_update['commit_url']
 
         return updates
+    # @deprecated end
 
-
+    # @deprecated start
     def get_git_update(self, filepath):
         """Change into the working directory of the file (it might be a submodule)
         and get the latest git history"""
@@ -127,6 +167,7 @@ class InputMetaFiles(InputFiles):
             'date': git_date,
             'commit_url': commit_url
         }
+    # @deprecated end
 
 
     def load_metadata_mapping(self):

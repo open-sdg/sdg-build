@@ -16,3 +16,4 @@ from .InputSdmxMeta import InputSdmxMeta
 from .InputApi import InputApi
 from .InputCkan import InputCkan
 from .InputSdmxMl_UnitedNationsApi import InputSdmxMl_UnitedNationsApi
+from .InputSdgMetadata import InputSdgMetadata

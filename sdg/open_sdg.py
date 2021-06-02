@@ -448,6 +448,8 @@ def open_sdg_input_from_dict(params, options):
         'InputExcelMeta',
         'InputYamlMeta',
         'InputSdmxMeta',
+        'InputJsonStat',
+        'InputPxWebApi',
         'InputWordMeta',
         'InputSdgMetadata',
     ]
@@ -488,6 +490,10 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputYamlMeta(**params)
     elif input_class == 'InputSdmxMeta':
         input_instance = sdg.inputs.InputSdmxMeta(**params)
+    elif input_class == 'InputJsonStat':
+        input_instance = sdg.inputs.InputJsonStat(**params)
+    elif input_class == 'InputPxWebApi':
+        input_instance = sdg.inputs.InputPxWebApi(**params)
     elif input_class == 'InputWordMeta':
         input_instance = sdg.inputs.InputWordMeta(**params)
     elif input_class == 'InputSdgMetadata':

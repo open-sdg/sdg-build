@@ -7,6 +7,7 @@ jsonschema
 requests
 humanize
 unicode-slugify
+pyjstat
 mammoth
 pyquery
 frictionless

@@ -21,9 +21,6 @@ class DataSchemaInputSdmxDsd(DataSchemaInputBase):
             dsd = self.source
         schema = {'fields': []}
         for dimension in dsd.dimensions:
-            # Skip the TIME_PERIOD dimension because it is used as the "observation dimension".
-            if dimension.id == 'TIME_PERIOD':
-                continue
             field = {
                 'name': dimension.id,
                 'title': str(dimension.concept_identity.name),

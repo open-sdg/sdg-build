@@ -133,7 +133,7 @@ class OutputGeoJson(OutputBase):
             if not self.indicator_has_geocodes(indicator):
                 continue
 
-            series_by_geocodes = self.get_series_by_geocodes(indicator)
+            series_by_geocodes = self.get_series_by_geocodes(indicator, language=language)
             geometry_data = copy.deepcopy(self.geometry_data)
 
             # Loop through the features.
@@ -170,13 +170,15 @@ class OutputGeoJson(OutputBase):
         return status
 
 
-    def get_series_by_geocodes(self, indicator):
+    def get_series_by_geocodes(self, indicator, language=None):
         """Get a dict of lists of Series objects, keyed by geocode ids.
 
         Parameters
         ----------
         indicator : Indicator
             An instance of the Indicator class.
+        language : language
+            A specified language since each language is cached
 
         Returns
         -------
@@ -184,7 +186,7 @@ class OutputGeoJson(OutputBase):
             Lists of instances of the Series class, keyed by geocode id.
         """
         series_by_geocodes = {}
-        for series in indicator.get_all_series():
+        for series in indicator.get_all_series(language=language):
             if series.has_disaggregation(self.id_column):
                 geocode = series.get_disaggregation(self.id_column)
                 geocode = self.replace_geocode(geocode)

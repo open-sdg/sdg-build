@@ -35,7 +35,7 @@ class Indicator(Loggable):
         self.set_headline()
         self.set_edges()
         self.translations = {}
-        self.serieses = None
+        self.serieses = {}
         self.data_matching_schema = {}
 
 
@@ -384,8 +384,15 @@ class Indicator(Loggable):
         return self.meta[field]
 
 
-    def get_all_series(self, use_cache=True):
+    def get_all_series(self, use_cache=True, language=None):
         """Get all of the series present in this indicator's data.
+
+        Parameters
+        ----------
+        use_cache : boolean
+            Whether to cache the results of the function.
+        language: string
+            The caching system can consider this optional language.
 
         Returns
         -------
@@ -396,8 +403,10 @@ class Indicator(Loggable):
         if self.data.empty:
             return []
         # Cache for efficiency.
-        if self.serieses is not None and use_cache:
-            return self.serieses
+        if language is None:
+            language = ''
+        if language in self.serieses and use_cache:
+            return self.serieses[language]
 
         # Assume "disaggregations" are everything except 'Year' and 'Value'.
         aggregating_columns = ['Year', 'Value']
@@ -422,19 +431,21 @@ class Indicator(Loggable):
         grouped = grouped.groupby(grouping_columns, as_index=False)[aggregating_columns].agg(lambda x: list(x))
         # Convert to a list of Series objects.
         grouped['series_objects'] = grouped.apply(row_to_series, axis=1)
-        self.serieses = grouped['series_objects'].tolist()
-        return self.serieses
+        self.serieses[language] = grouped['series_objects'].tolist()
+        return self.serieses[language]
 
 
-    def get_data_matching_schema(self, data_schema, data=None, use_cache=True):
+    def get_data_matching_schema(self, data_schema, data=None, use_cache=True, language=None):
         if data is None:
             data = self.data
         # Safety code for empty dataframes.
         if data.empty:
             return data
         # Cache for efficiency.
+        if language is None:
+            language = ''
         schema = data_schema.get_schema_for_indicator(self)
-        cache_key = str(schema.to_dict())
+        cache_key = language + str(schema.to_dict())
         if use_cache and cache_key in self.data_matching_schema:
             return self.data_matching_schema[cache_key]
 

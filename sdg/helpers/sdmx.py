@@ -130,6 +130,8 @@ def __get_series_from_indicator_id(indicator_id, dsd):
 
 
 def __get_all_series_from_indicator_id(indicator_id, dsd):
+
+    indicator_id = normalize_indicator_id(indicator_id)
     codes = []
     try:
         dimension = next(item for item in dsd.dimensions if item.id == 'SERIES')

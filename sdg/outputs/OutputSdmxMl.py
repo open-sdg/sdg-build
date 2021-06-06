@@ -46,8 +46,10 @@ class OutputSdmxMl(OutputBase):
         3. All values in the columns correspond exactly to codes in those dimensions' codelists or a code mapping is specified
 
         Notes on translation:
-        SDMX output does not need to be transated. Hence, this output will always appear in
+        SDMX data output does not need to be transated. Hence, data will always appear in
         an "sdmx" folder, and will never be translated in a language subfolder.
+        By contrast, metadata IS language-specific to metadata will appear in
+        the language folders, as with other outputs.
 
         Parameters
         ----------
@@ -78,6 +80,9 @@ class OutputSdmxMl(OutputBase):
         constrain_data : boolean
             Whether to use the DSD to remove any rows of data that are not compliant.
             Defaults to False.
+        constrain_meta : boolean
+            Whether to use the metadata schema to remove any metadata fields that are
+            not complaint. Defaults to True.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations,
             indicator_options, request_params=request_params)
@@ -104,12 +109,10 @@ class OutputSdmxMl(OutputBase):
 
     def build(self, language=None):
         """Write the SDMX output. Overrides parent."""
-        file_loader = FileSystemLoader('templates')
-        env = Environment(loader=file_loader)
-        metadata_template = env.get_template('sdmx_metadata.xml')
         status = True
         all_serieses = {}
-        all_serieses_metadata = {}
+        all_metadata_serieses = []
+        metadata_template = Template(self.get_metadata_template())
         dfd = DataflowDefinition(id="OPEN_SDG_DFD", structure=self.dsd)
         time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
         header_info = self.get_header_info()
@@ -120,8 +123,13 @@ class OutputSdmxMl(OutputBase):
         metadata_language = language
         if language is not None:
             language = None
-        else:
+        if metadata_language is None:
+            meta_folder = os.path.join(self.output_folder, 'sdmx', 'meta')
             metadata_language = 'en'
+        else:
+            meta_folder = os.path.join(self.output_folder, metadata_language, 'sdmx', 'meta')
+        if not os.path.exists(meta_folder):
+            os.makedirs(meta_folder, exist_ok=True)
 
         metadata_base_vars = header_info.copy()
         metadata_base_vars['language'] = metadata_language
@@ -186,20 +194,34 @@ class OutputSdmxMl(OutputBase):
             concept_items = [{ 'key': key, 'value': value } for key, value in concepts.items()]
             for code in series_codes:
                 metadata_series = {
-                    'set_id': uuid.uuidv4(),
+                    'set_id': uuid.uuid4(),
                     'series': code,
                     'reporting_type': 'G',
                     'ref_area': '1',
                     'concepts': concept_items,
                 }
                 metadata_serieses.append(metadata_series)
-            print(metadata_serieses)
+
+            metadata = metadata_base_vars.copy()
+            metadata['serieses'] = metadata_serieses
+            metadata_sdmx = metadata_template.render(metadata)
+            meta_path = os.path.join(meta_folder, indicator_id + '.xml')
+            with open(meta_path, 'w') as f:
+                status = status & f.write(metadata_sdmx)
+            all_metadata_serieses = all_metadata_serieses + metadata_serieses
 
         dataset = self.create_dataset(all_serieses)
         msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
         all_sdmx_path = os.path.join(self.sdmx_folder, 'all.xml')
         with open(all_sdmx_path, 'wb') as f:
             status = status & f.write(sdmx.to_xml(msg))
+
+        metadata = metadata_base_vars.copy()
+        metadata['serieses'] = all_metadata_serieses
+        metadata_sdmx = metadata_template.render(metadata)
+        meta_path = os.path.join(meta_folder, 'all.xml')
+        with open(meta_path, 'w') as f:
+            status = status & f.write(metadata_sdmx)
 
         return status
 
@@ -212,7 +234,7 @@ class OutputSdmxMl(OutputBase):
             id=info['id'],
             test=info['test'],
             prepared=info['prepared'],
-            sender=info['sender'],
+            sender=Agency(id=info['sender']),
         )
 
 

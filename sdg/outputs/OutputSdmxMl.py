@@ -36,7 +36,8 @@ class OutputSdmxMl(OutputBase):
                  indicator_options=None, dsd=None, default_values=None,
                  header_id=None, sender_id=None, structure_specific=False,
                  column_map=None, code_map=None, constrain_data=False,
-                 request_params=None, constrain_meta=True):
+                 request_params=None, constrain_meta=True,
+                 meta_ref_area=None, meta_reporting_type=None):
 
         """Constructor for OutputSdmxMl.
 
@@ -83,6 +84,12 @@ class OutputSdmxMl(OutputBase):
         constrain_meta : boolean
             Whether to use the metadata schema to remove any metadata fields that are
             not complaint. Defaults to True.
+        meta_ref_area : string
+            REF_AREA code to use in the metadata output. If omitted, will use
+            the first available in a REF_AREA data column.
+        meta_reporting_type : string
+            REPORTING_TYPE code to use in the metadata output. If omitted, will use
+            the first available in a REPORTING_TYPE data column.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations,
             indicator_options, request_params=request_params)
@@ -101,6 +108,8 @@ class OutputSdmxMl(OutputBase):
             os.makedirs(sdmx_folder, exist_ok=True)
         self.sdmx_folder = sdmx_folder
         self.default_values = {} if default_values is None else default_values
+        self.meta_ref_area = meta_ref_area
+        self.meta_reporting_type = meta_reporting_type
 
 
     def retrieve_dsd(self, dsd):
@@ -183,6 +192,18 @@ class OutputSdmxMl(OutputBase):
             all_serieses.update(serieses)
 
             # Now the metadata.
+            reporting_type = self.meta_reporting_type
+            if reporting_type is None and 'REPORTING_TYPE' in data.columns and data.length:
+                reporting_type = self.get_first_value_from_data_column(data, 'REPORTING_TYPE')
+            ref_area = self.meta_ref_area
+            if ref_area is None and 'REF_AREA' in data.columns and data.length:
+                ref_area = self.get_first_value_from_data_column(data, 'REF_AREA')
+
+            # We can only do SDMX metadata if we know the ref area and reporting type.
+            if ref_area is None or reporting_type is None:
+                print('Unable to produce SDMX metadata because of missing ref area or reporting type.')
+                continue
+
             series_codes = helpers.sdmx.get_all_series_codes_from_indicator_id(indicator_id,
                 dsd_path=self.dsd_path,
                 request_params=self.request_params,
@@ -196,8 +217,8 @@ class OutputSdmxMl(OutputBase):
                 metadata_series = {
                     'set_id': uuid.uuid4(),
                     'series': code,
-                    'reporting_type': 'G',
-                    'ref_area': '1',
+                    'reporting_type': reporting_type,
+                    'ref_area': ref_area,
                     'concepts': concept_items,
                 }
                 metadata_serieses.append(metadata_series)
@@ -256,6 +277,11 @@ class OutputSdmxMl(OutputBase):
             'prepared': time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(timestamp)),
             'sender': sender_id,
         }
+
+
+    def get_first_value_from_data_column(self, data, column):
+        index = data[column].first_valid_index()
+        return data[column].loc[index]
 
 
     def create_dataset(self, serieses):

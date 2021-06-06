@@ -193,10 +193,10 @@ class OutputSdmxMl(OutputBase):
 
             # Now the metadata.
             reporting_type = self.meta_reporting_type
-            if reporting_type is None and 'REPORTING_TYPE' in data.columns and data.length:
+            if reporting_type is None and 'REPORTING_TYPE' in data.columns and len(data) > 0:
                 reporting_type = self.get_first_value_from_data_column(data, 'REPORTING_TYPE')
             ref_area = self.meta_ref_area
-            if ref_area is None and 'REF_AREA' in data.columns and data.length:
+            if ref_area is None and 'REF_AREA' in data.columns and len(data) > 0:
                 ref_area = self.get_first_value_from_data_column(data, 'REF_AREA')
 
             # We can only do SDMX metadata if we know the ref area and reporting type.

@@ -12,4 +12,5 @@ mammoth
 pyquery
 frictionless
 csvw
+Jinja2
 git+git://github.com/dougmet/yamlmd

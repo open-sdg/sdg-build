@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 import sdmx
 import time
+import uuid
+from jinja2 import Environment, FileSystemLoader
 from slugify import slugify
 from sdmx.model import (
     SeriesKey,
@@ -34,7 +36,7 @@ class OutputSdmxMl(OutputBase):
                  indicator_options=None, dsd=None, default_values=None,
                  header_id=None, sender_id=None, structure_specific=False,
                  column_map=None, code_map=None, constrain_data=False,
-                 request_params=None):
+                 request_params=None, constrain_meta=True):
 
         """Constructor for OutputSdmxMl.
 
@@ -83,6 +85,8 @@ class OutputSdmxMl(OutputBase):
         self.sender_id = sender_id
         self.structure_specific = structure_specific
         self.constrain_data = constrain_data
+        self.constrain_meta = constrain_meta
+        self.dsd_path = dsd
         self.retrieve_dsd(dsd)
         self.data_schema = DataSchemaInputSdmxDsd(source=self.dsd)
         self.column_map = column_map
@@ -100,15 +104,27 @@ class OutputSdmxMl(OutputBase):
 
     def build(self, language=None):
         """Write the SDMX output. Overrides parent."""
+        file_loader = FileSystemLoader('templates')
+        env = Environment(loader=file_loader)
+        metadata_template = env.get_template('sdmx_metadata.xml')
         status = True
         all_serieses = {}
+        all_serieses_metadata = {}
         dfd = DataflowDefinition(id="OPEN_SDG_DFD", structure=self.dsd)
         time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
-        header = self.create_header()
+        header_info = self.get_header_info()
+        header = self.create_header(header_info)
 
-        # SDMX output is language-agnostic. Only the DSD contains language info.
+        # SDMX data output is language-agnostic. Only the DSD contains language info.
+        # But for metadata, language is important.
+        metadata_language = language
         if language is not None:
             language = None
+        else:
+            metadata_language = 'en'
+
+        metadata_base_vars = header_info.copy()
+        metadata_base_vars['language'] = metadata_language
 
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
@@ -158,6 +174,27 @@ class OutputSdmxMl(OutputBase):
                 status = status & f.write(sdmx.to_xml(msg))
             all_serieses.update(serieses)
 
+            # Now the metadata.
+            series_codes = helpers.sdmx.get_all_series_codes_from_indicator_id(indicator_id,
+                dsd_path=self.dsd_path,
+                request_params=self.request_params,
+            )
+            concepts = indicator.meta
+            if self.constrain_meta:
+                concepts = indicator.get_meta_matching_schema(self.schema)
+            metadata_serieses = []
+            concept_items = [{ 'key': key, 'value': value } for key, value in concepts.items()]
+            for code in series_codes:
+                metadata_series = {
+                    'set_id': uuid.uuidv4(),
+                    'series': code,
+                    'reporting_type': 'G',
+                    'ref_area': '1',
+                    'concepts': concept_items,
+                }
+                metadata_serieses.append(metadata_series)
+            print(metadata_serieses)
+
         dataset = self.create_dataset(all_serieses)
         msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
         all_sdmx_path = os.path.join(self.sdmx_folder, 'all.xml')
@@ -167,7 +204,19 @@ class OutputSdmxMl(OutputBase):
         return status
 
 
-    def create_header(self):
+    def create_header(self, info=None):
+        if info is None:
+            info = self.get_header_info()
+
+        return Header(
+            id=info['id'],
+            test=info['test'],
+            prepared=info['prepared'],
+            sender=info['sender'],
+        )
+
+
+    def get_header_info(self):
         timestamp = time.time()
         header_id = self.header_id
         if header_id is None:
@@ -179,13 +228,12 @@ class OutputSdmxMl(OutputBase):
             sender_id = 'open-sdg_sdg-build@' + slugify(sdg.__version__)
         else:
             sender_id = slugify(sender_id)
-
-        return Header(
-            id=header_id,
-            test=True,
-            prepared=time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(timestamp)),
-            sender=Agency(id=sender_id),
-        )
+        return {
+            'id': header_id,
+            'test': True,
+            'prepared': time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(timestamp)),
+            'sender': sender_id,
+        }
 
 
     def create_dataset(self, serieses):

@@ -470,3 +470,17 @@ class Indicator(Loggable):
 
         self.data_matching_schema[cache_key] = df
         return df
+
+
+    def get_meta_matching_schema(self, schema, meta=None):
+        if meta is None:
+            meta = self.meta
+        # Safety code for empty dataframes.
+        if not self.has_meta():
+            return meta
+        matches = {}
+        for key in meta:
+            schema_field = schema.get(key)
+            if schema_field is not None:
+                matches[key] = meta[key]
+        return matches

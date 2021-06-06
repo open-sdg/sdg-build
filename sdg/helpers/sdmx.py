@@ -129,6 +129,21 @@ def __get_series_from_indicator_id(indicator_id, dsd):
         return None
 
 
+def __get_all_series_from_indicator_id(indicator_id, dsd):
+    codes = []
+    try:
+        dimension = next(item for item in dsd.dimensions if item.id == 'SERIES')
+        for code in dimension.local_representation.enumerated:
+            matches = __get_annotation_text(code, 'Indicator')
+            for annotation_text in matches:
+                candidate = normalize_indicator_id(annotation_text)
+                if candidate == indicator_id:
+                    codes.append(code)
+    except:
+        pass
+    return codes
+
+
 def __get_series_by_annotation_text(annotation_title, annotation_text, dsd):
     try:
         dimension = next(item for item in dsd.dimensions if item.id == 'SERIES')
@@ -141,6 +156,20 @@ def __get_series_by_annotation_text(annotation_title, annotation_text, dsd):
         return None
 
 
+def __get_all_series_by_annotation_text(annotation_title, annotation_text, dsd):
+    codes = []
+    try:
+        dimension = next(item for item in dsd.dimensions if item.id == 'SERIES')
+        for code in dimension.local_representation.enumerated:
+            matches = __get_annotation_text(code, annotation_title)
+            for candidate in matches:
+                if candidate == annotation_text:
+                    codes.append(code)
+    except:
+        pass
+    return codes
+
+
 def get_series_code_from_indicator_id(indicator_id, dsd_path=None, request_params=None):
     """Convert an indicator ID (eg, "1.1.1") into a series code."""
     dsd = get_dsd(dsd_path, request_params=request_params)
@@ -149,6 +178,16 @@ def get_series_code_from_indicator_id(indicator_id, dsd_path=None, request_param
         return series.id
     except:
         return None
+
+
+def get_all_series_codes_from_indicator_id(indicator_id, dsd_path=None, request_params=None):
+    """Convert an indicator ID (eg, "1.1.1") into a multiple series codes."""
+    dsd = get_dsd(dsd_path, request_params=request_params)
+    serieses = __get_all_series_from_indicator_id(indicator_id, dsd)
+    try:
+        return [series.id for series in serieses]
+    except:
+        return []
 
 
 def get_series_code_from_indicator_code(indicator_code, dsd_path=None, request_params=None):
@@ -161,6 +200,16 @@ def get_series_code_from_indicator_code(indicator_code, dsd_path=None, request_p
         return None
 
 
+def get_all_series_codes_from_indicator_code(indicator_code, dsd_path=None, request_params=None):
+    """Convert an indicator code (eg, "C010101") into a multiple series codes."""
+    dsd = get_dsd(dsd_path, request_params=request_params)
+    serieses = __get_all_series_by_annotation_text('IndicatorCode', indicator_code, dsd)
+    try:
+        return [series.id for series in serieses]
+    except:
+        return []
+
+
 def get_series_code_from_indicator_title(indicator_title, dsd_path=None, request_params=None):
     """Convert an indicator title (eg, "Proportion of the...") into a series code."""
     dsd = get_dsd(dsd_path, request_params=request_params)
@@ -169,6 +218,16 @@ def get_series_code_from_indicator_title(indicator_title, dsd_path=None, request
         return series.id
     except:
         return None
+
+
+def get_all_series_codes_from_indicator_title(indicator_title, dsd_path=None, request_params=None):
+    """Convert an indicator title (eg, "Proportion of the...") into a multiple series codes."""
+    dsd = get_dsd(dsd_path, request_params=request_params)
+    serieses = __get_all_series_by_annotation_text('IndicatorTitle', indicator_title, dsd)
+    try:
+        return [series.id for series in serieses]
+    except:
+        return []
 
 
 def get_unit_code_from_series_code(series_code, dsd_path=None, request_params=None, fallback='NUMBER'):

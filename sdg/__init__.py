@@ -17,6 +17,7 @@ from . import schemas
 from . import data_schemas
 from . import translations
 from . import helpers
+from . import templates
 from .DisaggregationReportService import DisaggregationReportService
 from .DisaggregationStatusService import DisaggregationStatusService
 from .OutputDocumentationService import OutputDocumentationService

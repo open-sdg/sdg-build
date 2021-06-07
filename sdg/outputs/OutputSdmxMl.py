@@ -404,30 +404,21 @@ class OutputSdmxMl(OutputBase):
 
         indicator_ids = self.get_documentation_indicator_ids()
 
-        endpoint = 'sdmx/{indicator_id}.xml'
+        data_endpoint = 'sdmx/{indicator_id}.xml'
+        meta_endpoint = 'sdmx/meta/{indicator_id}.xml'
         output = '<p>' + self.get_documentation_description() + ' Examples are below:<p>'
 
         output += '<ul>'
-        path = endpoint.format(indicator_id='all')
-        output += '<li><a href="' + baseurl + path + '">' + path + '</a></li>'
+        data_path = data_endpoint.format(indicator_id='all')
+        meta_path = meta_endpoint.format(indicator_id='all')
+        output += '<li><a href="' + baseurl + data_path + '">' + data_path + ' (data)</a></li>'
+        output += '<li><a href="' + baseurl + meta_path + '">' + meta_path + ' (metadata)</a></li>'
         for indicator_id in indicator_ids:
-            path = endpoint.format(indicator_id=indicator_id)
-            output += '<li><a href="' + baseurl + path + '">' + path + '</a></li>'
+            data_path = data_endpoint.format(indicator_id=indicator_id)
+            meta_path = meta_endpoint.format(indicator_id=indicator_id)
+            output += '<li><a href="' + baseurl + data_path + '">' + data_path + ' (data)</a></li>'
+            output += '<li><a href="' + baseurl + meta_path + '">' + meta_path + ' (metadata)</a></li>'
         output += '<li>etc...</li>'
-        output += '</ul>'
-
-        if languages is None:
-            languages = ['']
-
-        endpoint = '{language}/sdmx/meta/{indicator_id}.xml'
-        output += '<ul>'
-        for language in languages:
-            path = endpoint.format(language=language, indicator_id='all')
-            output += '<li><a href="' + baseurl + path + '">' + path + '</a></li>'
-            for indicator_id in indicator_ids:
-                path = endpoint.format(language=language, indicator_id=indicator_id)
-                output += '<li><a href="' + baseurl + path + '">' + path + '</a></li>'
-            output += '<li>etc...</li>'
         output += '</ul>'
 
         return output
@@ -438,7 +429,10 @@ class OutputSdmxMl(OutputBase):
             "This output has an SDMX file for each indicator's data, "
             "plus one SDMX file with all indicator data. This data uses "
             "numbers and codes only, so is not specific to any language."
-            "The metadata is output separately in language folders."
+            "The metadata is output in a 'meta' subfolder' and similarly "
+            "has one per indicator plus an 'all' file. Translations of "
+            "the metadata are included in each file using the 'lang' "
+            "attribute."
         )
         return description
 

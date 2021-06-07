@@ -158,9 +158,9 @@ class OutputSdmxMl(OutputBase):
             })
 
             if self.constrain_data:
-                before = len(data)
+                before = data.size
                 data = indicator.get_data_matching_schema(self.data_schema, data=data)
-                after = len(data)
+                after = data.size
                 message = '{indicator_id} - Removed {difference} rows while constraining data (out of {total}).'
                 difference = str(before - after)
                 self.warn(message, indicator_id=indicator_id, difference=difference, total=before)

@@ -36,7 +36,7 @@ class OutputSdmxMl(OutputBase):
                  indicator_options=None, dsd=None, default_values=None,
                  header_id=None, sender_id=None, structure_specific=False,
                  column_map=None, code_map=None, constrain_data=False,
-                 request_params=None, constrain_meta=True,
+                 request_params=None, constrain_meta=True, logging=None,
                  meta_ref_area=None, meta_reporting_type=None):
 
         """Constructor for OutputSdmxMl.
@@ -92,7 +92,7 @@ class OutputSdmxMl(OutputBase):
             the first available in a REPORTING_TYPE data column.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations,
-            indicator_options, request_params=request_params)
+            indicator_options, request_params=request_params, logging=logging)
         self.header_id = header_id
         self.sender_id = sender_id
         self.structure_specific = structure_specific
@@ -158,7 +158,12 @@ class OutputSdmxMl(OutputBase):
             })
 
             if self.constrain_data:
+                before = len(data)
                 data = indicator.get_data_matching_schema(self.data_schema, data=data)
+                after = len(data)
+                message = '{indicator_id} - Removed {difference} rows while constraining data (out of {total}).'
+                difference = str(before - after)
+                self.warn(message, indicator_id=indicator_id, difference=difference, total=before)
 
             data = data.replace(np.nan, '', regex=True)
             if not data.empty:

@@ -6,12 +6,9 @@ from sdg.Loggable import Loggable
 from sdg import helpers
 
 class InputBase(Loggable):
-    """Base class for sources of SDG data/metadata."""
+    """Base class for sources of SDG data/metadata.
 
-    def __init__(self, logging=None, column_map=None, code_map=None, request_params=None,
-                 meta_suffix=None):
-        """Constructor for InputBase.
-        logging : list
+    logging : list
             List of types of log message to output. Values can include 'debug' or 'warn'.
         column_map: string
             Remote URL of CSV column mapping or path to local CSV column mapping file
@@ -26,7 +23,11 @@ class InputBase(Loggable):
             Optional dict of parameters to be passed to remote file fetches.
             Corresponds to the options passed to a urllib.request.Request.
             @see https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
-        """
+    """
+
+    def __init__(self, logging=None, column_map=None, code_map=None, request_params=None,
+                 meta_suffix=None):
+        """Constructor for InputBase."""
         Loggable.__init__(self, logging=logging)
         self.request_params = request_params
         self.indicators = {}

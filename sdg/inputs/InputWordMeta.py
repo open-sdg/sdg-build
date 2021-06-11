@@ -16,9 +16,9 @@ class InputWordMeta(InputMetaFiles):
             html = result.value
 
             if len(result.messages) > 0:
-                self.warn('Messages while reading ' + filepath)
+                self.debug('Messages while reading ' + filepath)
                 for message in result.messages:
-                    self.warn(str(message))
+                    self.debug(str(message))
             d = pq('<body>' + html + '</body>')
             self.clean_html(d)
 

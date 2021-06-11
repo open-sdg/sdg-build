@@ -20,7 +20,10 @@ class Loggable:
 
     def log(self, message, **kwargs):
         kwargs['class_name'] = type(self).__name__
-        message = message.format(**kwargs)
+        try:
+            message = message.format(**kwargs)
+        except:
+            pass
         print(Loggable.get_timestamp() + ' - ' + message)
 
 

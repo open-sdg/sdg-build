@@ -8,21 +8,19 @@ from sdg import helpers
 class InputBase(Loggable):
     """Base class for sources of SDG data/metadata.
 
-    logging : list
-            List of types of log message to output. Values can include 'debug' or 'warn'.
-        column_map: string
-            Remote URL of CSV column mapping or path to local CSV column mapping file
-        code_map: string
-            Remote URL of CSV code mapping or path to local CSV code mapping file
-        meta_suffix: string
-            String to add to each metadata key. Intended usage is to allow identical
-            sets of metadata - one for global and one for national.
-        logging: None or list
-            Type of logs to print, including 'warn' and 'debug'.
-        request_params : dict or None
-            Optional dict of parameters to be passed to remote file fetches.
-            Corresponds to the options passed to a urllib.request.Request.
-            @see https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
+    logging : None or list
+        Type of logs to print, including 'warn' and 'debug'.
+    request_params: dict or None
+        Optional dict of parameters to be passed to remote file fetches.
+        Corresponds to the options passed to a urllib.request.Request.
+        @see https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
+    column_map: string
+        Remote URL of CSV column mapping or path to local CSV column mapping file
+    code_map: string
+        Remote URL of CSV code mapping or path to local CSV code mapping file
+    meta_suffix: string
+        String to add to each metadata key. Intended usage is to allow identical
+        sets of metadata - one for global and one for national.
     """
 
     def __init__(self, logging=None, column_map=None, code_map=None, request_params=None,

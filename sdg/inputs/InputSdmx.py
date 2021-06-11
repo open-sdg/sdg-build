@@ -69,8 +69,7 @@ class InputSdmx(InputBase):
             An xpath query to find the indicator name within each Series code
         """
         InputBase.__init__(self, logging=logging, column_map=column_map,
-                           code_map=code_map, meta_suffix=meta_suffix,
-                           request_params=request_params)
+            code_map=code_map, request_params=request_params, meta_suffix=meta_suffix)
         if drop_dimensions is None:
             drop_dimensions = []
         if dimension_map is None:

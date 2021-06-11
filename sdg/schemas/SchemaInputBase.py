@@ -13,7 +13,7 @@ class SchemaInputBase(Loggable):
 
 
     def __init__(self, schema_path='', logging=None, scope=None,
-                 request_params=None, meta_suffix=None):
+        request_params=None, meta_suffix=None):
         """Create a new SchemaBase object
 
         Parameters

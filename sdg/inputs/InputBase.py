@@ -3,11 +3,13 @@ import pandas as pd
 import numpy as np
 from sdg.Indicator import Indicator
 from sdg.Loggable import Loggable
+from sdg import helpers
 
 class InputBase(Loggable):
     """Base class for sources of SDG data/metadata."""
 
-    def __init__(self, logging=None, column_map=None, code_map=None, meta_suffix=None):
+    def __init__(self, logging=None, column_map=None, code_map=None, request_params=None,
+                 meta_suffix=None):
         """Constructor for InputBase.
         logging : list
             List of types of log message to output. Values can include 'debug' or 'warn'.
@@ -18,8 +20,15 @@ class InputBase(Loggable):
         meta_suffix: string
             String to add to each metadata key. Intended usage is to allow identical
             sets of metadata - one for global and one for national.
+        logging: None or list
+            Type of logs to print, including 'warn' and 'debug'.
+        request_params : dict or None
+            Optional dict of parameters to be passed to remote file fetches.
+            Corresponds to the options passed to a urllib.request.Request.
+            @see https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
         """
         Loggable.__init__(self, logging=logging)
+        self.request_params = request_params
         self.indicators = {}
         self.data_alterations = []
         self.meta_alterations = []
@@ -108,27 +117,17 @@ class InputBase(Loggable):
         Dataframe
             The same dataframe with rearranged columns
         """
-        return df.replace([None, "", "nan"], np.NaN)
+        for col in df.columns:
+            for to_find in [None, "", "nan"]:
+                try:
+                    df[col].replace(to_replace={ to_find: np.NaN }, inplace=True)
+                except Exception as e:
+                    pass
+        return df
 
 
     def fetch_file(self, location):
-        """Fetch a file, either on disk, or on the Internet.
-
-        Parameters
-        ----------
-        location : String
-            Either an http address, or a path on disk
-        """
-        file = None
-        data = None
-        if location.startswith('http'):
-            file = urlopen(location)
-            data = file.read().decode('utf-8')
-        else:
-            file = open(location)
-            data = file.read()
-        file.close()
-        return data
+        return helpers.files.read_file(location, request_params=self.request_params)
 
 
     def normalize_indicator_id(self, indicator_id):
@@ -330,26 +329,18 @@ class InputBase(Loggable):
     def apply_column_map(self, data):
         if self.column_map is not None:
             column_map=pd.read_csv(self.column_map)
-            for col in data.columns:
-                if col in column_map['Text'].to_list():
-                    try:
-                        newcol=column_map['Value'].loc[column_map['Text']==col].iloc[0]
-                        data.rename(columns={col:newcol}, inplace=True)
-                    except Exception as e:
-                        self.warn('Error when mapping data column: ' + col)
-                        print(e)
+            column_dict = dict(zip(column_map['Text'], column_map['Value']))
+            data.rename(columns=column_dict, inplace=True)
         return data
 
 
     def apply_code_map(self, data):
         if self.code_map is not None:
             code_map=pd.read_csv(self.code_map)
-            for col in data.columns:
-                for i in data.index:
-                    try:
-                        if data.at[i, col] in code_map['Text'].to_list():
-                            data.at[i, col]=code_map['Value'].loc[code_map['Dimension']==col].loc[code_map['Text']==data.at[i, col]].iloc[0]
-                    except Exception as e:
-                        self.warn('Error when mapping codes for column ' + col)
-                        print(e)
+            code_dict = {}
+            for _, row in code_map.iterrows():
+                if row['Dimension'] not in code_dict:
+                    code_dict[row['Dimension']] = {}
+                code_dict[row['Dimension']][row['Text']] = row['Value']
+            data.replace(to_replace=code_dict, value=None, inplace=True)
         return data

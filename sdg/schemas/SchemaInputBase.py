@@ -12,7 +12,8 @@ class SchemaInputBase(Loggable):
     This class assumes imported schema (self.schema) are valid JSON Schema."""
 
 
-    def __init__(self, schema_path='', logging=None, scope=None, meta_suffix=None):
+    def __init__(self, schema_path='', logging=None, scope=None,
+                 request_params=None, meta_suffix=None):
         """Create a new SchemaBase object
 
         Parameters
@@ -24,12 +25,17 @@ class SchemaInputBase(Loggable):
         meta_suffix : string
             A suffix to add to each metadata key. Useful when using the same
             schema for both global and national metadata, for example.
+        request_params : dict or None
+            Optional dict of parameters to be passed to remote file fetches.
+            Corresponds to the options passed to a urllib.request.Request.
+            @see https://docs.python.org/3/library/urllib.request.html#urllib.request.Request
         """
 
         Loggable.__init__(self, logging=logging)
         self.schema_path = schema_path
         self.scope = scope
         self.meta_suffix = meta_suffix
+        self.request_params = request_params
         self.field_order = []
         self.schema = None
         self.load_schema()

@@ -21,13 +21,17 @@ class DataSchemaInputSdmxDsd(DataSchemaInputBase):
             dsd = self.source
         schema = {'fields': []}
         for dimension in dsd.dimensions:
-            # Skip the TIME_PERIOD dimension because it is used as the "observation dimension".
+            # Special treatment of the TIME_PERIOD dimension because it is used as the "observation dimension".
             if dimension.id == 'TIME_PERIOD':
-                continue
-            field = {
-                'name': dimension.id,
-                'title': str(dimension.concept_identity.name),
-            }
+                field = {
+                    'name': 'TIME_PERIOD',
+                    'title': 'Time period',
+                }
+            else:
+                field = {
+                    'name': dimension.id,
+                    'title': str(dimension.concept_identity.name),
+                }
             if dimension.local_representation is not None and dimension.local_representation.enumerated is not None:
                 field['constraints'] = {
                     'enum': [code.id for code in dimension.local_representation.enumerated]

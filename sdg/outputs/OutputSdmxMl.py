@@ -23,8 +23,9 @@ from sdmx.message import (
     DataMessage,
     Header
 )
-from urllib.request import urlretrieve
 from sdg.outputs import OutputBase
+from sdg.schemas import SchemaInputBase
+from sdg.schemas import SchemaInputSdmxMsd
 from sdg import helpers
 from sdg.data_schemas import DataSchemaInputSdmxDsd
 
@@ -37,7 +38,7 @@ class OutputSdmxMl(OutputBase):
                  header_id=None, sender_id=None, structure_specific=False,
                  column_map=None, code_map=None, constrain_data=False,
                  request_params=None, constrain_meta=True, logging=None,
-                 meta_ref_area=None, meta_reporting_type=None):
+                 meta_ref_area=None, meta_reporting_type=None, msd=None):
 
         """Constructor for OutputSdmxMl.
 
@@ -61,6 +62,9 @@ class OutputSdmxMl(OutputBase):
         dsd : string
             Remote URL of the SDMX DSD (data structure definition) or path to
             local file.
+        msd : string
+            Remote URL of the SDMX MSD (metadata structure definition) or path to
+            local file. If omitted, the global MSD will be assumed.
         default_values : dict
             Since SDMX output is required to have a value for every dimension/attribute
             you may need to specify defaults here. If not specified here, defaults for
@@ -82,7 +86,7 @@ class OutputSdmxMl(OutputBase):
             Whether to use the DSD to remove any rows of data that are not compliant.
             Defaults to False.
         constrain_meta : boolean
-            Whether to use the metadata schema to remove any metadata fields that are
+            Whether to use the MSD to remove any metadata fields that are
             not complaint. Defaults to True.
         meta_ref_area : string
             REF_AREA code to use in the metadata output. If omitted, will use
@@ -100,6 +104,8 @@ class OutputSdmxMl(OutputBase):
         self.constrain_meta = constrain_meta
         self.dsd_path = dsd
         self.retrieve_dsd(dsd)
+        self.msd_path = msd
+        self.retrieve_msd(msd)
         self.data_schema = DataSchemaInputSdmxDsd(source=self.dsd)
         self.column_map = column_map
         self.code_map = code_map
@@ -120,6 +126,13 @@ class OutputSdmxMl(OutputBase):
 
     def retrieve_dsd(self, dsd):
         self.dsd = helpers.sdmx.get_dsd(dsd, request_params=self.request_params)
+
+
+    def retrieve_msd(self, msd):
+        if msd is None:
+            self.msd = SchemaInputTemporaryMsd(logging=self.logging)
+        else:
+            self.msd = SchemaInputSdmxMsd(schema_path=msd, logging=self.logging)
 
 
     def build(self, language=None):
@@ -195,8 +208,8 @@ class OutputSdmxMl(OutputBase):
                 all_serieses.update(serieses)
 
             concepts = indicator.meta
-            if self.constrain_meta:
-                concepts = indicator.get_meta_matching_schema(self.schema)
+            if self.constrain_meta and self.msd is not None:
+                concepts = indicator.get_meta_matching_schema(self.msd)
 
             reporting_type = self.meta_reporting_type
             if reporting_type is None and 'REPORTING_TYPE' in data.columns and len(data) > 0:
@@ -501,3 +514,239 @@ class OutputSdmxMl(OutputBase):
   {% endfor %}
 </mes:GenericMetadata>
         """
+
+class SchemaInputTemporaryMsd(SchemaInputBase):
+    """Temporary hardcoding of the MSD since it is not published yet."""
+    def load_schema(self):
+        schema = {
+            "type": "object",
+            "properties": {}
+        }
+
+        concepts = [
+            {
+                "id": "SDG_INDICATOR_INFO",
+                "name": "0. Indicator information",
+                "section": "SDG_INDICATOR_INFO"
+            },
+            {
+                "id": "SDG_GOAL",
+                "name": "0.a. Goal",
+                "section": "SDG_INDICATOR_INFO"
+            },
+            {
+                "id": "SDG_TARGET",
+                "name": "0.b. Target",
+                "section": "SDG_INDICATOR_INFO"
+            },
+            {
+                "id": "SDG_INDICATOR",
+                "name": "0.c. Indicator",
+                "section": "SDG_INDICATOR_INFO"
+            },
+            {
+                "id": "SDG_SERIES_DESCR",
+                "name": "0.d. Series",
+                "section": "SDG_INDICATOR_INFO"
+            },
+            {
+                "id": "META_LAST_UPDATE",
+                "name": "0.e. Metadata update",
+                "section": "SDG_INDICATOR_INFO"
+            },
+            {
+                "id": "SDG_RELATED_INDICATORS",
+                "name": "0.f. Related indicators",
+                "section": "SDG_INDICATOR_INFO"
+            },
+            {
+                "id": "SDG_CUSTODIAN_AGENCIES",
+                "name": "0.g. International organisations(s) responsible for global monitoring",
+                "section": "SDG_INDICATOR_INFO"
+            },
+            {
+                "id": "CONTACT",
+                "name": "1. Data reporter",
+                "section": "CONTACT"
+            },
+            {
+                "id": "CONTACT_ORGANISATION",
+                "name": "1.a. Organisation",
+                "section": "CONTACT"
+            },
+            {
+                "id": "CONTACT_NAME",
+                "name": "1.b. Contact person(s)",
+                "section": "CONTACT"
+            },
+            {
+                "id": "ORGANISATION_UNIT",
+                "name": "1.c. Contact organisation unit",
+                "section": "CONTACT"
+            },
+            {
+                "id": "CONTACT_FUNCT",
+                "name": "1.d. Contact person function",
+                "section": "CONTACT"
+            },
+            {
+                "id": "CONTACT_PHONE",
+                "name": "1.e. Contact phone",
+                "section": "CONTACT"
+            },
+            {
+                "id": "CONTACT_MAIL",
+                "name": "1.f. Contact mail",
+                "section": "CONTACT"
+            },
+            {
+                "id": "CONTACT_EMAIL",
+                "name": "1.g. Contact email",
+                "section": "CONTACT"
+            },
+            {
+                "id": "IND_DEF_CON_CLASS",
+                "name": "2. Definition, concepts, and classifications",
+                "section": "IND_DEF_CON_CLASS"
+            },
+            {
+                "id": "STAT_CONC_DEF",
+                "name": "2.a. Definition and concepts",
+                "section": "IND_DEF_CON_CLASS"
+            },
+            {
+                "id": "UNIT_MEASURE",
+                "name": "2.b. Unit of measure",
+                "section": "IND_DEF_CON_CLASS"
+            },
+            {
+                "id": "CLASS_SYSTEM",
+                "name": "2.c. Classifications",
+                "section": "IND_DEF_CON_CLASS"
+            },
+            {
+                "id": "SRC_TYPE_COLL_METHOD",
+                "name": "3. Data source type and collection method",
+                "section": "SRC_TYPE_COLL_METHOD"
+            },
+            {
+                "id": "SOURCE_TYPE",
+                "name": "3.a. Data sources",
+                "section": "SRC_TYPE_COLL_METHOD"
+            },
+            {
+                "id": "COLL_METHOD",
+                "name": "3.b. Data collection method",
+                "section": "SRC_TYPE_COLL_METHOD"
+            },
+            {
+                "id": "FREQ_COLL",
+                "name": "3.c. Data collection calendar",
+                "section": "SRC_TYPE_COLL_METHOD"
+            },
+            {
+                "id": "REL_CAL_POLICY",
+                "name": "3.d. Data release calendar",
+                "section": "SRC_TYPE_COLL_METHOD"
+            },
+            {
+                "id": "DATA_SOURCE",
+                "name": "3.e. Data providers",
+                "section": "SRC_TYPE_COLL_METHOD"
+            },
+            {
+                "id": "COMPILING_ORG",
+                "name": "3.f. Data compilers",
+                "section": "SRC_TYPE_COLL_METHOD"
+            },
+            {
+                "id": "INST_MANDATE",
+                "name": "3.g. Institutional mandate",
+                "section": "SRC_TYPE_COLL_METHOD"
+            },
+            {
+                "id": "OTHER_METHOD",
+                "name": "4. Other methodological considerations",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "RATIONALE",
+                "name": "4.a. Rationale",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "REC_USE_LIM",
+                "name": "4.b. Comment and limitations",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "DATA_COMP",
+                "name": "4.c. Method of computation",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "DATA_VALIDATION",
+                "name": "4.d. Validation",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "ADJUSTMENT",
+                "name": "4.e. Adjustments",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "IMPUTATION",
+                "name": "4.f. Treatment of missing values (i) at country level and (ii) at regional level",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "REG_AGG",
+                "name": "4.g. Regional aggregations",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "DOC_METHOD",
+                "name": "4.h. Methods and guidance available to countries for the compilation of the data at the national level",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "QUALITY_MGMNT",
+                "name": "4.i. Quality management",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "QUALITY_ASSURE",
+                "name": "4.j. Quality assurance",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "QUALITY_ASSMNT",
+                "name": "4.k. Quality assessment",
+                "section": "OTHER_METHOD"
+            },
+            {
+                "id": "COVERAGE",
+                "name": "5. Data availability and disaggregation",
+                "section": "COVERAGE"
+            },
+            {
+                "id": "COMPARABILITY",
+                "name": "6. Comparability/deviation from international standards",
+                "section": "COMPARABILITY"
+            },
+            {
+                "id": "OTHER_DOC",
+                "name": "7. References and Documentation",
+                "section": "OTHER_DOC"
+            }
+        ]
+        for concept in concepts:
+            self.add_item_to_field_order(concept['id'])
+            jsonschema_field = {
+                'type': ['string', 'null'],
+                'title': concept['name'],
+                'translation_key': concept['section'] + '.' + concept['id'],
+            }
+            schema['properties'][concept['id']] = jsonschema_field
+
+        self.schema = schema

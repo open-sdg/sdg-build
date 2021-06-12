@@ -369,9 +369,13 @@ class OutputDocumentationService(Loggable):
                     box-shadow: 0 2px 0 #002d18;
                     text-decoration: none;
                 }}
+                .btn-primary:visited {{
+                    color: #fff;
+                }}
                 .btn-primary:hover {{
                     background-color: #005a30;
                     text-decoration: none;
+                    border: 2px solid transparent;
                 }}
                 .btn-primary:focus:not(:active):not(:hover) {{
                     border-color: #fd0;

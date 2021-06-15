@@ -35,6 +35,7 @@ class OutputBase(Loggable):
         if translations is None:
             translations = []
         self.indicator_options = IndicatorOptions() if indicator_options is None else indicator_options
+        self.all_languages = []
 
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
@@ -74,6 +75,9 @@ class OutputBase(Loggable):
             # Translate each indicator.
             for inid in self.indicators:
                 self.indicators[inid].translate(language, self.translation_helper)
+            # Track our languages for use later.
+            if language not in self.all_languages:
+                self.all_languages.append(language)
 
         # Now perform the build.
         status = self.build(language)
@@ -148,8 +152,8 @@ class OutputBase(Loggable):
 
     def execute_per_language(self, languages):
         """This helper triggers calls to execute() for each language."""
-        # Make sure we keep a copy of the originals before doing any translations.
         status = True
+        self.all_languages = languages
         for language in languages:
             status = status & self.execute(language)
 

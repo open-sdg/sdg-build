@@ -45,5 +45,5 @@ class SchemaInputMultiple(SchemaInputBase):
         if must_exist and value is None:
             raise ValueError(field + " doesn't exist in schema")
         if value is None:
-            print(field)
+            pass
         return value

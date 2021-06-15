@@ -15,7 +15,8 @@ class OutputDataPackage(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
         indicator_options=None, data_schema=None, package_properties=None,
-        resource_properties=None, field_properties=None, sorting='alphabetical'):
+        resource_properties=None, field_properties=None, sorting='alphabetical',
+        logging=None):
         """Constructor for OutputDataPackage.
 
         Parameters
@@ -45,6 +46,7 @@ class OutputDataPackage(OutputBase):
             output_folder=output_folder,
             translations=translations,
             indicator_options=indicator_options,
+            logging=logging
         )
         self.top_level_package = None
         self.data_schema = data_schema

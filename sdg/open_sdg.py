@@ -96,7 +96,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     if indicator_options is None:
         indicator_options = open_sdg_indicator_options_defaults()
     if logging is None:
-        logging = ['warnings']
+        logging = ['warn']
 
     status = True
 
@@ -147,8 +147,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     outputs = open_sdg_prep(options)
 
     for output in outputs:
-        if options['languages'] and output_is_translatable(output):
-            # If languages were provide, perform a translated build.
+        if options['languages']:
+            # If languages were provided, perform a translated build.
             status = status & output.execute_per_language(options['languages'])
             # Also provide an untranslated build.
             status = status & output.execute('untranslated')
@@ -357,6 +357,7 @@ def open_sdg_prep(options):
         translations=options['translations'],
         indicator_options=options['indicator_options'],
         data_schema=data_schema,
+        logging=options['logging'],
         **datapackage_params,
     ))
 
@@ -370,6 +371,7 @@ def open_sdg_prep(options):
             translations=options['translations'],
             indicator_options=options['indicator_options'],
             data_schema=data_schema,
+            logging=options['logging'],
             **csvw_params,
         ))
 
@@ -383,6 +385,7 @@ def open_sdg_prep(options):
             output_folder=options['site_dir'],
             translations=options['translations'],
             indicator_options=options['indicator_options'],
+            logging=options['logging'],
             **options['sdmx_output']
         ))
 
@@ -602,11 +605,3 @@ def open_sdg_schema_from_dict(params, options):
         schema_instance = sdg.schemas.SchemaInputSdmxMsd(**params)
 
     return schema_instance
-
-
-def output_is_translatable(output):
-    # Some types of output should never be translated.
-    if isinstance(output, sdg.outputs.OutputSdmxMl):
-        return False
-    else:
-        return True

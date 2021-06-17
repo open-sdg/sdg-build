@@ -159,9 +159,6 @@ class OutputSdmxMl(OutputBase):
             indicator = self.get_indicator_by_id(indicator_id)
             data = indicator.data.copy()
 
-            self.apply_column_map(data)
-            self.apply_code_map(data)
-
             # Some hardcoded dataframe changes.
             data = data.rename(columns={
                 'Value': 'OBS_VALUE',
@@ -169,6 +166,9 @@ class OutputSdmxMl(OutputBase):
                 'Series': 'SERIES',
                 'Year': 'TIME_PERIOD',
             })
+            # Any user-specified dataframe changes.
+            self.apply_column_map(data)
+            self.apply_code_map(data)
 
             if self.constrain_data:
                 before = data.size

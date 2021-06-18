@@ -13,7 +13,7 @@ class SchemaInputBase(Loggable):
 
 
     def __init__(self, schema_path='', logging=None, scope=None,
-        request_params=None):
+        request_params=None, meta_suffix=None):
         """Create a new SchemaBase object
 
         Parameters
@@ -22,6 +22,9 @@ class SchemaInputBase(Loggable):
             A path to the schema file to input
         scope : string
             An optional 'scope' to apply to all metadata fields
+        meta_suffix : string
+            A suffix to add to each metadata key. Useful when using the same
+            schema for both global and national metadata, for example.
         request_params : dict or None
             Optional dict of parameters to be passed to remote file fetches.
             Corresponds to the options passed to a urllib.request.Request.
@@ -31,6 +34,7 @@ class SchemaInputBase(Loggable):
         Loggable.__init__(self, logging=logging)
         self.schema_path = schema_path
         self.scope = scope
+        self.meta_suffix = meta_suffix
         self.request_params = request_params
         self.field_order = []
         self.schema = None
@@ -205,3 +209,21 @@ class SchemaInputBase(Loggable):
             A list of field names in a particular order
         """
         return self.field_order if len(self.field_order) > 0 else self.schema['properties'].keys()
+
+
+    def alter_key(self, key):
+        """Make any changes to a key before adding it to the schema.
+
+        Parameters
+        ----------
+        key : string
+            The key to alter
+
+        Returns
+        -------
+        string
+            The altered key
+        """
+        if self.meta_suffix is not None:
+            key = key + self.meta_suffix
+        return key

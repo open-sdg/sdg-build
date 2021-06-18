@@ -19,7 +19,7 @@ class SchemaInputSdmxMsd(SchemaInputBase):
 
         msd = self.parse_xml(self.schema_path)
         for concept in msd.findall('.//Concept'):
-            concept_id = concept.attrib['id']
+            concept_id = self.alter_key(concept.attrib['id'])
             self.add_item_to_field_order(concept_id)
             concept_name = concept.find('./Name').text
             concept_description = concept.find('./Description').text

@@ -171,9 +171,9 @@ class OutputSdmxMl(OutputBase):
             self.apply_code_map(data)
 
             if self.constrain_data:
-                before = data.size
+                before = len(data.index)
                 data = indicator.get_data_matching_schema(self.data_schema, data=data)
-                after = data.size
+                after = len(data.index)
                 message = '{indicator_id} - Removed {difference} rows while constraining data (out of {total}).'
                 difference = str(before - after)
                 self.warn(message, indicator_id=indicator_id, difference=difference, total=before)

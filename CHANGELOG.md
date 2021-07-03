@@ -19,8 +19,9 @@
 * SDMX and file helper functions #242
 * Bugfix - structure-specific default #237
 * Allow column and code mappings to be used #236, #251, #256, #264
-* Fixes for SDMX single-file output #231
+* Improvements of SDMX output #217, #218, #231
 * Metadata input for Word template files #230
+* JSON-Stat and PxWeb data inputs #219
 
 ### 1.3.0
 

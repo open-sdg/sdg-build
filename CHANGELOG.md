@@ -1,5 +1,27 @@
 # Changes
 
+### 1.4.0
+
+* Correct way to get number of dataframe rows #266
+* Style updates for data service frontend #262
+* SDMX metadata output #261
+* Metadata input from "SDG Metadata" repositories #259
+* Replace values individually to avoid exceptions #258
+* Vary by language in some method caches #257
+* Allow suffix on imported metadata keys #253
+* Fix empty values by column to avoid datatype issues #252
+* Use TIME_PERIOD instead of TIME_DETAIL in SDMX output #250
+* Allow TIME_PERIOD to exist in SDMX DSD data schema #249
+* Defaults for mandatory attributes in SDMX output #247
+* Fallback to translation keys if names are missing #246
+* Do not sort datapackage schemas that were intentionally specified #245
+* New automated metadata fields for Git dates (only) #244
+* SDMX and file helper functions #242
+* Bugfix - structure-specific default #237
+* Allow column and code mappings to be used #236, #251, #256, #264
+* Fixes for SDMX single-file output #231
+* Metadata input for Word template files #230
+
 ### 1.3.0
 
 * Allow numeric disaggregaton #198

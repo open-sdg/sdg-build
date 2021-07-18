@@ -13,7 +13,7 @@ setup(name='sdg',
       packages=find_packages(exclude=['contrib', 'docs', 'tests*', 'check', 'reset']),
       zip_safe=False,
       package_data={'sdg': [
-        os.path.join('helpers', 'sdmx_global_content_constraints.csv'),
+        os.path.join('outputs', 'sdmx_global_content_constraints.csv'),
       ]},
       include_package_data=True,
       python_requires='>=3.5',

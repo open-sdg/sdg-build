@@ -266,7 +266,7 @@ def get_unit_code_from_series_code(series_code, dsd_path=None, request_params=No
 # Remove rows of data that do not comply with the global SDMX content constraints.
 def enforce_global_content_constraints(rows):
     constraints_path = os.path.join(os.path.dirname(__file__), 'sdmx_global_content_constraints.csv')
-    constraints = pd.read_csv(constraints_path)
+    constraints = pd.read_csv(constraints_path, encoding_errors='ignore')
     series_constraints = {}
     matching_rows = []
     for _, row in rows.iterrows():

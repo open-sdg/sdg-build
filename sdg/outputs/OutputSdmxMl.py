@@ -38,7 +38,8 @@ class OutputSdmxMl(OutputBase):
                  header_id=None, sender_id=None, structure_specific=False,
                  column_map=None, code_map=None, constrain_data=False,
                  request_params=None, constrain_meta=True, logging=None,
-                 meta_ref_area=None, meta_reporting_type=None, msd=None):
+                 meta_ref_area=None, meta_reporting_type=None, msd=None,
+                 global_content_constraints=False):
 
         """Constructor for OutputSdmxMl.
 
@@ -94,6 +95,9 @@ class OutputSdmxMl(OutputBase):
         meta_reporting_type : string
             REPORTING_TYPE code to use in the metadata output. If omitted, will use
             the first available in a REPORTING_TYPE data column.
+        global_content_constraints: boolean
+            Whether to enforce the global content constraints, which is in
+            a draft state.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations,
             indicator_options, request_params=request_params, logging=logging)
@@ -109,6 +113,7 @@ class OutputSdmxMl(OutputBase):
         self.data_schema = DataSchemaInputSdmxDsd(source=self.dsd)
         self.column_map = column_map
         self.code_map = code_map
+        self.global_content_constraints = global_content_constraints
 
         sdmx_folder = os.path.join(output_folder, 'sdmx')
         if not os.path.exists(sdmx_folder):
@@ -177,6 +182,9 @@ class OutputSdmxMl(OutputBase):
                 message = '{indicator_id} - Removed {difference} rows while constraining data (out of {total}).'
                 difference = str(before - after)
                 self.warn(message, indicator_id=indicator_id, difference=difference, total=before)
+
+            if self.global_content_constraints:
+                data = helpers.sdmx.enforce_global_content_constraints(data)
 
             data = data.replace(np.nan, '', regex=True)
             if not data.empty:

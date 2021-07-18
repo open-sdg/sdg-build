@@ -3,6 +3,7 @@ import sdmx
 import os
 from xml.etree import ElementTree as ET
 from io import StringIO
+import pandas as pd
 
 cache = {}
 
@@ -260,3 +261,46 @@ def get_unit_code_from_series_code(series_code, dsd_path=None, request_params=No
 
     # Finally a default fallback.
     return fallback
+
+
+# Remove rows of data that do not comply with the global SDMX content constraints.
+def enforce_global_content_constraints(rows):
+    constraints_path = os.path.join(os.path.dirname(__file__), 'sdmx_global_content_constraints.csv')
+    constraints = pd.read_csv(constraints_path)
+    series_constraints = {}
+    matching_rows = []
+    for _, row in rows.iterrows():
+        series = row['SERIES']
+        if series in series_constraints:
+            series_constraint = series_constraints[series]
+        else:
+            series_constraint = constraints.loc[constraints['SERIES'] == series]
+            series_constraints[series] = series_constraint
+        if series_constraint.empty:
+            print('SERIES not found in constraints: ' + series)
+            continue
+        row_matches = True
+        skip_reasons = []
+        ignore_columns = ['SERIES', 'Name']
+        for column in series_constraint.columns.to_list():
+            if column in ignore_columns:
+                continue
+            column_constraint = series_constraint[column].iloc[0]
+            if column_constraint == 'ALL':
+                continue
+            allowed_values = column_constraint.split(';') if ';' in column_constraint else [column_constraint]
+            if column not in row:
+                row_matches = False
+                skip_reasons.append('Column "' + column + '" is missing.')
+            elif row[column] not in allowed_values:
+                row_matches = False
+                skip_reasons.append('Column "' + column + '" has invalid value "' + row[column] + '". Allowed values are: ' + ', '.join(allowed_values))
+        if not row_matches:
+            print('A row was dropped because of the following reasons:')
+            for reason in skip_reasons:
+                print('- ' + reason)
+        else:
+            matching_rows.append(row)
+
+    empty_df = pd.DataFrame(columns=rows.columns)
+    return empty_df.append(matching_rows)

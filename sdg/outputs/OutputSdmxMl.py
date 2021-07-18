@@ -39,7 +39,7 @@ class OutputSdmxMl(OutputBase):
                  column_map=None, code_map=None, constrain_data=False,
                  request_params=None, constrain_meta=True, logging=None,
                  meta_ref_area=None, meta_reporting_type=None, msd=None,
-                 global_content_constraints=False):
+                 global_content_constraints=False, output_subfolder='sdmx'):
 
         """Constructor for OutputSdmxMl.
 
@@ -98,6 +98,8 @@ class OutputSdmxMl(OutputBase):
         global_content_constraints: boolean
             Whether to enforce the global content constraints, which is in
             a draft state.
+        output_subfolder: string
+            A subfolder in which to place this output. Defaults to 'sdmx'.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations,
             indicator_options, request_params=request_params, logging=logging)
@@ -114,8 +116,9 @@ class OutputSdmxMl(OutputBase):
         self.column_map = column_map
         self.code_map = code_map
         self.global_content_constraints = global_content_constraints
+        self.output_subfolder = output_subfolder
 
-        sdmx_folder = os.path.join(output_folder, 'sdmx')
+        sdmx_folder = os.path.join(output_folder, self.output_subfolder)
         if not os.path.exists(sdmx_folder):
             os.makedirs(sdmx_folder, exist_ok=True)
         self.sdmx_folder = sdmx_folder
@@ -491,8 +494,8 @@ class OutputSdmxMl(OutputBase):
 
         indicator_ids = self.get_documentation_indicator_ids()
 
-        data_endpoint = 'sdmx/{indicator_id}.xml'
-        meta_endpoint = 'sdmx/meta/{indicator_id}.xml'
+        data_endpoint = self.output_subfolder + '/{indicator_id}.xml'
+        meta_endpoint = self.output_subfolder + '/meta/{indicator_id}.xml'
         output = '<p>' + self.get_documentation_description() + ' Examples are below:<p>'
 
         output += '<ul>'
@@ -519,7 +522,8 @@ class OutputSdmxMl(OutputBase):
             "The metadata is output in a 'meta' subfolder' and similarly "
             "has one per indicator plus an 'all' file. Translations of "
             "the metadata are included in each file using the 'lang' "
-            "attribute."
+            "attribute. The data for this output uses the following "
+            "data structure definition: " + self.dsd_path
         )
         return description
 

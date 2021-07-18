@@ -264,12 +264,15 @@ def get_unit_code_from_series_code(series_code, dsd_path=None, request_params=No
 
 
 # Remove rows of data that do not comply with the global SDMX content constraints.
-def enforce_global_content_constraints(rows):
+def enforce_global_content_constraints(rows, indicator_id):
     constraints_path = os.path.join(os.path.dirname(__file__), 'sdmx_global_content_constraints.csv')
     constraints = pd.read_csv(constraints_path, encoding_errors='ignore')
     series_constraints = {}
     matching_rows = []
+    skip_reasons = []
     for _, row in rows.iterrows():
+        if 'SERIES' not in row:
+            continue
         series = row['SERIES']
         if series in series_constraints:
             series_constraint = series_constraints[series]
@@ -277,10 +280,8 @@ def enforce_global_content_constraints(rows):
             series_constraint = constraints.loc[constraints['SERIES'] == series]
             series_constraints[series] = series_constraint
         if series_constraint.empty:
-            print('SERIES not found in constraints: ' + series)
             continue
         row_matches = True
-        skip_reasons = []
         ignore_columns = ['SERIES', 'Name']
         for column in series_constraint.columns.to_list():
             if column in ignore_columns:
@@ -289,18 +290,25 @@ def enforce_global_content_constraints(rows):
             if column_constraint == 'ALL':
                 continue
             allowed_values = column_constraint.split(';') if ';' in column_constraint else [column_constraint]
-            if column not in row:
+            if '0' in allowed_values:
+                allowed_values.append(0)
+            if column not in row and '_T' not in allowed_values:
                 row_matches = False
-                skip_reasons.append('Column "' + column + '" is missing.')
-            elif row[column] not in allowed_values:
+                reason = 'Column "' + column + '" is missing.'
+                if reason not in skip_reasons:
+                    skip_reasons.append(reason)
+            elif column in row and row[column] not in allowed_values:
                 row_matches = False
-                skip_reasons.append('Column "' + column + '" has invalid value "' + row[column] + '". Allowed values are: ' + ', '.join(allowed_values))
-        if not row_matches:
-            print('A row was dropped because of the following reasons:')
-            for reason in skip_reasons:
-                print('- ' + reason)
-        else:
+                reason = 'Column "' + column + '" has invalid value "' + str(row[column]) + '". Allowed values are: ' + ', '.join(allowed_values)
+                if reason not in skip_reasons:
+                    skip_reasons.append(reason)
+        if row_matches:
             matching_rows.append(row)
+
+    if len(skip_reasons) > 0:
+        print('Rows were dropped from indicator ' + indicator_id + ' because of content constraints.')
+        for reason in skip_reasons:
+            print('- ' + reason)
 
     empty_df = pd.DataFrame(columns=rows.columns)
     return empty_df.append(matching_rows)

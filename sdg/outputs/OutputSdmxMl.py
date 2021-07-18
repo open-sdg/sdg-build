@@ -184,7 +184,7 @@ class OutputSdmxMl(OutputBase):
                 self.warn(message, indicator_id=indicator_id, difference=difference, total=before)
 
             if self.global_content_constraints:
-                data = helpers.sdmx.enforce_global_content_constraints(data)
+                data = helpers.sdmx.enforce_global_content_constraints(data, indicator_id)
 
             data = data.replace(np.nan, '', regex=True)
             if not data.empty:

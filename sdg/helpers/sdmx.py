@@ -294,14 +294,17 @@ def enforce_global_content_constraints(rows, indicator_id):
                 allowed_values.append(0)
             if column not in row and '_T' not in allowed_values:
                 row_matches = False
-                reason = 'Column "' + column + '" is missing.'
+                reason = 'Column "' + column + '" is missing value. Allowed values are: ' + ', '.join(allowed_values)
                 if reason not in skip_reasons:
                     skip_reasons.append(reason)
             elif column in row and row[column] not in allowed_values:
-                row_matches = False
-                reason = 'Column "' + column + '" has invalid value "' + str(row[column]) + '". Allowed values are: ' + ', '.join(allowed_values)
-                if reason not in skip_reasons:
-                    skip_reasons.append(reason)
+                if pd.isna(row[column]) and '_T' in allowed_values:
+                    pass
+                else:
+                    row_matches = False
+                    reason = 'Column "' + column + '" has invalid value "' + str(row[column]) + '". Allowed values are: ' + ', '.join(allowed_values)
+                    if reason not in skip_reasons:
+                        skip_reasons.append(reason)
         if row_matches:
             matching_rows.append(row)
 

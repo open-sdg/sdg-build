@@ -159,8 +159,10 @@ class OutputGeoJson(OutputBase):
                 # Normalize the id and name properties.
                 geometry_data['features'][index]['properties']['name'] = feature_name
                 geometry_data['features'][index]['properties']['geocode'] = feature['properties'][self.id_property]
-                del geometry_data['features'][index]['properties'][self.name_property]
-                del geometry_data['features'][index]['properties'][self.id_property]
+                if self.name_property != 'name':
+                    del geometry_data['features'][index]['properties'][self.name_property]
+                if self.id_property != 'geocode':
+                    del geometry_data['features'][index]['properties'][self.id_property]
             # Finally write the updated GeoJSON file.
             filename = self.filename_prefix + indicator_id + '.geojson'
             filepath = os.path.join(target_folder, filename)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup, find_packages
+import os
 
 setup(name='sdg',
       version='1.4.0',
@@ -11,7 +12,9 @@ setup(name='sdg',
       license='MIT',
       packages=find_packages(exclude=['contrib', 'docs', 'tests*', 'check', 'reset']),
       zip_safe=False,
-      package_data={'sdg': ['schema_defaults.json']},
+      package_data={'sdg': [
+        os.path.join('outputs', 'sdmx_global_content_constraints.csv'),
+      ]},
       include_package_data=True,
       python_requires='>=3.5',
       install_requires=['pyyaml', 'gitpython', 'numpy', 'pandas', 'yamlmd', 'jsonschema', 'requests', 'humanize', 'unicode-slugify', 'sdmx1', 'frictionless', 'csvw', 'mammoth', 'pyquery', 'pyjstat', 'Jinja2'],

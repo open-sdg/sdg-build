@@ -389,6 +389,26 @@ def open_sdg_prep(options):
             **options['sdmx_output']
         ))
 
+    # Add Global SDMX output separately, if configured.
+    if 'sdmx_output_global' in options:
+        params = options['sdmx_output_global']
+        if type(params) is not dict:
+            params = {}
+        # Hardcode some options for global output.
+        params['inputs'] = inputs
+        params['schema'] = schema
+        params['output_subfolder'] = 'sdmx-global'
+        params['translations'] = options['translations']
+        params['indicator_options'] = options['indicator_options']
+        params['logging'] = options['logging']
+        params['dsd'] = sdg.helpers.sdmx.get_dsd_url()
+        params['msd'] = None
+        params['structure_specific'] = True
+        params['constrain_data'] = True
+        params['constrain_meta'] = True
+        params['global_content_constraints'] = True
+        outputs.append(sdg.outputs.OutputSdmxMl(**params))
+
     return outputs
 
 

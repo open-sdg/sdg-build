@@ -3,6 +3,7 @@ import sdmx
 import os
 from xml.etree import ElementTree as ET
 from io import StringIO
+import pandas as pd
 
 cache = {}
 

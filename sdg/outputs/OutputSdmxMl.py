@@ -38,7 +38,8 @@ class OutputSdmxMl(OutputBase):
                  header_id=None, sender_id=None, structure_specific=False,
                  column_map=None, code_map=None, constrain_data=False,
                  request_params=None, constrain_meta=True, logging=None,
-                 meta_ref_area=None, meta_reporting_type=None, msd=None):
+                 meta_ref_area=None, meta_reporting_type=None, msd=None,
+                 global_content_constraints=False, output_subfolder='sdmx'):
 
         """Constructor for OutputSdmxMl.
 
@@ -94,6 +95,11 @@ class OutputSdmxMl(OutputBase):
         meta_reporting_type : string
             REPORTING_TYPE code to use in the metadata output. If omitted, will use
             the first available in a REPORTING_TYPE data column.
+        global_content_constraints: boolean
+            Whether to enforce the global content constraints, which is in
+            a draft state.
+        output_subfolder: string
+            A subfolder in which to place this output. Defaults to 'sdmx'.
         """
         OutputBase.__init__(self, inputs, schema, output_folder, translations,
             indicator_options, request_params=request_params, logging=logging)
@@ -109,8 +115,10 @@ class OutputSdmxMl(OutputBase):
         self.data_schema = DataSchemaInputSdmxDsd(source=self.dsd)
         self.column_map = column_map
         self.code_map = code_map
+        self.global_content_constraints = global_content_constraints
+        self.output_subfolder = output_subfolder
 
-        sdmx_folder = os.path.join(output_folder, 'sdmx')
+        sdmx_folder = os.path.join(output_folder, self.output_subfolder)
         if not os.path.exists(sdmx_folder):
             os.makedirs(sdmx_folder, exist_ok=True)
         self.sdmx_folder = sdmx_folder
@@ -182,9 +190,12 @@ class OutputSdmxMl(OutputBase):
                 before = len(data.index)
                 data = indicator.get_data_matching_schema(self.data_schema, data=data)
                 after = len(data.index)
-                message = '{indicator_id} - Removed {difference} rows while constraining data (out of {total}).'
+                message = '{indicator_id} - Removed {difference} rows while constraining data to the DSD (out of {total}).'
                 difference = str(before - after)
                 self.warn(message, indicator_id=indicator_id, difference=difference, total=before)
+
+            if self.global_content_constraints:
+                data = self.enforce_global_content_constraints(data, indicator_id)
 
             data = data.replace(np.nan, '', regex=True)
             if not data.empty:
@@ -438,6 +449,67 @@ class OutputSdmxMl(OutputBase):
             data.replace(to_replace=code_dict, value=None, inplace=True)
         return data
 
+    # Remove rows of data that do not comply with the global SDMX content constraints.
+    def enforce_global_content_constraints(self, rows, indicator_id):
+        before = len(rows.index)
+        # Until these constraints are published, we use a local file.
+        constraints_path = os.path.join(os.path.dirname(__file__), 'sdmx_global_content_constraints.csv')
+        constraints = pd.read_csv(constraints_path, encoding_errors='ignore')
+        series_constraints = {}
+        matching_rows = []
+        skip_reasons = []
+        for _, row in rows.iterrows():
+            if 'SERIES' not in row:
+                continue
+            series = row['SERIES']
+            if series in series_constraints:
+                series_constraint = series_constraints[series]
+            else:
+                series_constraint = constraints.loc[constraints['SERIES'] == series]
+                series_constraints[series] = series_constraint
+            if series_constraint.empty:
+                continue
+            row_matches = True
+            ignore_columns = ['SERIES', 'Name']
+            for column in series_constraint.columns.to_list():
+                if column in ignore_columns:
+                    continue
+                column_constraint = series_constraint[column].iloc[0]
+                if column_constraint == 'ALL':
+                    continue
+                allowed_values = column_constraint.split(';') if ';' in column_constraint else [column_constraint]
+                if '0' in allowed_values:
+                    allowed_values.append(0)
+                if column not in row and '_T' not in allowed_values:
+                    row_matches = False
+                    reason = 'Column "' + column + '" is missing value. Allowed values are: ' + ', '.join(allowed_values)
+                    if reason not in skip_reasons:
+                        skip_reasons.append(reason)
+                elif column in row and row[column] not in allowed_values:
+                    if pd.isna(row[column]) and '_T' in allowed_values:
+                        pass
+                    else:
+                        row_matches = False
+                        reason = 'Column "' + column + '" has invalid value "' + str(row[column]) + '". Allowed values are: ' + ', '.join(allowed_values)
+                        if reason not in skip_reasons:
+                            skip_reasons.append(reason)
+            if row_matches:
+                matching_rows.append(row)
+
+        empty_df = pd.DataFrame(columns=rows.columns)
+        constrained_df = empty_df.append(matching_rows)
+
+        if len(skip_reasons) > 0:
+            after = len(constrained_df.index)
+            message = '{indicator_id} - Removed {difference} rows while constraining data to the global content constraints (out of {total}). Reasons below:'
+            difference = str(before - after)
+            self.warn(message, indicator_id=indicator_id, difference=difference, total=before)
+            for reason in skip_reasons:
+                self.warn('  ' + reason)
+
+        return constrained_df
+
+
 
     def get_documentation_title(self):
         return 'SDMX output'
@@ -447,8 +519,8 @@ class OutputSdmxMl(OutputBase):
 
         indicator_ids = self.get_documentation_indicator_ids()
 
-        data_endpoint = 'sdmx/{indicator_id}.xml'
-        meta_endpoint = 'sdmx/meta/{indicator_id}.xml'
+        data_endpoint = self.output_subfolder + '/{indicator_id}.xml'
+        meta_endpoint = self.output_subfolder + '/meta/{indicator_id}.xml'
         output = '<p>' + self.get_documentation_description() + ' Examples are below:<p>'
 
         output += '<ul>'
@@ -481,7 +553,8 @@ class OutputSdmxMl(OutputBase):
             "The metadata is output in a 'meta' subfolder' and similarly "
             "has one per indicator plus an 'all' file. Translations of "
             "the metadata are included in each file using the 'lang' "
-            "attribute."
+            "attribute. The data for this output uses the following "
+            "data structure definition: " + self.dsd_path
         )
         return description
 

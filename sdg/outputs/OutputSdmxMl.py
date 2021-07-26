@@ -146,7 +146,9 @@ class OutputSdmxMl(OutputBase):
             return status
 
         all_serieses = {}
+        all_serieses_by_goal = {}
         all_metadata_serieses = []
+        all_metadata_serieses_by_goal = {}
         metadata_template = Template(self.get_metadata_template())
         dfd = DataflowDefinition(id="OPEN_SDG_DFD", structure=self.dsd)
         time_period = next(dim for dim in self.dsd.dimensions if dim.id == 'TIME_PERIOD')
@@ -158,6 +160,12 @@ class OutputSdmxMl(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id)
             data = indicator.data.copy()
+
+            goal = indicator.get_goal_id()
+            if goal not in all_serieses_by_goal:
+                all_serieses_by_goal[goal] = {}
+            if goal not in all_metadata_serieses_by_goal:
+                all_metadata_serieses_by_goal[goal] = []
 
             # Some hardcoded dataframe changes.
             data = data.rename(columns={
@@ -206,6 +214,7 @@ class OutputSdmxMl(OutputBase):
                 with open(sdmx_path, 'wb') as f:
                     status = status & f.write(sdmx.to_xml(msg))
                 all_serieses.update(serieses)
+                all_serieses_by_goal[goal].update(serieses)
 
             concepts = indicator.meta
             if self.constrain_meta and self.msd is not None:
@@ -261,6 +270,7 @@ class OutputSdmxMl(OutputBase):
                 with open(meta_path, 'w') as f:
                     status = status & f.write(metadata_sdmx)
                 all_metadata_serieses = all_metadata_serieses + metadata_serieses
+                all_metadata_serieses_by_goal[goal] = all_metadata_serieses_by_goal[goal] + metadata_serieses
 
         dataset = self.create_dataset(all_serieses)
         msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
@@ -268,12 +278,27 @@ class OutputSdmxMl(OutputBase):
         with open(all_sdmx_path, 'wb') as f:
             status = status & f.write(sdmx.to_xml(msg))
 
+        for goal in all_serieses_by_goal:
+            dataset = self.create_dataset(all_serieses_by_goal[goal])
+            msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
+            goal_sdmx_path = os.path.join(self.sdmx_folder, str(goal) + '.xml')
+            with open(goal_sdmx_path, 'wb') as f:
+                status = status & f.write(sdmx.to_xml(msg))
+
         metadata = metadata_base_vars.copy()
         metadata['serieses'] = all_metadata_serieses
         metadata_sdmx = metadata_template.render(metadata)
         meta_path = os.path.join(self.meta_folder, 'all.xml')
         with open(meta_path, 'w') as f:
             status = status & f.write(metadata_sdmx)
+
+        for goal in all_metadata_serieses_by_goal:
+            metadata = metadata_base_vars.copy()
+            metadata['serieses'] = all_metadata_serieses_by_goal[goal]
+            metadata_sdmx = metadata_template.render(metadata)
+            goal_meta_path = os.path.join(self.meta_folder, str(goal) + '.xml')
+            with open(goal_meta_path, 'w') as f:
+                status = status & f.write(metadata_sdmx)
 
         return status
 
@@ -429,13 +454,19 @@ class OutputSdmxMl(OutputBase):
         output += '<ul>'
         data_path = data_endpoint.format(indicator_id='all')
         meta_path = meta_endpoint.format(indicator_id='all')
-        output += '<li><a href="' + baseurl + data_path + '">' + data_path + ' (data)</a></li>'
-        output += '<li><a href="' + baseurl + meta_path + '">' + meta_path + ' (metadata)</a></li>'
+        output += '<li><a href="' + baseurl + data_path + '">' + data_path + ' (all data)</a></li>'
+        output += '<li><a href="' + baseurl + meta_path + '">' + meta_path + ' (all metadata)</a></li>'
         for indicator_id in indicator_ids:
             data_path = data_endpoint.format(indicator_id=indicator_id)
             meta_path = meta_endpoint.format(indicator_id=indicator_id)
-            output += '<li><a href="' + baseurl + data_path + '">' + data_path + ' (data)</a></li>'
-            output += '<li><a href="' + baseurl + meta_path + '">' + meta_path + ' (metadata)</a></li>'
+            output += '<li><a href="' + baseurl + data_path + '">' + data_path + ' (data by indicator)</a></li>'
+            output += '<li><a href="' + baseurl + meta_path + '">' + meta_path + ' (metadata by indicator)</a></li>'
+        # Also an examples of the goals.
+        for goal_id in ['1', '2']:
+            data_path = data_endpoint.format(indicator_id=goal_id)
+            meta_path = meta_endpoint.format(indicator_id=goal_id)
+            output += '<li><a href="' + baseurl + data_path + '">' + data_path + ' (data by goal)</a></li>'
+            output += '<li><a href="' + baseurl + meta_path + '">' + meta_path + ' (metadata by goal)</a></li>'
         output += '<li>etc...</li>'
         output += '</ul>'
 

@@ -397,6 +397,7 @@ def open_sdg_prep(options):
         # Hardcode some options for global output.
         params['inputs'] = inputs
         params['schema'] = schema
+        params['output_folder'] = options['site_dir']
         params['output_subfolder'] = 'sdmx-global'
         params['translations'] = options['translations']
         params['indicator_options'] = options['indicator_options']

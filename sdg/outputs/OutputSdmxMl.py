@@ -454,7 +454,7 @@ class OutputSdmxMl(OutputBase):
         before = len(rows.index)
         # Until these constraints are published, we use a local file.
         constraints_path = os.path.join(os.path.dirname(__file__), 'sdmx_global_content_constraints.csv')
-        constraints = pd.read_csv(constraints_path, encoding_errors='ignore')
+        constraints = pd.read_csv(constraints_path)
         series_constraints = {}
         matching_rows = []
         skip_reasons = []

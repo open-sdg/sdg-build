@@ -144,19 +144,19 @@ SE_ACS_H2O,Proportion of schools with access to basic drinking water [4.a.1],PT,
 SE_ACS_ELECT,Proportion of schools with access to electricity [4.a.1],PT,0,_T,_T,ALL,_T,ALL,_T,_T,_T,_T,_T
 SE_ACC_HNDWSH,Proportion of schools with basic handwashing facilities [4.a.1],PT,0,_T,_T,ALL,_T,ALL,_T,_T,_T,_T,_T
 SE_ACS_INTNT,Proportion of schools with access to the internet for pedagogical purposes [4.a.1],PT,0,_T,_T,ALL,_T,ALL,_T,_T,_T,_T,_T
-SE_ACS_SANIT,Proportion of schools with access to access to single-sex basic sanitation [4.a.1],PT,0,_T,_T,ALL,_T,ALL,_T,_T,_T,_T,_T
+SE_ACS_SANIT,Proportion of schools with access toÂ access to single-sex basic sanitation [4.a.1],PT,0,_T,_T,ALL,_T,ALL,_T,_T,_T,_T,_T
 SE_INF_DSBL,Proportion of schools with access to adapted infrastructure and materials for students with disabilities [4.a.1],PT,0,_T,_T,ALL,_T,ALL,_T,_T,_T,_T,_T
 DC_TOF_SCHIPSL,"Total official flows for scholarships, by recipient countries [4.b.1]",CON_USD,ALL,_T,_T,_T,_T,ALL,_T,_T,_T,_T,_T
 SE_TRA_GRDL,Proportion of teachers who have received at least the minimum organized teacher training (e.g. pedagogical training) pre-service or in-service required for teaching at the relevant level in a given country [4.c.1],PT,0,ALL,_T,ALL,_T,ALL,_T,_T,_T,_T,_T
 SG_LGL_GENEQLFP,"Legal frameworks that promote, enforce and monitor gender equality (percentage of achievement, 0 - 100) -- Area 1: overarching legal frameworks and public life. [5.1.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
-SG_LGL_GENEQVAW,"Legal frameworks that promote, enforce and monitor gender equality (percentage of achievement, 0 - 100) -- Area 2: violence against women. [5.1.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
+SG_LGL_GENEQVAW,"Legal frameworks that promote, enforce and monitor gender equality (percentage of achievement, 0 - 100) --Â Area 2: violence against women. [5.1.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SG_LGL_GENEQEMP,"Legal frameworks that promote, enforce and monitor gender equality (percentage of achievement, 0 - 100) -- Area 3: employment and economic benefits. [5.1.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SG_LGL_GENEQMAR,"Legal frameworks that promote, enforce and monitor gender equality (percentage of achievement, 0 - 100) -- Area 4: marriage and family. [5.1.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 VC_VAW_MARR,Proportion of ever-partnered women and girls subjected to physical and sexual violence by a current or former intimate partner in the previous 12 months [5.2.1],PT,0,F,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 VC_VAW_PHYV,Proportion of ever-partnered women and girls subjected to physical violence by a current or former intimate partner in the previous 12 months [5.2.1],PT,0,F,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 VC_VAW_SEXV,Proportion of ever-partnered women and girls subjected to sexual violence by a current or former intimate partner in the previous 12 months [5.2.1],PT,0,F,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 VC_VAW_PSYV,Proportion of ever-partnered women and girls subjected to psychological violence by a current or former intimate partner in the previous 12 months [5.2.1],PT,0,F,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
-VC_VAW_NONMARR,Proportion of women and girls aged 15 years and older subjected to sexual violence by persons other than an intimate partner in the previous 12 months [5.2.2],PT,0,F,Y_GE15,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
+VC_VAW_NONMARR,Proportion of women and girls aged 15Â years and older subjected to sexual violence by persons other than anÂ intimate partner in the previous 12Â months [5.2.2],PT,0,F,Y_GE15,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 SP_DYN_MRBF18,Proportion of women aged 20-24 years who were married or in a union before age 18 [5.3.1],PT,0,F,Y20T24,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 SP_DYN_MRBF15,Proportion of women aged 20-24 years who were married or in a union before age 15 [5.3.1],PT,0,F,Y20T24,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 SH_STA_FGMS,Proportion of girls and women aged 15-49 years who have undergone female genital mutilation/cutting [5.3.2],PT,0,F,Y15T19;Y15T49,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
@@ -174,7 +174,7 @@ SH_FPL_INFM,"Proportion of women who make their own informed decisions regarding
 SH_FPL_INFMSR,Proportion of women who make their own informed decisions regarding sexual relations (% of women aged 15-49 years) [5.6.1],PT,0,F,Y15T49,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 SH_FPL_INFMCU,Proportion of women who make their own informed decisions regarding contraceptive use (% of women aged 15-49 years) [5.6.1],PT,0,F,Y15T49,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 SH_FPL_INFMRH,Proportion of women who make their own informed decisions regarding reproductive health care (% of women aged 15-49 years) [5.6.1],PT,0,F,Y15T49,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
-SG_RHC_ACCS,"Countries with laws and regulations that guarantee full and equal access to women and men aged 15 years and older to sexual and reproductive health care, information and education (1 = YES; 0 = NO) [5.6.2]",NUMBER,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
+SG_RHC_ACCS,"Countries with laws and regulations that guarantee full and equal access to women and men aged 15Â years and older to sexual and reproductive health care, information and education (1 = YES; 0 = NO) [5.6.2]",NUMBER,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SP_LGL_LNDAGSEC,Proportion of total agricultural population with ownership or secure rights over agricultural land [5.a.1],PT,0,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SG_LGL_LNDWMN,Proportion of countries where the legal framework (including customary law) guarantees women's equal rights to land ownership and/or control [5.a.2],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 IT_MOB_OWN,Proportion of individuals who own a mobile telephone [5.b.1],PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
@@ -256,7 +256,7 @@ DC_TOF_TRDDBMDL,"Total official flows (disbursement) for Aid for Trade, by donor
 DC_TOF_TRDDBML,"Total official flows (disbursement) for Aid for Trade, by recipient countries [8.a.1]",CON_USD,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 DC_TOF_TRDCML,"Total official flows (commitments) for Aid for Trade, by recipient countries [8.a.1]",CON_USD,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SL_CPA_YEMP,"Existence of a developed and operationalized national strategy for youth employment, as a distinct strategy or as part of a national employment strategy [8.b.1]",NUMBER,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
-SP_ROD_R2KM,Proportion of the rural population who live within 2 km of an all-season road [9.1.1],PT,0,ALL,ALL,R,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
+SP_ROD_R2KM,Proportion of the rural population who live within 2Â km of an all-season road [9.1.1],PT,0,ALL,ALL,R,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 IS_RDP_FRGVOL,Freight volume (tonne kilometres) [9.1.2],T_KM,ALL,_T,_T,_T,_T;MOT_AIR;MOT_RAI;MOT_ROA;MOT_IWW;MOT_SEA,_T,_T,_T,_T,_T,_T
 IS_RDP_PFVOL,Passenger volume (passenger kilometres) [9.1.2],P_KM,ALL,_T,_T,_T,_T;MOT_AIR;MOT_RAI;MOT_ROA;MOT_IWW;MOT_SEA,_T,_T,_T,_T,_T,_T
 IS_TRP_MAILTKM,Mail volume (tonne kilometres) [9.1.2],T_KM,ALL,_T,_T,_T,_T;MOT_AIR;MOT_RAI;MOT_ROA;MOT_IWW;MOT_SEA,_T,_T,_T,_T,_T,_T
@@ -276,7 +276,7 @@ IT_MOB_2GNTWK,Proportion of population covered by at least a 2G mobile network [
 IT_MOB_3GNTWK,Proportion of population covered by at least a 3G mobile network [9.c.1],PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 IT_MOB_4GNTWK,Proportion of population covered by at least a 4G mobile network [9.c.1],PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 SI_HEI_TOTL,Growth rates of household expenditure or income per capita [10.1.1],PT,0,_T,_T,_T,_T,_T,_T,_T,ALL,_T,_T
-SI_POV_50MI,Proportion of people living below 50 percent of median income [10.2.1],PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
+SI_POV_50MI,Proportion of people living below 50Â percent of median income [10.2.1],PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 VC_VOV_DCMN,"Proportion of population reporting having personally felt discriminated against or harassed in the previous 12 months on the basis of a ground of discrimination prohibited under international human rights law [10.3.1, 16.b.1]",PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 SL_EMP_GTOTL,Labour share of GDP [10.4.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 FI_FSI_FSANL,Non-performing loans to total gross loans (%) [10.5.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
@@ -333,7 +333,7 @@ DC_SCP_RANDN,Amount of support to developing countries on research and developme
 ER_FFS_PRTSST,Fossil-fuel pre-tax subsidies (consumption and production) [12.c.1],USD,6,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 ER_FFS_PRTSPC,Fossil-fuel pre-tax subsidies (consumption and production) per capita [12.c.1],USD,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 ER_FFS_PRTSPR,Fossil-fuel pre-tax subsidies (consumption and production) as a proportion of total GDP [12.c.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
-DC_CLC_100B,Mobilized amount of United States dollars per year between 2020 and 2025 accountable towards the $100 billion commitment [13.a.1],USD,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
+DC_CLC_100B,Mobilized amount of United States dollars per year between 2020 and 2025 accountable towards the $100Â billion commitment [13.a.1],USD,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 EN_SCP_EZECO,Proportion of national exclusive economic zones managed using ecosystem-based approaches [14.2.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 ER_H2O_FWTL,Proportion of fish stocks within biologically sustainable levels (not overexploited) [14.4.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 ER_H2O_FISHFEXP,Proportion of fish stocks that are fully exploited [14.4.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
@@ -387,7 +387,7 @@ VC_HTF_DETVOG,Detected victims of human trafficking for removal of organ (number
 VC_HTF_DETVSX,Detected victims of human trafficking for sexual exploitaton (number) [16.2.2],NUMBER,ALL,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 VC_HTF_DETV,Detected victims of human trafficking (number) [16.2.2],NUMBER,ALL,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 VC_VAW_DIST,Age and sex distribution of detected victims of trafficking in persons (%) [16.2.2],PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
-VC_VAW_SXVLN,Proportion of population aged 18-29 years who experienced sexual violence by age 18 [16.2.3],PT,0,ALL,Y18T29;Y18T74,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
+VC_VAW_SXVLN,Proportion of population aged 18-29 years who experienced sexual violence by ageÂ 18 [16.2.3],PT,0,ALL,Y18T29;Y18T74,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 VC_PRR_PHYV,"Police reporting rate for physical assault, by sex (%) [16.3.1]",PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 VC_PRR_SEXV,"Police reporting rate for sexual assault, by sex (%) [16.3.1]",PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
 VC_PRR_ROBB,"Police reporting rate for robbery, by sex (%) [16.3.1]",PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,ALL,_T,_T
@@ -434,10 +434,10 @@ IT_USE_II99,Internet users per 100 inhabitants [17.8.1],PER_100_POP,ALL,ALL,ALL,
 DC_FTA_TOTAL,Total official development assistance (gross disbursement) for technical cooperation [17.9.1],CON_USD,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 TM_TAX_WMFN,"Worldwide weighted tariff-average, most-favoured-nation status [17.10.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T;AGG_ARMS;AGG_CLTH;AGG_IND;AGG_AGR;AGG_OIL;AGG_TXT,_T
 TM_TAX_WMPS,"Worldwide weighted tariff-average, preferential status [17.10.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T;AGG_ARMS;AGG_CLTH;AGG_IND;AGG_AGR;AGG_OIL;AGG_TXT,_T
-TX_IMP_GBMRCH,Developing countries’ and least developed countries’ share of global merchandise imports [17.11.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
-TX_EXP_GBMRCH,Developing countries’ and least developed countries’ share of global merchandise exports [17.11.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
-TX_EXP_GBSVR,Developing countries’ and least developed countries’ share of global services exports [17.11.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
-TX_IMP_GBSVR,Developing countries’ and least developed countries’ share of global services imports [17.11.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
+TX_IMP_GBMRCH,Developing countriesâ€™ and least developed countriesâ€™ share of global merchandise imports [17.11.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
+TX_EXP_GBMRCH,Developing countriesâ€™ and least developed countriesâ€™ share of global merchandise exports [17.11.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
+TX_EXP_GBSVR,Developing countriesâ€™ and least developed countriesâ€™ share of global services exports [17.11.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
+TX_IMP_GBSVR,Developing countriesâ€™ and least developed countriesâ€™ share of global services imports [17.11.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
 TM_TAX_WM,Average tariff applied by developed countries [17.12.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T;AGG_ARMS;AGG_CLTH;AGG_IND;AGG_AGR;AGG_OIL;AGG_TXT,_T
 SG_CPA_SDEV,Countries with mechanisms in place to enhance policy coherence of sustainable development  (1 = YES; 0 = NO) [17.14.1],NUMBER,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SG_PLN_PRVRIMON,Proportion of results indicators which will be monitored using government sources and monitoring systems - data by provider (%) [17.15.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
@@ -513,14 +513,14 @@ SH_LGR_ACSRHES2,"(S.2) Extent to which countries have laws and regulations that 
 SH_LGR_ACSRHES3,"(S.3) Extent to which countries have laws and regulations that guarantee full and equal access to women and men aged 15 years and older to sexual and reproductive health care, information and education: Section 3: Sexuality Education [5.6.2]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SH_LGR_ACSRHES4,"(S.4) Extent to which countries have laws and regulations that guarantee full and equal access to women and men aged 15 years and older to sexual and reproductive health care, information and education: Section 4: HIV and HPV [5.6.2]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SP_GNP_WNOWNS,"Share of women among owners or rights-bearers of agricultural land, by type of tenure [5.a.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
-SG_LGL_LNDFEMOD,Degree to which the legal framework (including customary law) guarantees women’s equal rights to land ownership and/or control (1=No evidence to 6=Highest levels of guarantees) [5.a.2],SCORE,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
+SG_LGL_LNDFEMOD,Degree to which the legal framework (including customary law) guarantees womenâ€™s equal rights to land ownership and/or control (1=No evidence to 6=Highest levels of guarantees) [5.a.2],SCORE,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 EN_WWT_GEN,Total wastewater generated (million m3/year) [6.3.1],M_M3_PER_YR,ALL,_T,_T,ALL,_T,_T,_T,_T,_T,_T,ALL
 EN_WWT_TREAT,Total wastewater treated (million m3/year) [6.3.1],M_M3_PER_YR,ALL,_T,_T,ALL,_T,_T,_T,_T,_T,_T,ALL
 EN_WWT_TREATR,Proportion of wastewater treated [6.3.1],PT,0,_T,_T,ALL,_T,_T,_T,_T,_T,_T,ALL
 EN_WBE_HMWTL,Extent of human made wetlands (square kilometres) [6.6.1],KM2,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 EN_WBE_INWTL,Extent of inland wetlands (square kilometres) [6.6.1],KM2,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 EG_CFT_LIGHT,Proportion of population with primary reliance on clean fuels and technology for lighting [7.1.2],PT,0,_T,_T,ALL,_T,_T,_T,_T,_T,_T,_T
-EG_EGY_RNEW,"Installed renewable electricity-generating capacity (watts per capita) [7.b.1, 12.a.1]",W_PER_CAPITA,ALL,_T,_T,ALL,_T,_T,_T,_T,_T,_T,_T
+EG_EGY_RNEW,"Installed renewableÂ electricity-generating capacity (watts per capita) [7.b.1, 12.a.1]",W_PER_CAPITA,ALL,_T,_T,ALL,_T,_T,_T,_T,_T,_T,_T
 SL_ISV_IFEM,"Proportion of informal employment, by sector and sex (ILO harmonized estimates) [8.3.1]",PT,0,ALL,ALL,ALL,_T;MS_MIGRANT;MS_NOMIGRANT;MS_EUMIGRANT;MS_NONEUMIGRANT,ALL,ALL,ALL,_T,_T,ALL
 SL_LBR_NTLCPL,Level of national compliance with labour rights (freedom of association and collective bargaining) based on International Labour Organization (ILO) textual sources and national legislation [8.8.2],SCORE,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 IS_RDP_LULFRG,Freight loaded and unloaded (metric tons) [9.1.2],T,ALL,_T,_T,_T,_T;MOT_AIR;MOT_RAI;MOT_ROA;MOT_IWW;MOT_SEA,_T,_T,_T,_T,_T,_T
@@ -590,8 +590,8 @@ ER_UNCLOS_RATACC,Score for the ratification of and accession to UNCLOS and its t
 ER_UNCLOS_IMPLE,Score for the implementation of UNCLOS and its two implementing agreements (%) [14.c.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 ER_IAS_LEGIS,"Legislation, Regulation, Act related to the prevention of introduction and management of Invasive Alien Species (1 = YES, 0 = NO) [15.8.1]",BOOL,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 ER_IAS_NBSAP,"National Biodiversity Strategy and Action Plan (NBSAP) targets alignment to Aichi Biodiversity target 9 set out in the Strategic Plan for Biodiversity 2011-2020 (1 = YES, 0 = NO) [15.8.1]",BOOL,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
-ER_IAS_NATBUD,"Countries with an allocation from the national budget to manage the threat of invasive alien species (1 = YES, 0 = NO) [15.8.1]",BOOL,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
-ER_IAS_GLOFUN,"Recipient countries of global funding with access to any funding from global financial mechanisms for projects related to invasive alien species  management (1 = YES, 0 = NO) [15.8.1]",BOOL,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
+ER_IAS_NATBUD,"Countries with an allocation from the national budget to manage the threat of invasive alien speciesÂ (1 = YES, 0 = NO) [15.8.1]",BOOL,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
+ER_IAS_GLOFUN,"Recipient countries of global funding with access to any funding from global financial mechanisms for projects related to invasive alien speciesÂ  management (1 = YES, 0 = NO) [15.8.1]",BOOL,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 ER_BDY_ABT2NP,Countries that established national targets in accordance with Aichi Biodiversity Target 2 of the Strategic Plan for Biodiversity 2011-2020 in their National Biodiversity Strategy and Action Plans (1 = YES; 0 = NO) [15.9.1],NUMBER,0,_T,_T,_T,_T;ABT2_ACHIEVE;ABT2_EXCEED;ABT2_INSUFNT;ABT2_DIGRESS;ABT2_NOPROG;ABT2_NONTLT,_T,_T,_T,_T,_T,_T
 ER_BDY_SEEA,"Countries with integrated biodiversity values into national accounting and reporting systems, defined as implementation of the System of Environmental-Economic Accounting  (1 = YES; 0 = NO) [15.9.1]",NUMBER,0,_T,_T,_T,_T;LS_COMP;LS_DISSEM;LS_COMPDISSE,_T,_T,_T,_T,_T,_T
 ER_BDY_SEEACF,"Countries that have integrated biodiversity values into national accounting and reporting systems, defined as implementation of the System of Environmental-Economic Accounting Central Framework (SEEA-CF)   (1 = YES; 0 = NO) [15.9.1]",NUMBER,0,_T,_T,_T,_T;LS_COMP;LS_DISSEM;LS_COMPDISSE,_T,_T,_T,_T,_T,_T
@@ -600,23 +600,23 @@ VC_DTH_TOCVN,"Number of conflict-related deaths (civilians), by sex, age and cau
 VC_DTH_TOCVR,"Conflict-related death rate (civilians), by sex, age and cause of death (%) [16.1.2]",PT,0,ALL,ALL,ALL,_T;COD_EXPLOSIVES;COD_SMALLARMS;COD_HEAVYWEAPONS;COD_U;COD_OTHER,_T,_T,_T,_T,_T,_T
 SG_DMK_PARLCC_UC,"Number of chairs of permanent committees, by age, sex and focus of the committee, Upper Chamber [16.7.1]",NUMBER,0,ALL,ALL,_T,_T;PC_FOR_AFF;PC_DEFENCE;PC_FINANCE;PC_HUM_RIGH;PC_GEN_EQU;PC_FAFF_DEF;PC_HR_GEQU;PC_FAFF_DEF_FIN;PC_FAFF_DEF_HR,_T,_T,_T,_T,_T,_T
 SG_DMK_PARLCC_LC,"Number of chairs of permanent committees, by age, sex and focus of the committee, Lower Chamber or Unicameral [16.7.1]",NUMBER,0,ALL,ALL,_T,_T;PC_FOR_AFF;PC_DEFENCE;PC_FINANCE;PC_HUM_RIGH;PC_GEN_EQU;PC_FAFF_DEF;PC_HR_GEQU;PC_FAFF_DEF_FIN;PC_FAFF_DEF_HR,_T,_T,_T,_T,_T,_T
-SG_DMK_PARLMP_UC,"Ratio for female members of parliaments (Ratio of the proportion of women in parliament in the proportion of women in the national population with the age of eligibility as a lower bound boundary), Upper Chamber [16.7.1]",RO,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
-SG_DMK_PARLMP_LC,"Ratio for female members of parliaments (Ratio of the proportion of women in parliament in the proportion of women in the national population with the age of eligibility as a lower bound boundary), Lower Chamber or Unicameral [16.7.1]",RO,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
+SG_DMK_PARLMP_UC,"Ratio for female members of parliaments (Ratio of the proportion of women in parliament in the proportion of women in the national populationÂ with the age of eligibility as a lower bound boundary), Upper Chamber [16.7.1]",RO,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
+SG_DMK_PARLMP_LC,"Ratio for female members of parliaments (Ratio of the proportion of women in parliament in the proportion of women in the national populationÂ with the age of eligibility as a lower bound boundary), Lower Chamber or Unicameral [16.7.1]",RO,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SG_DMK_PARLSP_UC,"Number of speakers in parliament, by age and sex, Upper Chamber [16.7.1]",NUMBER,0,ALL,ALL,_T,_T,_T,_T,_T,_T,_T,_T
 SG_DMK_PARLSP_LC,"Number of speakers in parliament, by age and sex , Lower Chamber or Unicameral [16.7.1]",NUMBER,0,ALL,ALL,_T,_T,_T,_T,_T,_T,_T,_T
 SG_DMK_PARLCC_JC,"Number of chairs of permanent committees, by age sex and focus of the committee, Joint Committees [16.7.1]",NUMBER,0,ALL,ALL,_T,_T;PC_FOR_AFF;PC_DEFENCE;PC_FINANCE;PC_HUM_RIGH;PC_GEN_EQU;PC_FAFF_DEF;PC_HR_GEQU;PC_FAFF_DEF_FIN;PC_FAFF_DEF_HR,_T,_T,_T,_T,_T,_T
-SG_DMK_PARLYR_LC,"Ratio of young members in parliament (Ratio of the proportion of young members in parliament (age 45 or below) in the proportion of the national population (age 45 or below) with the age of eligibility as a lower bound boundary), Lower Chamber or Unicameral [16.7.1]",RO,0,ALL,Y0T45,_T,_T,_T,_T,_T,_T,_T,_T
+SG_DMK_PARLYR_LC,"Ratio of young members in parliament (Ratio of the proportion of young members in parliament (age 45 or below) in the proportion of the national population (age 45 or below)Â with the age of eligibility as a lower bound boundary), Lower Chamber or Unicameral [16.7.1]",RO,0,ALL,Y0T45,_T,_T,_T,_T,_T,_T,_T,_T
 SG_DMK_PARLYP_LC,"Proportion of youth in parliament (age 45 or below), Lower Chamber or Unicameral [16.7.1]",PT,0,_T,Y0T45,_T,_T,_T,_T,_T,_T,_T,_T
 SG_DMK_PARLYN_LC,"Number of youth in parliament (age 45 or below), Lower Chamber or Unicameral [16.7.1]",NUMBER,0,_T,Y0T45,_T,_T,_T,_T,_T,_T,_T,_T
-SG_DMK_PARLYR_UC,"Ratio of young members in parliament (Ratio of the proportion of young members in parliament (age 45 or below) in the proportion of the national population (age 45 or below) with the age of eligibility as a lower bound boundary), Upper Chamber [16.7.1]",RO,0,ALL,Y0T45,_T,_T,_T,_T,_T,_T,_T,_T
+SG_DMK_PARLYR_UC,"Ratio of young members in parliament (Ratio of the proportion of young members in parliament (age 45 or below) in the proportion of the national population (age 45 or below)Â with the age of eligibility as a lower bound boundary), Upper Chamber [16.7.1]",RO,0,ALL,Y0T45,_T,_T,_T,_T,_T,_T,_T,_T
 SG_DMK_PARLYP_UC,"Proportion of youth in parliament (age 45 or below), Upper Chamber [16.7.1]",PT,0,_T,Y0T45,_T,_T,_T,_T,_T,_T,_T,_T
 SG_DMK_PARLYN_UC,"Number of youth in parliament (age 45 or below), Upper Chamber [16.7.1]",NUMBER,0,_T,Y0T45,_T,_T,_T,_T,_T,_T,_T,_T
 VC_VOC_ENFDIS,"Number of cases of enforced disappearance of human rights defenders, journalists and trade unionists [16.10.1]",NUMBER,0,ALL,ALL,ALL,_T,ALL,ALL,ALL,_T,_T,_T
 GF_FRN_FDI,Foreign direct investment (FDI) inflows [17.3.1],USD,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SG_PLN_MSTKSDG_P,"Progress in multi-stakeholder development effectiveness monitoring frameworks that support the achievement of the sustainable development goals, Provider (1 = YES; 0 = NO) [17.16.1]",NUMBER,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SG_PLN_MSTKSDG_R,"Progress in multi-stakeholder development effectiveness monitoring frameworks that support the achievement of the sustainable development goals, Recipient (1 = YES; 0 = NO) [17.16.1]",NUMBER,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
-TM_TAX_DMFN,"Average tariff applied by developed countries, most-favored nation status, by type of product (%)  [17.12.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
-TM_TAX_DPRF,"Average tariff applied by developed countries, preferential status, by type of product (%)  [17.12.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
+TM_TAX_DMFN,"Average tariff applied by developed countries, most-favored nation status, by type of product (%)Â  [17.12.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
+TM_TAX_DPRF,"Average tariff applied by developed countries, preferential status, by type of product (%)Â  [17.12.1]",PT,0,_T,_T,_T,_T,_T,_T,_T,_T,ALL,_T
 SG_CPA_SDEVP,Mechanisms in place to enhance policy coherence for sustainable development (Percent) [17.14.1 ],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SG_CPA_SIGN_BIT,Number of countries with a signed bilateral investment treaty (BIT) [17.5.1],NUMBER,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 SG_CPA_INFORCE_BIT,Number of countries with an inforce bilateral investment treaty (BIT) [17.5.1],NUMBER,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
@@ -648,7 +648,7 @@ SE_TOT_SESPI_FS,"Adjusted low to high socio-economic parity status index for ach
 EN_TWT_GENV,"Total waste generation, by activity (Tonnes) [12.4.2]",T,ALL,_T,_T,_T,_T,_T,_T,_T,_T,_T,ALL
 ER_IAS_NBSAPP,Proportion of countries with National Biodiversity Strategy and Action Plan (NBSAP) targets alignment to Aichi Biodiversity target 9 set out in the Strategic Plan for Biodiversity 2011-2020 (%) [15.8.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 ER_IAS_NATBUDP,Proportion of countries with allocation from the national budget to manage the threat of invasive alien species (%) [15.8.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
-ER_IAS_GLOFUNP,Proportion of recipient countries of global funding with access to any funding from global financial mechanisms for projects related to invasive alien species  management (%) [15.8.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
+ER_IAS_GLOFUNP,Proportion of recipient countries of global funding with access to any funding from global financial mechanisms for projects related to invasive alien speciesÂ  management (%) [15.8.1],PT,0,_T,_T,_T,_T,_T,_T,_T,_T,_T,_T
 EN_NACOM_NAIP_DV,"Number of least developed countries and small island developing States with national communications, non-Annex I Parties (Number) [13.b.1]",NUMBER,0,_T,_T,_T,RO_FIRST;RO_SECOND;RO_THIRD;RO_FOURTH;RO_FIFTH;RO_SIXTH;RO_SEVENTH,_T,_T,_T,_T,_T,_T
 EN_BIUREP_NAIP_DV,"Number of least developed countries and small island developing States with biennial update reports, non-Annex I Parties (Number) [13.b.1]",NUMBER,0,_T,_T,_T,RO_FIRST;RO_SECOND;RO_THIRD;RO_FOURTH;RO_FIFTH;RO_SIXTH;RO_SEVENTH,_T,_T,_T,_T,_T,_T
 EN_ADAP_COM_DV,Number of least developed countries and small island developing States with adaptation communications (Number) [13.b.1],NUMBER,0,_T,_T,_T,RO_FIRST;RO_SECOND;RO_THIRD;RO_FOURTH;RO_FIFTH;RO_SIXTH;RO_SEVENTH,_T,_T,_T,_T,_T,_T

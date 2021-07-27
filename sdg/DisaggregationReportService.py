@@ -3,6 +3,7 @@ import sdg
 import pandas as pd
 from slugify import slugify
 from sdg.Loggable import Loggable
+import json
 
 class DisaggregationReportService(Loggable):
     """Report generation to document disaggregations in data."""

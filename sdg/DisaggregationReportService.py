@@ -96,7 +96,10 @@ class DisaggregationReportService(Loggable):
                         all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] = 0
                     all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] += 1
                     all_disaggregations[disaggregation]['indicators'][indicator_id] = True
-                print(all_disaggregations)
+        print(all_disaggregations)
+        a_file = open("all_disaggregations.json", "w")
+        json.dump(all_disaggregations, a_file)
+        a_file.close()
         self.disaggregation_store = all_disaggregations
         return self.disaggregation_store
 

@@ -60,6 +60,7 @@ class DisaggregationReportService(Loggable):
 
         all_disaggregations = {}
         indicators = self.get_all_indicators()
+        print(indicators)
         for indicator_id in indicators:
             if not indicators[indicator_id].is_statistical():
                 continue
@@ -95,7 +96,7 @@ class DisaggregationReportService(Loggable):
                         all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] = 0
                     all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] += 1
                     all_disaggregations[disaggregation]['indicators'][indicator_id] = True
-                    print(all_disaggregations)
+                print(all_disaggregations)
         self.disaggregation_store = all_disaggregations
         return self.disaggregation_store
 

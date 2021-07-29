@@ -478,6 +478,7 @@ class OutputSdmxMl(OutputBase):
                 if column_constraint == 'ALL':
                     continue
                 allowed_values = column_constraint.split(';') if ';' in column_constraint else [column_constraint]
+                allowed_values_strings = allowed_values.copy()
                 if '0' in allowed_values:
                     allowed_values.append(0)
                 if column not in row and '_T' not in allowed_values:
@@ -490,7 +491,7 @@ class OutputSdmxMl(OutputBase):
                         pass
                     else:
                         row_matches = False
-                        reason = 'Column "' + column + '" has invalid value "' + str(row[column]) + '". Allowed values are: ' + ', '.join(allowed_values)
+                        reason = 'Column "' + column + '" has invalid value "' + str(row[column]) + '". Allowed values are: ' + ', '.join(allowed_values_strings)
                         if reason not in skip_reasons:
                             skip_reasons.append(reason)
             if row_matches:

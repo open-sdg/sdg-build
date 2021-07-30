@@ -483,7 +483,7 @@ class OutputSdmxMl(OutputBase):
                     allowed_values.append(0)
                 if column not in row and '_T' not in allowed_values:
                     row_matches = False
-                    reason = 'Column "' + column + '" is missing value. Allowed values are: ' + ', '.join(allowed_values)
+                    reason = 'Column "' + column + '" is missing value. Allowed values are: ' + ', '.join(allowed_values_strings)
                     if reason not in skip_reasons:
                         skip_reasons.append(reason)
                 elif column in row and row[column] not in allowed_values:

@@ -140,6 +140,7 @@ class DisaggregationReportService(Loggable):
                 if indicator not in grouped:
                     grouped[indicator] = {}
                 grouped[indicator][disaggregation] = store[disaggregation]
+        print(grouped)
         return grouped
 
 

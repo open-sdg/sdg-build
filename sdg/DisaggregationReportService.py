@@ -3,7 +3,6 @@ import sdg
 import pandas as pd
 from slugify import slugify
 from sdg.Loggable import Loggable
-import json
 
 class DisaggregationReportService(Loggable):
     """Report generation to document disaggregations in data."""
@@ -100,9 +99,6 @@ class DisaggregationReportService(Loggable):
                     all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] += 1
                     all_disaggregations[disaggregation]['indicators'][indicator_id] = True
         #print(all_disaggregations)
-        a_file = open("all_disaggregations.json", "w")
-        json.dump(all_disaggregations, a_file)
-        a_file.close()
         self.disaggregation_store = all_disaggregations
         return self.disaggregation_store
 

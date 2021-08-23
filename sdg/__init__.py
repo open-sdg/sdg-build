@@ -19,7 +19,6 @@ from . import translations
 from . import helpers
 from .DisaggregationReportService import DisaggregationReportService
 from .DisaggregationStatusService import DisaggregationStatusService
-from .IndicatorReportService import IndicatorReportService
 from .OutputDocumentationService import OutputDocumentationService
 from .Indicator import Indicator
 from .IndicatorDownloadService import IndicatorDownloadService

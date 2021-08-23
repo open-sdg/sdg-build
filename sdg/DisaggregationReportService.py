@@ -71,6 +71,8 @@ class DisaggregationReportService(Loggable):
             non_disaggregation_columns = [col for col in non_disaggregation_columns if col not in self.extra_disaggregations]
             for series in indicators[indicator_id].get_all_series():
                 disaggregations = series.get_disaggregations()
+                print("=======================================/n")
+                print(disaggregations)
                 for disaggregation in disaggregations:
                     if disaggregation in non_disaggregation_columns:
                         continue
@@ -97,7 +99,7 @@ class DisaggregationReportService(Loggable):
                         all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] = 0
                     all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] += 1
                     all_disaggregations[disaggregation]['indicators'][indicator_id] = True
-        print(all_disaggregations)
+        #print(all_disaggregations)
         a_file = open("all_disaggregations.json", "w")
         json.dump(all_disaggregations, a_file)
         a_file.close()

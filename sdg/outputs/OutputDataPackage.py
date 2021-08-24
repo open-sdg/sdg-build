@@ -204,7 +204,7 @@ class OutputDataPackage(OutputBase):
             schema.fields.sort(key=lambda field: field.name)
             for field in schema.fields:
                 if 'enum' in field.constraints:
-                    field.constraints['enum'].sort()
+                    field.constraints['enum'].sort(key=str)
 
 
     def translate_data_schema(self, schema, language):

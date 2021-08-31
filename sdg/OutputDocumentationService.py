@@ -2,9 +2,10 @@ import os
 import sdg
 import pandas as pd
 from slugify import slugify
+from sdg.Loggable import Loggable
 import humanize
 
-class OutputDocumentationService:
+class OutputDocumentationService(Loggable):
     """HTML generation to document outputs built with this library.
 
     Note that this is meant to document particular builds, not the library in
@@ -17,7 +18,7 @@ class OutputDocumentationService:
     def __init__(self, outputs, folder='_site', branding='Build docs',
                  languages=None, intro='', translations=None, indicator_url=None,
                  subfolder=None, baseurl='', extra_disaggregations=None,
-                 translate_disaggregations=False):
+                 translate_disaggregations=False, logging=None):
         """Constructor for the OutputDocumentationService class.
 
         Parameters
@@ -58,6 +59,7 @@ class OutputDocumentationService:
             Whether or not to include translation columns in the
             disaggregation report.
         """
+        Loggable.__init__(self, logging=logging)
         self.outputs = outputs
         self.folder = self.fix_folder(folder, subfolder)
         self.branding = branding
@@ -298,8 +300,8 @@ class OutputDocumentationService:
 
     def write_disaggregation_value_detail_page(self, info):
         service = self.disaggregation_report_service
-        disaggregation = info['disaggregation']
-        disaggregation_value = info['name']
+        disaggregation = str(info['disaggregation'])
+        disaggregation_value = str(info['name'])
         filename = info['filename']
 
         df = service.get_disaggregation_value_dataframe(info)
@@ -359,15 +361,43 @@ class OutputDocumentationService:
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/open-sdg/open-sdg-table@0.4.0/open-sdg-table.min.css">
             <style>
                 .btn-primary {{
-                    background-color: #1D70B8;
-                    border-color: #1D70B8;
+                    background-color: #00703c;
+                    padding: 8px 10px 7px;
+                    border: 2px solid transparent;
+                    border-radius: 0;
+                    color: #fff;
+                    box-shadow: 0 2px 0 #002d18;
+                    text-decoration: none;
+                }}
+                .btn-primary:visited {{
+                    color: #fff;
+                }}
+                .btn-primary:hover, .btn-primary:not(:disabled):not(.disabled):active {{
+                    background-color: #005a30;
+                    text-decoration: none;
+                    border: 2px solid transparent;
+                }}
+                .btn-primary:focus:not(:active):not(:hover) {{
+                    border-color: #fd0;
+                    color: #0b0c0c;
+                    background-color: #fd0;
+                    box-shadow: 0 2px 0 #0b0c0c;
                 }}
                 a {{
                     color: #1D70B8;
                     text-decoration: underline;
                 }}
+                a:hover {{
+                    color: #003078;
+                }}
+                a:visited {{
+                    color: #4c2c92;
+                }}
                 .download-info {{
                     margin-left: 12px;
+                }}
+                .table-striped tbody tr:nth-of-type(2n+1) {{
+                    background-color: #f3f2f1;
                 }}
             </style>
         </head>

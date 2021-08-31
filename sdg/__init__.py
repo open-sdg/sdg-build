@@ -1,9 +1,10 @@
 """Supporting scripts for sdg-indicators build"""
 
-__version__ = "0.3.1"
+__version__ = "1.4.0"
 __author__ = "Doug Ashton <douglas.j.ashton@gmail.com>"
 
 # Load key components
+from .Loggable import Loggable
 from . import path
 from . import data
 from . import edges
@@ -13,7 +14,9 @@ from . import open_sdg
 from . import inputs
 from . import outputs
 from . import schemas
+from . import data_schemas
 from . import translations
+from . import helpers
 from .DisaggregationReportService import DisaggregationReportService
 from .DisaggregationStatusService import DisaggregationStatusService
 from .OutputDocumentationService import OutputDocumentationService

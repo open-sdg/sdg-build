@@ -51,12 +51,12 @@ prose:
             label: "Global indicator description"
             scope: global
       - name: "un_designated_tier"
-        field: 
+        field:
             element: text
             label: "UN designated tier"
             scope: global
       - name: "un_custodian_agency"
-        field: 
+        field:
             element: text
             label: "UN custodian agency"
             scope: global
@@ -107,30 +107,20 @@ prose:
             element: text
             label: "Other information"
             scope: national
-      - name: "national_data_update_url"
+      - name: "national_data_updated_date"
         field:
             element: hidden
             label: "Data last updated"
             scope: national
-      - name: "national_data_update_url_text"
-        field:
-            element: hidden
-            label: "Data last updated"
-            scope: national
-      - name: "national_metadata_update_url"
-        field:
-            element: hidden
-            label: "Metadata last updated"
-            scope: national
-      - name: "national_metadata_update_url_text"
+      - name: "national_metadata_updated_date"
         field:
             element: hidden
             label: "Metadata last updated"
             scope: national
        ######### Data Info #########
       - name: "reporting_status"
-        field: 
-            element: select 
+        field:
+            element: select
             label: "Reporting status"
             options:
               - name: 'Exploring data sources'
@@ -177,8 +167,8 @@ prose:
             scope: data
       ######### Chart Info #########
       - name: "graph_type"
-        field: 
-            element: select 
+        field:
+            element: select
             label: "Graph type"
             options:
               - name: 'line'
@@ -187,7 +177,7 @@ prose:
                 value: 'bar'
             scope: graph
       - name: "graph_title"
-        field: 
+        field:
             element: text
             label: "Graph Title"
             scope: graph

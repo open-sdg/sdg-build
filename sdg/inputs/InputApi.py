@@ -1,8 +1,10 @@
 import sdg
 import pandas as pd
 import requests
+import json
 from sdg.inputs import InputBase
 from sdg.Indicator import Indicator
+import time
 
 class InputApi(InputBase):
     """Sources of SDG data that are in a remote API.
@@ -14,27 +16,46 @@ class InputApi(InputBase):
     "add_data_alteration" to add a callback function that corrects the format.
     """
 
-    def __init__(self, endpoint, indicator_id_map):
+    def __init__(self, endpoint, indicator_id_map=None, logging=None,
+                 column_map=None, code_map=None, post_data=None,
+                 year_column=None, value_column=None, sleep=None):
         """Constructor for InputApi input.
 
         Parameters
         ----------
         endpoint : string
-            The remote URL of the endpoint for fetching indicators.
+            The remote URL of the endpoint for fetching indicators. If this
+            contains "[resource_id]", it will be replaced with the resource
+            ID for each API call. Otherwise, the resource ID will be added
+            to the end of each API call.
         indicator_id_map : dict
             Map of API ids (such as "resource ids) to indicator ids.
+        post_data : dict
+            If passed, the request will be a POST instead of GET with the
+            dict as the request payload.
+        year_column : string
+            A column to change to "Year".
+        value_column : string
+            A column to change to "Value".
+        sleep : int
+            Number of seconds to wait in between each request.
         """
         self.endpoint = endpoint
         self.indicator_id_map = indicator_id_map
-        InputBase.__init__(self)
+        self.post_data = post_data
+        self.year_column = year_column
+        self.value_column = value_column
+        self.sleep = sleep
+        InputBase.__init__(self, logging=logging, column_map=column_map,
+            code_map=code_map)
 
 
-    def indicator_data_from_json(self, json):
+    def indicator_data_from_json(self, json_response):
         """Convert a an API response into a DataFrame for indicator data.
 
         Parameters
         ----------
-        json : dict
+        json_response : dict
             JSON data as returned from the API call.
 
         Returns
@@ -53,10 +74,13 @@ class InputApi(InputBase):
         resource_id : string
             The resource id for the indicator in the API.
         """
-        raise NotImplementedError
+        if '[resource_id]' in self.endpoint:
+            return self.endpoint.replace("[resource_id]", resource_id)
+        else:
+            return self.endpoint + resource_id
 
 
-    def get_indicator_name(self, indicator_id, resource_id):
+    def get_indicator_name(self, indicator_id, resource_id, json_response):
         """Decide on an indicator name, based on the indicator/resource ids.
 
         Parameters
@@ -65,21 +89,64 @@ class InputApi(InputBase):
             The indicator id.
         resource_id : string
             The resource id.
+        json_response : dict
+            The data that was returned from the endpoint.
         """
         raise NotImplementedError
 
 
-    def execute(self, indicator_options):
-        """Fetch the resource data from the API for each indicator."""
-        headers = { 'Accept': 'application/json' }
-        for resource_id in self.indicator_id_map:
-            # Fetch the data.
-            url = self.generate_api_call(resource_id)
-            r = requests.get(url, headers=headers)
-            json = r.json()
+    def get_indicator_id(self, resource_id, json_response):
+        if isinstance(self.indicator_id_map, dict):
+            return self.indicator_id_map[resource_id]
+        else:
+            return resource_id
 
-            # Create the indicator.
-            inid = self.indicator_id_map[resource_id]
-            data = self.indicator_data_from_json(json)
-            name = self.get_indicator_name(inid, resource_id)
+
+    def fetch_json_response(self, url):
+        headers = { 'Accept': 'application/json' }
+        post_data = self.get_post_data()
+        if post_data is not None:
+            r = requests.post(url, headers=headers, data=json.dumps(post_data))
+        else:
+            r = requests.get(url, headers=headers)
+        try:
+            return r.json()
+        except:
+            return None
+
+
+    def get_post_data(self):
+        return self.post_data
+
+
+    def execute(self, indicator_options):
+        InputBase.execute(self, indicator_options)
+        for resource_id in self.get_indicator_id_map():
+
+            url = self.generate_api_call(resource_id)
+            json_response = self.fetch_json_response(url)
+
+            inid = self.get_indicator_id(resource_id, json_response)
+            data = self.indicator_data_from_json(json_response)
+            if data is None:
+                continue
+
+            columns = data.columns.to_list()
+            if self.year_column is not None and self.year_column in columns:
+                data = data.rename(columns={self.year_column: 'Year'})
+            if self.value_column is not None and self.value_column in columns:
+                data = data.rename(columns={self.value_column: 'Value'})
+
+            name = self.get_indicator_name(inid, resource_id, json_response)
             self.add_indicator(inid, data=data, name=name, options=indicator_options)
+
+            self.wait_for_next_request()
+
+
+    def get_indicator_id_map(self):
+        return self.indicator_id_map if self.indicator_id_map is not None else {}
+
+
+    def wait_for_next_request(self):
+        if self.sleep is not None:
+            time.sleep(self.sleep)

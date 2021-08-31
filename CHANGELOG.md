@@ -1,5 +1,42 @@
 # Changes
 
+### 1.4.0
+
+* Correct way to get number of dataframe rows #266
+* Style updates for data service frontend #262
+* SDMX metadata output #261
+* Metadata input from "SDG Metadata" repositories #259
+* Replace values individually to avoid exceptions #258
+* Vary by language in some method caches #257
+* Allow suffix on imported metadata keys #253
+* Fix empty values by column to avoid datatype issues #252
+* Use TIME_PERIOD instead of TIME_DETAIL in SDMX output #250
+* Allow TIME_PERIOD to exist in SDMX DSD data schema #249
+* Defaults for mandatory attributes in SDMX output #247
+* Fallback to translation keys if names are missing #246
+* Do not sort datapackage schemas that were intentionally specified #245
+* New automated metadata fields for Git dates (only) #244
+* SDMX and file helper functions #242
+* Bugfix - structure-specific default #237
+* Allow column and code mappings to be used #236, #251, #256, #264
+* Improvements of SDMX output #217, #218, #231
+* Metadata input for Word template files #230
+* JSON-Stat and PxWeb data inputs #219
+
+### 1.3.0
+
+* Allow numeric disaggregaton #198
+* Use only 2 segments for the auto target id #196
+* Allow missing metadata to be altered #194
+* Performance optimizations and logging option #192
+* Allow the export filename to be configured #189
+* Allow missing values in reporting status extra fields #188
+* Input from the UN SDGs-SDMX API #187
+* Better handling of common SDMX data fields #182
+* Input for SDMX metadata #180
+* Standalone indicators #179
+* SDMX output for SDMX-compliant datasets #177
+
 ### 1.2.0
 
 * Output documentation baseurl (#178)

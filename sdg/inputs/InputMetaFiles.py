@@ -8,7 +8,8 @@ class InputMetaFiles(InputFiles):
     """Sources of SDG metadata that are local files."""
 
     def __init__(self, path_pattern='', git=True, git_data_dir='data',
-                 git_data_filemask='indicator_*.csv', metadata_mapping=None):
+                 git_data_filemask='indicator_*.csv', metadata_mapping=None,
+                 logging=None, column_map=None, code_map=None):
         """Constructor for InputMetaFiles.
 
         Keyword arguments:
@@ -22,20 +23,23 @@ class InputMetaFiles(InputFiles):
         metadata_mapping -- a dict mapping human-readable labels to machine keys
           or a path to a CSV file
         """
+        InputFiles.__init__(self, path_pattern, logging=logging,
+            column_map=column_map, code_map=code_map)
         self.git = git
         self.git_data_dir = git_data_dir
         self.git_data_filemask = git_data_filemask
         self.metadata_mapping = metadata_mapping
-        InputFiles.__init__(self, path_pattern)
 
 
     def execute(self, indicator_options):
+        InputFiles.execute(self, indicator_options)
         """Get the metadata from the files."""
         self.load_metadata_mapping()
         indicator_map = self.get_indicator_map()
         for inid in indicator_map:
             meta = self.read_meta(indicator_map[inid])
             self.apply_metadata_mapping(meta)
+            self.fix_booleans(meta)
             name = meta['indicator_name'] if 'indicator_name' in meta else None
             self.add_indicator(inid, name=name, meta=meta, options=indicator_options)
 
@@ -62,15 +66,64 @@ class InputMetaFiles(InputFiles):
             if os.path.isfile(translated_filepath):
                 translated_meta = self.read_meta_at_path(translated_filepath)
                 self.apply_metadata_mapping(translated_meta)
+                self.fix_booleans(translated_meta)
                 meta[language] = translated_meta
 
 
+    def fix_booleans(self, meta):
+        for key in meta:
+            value = meta[key]
+            if isinstance(value, str):
+                if value.lower() == 'true':
+                    meta[key] = True
+                elif value.lower() == 'false':
+                    meta[key] = False
+
+
     def add_git_dates(self, meta, filepath):
-        git_update = self.get_git_updates(meta, filepath)
+        git_update = self.get_git_dates(meta, filepath)
         for k in git_update.keys():
             meta[k] = git_update[k]
+        # @deprecated start
+        # For now continue to populate the deprecated link fields:
+        # * national_metadata_update_url / national_metadata_update_url_text
+        # * national_data_update_url / national_data_update_url_text
+        deprecated_fields = self.get_git_updates(meta, filepath)
+        for k in deprecated_fields.keys():
+            meta[k] = deprecated_fields[k]
+        # @deprecated end
 
 
+    def get_git_dates(self, meta, filepath):
+        updates = {}
+        updates['national_metadata_updated_date'] = self.get_git_date(filepath)
+        if 'data_filename' in meta:
+            data_filename = meta['data_filename']
+        else:
+            indicator_id = self.convert_path_to_indicator_id(filepath)
+            data_filename = self.git_data_filemask.replace('*', indicator_id)
+        src_dir = os.path.dirname(os.path.dirname(self.path_pattern))
+        data_filepath = os.path.join(src_dir, self.git_data_dir, data_filename)
+        if os.path.isfile(data_filepath):
+            updates['national_data_updated_date'] = self.get_git_date(data_filepath)
+
+        return updates
+
+
+    def get_git_date(self, filepath):
+        """Change into the working directory of the file (it might be a submodule)
+        and get the latest git history"""
+        folder = os.path.split(filepath)[0]
+
+        repo = git.Repo(folder, search_parent_directories=True)
+        # Need to translate relative to the repo root (this may be a submodule)
+        repo_dir = os.path.relpath(repo.working_dir, os.getcwd())
+        filepath = os.path.relpath(filepath, repo_dir)
+        commit = next(repo.iter_commits(paths=filepath, max_count=1))
+        return str(commit.committed_datetime.date())
+
+
+    # @deprecated start
     def get_git_updates(self, meta, filepath):
         meta_update = self.get_git_update(filepath)
         updates = {
@@ -88,15 +141,16 @@ class InputMetaFiles(InputFiles):
             data_update = self.get_git_update(data_filepath)
             updates['national_data_update_url_text'] = data_update['date'] + ': see changes on GitHub'
             updates['national_data_update_url'] = data_update['commit_url']
-        
+
         return updates
+    # @deprecated end
 
-
+    # @deprecated start
     def get_git_update(self, filepath):
         """Change into the working directory of the file (it might be a submodule)
         and get the latest git history"""
         folder = os.path.split(filepath)[0]
-        
+
         repo = git.Repo(folder, search_parent_directories=True)
         # Need to translate relative to the repo root (this may be a submodule)
         repo_dir = os.path.relpath(repo.working_dir, os.getcwd())
@@ -108,12 +162,13 @@ class InputMetaFiles(InputFiles):
         remote = repo.remote().url
         remote_bare = re.sub('^.*github\.com(:|\/)', '', remote).replace('.git','')
         commit_url = 'https://github.com/'+remote_bare+'/commit/'+git_sha
-        
+
         return {
             'date': git_date,
             'commit_url': commit_url
         }
-    
+    # @deprecated end
+
 
     def load_metadata_mapping(self):
         mapping = None
@@ -136,6 +191,6 @@ class InputMetaFiles(InputFiles):
     def apply_metadata_mapping(self, metadata):
         for human_key in self.metadata_mapping:
             machine_key = self.metadata_mapping[human_key]
-            if human_key in metadata:
+            if human_key in metadata and human_key != machine_key:
                 metadata[machine_key] = metadata[human_key]
                 del metadata[human_key]

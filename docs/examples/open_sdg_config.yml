@@ -76,6 +76,20 @@ schema_file: _prose.yml
 # fields, beyond the default "status by goal" report.
 reporting_status_extra_fields: []
 
+# Datapackage properties
+# ----------------------
+# This adds properties to all datapackages.
+datapackage_properties:
+  licenses:
+    - name: CC-BY-4.0
+      title: Creative Commons Attribution 4.0
+      path": https://creativecommons.org/licenses/by/4.0/
+datapackage_resource_properties:
+  licenses:
+    - name: CC-BY-4.0
+      title: Creative Commons Attribution 4.0
+      path": https://creativecommons.org/licenses/by/4.0/
+
 # Map layers
 # ----------
 # This allows the build to generate one or more GeoJSON files to be used by

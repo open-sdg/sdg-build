@@ -1,9 +1,17 @@
 pyyaml
 pandas
+pydantic
+sdmx1
 gitpython
 jsonschema
 requests
 humanize
 unicode-slugify
 natsort
+pyjstat
+mammoth
+pyquery
+frictionless
+csvw
+Jinja2
 git+git://github.com/dougmet/yamlmd

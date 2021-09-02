@@ -1,6 +1,7 @@
 import os
 import sdg
 import json
+from natsort import natsorted
 from sdg.Loggable import Loggable
 
 class DisaggregationStatusService(Loggable):
@@ -58,11 +59,10 @@ class DisaggregationStatusService(Loggable):
             indicator = self.indicators[indicator_id]
             if indicator.is_standalone():
                 continue
-            goal = int(indicator.get_goal_id())
+            goal = indicator.get_goal_id()
             goals[goal] = True
         goal_ids = list(goals.keys())
-        goal_ids.sort()
-        return goal_ids
+        return natsorted(goal_ids)
 
 
     def is_indicator_complete(self, indicator_id):
@@ -150,7 +150,7 @@ class DisaggregationStatusService(Loggable):
             is_notapplicable = self.is_indicator_notapplicable(indicator_id)
             is_complete = self.is_indicator_complete(indicator_id)
             is_inprogress = self.is_indicator_inprogress(indicator_id)
-            goal_id = int(indicator.get_goal_id())
+            goal_id = indicator.get_goal_id()
 
             overall_total += 1
             goals[goal_id]['total'] += 1
@@ -216,7 +216,8 @@ class DisaggregationStatusService(Loggable):
         })
 
         status['goals'] = []
-        for goal_id in goals:
+        goal_ids_sorted = natsorted(goals.keys())
+        for goal_id in goal_ids_sorted:
             num_complete = goals[goal_id]['complete']
             num_inprogress = goals[goal_id]['inprogress']
             num_notstarted = goals[goal_id]['notstarted']

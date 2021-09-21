@@ -4,13 +4,13 @@ import pandas as pd
 from slugify import slugify
 from sdg.Loggable import Loggable
 
-class DisaggregationReportService(Loggable):
-    """Report generation to document disaggregations in data."""
+class metadata_fieldReportService(Loggable):
+    """Report generation to document metadata_fields in data."""
 
 
     def __init__(self, outputs, languages=None, translation_helper=None,
-                 indicator_url=None, extra_disaggregations=None, logging=None):
-        """Constructor for the DisaggregationReportService class.
+                 indicator_url=None, extra_metadata_fields=None, logging=None):
+        """Constructor for the metadata_fieldReportService class.
         Parameters
         ----------
         outputs : list
@@ -27,7 +27,7 @@ class DisaggregationReportService(Loggable):
             the "[id]" will be replaced with the indicator id (dash-delimited).
             For example, "https://example.com/[id].html" will be replaced with
             "https://example.com/4-1-1.html".
-        extra_disaggregations : list
+        extra_metadata_fields : list
             Optional list of columns to include, which would not otherwise be
             included. Common choices are are units of measurement and series,
             which some users may prefer to see in the report.
@@ -38,65 +38,73 @@ class DisaggregationReportService(Loggable):
         self.slugs = []
         self.languages = [] if languages is None else languages
         self.translation_helper = translation_helper
-        self.extra_disaggregations = [] if extra_disaggregations is None else extra_disaggregations
-        self.disaggregation_store = None
+        self.extra_metadata_fields = [] if extra_metadata_fields is None else extra_metadata_fields
+        self.metadata_field_store = None
 
 
-    def get_disaggregation_store(self):
-        """Analyzes the data in and compiles information about disaggregations.
+    def get_metadata_field_store(self):
+        """Analyzes the data in and compiles information about indicators.
         Returns
         -------
         dict
-            Dict with disaggregation names keyed to dicts containing:
+            Dict with metadata_field names keyed to dicts containing:
             - values (dict of values keyed to number of instances)
             - indicators (dict with indicator ids as keys)
             - filename (string, suitable for writing to disk)
-            - name (string, the name of the disaggregation)
+            - name (string, the name of the metadata_field)            
         """
-        if self.disaggregation_store is not None:
-            return self.disaggregation_store
+        url = "https://sdgdata.gov.uk/sdg-data/en/meta/all.json"
+        response = urllib.request.urlopen(url)
+        metadata = json.loads(response.read())
+        all_fields = {}
+        allowed_fields=['computation_units',
 
-        all_disaggregations = {}
-        indicators = self.get_all_indicators()
-        for indicator_id in indicators:
-            if not indicators[indicator_id].is_statistical():
+                'data_non_statistical',
+                'data_show_map',
+                'graph_type',
+                'national_geographical_coverage',
+                'reporting_status',
+                #'un_custodian_agency',
+                'un_designated_tier']
+        
+        for indicator in metadata:
+            fields = metadata.get(indicator)
+            if "standalone" in fields:
                 continue
-            if not indicators[indicator_id].is_complete():
-                continue
-            non_disaggregation_columns = indicators[indicator_id].options.get_non_disaggregation_columns()
-            non_disaggregation_columns = [col for col in non_disaggregation_columns if col not in self.extra_disaggregations]
-            for series in indicators[indicator_id].get_all_series():
-                disaggregations = series.get_disaggregations()
-                for disaggregation in disaggregations:
-                    if disaggregation in non_disaggregation_columns:
-                        continue
-                    if disaggregation not in all_disaggregations:
-                        all_disaggregations[disaggregation] = {
-                            'values': {},
-                            'indicators': {},
-                            'filename': self.create_filename(disaggregation),
-                            'name': disaggregation,
-                        }
-                    value = disaggregations[disaggregation]
-                    if pd.isna(value) or value == '':
-                        continue
-                    if value not in all_disaggregations[disaggregation]['values']:
-                        all_disaggregations[disaggregation]['values'][value] = {
-                            'instances': 0,
-                            'indicators': {},
-                            'filename': self.create_filename(value, prefix='disaggregation-value--'),
-                            'name': value,
-                            'disaggregation': disaggregation,
-                        }
-                    all_disaggregations[disaggregation]['values'][value]['instances'] += 1
-                    if indicator_id not in all_disaggregations[disaggregation]['values'][value]['indicators']:
-                        all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] = 0
-                    all_disaggregations[disaggregation]['values'][value]['indicators'][indicator_id] += 1
+            for field in fields:
+                if field not in allowed_fields:
+                    continue
+                if field not in all_fields:
+                    all_fields[field]= {
+                        "filename": "metadata--"+slugify(str(field))+".html",
+                        "indicators": {},
+                        "name": field,
+                        "values": {},
+                    }
+                value = fields[field]
 
-                    all_disaggregations[disaggregation]['indicators'][indicator_id] = True
-        self.disaggregation_store = all_disaggregations
-        return self.disaggregation_store
+                if pd.isna(value) or value == '':
+                    continue
 
+                if value not in all_fields[field]["values"]:
+
+                    all_fields[field]["values"][value] = {
+                        "field": field,
+                        "filename": "metadata-value--"+slugify(str(field))+".html",
+                        "indicators": [],
+                        "instances": 0,
+                        "name": value
+                }
+
+                all_fields[field]["values"][value]["instances"] +=1
+
+                if indicator not in all_fields[field]["values"][value]["indicators"]:
+
+                    all_fields[field]["values"][value]["indicators"].append(indicator)
+
+                all_fields[field]["indicators"][indicator]= value
+        self.metadata_field_store = all_metadata_field
+        return self.metadata_field_store
 
     def get_all_indicators(self):
         indicators = {}
@@ -108,7 +116,7 @@ class DisaggregationReportService(Loggable):
         return indicators
 
 
-    def create_filename(self, title, prefix='disaggregation--'):
+    def create_filename(self, title, prefix='metadata_field--'):
         """Convert a title into a unique filename.
         Parameters
         ----------
@@ -128,28 +136,28 @@ class DisaggregationReportService(Loggable):
         return slug + '.html'
 
 
-    def group_disaggregation_store_by_indicator(self):
-        store = self.get_disaggregation_store()
+    def group_metadata_field_store_by_indicator(self):
+        store = self.get_metadata_field_store()
         grouped = {}
-        for disaggregation in store:
-            for indicator in store[disaggregation]['indicators']:
+        for metadata_field in store:
+            for indicator in store[metadata_field]['indicators']:
                 if indicator not in grouped:
                     grouped[indicator] = {}
-                grouped[indicator][disaggregation] = store[disaggregation]
+                grouped[indicator][metadata_field] = store[metadata_field]
         return grouped
 
 
-    def get_disaggregation_link(self, disaggregation_info):
+    def get_metadata_field_link(self, metadata_field_info):
         return '<a href="{}">{}</a>'.format(
-            disaggregation_info['filename'],
-            disaggregation_info['name'],
+            metadata_field_info['filename'],
+            metadata_field_info['name'],
         )
 
 
-    def get_disaggregation_value_link(self, disaggregation_value_info):
+    def get_metadata_field_value_link(self, metadata_field_value_info):
         return '<a href="{}">{}</a>'.format(
-            disaggregation_value_info['filename'],
-            disaggregation_value_info['name'],
+            metadata_field_value_info['filename'],
+            metadata_field_value_info['name'],
         )
 
 
@@ -161,35 +169,35 @@ class DisaggregationReportService(Loggable):
             return self.translation_helper.translate(text, language, default_group)
 
 
-    def get_disaggregations_dataframe(self):
-        store = self.get_disaggregation_store()
+    def get_metadata_field_dataframe(self):
+        store = self.get_metadata_field_store()
         rows = []
-        for disaggregation in store:
+        for metadata_field in store:
 
-            num_indicators = len(store[disaggregation]['indicators'].keys())
-            num_values = len(store[disaggregation]['values'].keys())
+            num_indicators = len(store[metadata_field]['indicators'].keys())
+            num_values = len(store[metadata_field]['values'].keys())
 
-            # In some cases, a disaggregation may exist as a column but will have
+            # In some cases, a metadata_field may exist as a column but will have
             # no values. In these cases, we skip it.
             if num_values == 0:
                 continue
 
             row = {
-                'Disaggregation': self.get_disaggregation_link(store[disaggregation]),
+                'metadata_field': self.get_metadata_field_link(store[metadata_field]),
                 'Number of indicators':  num_indicators,
                 'Number of values': num_values,
             }
             for language in self.get_languages():
-                row[language] = self.translate(disaggregation, language, disaggregation)
+                row[language] = self.translate(metadata_field, language, metadata_field)
             rows.append(row)
 
-        columns = ['Disaggregation']
+        columns = ['metadata_field']
         columns.extend(self.get_languages())
         columns.extend(['Number of indicators', 'Number of values'])
 
         df = pd.DataFrame(rows, columns=columns)
         if not df.empty:
-            df.sort_values(by=['Disaggregation'], inplace=True)
+            df.sort_values(by=['metadata_field'], inplace=True)
         return df
 
 
@@ -198,29 +206,29 @@ class DisaggregationReportService(Loggable):
 
 
     def get_indicators_dataframe(self):
-        grouped = self.group_disaggregation_store_by_indicator()
+        grouped = self.group_metadata_field_store_by_indicator()
         rows = []
         for indicator in grouped:
-            disaggregation_links = [self.get_disaggregation_link(disaggregation) for disaggregation in grouped[indicator].values()]
-            if len(disaggregation_links) == 0:
+            metadata_field_links = [self.get_metadata_field_link(metadata_field) for metadata_field in grouped[indicator].values()]
+            if len(metadata_field_links) == 0:
                 continue
             rows.append({
                 'Indicator': self.get_indicator_link(indicator),
-                'Disaggregations': ', '.join(disaggregation_links),
-                'Number of disaggregations': len(disaggregation_links),
+                'metadata_fields': ', '.join(metadata_field_links),
+                'Number of metadata_fields': len(metadata_field_links),
             })
-        df = pd.DataFrame(rows, columns=['Indicator', 'Disaggregations', 'Number of disaggregations'])
+        df = pd.DataFrame(rows, columns=['Indicator', 'metadata_fields', 'Number of metadata_fields'])
         if not df.empty:
             df.sort_values(by=['Indicator'], inplace=True)
         return df
 
 
-    def get_disaggregation_dataframe(self, info):
+    def get_metadata_fields_dataframe(self, info):
         rows = []
         for value in info['values']:
             row = {
-                'Value': self.get_disaggregation_value_link(info['values'][value]),
-                'Disaggregation combinations using this value': info['values'][value]['instances'],
+                'Value': self.get_metadata_field_value_link(info['values'][value]),
+                'metadata_field combinations using this value': info['values'][value]['instances'],
                 'Number of indicators': len(info['values'][value]['indicators'].keys()),
             }
             for language in self.get_languages():
@@ -229,7 +237,7 @@ class DisaggregationReportService(Loggable):
 
         columns = ['Value']
         columns.extend(self.get_languages())
-        columns.extend(['Disaggregation combinations using this value', 'Number of indicators'])
+        columns.extend(['metadata_field combinations using this value', 'Number of indicators'])
 
         df = pd.DataFrame(rows, columns=columns)
         if not df.empty:
@@ -237,7 +245,7 @@ class DisaggregationReportService(Loggable):
         return df
 
 
-    def get_disaggregation_indicator_dataframe(self, info):
+    def get_metadata_field_indicator_dataframe(self, info):
         rows = []
         for indicator_id in info['indicators']:
             rows.append({
@@ -249,32 +257,32 @@ class DisaggregationReportService(Loggable):
         return df
 
 
-    def get_disaggregation_value_dataframe(self, info):
+    def get_metadata_field_value_dataframe(self, info):
         rows = []
         for indicator_id in info['indicators']:
             rows.append({
                 'Indicator': self.get_indicator_link(indicator_id),
-                'Disaggregation combinations using this value': info['indicators'][indicator_id]
+                'metadata_field combinations using this value': info['indicators'][indicator_id]
             })
-        df = pd.DataFrame(rows, columns=['Indicator', 'Disaggregation combinations using this value'])
+        df = pd.DataFrame(rows, columns=['Indicator', 'metadata_field combinations using this value'])
         if not df.empty:
             df.sort_values(by=['Indicator'], inplace=True)
         return df
 
 
-    def get_disaggregation_report_template(self):
+    def get_metadata_field_report_template(self):
         return """
         <div role="navigation" aria-describedby="contents-heading">
             <h2 id="contents-heading">On this page</h2>
             <ul>
-                <li><a href="#by-disaggregation">By disaggregation</a></li>
+                <li><a href="#by-metadata_field">By metadata_field</a></li>
                 <li><a href="#by-indicator">By indicator</a></li>
             </ul>
         </div>
         <div>
-            <h2 id="by-disaggregation" tabindex="-1">By disaggregation</h2>
-            {disaggregation_download}
-            {disaggregation_table}
+            <h2 id="by-metadata_field" tabindex="-1">By metadata_field</h2>
+            {metadata_field_download}
+            {metadata_field_table}
         </div>
         <div>
             <h2 id="by-indicator" tabindex="-1">By indicator</h2>
@@ -284,29 +292,29 @@ class DisaggregationReportService(Loggable):
         """
 
 
-    def get_disaggregation_detail_template(self):
+    def get_metadata_field_detail_template(self):
         return """
         <div role="navigation" aria-describedby="contents-heading">
             <h2 id="contents-heading">On this page</h2>
             <ul>
-                <li><a href="#values-used">Values used in disaggregation</a></li>
-                <li><a href="#indicators-using">Indicators using disaggregation</a></li>
+                <li><a href="#values-used">Values used in metadata_field</a></li>
+                <li><a href="#indicators-using">Indicators using metadata_field</a></li>
             </ul>
         </div>
         <div>
-            <h2 id="values-used" tabindex="-1">Values used in disaggregation</h2>
+            <h2 id="values-used" tabindex="-1">Values used in metadata_field</h2>
             {values_download}
             {values_table}
         </div>
         <div>
-            <h2 id="indicators-using" tabindex="-1">Indicators using disaggregation</h2>
+            <h2 id="indicators-using" tabindex="-1">Indicators using metadata_field</h2>
             {indicators_download}
             {indicators_table}
         </div>
         """
 
 
-    def get_disaggregation_value_detail_template(self):
+    def get_metadata_field_value_detail_template(self):
         return """
         <div>
             {download}

@@ -87,12 +87,7 @@ class OutputOpenSdg(OutputBase):
         status = status & sdg.json.write_json('all', all_headline, ftype='headline', site_dir=site_dir)
 
         # Reporting status.
-        reporting_status_types = []
-        if self.schema.get('reporting_status') is not None:
-            status_values = self.schema.get_values('reporting_status')
-            value_translation = self.schema.get_value_translation('reporting_status')
-            reporting_status_types = [{'value': value, 'label': value_translation[value]} for value in status_values]
-        stats_reporting = sdg.stats.reporting_status(reporting_status_types, all_meta, self.reporting_status_grouping_fields)
+        stats_reporting = sdg.stats.reporting_status(all_meta, self.reporting_status_grouping_fields)
         status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
 
         disaggregation_status_service = sdg.DisaggregationStatusService(site_dir, self.indicators, self.reporting_status_grouping_fields)

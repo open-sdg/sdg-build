@@ -9,10 +9,9 @@ Aggregate information for reporting statistics
 import pandas as pd
 
 
-def reporting_status(reporting_status_types, all_meta, extra_fields=None):
+def reporting_status(all_meta, extra_fields=None):
     """
     Args:
-        reporting_status_types: A list of value/label status types
         all_meta: A dictionary containing all metadata items
         extra_fields: List of fields to group stats by, in addition to goal
 
@@ -27,16 +26,11 @@ def reporting_status(reporting_status_types, all_meta, extra_fields=None):
         grouping_fields.append('sdg_goal')
 
     # Generate a report of the possible statuses.
-    unique_status_types = {}
+    status_values = {}
     for indicator_id in all_meta:
         if 'reporting_status' in all_meta[indicator_id]:
-            unique_status_types[all_meta[indicator_id]['reporting_status']] = True
-    print(unique_status_types)
-    status_values = [status['value'] for status in reporting_status_types]
-    value_translation = {status['value']: status['label'] for status in reporting_status_types}
-    status_report = [{'value': status,
-                      'translation_key': value_translation[status]}
-                    for status in status_values]
+            status_values[all_meta[indicator_id]['reporting_status']] = True
+    status_values = status_values.keys()
 
     # Omit any standalone indicators.
     indicators = {k: v for (k, v) in all_meta.items() if 'standalone' not in v or v['standalone'] == False }
@@ -76,7 +70,6 @@ def reporting_status(reporting_status_types, all_meta, extra_fields=None):
     def one_status_report(g, status):
         count = g.get(status, 0)  # If status is missing use 0
         return {'status': status,
-                'translation_key': value_translation[status],
                 'count': count,
                 'percentage': round(100 * count / g['total'],3)}
 
@@ -91,7 +84,7 @@ def reporting_status(reporting_status_types, all_meta, extra_fields=None):
 
     # Start to build our output.
     output = {
-        'statuses': status_report,
+        'statuses': status_values,
         'overall': total_report,
         'extra_fields': {},
     }

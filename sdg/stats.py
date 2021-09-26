@@ -27,6 +27,11 @@ def reporting_status(reporting_status_types, all_meta, extra_fields=None):
         grouping_fields.append('sdg_goal')
 
     # Generate a report of the possible statuses.
+    unique_status_types = {}
+    for indicator_id in all_meta:
+        if 'reporting_status' in all_meta[indicator_id]:
+            unique_status_types[all_meta[indicator_id]['reporting_status']] = True
+    print(unique_status_types)
     status_values = [status['value'] for status in reporting_status_types]
     value_translation = {status['value']: status['label'] for status in reporting_status_types}
     status_report = [{'value': status,

@@ -30,8 +30,7 @@ def reporting_status(all_meta, extra_fields=None):
     for indicator_id in all_meta:
         if 'reporting_status' in all_meta[indicator_id]:
             status_values_by_type[all_meta[indicator_id]['reporting_status']] = True
-    status_values = status_values_by_type.keys()
-    print(status_values)
+    status_values = list(status_values_by_type.keys())
 
     # Omit any standalone indicators.
     indicators = {k: v for (k, v) in all_meta.items() if 'standalone' not in v or v['standalone'] == False }

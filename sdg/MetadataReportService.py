@@ -1,10 +1,12 @@
 import os
 import sdg
 import pandas as pd
+import urllib.request
+import json
 from slugify import slugify
 from sdg.Loggable import Loggable
 
-class metadata_fieldReportService(Loggable):
+class MetadataReportService(Loggable):
     """Report generation to document metadata_fields in data."""
 
 
@@ -56,7 +58,7 @@ class metadata_fieldReportService(Loggable):
         url = "https://sdgdata.gov.uk/sdg-data/en/meta/all.json"
         response = urllib.request.urlopen(url)
         metadata = json.loads(response.read())
-        all_fields = {}
+        all_metadata_fields = {}
         allowed_fields=['computation_units',
 
                 'data_non_statistical',
@@ -64,7 +66,7 @@ class metadata_fieldReportService(Loggable):
                 'graph_type',
                 'national_geographical_coverage',
                 'reporting_status',
-                #'un_custodian_agency',
+                'un_custodian_agency',
                 'un_designated_tier']
         
         for indicator in metadata:
@@ -74,8 +76,8 @@ class metadata_fieldReportService(Loggable):
             for field in fields:
                 if field not in allowed_fields:
                     continue
-                if field not in all_fields:
-                    all_fields[field]= {
+                if field not in all_metadata_fields:
+                    all_metadata_fields[field]= {
                         "filename": "metadata--"+slugify(str(field))+".html",
                         "indicators": {},
                         "name": field,
@@ -86,23 +88,24 @@ class metadata_fieldReportService(Loggable):
                 if pd.isna(value) or value == '':
                     continue
 
-                if value not in all_fields[field]["values"]:
+                if value not in all_metadata_fields[field]["values"]:
 
-                    all_fields[field]["values"][value] = {
+                    all_metadata_fields[field]["values"][value] = {
                         "field": field,
                         "filename": "metadata-value--"+slugify(str(field))+".html",
-                        "indicators": [],
+                        "indicators": {},
                         "instances": 0,
                         "name": value
                 }
 
-                all_fields[field]["values"][value]["instances"] +=1
+                all_metadata_fields[field]["values"][value]["instances"] +=1
 
-                if indicator not in all_fields[field]["values"][value]["indicators"]:
+                if indicator not in all_metadata_fields[field]["values"][value]["indicators"]:
 
-                    all_fields[field]["values"][value]["indicators"].append(indicator)
+                    all_metadata_fields[field]["values"][value]["indicators"][indicator] = 0
+                    all_metadata_fields[field]["values"][value]["indicators"][indicator] += 1
 
-                all_fields[field]["indicators"][indicator]= value
+                all_metadata_fields[field]["indicators"][indicator]= value
         self.metadata_field_store = all_metadata_field
         return self.metadata_field_store
 
@@ -207,6 +210,7 @@ class metadata_fieldReportService(Loggable):
 
     def get_indicators_dataframe(self):
         grouped = self.group_metadata_field_store_by_indicator()
+        store = self.get_metadata_field_store()
         rows = []
         for indicator in grouped:
             metadata_field_links = [self.get_metadata_field_link(metadata_field) for metadata_field in grouped[indicator].values()]
@@ -214,10 +218,17 @@ class metadata_fieldReportService(Loggable):
                 continue
             rows.append({
                 'Indicator': self.get_indicator_link(indicator),
-                'metadata_fields': ', '.join(metadata_field_links),
-                'Number of metadata_fields': len(metadata_field_links),
+                'Indicator': self.get_indicator_link(indicator),
+                'Computation units': self.get_metadata_field_value_link(store['computation_units']['values'][store['computation_units']['indicators'][indicator]]) if indicator in store['computation_units']['indicators'] else '',
+                'Data non-statistical': self.get_metadata_field_value_link(store['data_non_statistical']['values'][store['data_non_statistical']['indicators'][indicator]]) if indicator in store['data_non_statistical']['indicators'] else '',
+                'Data show map': self.get_metadata_field_value_link(store['data_show_map']['values'][store['data_show_map']['indicators'][indicator]]) if indicator in store['data_show_map']['indicators'] else '',
+                'National geographical coverage': self.get_metadata_field_value_link(store['national_geographical_coverage']['values'][store['national_geographical_coverage']['indicators'][indicator]]) if indicator in store['national_geographical_coverage']['indicators'] else '',
+                'Reporting status': self.get_metadata_field_value_link(store['reporting_status']['values'][store['reporting_status']['indicators'][indicator]]) if indicator in store['reporting_status']['indicators'] else '',
+                'UN designated tier': self.get_metadata_field_value_link(store['un_designated_tier']['values'][store['un_designated_tier']['indicators'][indicator]]) if indicator in store['un_designated_tier']['indicators'] else '',
+                'UN Custodian Agency': self.get_metadata_field_value_link(store['un_custodian_agency']['values'][store['un_custodian_agency']['indicators'][indicator]]) if indicator in store['un_custodian_agency']['indicators'] else '',
+                'Graph type': self.get_metadata_field_value_link(store['graph_type']['values'][store['graph_type']['indicators'][indicator]]) if indicator in store['graph_type']['indicators'] else ''
             })
-        df = pd.DataFrame(rows, columns=['Indicator', 'metadata_fields', 'Number of metadata_fields'])
+        df = pd.DataFrame(rows, columns=['Indicator', 'Computation units', 'Data non-statistical', 'Data show map', 'National geographical coverage', 'Reporting status', 'UN designated tier', 'UN Custodian Agency', 'Graph type'])
         if not df.empty:
             df.sort_values(by=['Indicator'], inplace=True)
         return df
@@ -237,7 +248,7 @@ class metadata_fieldReportService(Loggable):
 
         columns = ['Value']
         columns.extend(self.get_languages())
-        columns.extend(['metadata_field combinations using this value', 'Number of indicators'])
+        columns.extend(['Number of indicators'])
 
         df = pd.DataFrame(rows, columns=columns)
         if not df.empty:
@@ -275,12 +286,12 @@ class metadata_fieldReportService(Loggable):
         <div role="navigation" aria-describedby="contents-heading">
             <h2 id="contents-heading">On this page</h2>
             <ul>
-                <li><a href="#by-metadata_field">By metadata_field</a></li>
+                <li><a href="#by-metadata_field">By metadata field</a></li>
                 <li><a href="#by-indicator">By indicator</a></li>
             </ul>
         </div>
         <div>
-            <h2 id="by-metadata_field" tabindex="-1">By metadata_field</h2>
+            <h2 id="by-metadata_field" tabindex="-1">By metadata field</h2>
             {metadata_field_download}
             {metadata_field_table}
         </div>

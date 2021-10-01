@@ -14,13 +14,20 @@ class OutputDocumentationService(Loggable):
     HTML pages documenting the specifics of the build (such as endpoint URLs).
     """
 
+class OutputDocumentationService(Loggable):
+    """HTML generation to document outputs built with this library.
+    Note that this is meant to document particular builds, not the library in
+    general. The idea is that each time this library is used to build/convert
+    some SDG-related data, this class can be used to generate human-friendly
+    HTML pages documenting the specifics of the build (such as endpoint URLs).
+    """
+
 
     def __init__(self, outputs, folder='_site', branding='Build docs',
                  languages=None, intro='', translations=None, indicator_url=None,
                  subfolder=None, baseurl='', extra_disaggregations=None,
-                 translate_disaggregations=False, logging=None):
+                 translate_disaggregations=False, translate_metadata=False, logging=None):
         """Constructor for the OutputDocumentationService class.
-
         Parameters
         ----------
         outputs : list
@@ -80,6 +87,13 @@ class OutputDocumentationService(Loggable):
             indicator_url = self.indicator_url,
             extra_disaggregations = extra_disaggregations,
         )
+        self.metadata_report_service = sdg.MetadataReportService(
+            self.outputs,
+            languages = self.languages if translate_metadata else [],
+            translation_helper = self.translation_helper,
+            indicator_url = self.indicator_url,
+        )
+        
 
 
     def fix_folder(self, folder, subfolder):

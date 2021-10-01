@@ -1,10 +1,10 @@
 import os
 import sdg
 import pandas as pd
-import urllib.request
-import json
 from slugify import slugify
 from sdg.Loggable import Loggable
+import urllib.request
+import json
 
 class MetadataReportService(Loggable):
     """Report generation to document metadata_fields in data."""
@@ -58,7 +58,8 @@ class MetadataReportService(Loggable):
         url = "https://sdgdata.gov.uk/sdg-data/en/meta/all.json"
         response = urllib.request.urlopen(url)
         metadata = json.loads(response.read())
-        all_metadata_fields = {}
+        
+        all_fields = {}
         allowed_fields=['computation_units',
 
                 'data_non_statistical',
@@ -66,7 +67,7 @@ class MetadataReportService(Loggable):
                 'graph_type',
                 'national_geographical_coverage',
                 'reporting_status',
-                'un_custodian_agency',
+                #'un_custodian_agency',
                 'un_designated_tier']
         
         for indicator in metadata:
@@ -76,8 +77,8 @@ class MetadataReportService(Loggable):
             for field in fields:
                 if field not in allowed_fields:
                     continue
-                if field not in all_metadata_fields:
-                    all_metadata_fields[field]= {
+                if field not in all_fields:
+                    all_fields[field]= {
                         "filename": "metadata--"+slugify(str(field))+".html",
                         "indicators": {},
                         "name": field,
@@ -88,9 +89,9 @@ class MetadataReportService(Loggable):
                 if pd.isna(value) or value == '':
                     continue
 
-                if value not in all_metadata_fields[field]["values"]:
+                if value not in all_fields[field]["values"]:
 
-                    all_metadata_fields[field]["values"][value] = {
+                    all_fields[field]["values"][value] = {
                         "field": field,
                         "filename": "metadata-value--"+slugify(str(field))+".html",
                         "indicators": {},
@@ -98,15 +99,14 @@ class MetadataReportService(Loggable):
                         "name": value
                 }
 
-                all_metadata_fields[field]["values"][value]["instances"] +=1
+                all_fields[field]["values"][value]["instances"] +=1
 
-                if indicator not in all_metadata_fields[field]["values"][value]["indicators"]:
+                if indicator not in all_fields[field]["values"][value]["indicators"]:
+                    all_fields[field]['values'][value]['indicators'][indicator] = 0
+                all_fields[field]['values'][value]['indicators'][indicator] +=1  
 
-                    all_metadata_fields[field]["values"][value]["indicators"][indicator] = 0
-                    all_metadata_fields[field]["values"][value]["indicators"][indicator] += 1
-
-                all_metadata_fields[field]["indicators"][indicator]= value
-        self.metadata_field_store = all_metadata_field
+                all_fields[field]["indicators"][indicator]= value
+        self.metadata_field_store = all_fields
         return self.metadata_field_store
 
     def get_all_indicators(self):
@@ -172,7 +172,7 @@ class MetadataReportService(Loggable):
             return self.translation_helper.translate(text, language, default_group)
 
 
-    def get_metadata_field_dataframe(self):
+    def get_metadata_fields_dataframe(self):
         store = self.get_metadata_field_store()
         rows = []
         for metadata_field in store:
@@ -218,28 +218,26 @@ class MetadataReportService(Loggable):
                 continue
             rows.append({
                 'Indicator': self.get_indicator_link(indicator),
-                'Indicator': self.get_indicator_link(indicator),
                 'Computation units': self.get_metadata_field_value_link(store['computation_units']['values'][store['computation_units']['indicators'][indicator]]) if indicator in store['computation_units']['indicators'] else '',
                 'Data non-statistical': self.get_metadata_field_value_link(store['data_non_statistical']['values'][store['data_non_statistical']['indicators'][indicator]]) if indicator in store['data_non_statistical']['indicators'] else '',
                 'Data show map': self.get_metadata_field_value_link(store['data_show_map']['values'][store['data_show_map']['indicators'][indicator]]) if indicator in store['data_show_map']['indicators'] else '',
                 'National geographical coverage': self.get_metadata_field_value_link(store['national_geographical_coverage']['values'][store['national_geographical_coverage']['indicators'][indicator]]) if indicator in store['national_geographical_coverage']['indicators'] else '',
                 'Reporting status': self.get_metadata_field_value_link(store['reporting_status']['values'][store['reporting_status']['indicators'][indicator]]) if indicator in store['reporting_status']['indicators'] else '',
                 'UN designated tier': self.get_metadata_field_value_link(store['un_designated_tier']['values'][store['un_designated_tier']['indicators'][indicator]]) if indicator in store['un_designated_tier']['indicators'] else '',
-                'UN Custodian Agency': self.get_metadata_field_value_link(store['un_custodian_agency']['values'][store['un_custodian_agency']['indicators'][indicator]]) if indicator in store['un_custodian_agency']['indicators'] else '',
                 'Graph type': self.get_metadata_field_value_link(store['graph_type']['values'][store['graph_type']['indicators'][indicator]]) if indicator in store['graph_type']['indicators'] else ''
             })
-        df = pd.DataFrame(rows, columns=['Indicator', 'Computation units', 'Data non-statistical', 'Data show map', 'National geographical coverage', 'Reporting status', 'UN designated tier', 'UN Custodian Agency', 'Graph type'])
+                
+        df = pd.DataFrame(rows, columns=['Indicator', 'Computation units', 'Data non-statistical', 'Data show map', 'National geographical coverage', 'Reporting status', 'UN designated tier', 'Graph type'])
         if not df.empty:
             df.sort_values(by=['Indicator'], inplace=True)
         return df
 
 
-    def get_metadata_fields_dataframe(self, info):
+    def get_metadata_field_dataframe(self, info):
         rows = []
         for value in info['values']:
             row = {
                 'Value': self.get_metadata_field_value_link(info['values'][value]),
-                'metadata_field combinations using this value': info['values'][value]['instances'],
                 'Number of indicators': len(info['values'][value]['indicators'].keys()),
             }
             for language in self.get_languages():
@@ -272,10 +270,9 @@ class MetadataReportService(Loggable):
         rows = []
         for indicator_id in info['indicators']:
             rows.append({
-                'Indicator': self.get_indicator_link(indicator_id),
-                'metadata_field combinations using this value': info['indicators'][indicator_id]
+                'Indicator': self.get_indicator_link(indicator_id)
             })
-        df = pd.DataFrame(rows, columns=['Indicator', 'metadata_field combinations using this value'])
+        df = pd.DataFrame(rows, columns=['Indicator'])
         if not df.empty:
             df.sort_values(by=['Indicator'], inplace=True)
         return df
@@ -308,17 +305,17 @@ class MetadataReportService(Loggable):
         <div role="navigation" aria-describedby="contents-heading">
             <h2 id="contents-heading">On this page</h2>
             <ul>
-                <li><a href="#values-used">Values used in metadata_field</a></li>
+                <li><a href="#values-used">Values used in metadata field</a></li>
                 <li><a href="#indicators-using">Indicators using metadata_field</a></li>
             </ul>
         </div>
         <div>
-            <h2 id="values-used" tabindex="-1">Values used in metadata_field</h2>
+            <h2 id="values-used" tabindex="-1">Values used in metadata field</h2>
             {values_download}
             {values_table}
         </div>
         <div>
-            <h2 id="indicators-using" tabindex="-1">Indicators using metadata_field</h2>
+            <h2 id="indicators-using" tabindex="-1">Indicators using metadata field</h2>
             {indicators_download}
             {indicators_table}
         </div>

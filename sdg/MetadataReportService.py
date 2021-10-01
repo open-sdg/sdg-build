@@ -67,7 +67,7 @@ class MetadataReportService(Loggable):
                 'graph_type',
                 'national_geographical_coverage',
                 'reporting_status',
-                #'un_custodian_agency',
+                'un_custodian_agency',
                 'un_designated_tier']
         
         for indicator in metadata:

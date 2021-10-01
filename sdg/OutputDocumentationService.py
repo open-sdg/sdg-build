@@ -183,7 +183,6 @@ class OutputDocumentationService(Loggable):
 
     def write_index(self, pages):
         """Write the index page.
-
         Parameters
         ----------
         pages : list
@@ -221,26 +220,15 @@ class OutputDocumentationService(Loggable):
         card_number += 1
         if card_number % 3 == 0:
             html += row_end
-
-        if card_number % 3 != 0:
-            html += row_end
-
-        page_html = self.get_html('Overview', html)
-        self.write_page('index.html', page_html)
-        
-        # Add the metadata report.
         if card_number % 3 == 0:
             html += row_start
         html += self.get_index_card_template().format(
             title='Metadata report',
-            description='These tables show information about all the metadata fields used in the data.',
+            description='These tables show information about the indicators.',
             destination='metadata.html',
             call_to_action='See metadata report'
         )
         card_number += 1
-        if card_number % 3 == 0:
-            html += row_end
-
         if card_number % 3 != 0:
             html += row_end
 

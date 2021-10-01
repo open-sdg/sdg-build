@@ -79,7 +79,7 @@ class MetadataReportService(Loggable):
                     continue
                 if field not in all_fields:
                     all_fields[field]= {
-                        "filename": self.create_filename(field),
+                        "filename": "metadata--"+slugify(str(field))+".html",
                         "indicators": {},
                         "name": field,
                         "values": {},
@@ -93,7 +93,7 @@ class MetadataReportService(Loggable):
 
                     all_fields[field]["values"][value] = {
                         "field": field,
-                        "filename": self.create_filename(value, prefix='metadata-value--'),
+                        "filename": "metadata-value--"+slugify(str(field))+".html",
                         "indicators": {},
                         "instances": 0,
                         "name": value

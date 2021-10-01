@@ -511,52 +511,52 @@ class OutputDocumentationService(Loggable):
             file.write(html)
   
     def write_metadata_report(self):
-        service = self.disaggregation_report_service
-        store = self.disaggregation_report_service.get_disaggregation_store()
+        service = self.metadata_report_service
+        store = self.metadata_report_service.get_metadata_field_store()
 
-        disaggregation_df = service.get_disaggregations_dataframe()
-        disaggregation_table = self.html_from_dataframe(disaggregation_df, table_id='disaggregation-table')
-        disaggregation_download_label = 'Download CSV of disaggregations'
-        disaggregation_download_file = 'disaggregation-report.csv'
-        disaggregation_download = self.get_csv_download(disaggregation_df, disaggregation_download_file, label=disaggregation_download_label)
+        metadata_field_df = service.get_metadata_fields_dataframe()
+        metadata_field_table = self.html_from_dataframe(metadata_field_df, table_id='metadata-field-table')
+        metadata_field_download_label = 'Download CSV of disaggregations'
+        metadata_field_download_file = 'metadata_field-report.csv'
+        metadata_field_download = self.get_csv_download(metadata_field_df, metadata_field_download_file, label=metadata_field_download_label)
 
         indicator_df = service.get_indicators_dataframe()
         indicator_table = self.html_from_dataframe(indicator_df, table_id='indicator-table')
         indicator_download_label = 'Download CSV of indicators'
-        indicator_download_file = 'disaggregation-by-indicator-report.csv'
+        indicator_download_file = 'metadata_field-by-indicator-report.csv'
         indicator_download = self.get_csv_download(indicator_df, indicator_download_file, label=indicator_download_label)
 
-        report_html = self.get_html('Disaggregation report', service.get_disaggregation_report_template().format(
-            disaggregation_download=disaggregation_download,
-            disaggregation_table=disaggregation_table,
+        report_html = self.get_html('Metadata report', service.get_metadata_field_report_template().format(
+            metadata_field_download=metadata_field_download,
+            metadata_field_table=metadata_field_table,
             indicator_download=indicator_download,
             indicator_table=indicator_table
         ))
-        self.write_page('disaggregations.html', report_html)
+        self.write_page('metadata.html', report_html)
 
-        for disaggregation in store:
-            self.write_metadata_field_detail_page(store[disaggregation])
-            for disaggregation_value in store[disaggregation]['values']:
-                self.write_metadata_field_value_detail_page(store[disaggregation]['values'][disaggregation_value]
+        for metadata_field in store:
+            self.write_metadata_field_detail_page(store[metadata_field])
+            for metadata_field_value in store[metadata_field]['values']:
+                self.write_metadata_field_value_detail_page(store[metadata_field]['values'][metadata_field_value])
 
     def write_metadata_field_detail_page(self, info):
-        service = self.disaggregation_report_service
-        disaggregation = info['name']
+        service = self.metadata_report_service
+        metadata_field = info['name']
         filename = info['filename']
 
-        values_df = service.get_disaggregation_dataframe(info)
-        values_download_label = 'Download CSV of values used in this disaggregation'
+        values_df = service.get_metadata_field_dataframe(info)
+        values_download_label = 'Download CSV of values used in this metadata field'
         values_download_file = 'values--' + filename.replace('.html', '.csv')
         values_download = self.get_csv_download(values_df, values_download_file, label=values_download_label)
         values_table = self.html_from_dataframe(values_df, table_id='values-table')
 
-        indicators_df = service.get_disaggregation_indicator_dataframe(info)
-        indicators_download_label = 'Download CSV of indicators using this disaggregation'
+        indicators_df = service.get_metadata_field_indicator_dataframe(info)
+        indicators_download_label = 'Download CSV of indicators using this metadata field'
         indicators_download_file = 'indicators--' + filename.replace('.html', '.csv')
         indicators_download = self.get_csv_download(indicators_df, indicators_download_file, label=indicators_download_label)
         indicators_table = self.html_from_dataframe(indicators_df, table_id='indicators-table')
 
-        detail_html = self.get_html('Disaggregation: ' + disaggregation, service.get_disaggregation_detail_template().format(
+        detail_html = self.get_html('Metadata field ' + metadata_field, service.get_metadata_field_detail_template().format(
             values_download=values_download,
             values_table=values_table,
             indicators_download=indicators_download,
@@ -565,18 +565,18 @@ class OutputDocumentationService(Loggable):
         self.write_page(filename, detail_html)
 
     def write_metadata_field_value_detail_page(self, info):
-        service = self.disaggregation_report_service
-        disaggregation = str(info['disaggregation'])
-        disaggregation_value = str(info['name'])
+        service = self.metadata_report_service
+        metadata_field = str(info['field'])
+        metadata_field_value = str(info['name'])
         filename = info['filename']
 
-        df = service.get_disaggregation_value_dataframe(info)
-        download_label = 'Download CSV of indicators using this disaggregation value'
+        df = service.get_metadata_field_value_dataframe(info)
+        download_label = 'Download CSV of indicators using this metadata field value'
         download_file = filename.replace('.html', '.csv')
         download = self.get_csv_download(df, download_file, label=download_label)
-        table = self.html_from_dataframe(df, table_id='disaggregation-value-table')
+        table = self.html_from_dataframe(df, table_id='metadata-field-value-table')
 
-        html = self.get_html(disaggregation + ': ' + disaggregation_value, service.get_disaggregation_value_detail_template().format(
+        html = self.get_html(metadata_field + ': ' + metadata_field_value, service.get_metadata_field_value_detail_template().format(
             download=download,
             table=table
         ))

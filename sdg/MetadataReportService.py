@@ -132,7 +132,7 @@ class MetadataReportService(Loggable):
         """
         slug = prefix + slugify(str(title))
         if slug in self.slugs:
-            slug = slug + '_'
+            slug = slug
         if len(slug) > 100:
             slug = slug[0:100]
         self.slugs.append(slug)

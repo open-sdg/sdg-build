@@ -119,7 +119,7 @@ class MetadataReportService(Loggable):
         return indicators
 
 
-    def create_filename(self, title, prefix='metadata_field--'):
+    def create_filename(self, title, prefix='metadata--'):
         """Convert a title into a unique filename.
         Parameters
         ----------

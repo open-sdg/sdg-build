@@ -92,6 +92,7 @@ class MetadataReportService(Loggable):
                 if field in boolean_fields:
                     if pd.isna(value) or value == '':
                         value = False
+                        print("##################################################################"
                         print(value)
                 elif pd.isna(value) or value == '':
                     continue

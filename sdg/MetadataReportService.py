@@ -5,6 +5,7 @@ from slugify import slugify
 from sdg.Loggable import Loggable
 import urllib.request
 import json
+import numpy as np
 
 class MetadataReportService(Loggable):
     """Report generation to document metadata_fields in data."""
@@ -89,8 +90,9 @@ class MetadataReportService(Loggable):
                     }
                 value = fields[field]
                 if field in boolean_fields:
-                    value.fillna(False)
-                elif pd.isna(value) or value == '':
+                    if pd.isna(value) or value == ''
+                    value = False
+                if pd.isna(value) or value == '':
                     continue
 
                 if value not in all_fields[field]["values"]:

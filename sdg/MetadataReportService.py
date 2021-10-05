@@ -69,6 +69,9 @@ class MetadataReportService(Loggable):
                 'reporting_status',
                 'un_custodian_agency',
                 'un_designated_tier']
+        boolean_fields=['data_non_statistical',
+                        'data_show_map']
+                        
         
         for indicator in metadata:
             fields = metadata.get(indicator)
@@ -85,8 +88,10 @@ class MetadataReportService(Loggable):
                         "values": {},
                     }
                 value = fields[field]
-
-                if pd.isna(value) or value == '':
+                if field is in boolean_fields:
+                    if pd.isna(value) or value == '':
+                        value = False
+                elif pd.isna(value) or value == '':
                     continue
 
                 if value not in all_fields[field]["values"]:

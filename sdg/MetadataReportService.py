@@ -89,8 +89,7 @@ class MetadataReportService(Loggable):
                     }
                 value = fields[field]
                 if field in boolean_fields:
-                    if pd.isna(value) or value == '':
-                        value = "False"
+                    value.fillna(False)
                 elif pd.isna(value) or value == '':
                     continue
 

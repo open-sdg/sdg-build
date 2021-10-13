@@ -1,5 +1,16 @@
 # Changes
 
+### 1.5.0
+
+* Keep placeholder indicators out of some calculations #275
+* Make sure disaggregations are sorted as strings #274
+* Fix for UNIT_MULT issue #273
+* Fix encoding in constraints CSV #272
+* Allow a dtype parameter in CSV data input #271
+* Handle special case of id/name columns in GeoJson output #270
+* Create pull_request_template.md #269
+* SDMX global output #268
+
 ### 1.4.0
 
 * Correct way to get number of dataframe rows #266

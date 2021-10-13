@@ -362,6 +362,21 @@ class Indicator(Loggable):
             return True
 
 
+    def is_placeholder(self):
+        """Decide whether this indicator is a placeholder - ie, not intended to be reported yet.
+
+        Returns
+        -------
+        boolean
+            True if the indicator should be considered a placeholder, False otherwise.
+        """
+        placeholder = self.get_meta_field_value('placeholder')
+        if placeholder is None or placeholder == '':
+            return False
+        else:
+            return True
+
+
     def get_meta_field_value(self, field):
         """Get the value for a metadata field.
 

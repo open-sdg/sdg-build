@@ -35,6 +35,8 @@ def reporting_status(reporting_status_types, all_meta, extra_fields=None):
 
     # Omit any standalone indicators.
     indicators = {k: v for (k, v) in all_meta.items() if 'standalone' not in v or v['standalone'] == False }
+    # Omit any placeholder indicators.
+    indicators = {k: v for (k, v) in indicators.items() if 'placeholder' not in v or v['placeholder'] == '' }
 
     # Pick out only the fields we want from each indicators metadata
     fields = ['reporting_status'] + grouping_fields

@@ -105,7 +105,7 @@ class DisaggregationReportService(Loggable):
         for output in self.outputs:
             for indicator_id in output.get_indicator_ids():
                 indicator = output.get_indicator_by_id(indicator_id)
-                if not indicator.is_standalone():
+                if not indicator.is_standalone() and not indicator.is_placeholder():
                     indicators[indicator_id] = indicator
         return indicators
 

@@ -57,7 +57,7 @@ class DisaggregationStatusService(Loggable):
         goals = {}
         for indicator_id in self.indicators:
             indicator = self.indicators[indicator_id]
-            if indicator.is_standalone():
+            if indicator.is_standalone() or indicator.is_placeholder():
                 continue
             goal = indicator.get_goal_id()
             goals[goal] = True
@@ -144,7 +144,7 @@ class DisaggregationStatusService(Loggable):
         for indicator_id in self.indicators:
             indicator = self.indicators[indicator_id]
 
-            if indicator.is_standalone():
+            if indicator.is_standalone() or indicator.is_placeholder():
                 continue
 
             is_notapplicable = self.is_indicator_notapplicable(indicator_id)

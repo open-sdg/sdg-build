@@ -57,11 +57,12 @@ class MetadataReportService(Loggable):
             - name (string, the name of the metadata_field)            
         """
         
-        metadata = {
+        metadata = (
                 indicator_id: indicator.meta
                 for (indicator_id, indicator)
                 in self.get_all_indicators().items()
-        }        
+        )
+                
         
         all_fields = {}
         allowed_fields=['computation_units',

@@ -235,7 +235,7 @@ class MetadataReportService(Loggable):
                 'National geographical coverage': self.get_metadata_field_value_link(store['national_geographical_coverage']['values'][store['national_geographical_coverage']['indicators'][indicator]]) if indicator in store['national_geographical_coverage']['indicators'] else '',
                 'Reporting status': self.get_metadata_field_value_link(store['reporting_status']['values'][store['reporting_status']['indicators'][indicator]]) if indicator in store['reporting_status']['indicators'] else '',
                 'UN designated tier': self.get_metadata_field_value_link(store['un_designated_tier']['values'][store['un_designated_tier']['indicators'][indicator]]) if indicator in store['un_designated_tier']['indicators'] else '',
-                'Graph type': self.get_metadata_field_value_link(store['graph_type']['values'][store['graph_type']['indicators'][indicator]]) if indicator in store['graph_type']['indicators'] else ''
+                'Graph type': self.get_metadata_field_value_link(store['graph_type']['values'][store['graph_type']['indicators'][indicator]]) if indicator in store['graph_type']['indicators'] else '',
                 'UN custodian agency': self.get_metadata_field_value_link(store['un_custodian_agency']['values'][store['un_custodian_agency']['indicators'][indicator]]) if indicator in store['un_custodian_agency']['indicators'] else ''
             })
                 

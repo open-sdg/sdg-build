@@ -237,7 +237,7 @@ class MetadataReportService(Loggable):
                 'UN custodian agency': self.get_metadata_field_value_link(store['un_custodian_agency']['values'][store['un_custodian_agency']['indicators'][indicator]]) if indicator in store['un_custodian_agency']['indicators'] else ''
             })
                 
-        df = pd.DataFrame(rows, columns=['Indicator', 'Computation units', 'Data non-statistical', 'Data show map', 'National geographical coverage', 'Reporting status', 'UN designated tier', 'Graph type'])
+        df = pd.DataFrame(rows, columns=['Indicator', 'Reporting status', 'UN designated tier', 'Computation units', 'Data non-statistical', 'Data show map', 'Graph type', 'National geographical coverage', 'UN custodian agency'])
         if not df.empty:
             df.sort_values(by=['Indicator'], inplace=True)
         return df

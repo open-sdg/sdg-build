@@ -218,7 +218,7 @@ class MetadataReportService(Loggable):
         return self.languages
 
 
-def get_indicators_dataframe(self):
+    def get_indicators_dataframe(self):
         grouped = self.group_metadata_field_store_by_indicator()
         store = self.get_metadata_field_store()
         rows = []

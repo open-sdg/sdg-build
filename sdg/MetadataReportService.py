@@ -72,7 +72,7 @@ class MetadataReportService(Loggable):
                 'national_geographical_coverage',
                 'reporting_status',
                 'un_custodian_agency',
-                'un_designated_tier']
+                'un_designated_tier',
                 'un_custodian_agency']
         boolean_fields=['data_non_statistical',
                         'data_show_map']

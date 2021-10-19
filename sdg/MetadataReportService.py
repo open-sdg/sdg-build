@@ -64,15 +64,14 @@ class MetadataReportService(Loggable):
         }        
         
         all_fields = {}
-        allowed_fields=['computation_units',
-
+        allowed_fields=['reporting_status',
+                'un_designated_tier',
+                'un_custodian_agency',
                 'data_non_statistical',
                 'data_show_map',
-                'graph_type',
-                'national_geographical_coverage',
-                'reporting_status',
-                'un_custodian_agency',
-                'un_designated_tier']
+                'national_geographical_coverage'
+                'computation_units',
+                'graph_type']
         boolean_fields=['data_non_statistical',
                         'data_show_map']
                         

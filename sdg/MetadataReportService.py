@@ -91,11 +91,9 @@ class MetadataReportService(Loggable):
                         "values": {},
                     }
                 value = fields[field]
-                """
                 if field in boolean_fields:
                     if value == False:
                         value = ''
-                """
                 if pd.isna(value) or value == '':
                     continue
 

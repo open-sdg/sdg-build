@@ -74,6 +74,7 @@ class MetadataReportService(Loggable):
                 'graph_type']
         boolean_fields=['data_non_statistical',
                         'data_show_map']
+        data_non_statistical_test=['data_non_statistical']
                         
         
         for indicator in metadata:
@@ -94,9 +95,8 @@ class MetadataReportService(Loggable):
                 if field in boolean_fields:
                     if value == False:
                         value = ''
-                if field is 'data_non_statistical':
+                if field in data_non_statistical_test:
                     if value == True:
-                        print('##########################################################################################')
                         value = 'Yes'
                 if pd.isna(value) or value == '':
                     continue

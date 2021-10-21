@@ -96,6 +96,7 @@ class MetadataReportService(Loggable):
                         value = ''
                 if field is 'data_non_statistical':
                     if value == True:
+                        print('##########################################################################################')
                         value = 'Yes'
                 if pd.isna(value) or value == '':
                     continue

@@ -94,7 +94,7 @@ class MetadataReportService(Loggable):
                 if field in boolean_fields:
                     if value == False:
                         value = ''
-                if field is 'data_non_statistical'
+                if field is 'data_non_statistical':
                     if value == True:
                         value = 'Yes'
                 if pd.isna(value) or value == '':

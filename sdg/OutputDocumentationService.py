@@ -231,17 +231,20 @@ class OutputDocumentationService(Loggable):
         card_number += 1
         if card_number % 3 == 0:
             html += row_end
-        if card_number % 3 == 0:
-            html += row_start
-        html += self.get_index_card_template().format(
-            title='Metadata report',
-            description='These tables show information about the indicators.',
-            destination='metadata.html',
-            call_to_action='See metadata report'
-        )
-        card_number += 1
-        if card_number % 3 != 0:
-            html += row_end
+
+        # Add the metadata report.
+        if self.metadata_report_service is not None and self.metadata_report_service.validate_field_config():
+            if card_number % 3 == 0:
+                html += row_start
+            html += self.get_index_card_template().format(
+                title='Metadata report',
+                description='These tables show information about the indicators.',
+                destination='metadata.html',
+                call_to_action='See metadata report'
+            )
+            card_number += 1
+            if card_number % 3 != 0:
+                html += row_end
 
         page_html = self.get_html('Overview', html)
         self.write_page('index.html', page_html)
@@ -512,10 +515,7 @@ class OutputDocumentationService(Loggable):
     def write_metadata_report(self):
         service = self.metadata_report_service
 
-        if service is None:
-            return
-
-        if not service.validate_field_config():
+        if service is None or not service.validate_field_config():
             return
 
         store = self.metadata_report_service.get_metadata_field_store()

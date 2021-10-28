@@ -242,7 +242,7 @@ class MetadataReportService(Loggable):
                 'Indicator': self.get_indicator_link(indicator)
             })
             for field in allowed_fields:
-                if field is in store:
+                if field in store:
                     rows.append({
                         fields_dict[field]: self.get_metadata_field_value_link(store[field]['values'][store[field]['indicators'][indicator]]) if indicator in store[field]['indicators'] else ''
                 })

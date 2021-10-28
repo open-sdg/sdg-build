@@ -251,17 +251,13 @@ class MetadataReportService(Loggable):
         store = self.get_metadata_field_store()
         rows = []
         for indicator in grouped:
-            metadata_field_links = [self.get_metadata_field_link(metadata_field) for metadata_field in grouped[indicator].values()]
-            if len(metadata_field_links) == 0:
-                continue
             rows.append({
                 'Indicator': self.get_indicator_link(indicator)
             })
-            for field in allowed_fields:
-                if field in store:
-                    rows.append({
-                        fields_dict[field]: self.get_metadata_field_value_link(store[field]['values'][store[field]['indicators'][indicator]]) if indicator in store[field]['indicators'] else ''
-                })
+        for field in store:
+            rows.append({
+                fields_dict[field]: self.get_metadata_field_value_link(store[field]['values'][store[field]['indicators'][indicator]]) if indicator in store[field]['indicators'] else ''
+            })
 
         df = pd.DataFrame(rows, columns=['Indicator', 'Reporting status', 'UN designated tier', 'UN custodian agency', 'Data non-statistical', 'Data show map', 'Graph type'])
         if not df.empty:

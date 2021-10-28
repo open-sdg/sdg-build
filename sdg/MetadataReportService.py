@@ -12,7 +12,7 @@ class MetadataReportService(Loggable):
 
 
     def __init__(self, outputs, languages=None, translation_helper=None,
-                 indicator_url=None, extra_metadata_fields=None, logging=None):
+                 indicator_url=None, metadata_fields=None, logging=None):
         """Constructor for the metadata_fieldReportService class.
         Parameters
         ----------
@@ -30,10 +30,9 @@ class MetadataReportService(Loggable):
             the "[id]" will be replaced with the indicator id (dash-delimited).
             For example, "https://example.com/[id].html" will be replaced with
             "https://example.com/4-1-1.html".
-        extra_metadata_fields : list
-            Optional list of columns to include, which would not otherwise be
-            included. Common choices are are units of measurement and series,
-            which some users may prefer to see in the report.
+        metadata_fields : list
+            List of metadata fields to include. Each item should be a dict with
+            both 'label' and 'key'.
         """
         Loggable.__init__(self, logging=logging)
         self.outputs = outputs
@@ -41,7 +40,7 @@ class MetadataReportService(Loggable):
         self.slugs = []
         self.languages = [] if languages is None else languages
         self.translation_helper = translation_helper
-        self.extra_metadata_fields = [] if extra_metadata_fields is None else extra_metadata_fields
+        self.metadata_fields = [] if metadata_fields is None else metadata_fields
         self.metadata_field_store = None
 
 
@@ -54,50 +53,34 @@ class MetadataReportService(Loggable):
             - values (dict of values keyed to number of instances)
             - indicators (dict with indicator ids as keys)
             - filename (string, suitable for writing to disk)
-            - name (string, the name of the metadata_field)            
+            - name (string, the name of the metadata_field)
         """
-        
+
         metadata = {
                 indicator_id: indicator.meta
                 for (indicator_id, indicator)
                 in self.get_all_indicators().items()
-        }        
-        
+        }
+
         all_fields = {}
-        allowed_fields=['reporting_status',
-                'un_designated_tier',
-                'un_custodian_agency',
-                'data_non_statistical',
-                'data_show_map',
-                'national_geographical_coverage',
-                'computation_units',
-                'graph_type']
-        boolean_fields=['data_non_statistical',
-                        'data_show_map']
-        data_non_statistical_test=['data_non_statistical']
-                        
-        
         for indicator in metadata:
             fields = metadata.get(indicator)
-            if "standalone" in fields:
-                continue
+
             for field in fields:
-                if field not in allowed_fields:
+                if not self.is_field_allowed(field):
                     continue
+                label = self.get_field_label(field)
                 if field not in all_fields:
                     all_fields[field]= {
                         "filename": self.create_filename(field),
                         "indicators": {},
                         "name": field,
+                        "label": label,
                         "values": {},
                     }
                 value = fields[field]
-                if field in boolean_fields:
-                    if value == False:
-                        value = ''
-                if field in data_non_statistical_test:
-                    if value == True:
-                        value = 'Yes'
+                if value == False:
+                    value = ''
                 if pd.isna(value) or value == '':
                     continue
 
@@ -105,21 +88,45 @@ class MetadataReportService(Loggable):
 
                     all_fields[field]["values"][value] = {
                         "field": field,
-                        "filename": self.create_filename(value, prefix='metadata-value--'),
+                        "filename": self.create_filename(value, prefix='metadata-value--' + field + '--'),
                         "indicators": {},
                         "instances": 0,
-                        "name": value
+                        "name": value,
+                        "label": value,
                 }
 
                 all_fields[field]["values"][value]["instances"] +=1
 
                 if indicator not in all_fields[field]["values"][value]["indicators"]:
                     all_fields[field]['values'][value]['indicators'][indicator] = 0
-                all_fields[field]['values'][value]['indicators'][indicator] +=1  
+                all_fields[field]['values'][value]['indicators'][indicator] +=1
 
                 all_fields[field]["indicators"][indicator]= value
         self.metadata_field_store = all_fields
         return self.metadata_field_store
+
+
+    def validate_field_config(self):
+        for field in self.metadata_fields:
+            if 'key' not in field or 'label' not in field:
+                self.warn('The metadata report cannot be generated because some field do not have a key and label specified.')
+                return False
+        return True
+
+
+    def is_field_allowed(self, field_name):
+        for field in self.metadata_fields:
+            if field['key'] == field_name:
+                return True
+        return False
+
+
+    def get_field_label(self, field_name):
+        for field in self.metadata_fields:
+            if field['key'] == field_name:
+                return field['label']
+        return field_name
+
 
     def get_all_indicators(self):
         indicators = {}
@@ -165,14 +172,14 @@ class MetadataReportService(Loggable):
     def get_metadata_field_link(self, metadata_field_info):
         return '<a href="{}">{}</a>'.format(
             metadata_field_info['filename'],
-            metadata_field_info['name'],
+            metadata_field_info['label'],
         )
 
 
     def get_metadata_field_value_link(self, metadata_field_value_info):
         return '<a href="{}">{}</a>'.format(
             metadata_field_value_info['filename'],
-            metadata_field_value_info['name'],
+            metadata_field_value_info['label'],
         )
 
 
@@ -224,23 +231,19 @@ class MetadataReportService(Loggable):
         grouped = self.group_metadata_field_store_by_indicator()
         store = self.get_metadata_field_store()
         rows = []
+        columns = [field['key'] for field in self.metadata_fields]
         for indicator in grouped:
             metadata_field_links = [self.get_metadata_field_link(metadata_field) for metadata_field in grouped[indicator].values()]
             if len(metadata_field_links) == 0:
                 continue
-            rows.append({
-                'Indicator': self.get_indicator_link(indicator),
-                'Reporting status': self.get_metadata_field_value_link(store['reporting_status']['values'][store['reporting_status']['indicators'][indicator]]) if indicator in store['reporting_status']['indicators'] else '',
-                'UN designated tier': self.get_metadata_field_value_link(store['un_designated_tier']['values'][store['un_designated_tier']['indicators'][indicator]]) if indicator in store['un_designated_tier']['indicators'] else '',
-                'UN custodian agency': self.get_metadata_field_value_link(store['un_custodian_agency']['values'][store['un_custodian_agency']['indicators'][indicator]]) if indicator in store['un_custodian_agency']['indicators'] else '',
-                'Data non-statistical': self.get_metadata_field_value_link(store['data_non_statistical']['values'][store['data_non_statistical']['indicators'][indicator]]) if indicator in store['data_non_statistical']['indicators'] else '',
-                'Data show map': self.get_metadata_field_value_link(store['data_show_map']['values'][store['data_show_map']['indicators'][indicator]]) if indicator in store['data_show_map']['indicators'] else '',
-                'National geographical coverage': self.get_metadata_field_value_link(store['national_geographical_coverage']['values'][store['national_geographical_coverage']['indicators'][indicator]]) if indicator in store['national_geographical_coverage']['indicators'] else '',
-                'Computation units': self.get_metadata_field_value_link(store['computation_units']['values'][store['computation_units']['indicators'][indicator]]) if indicator in store['computation_units']['indicators'] else '',
-                'Graph type': self.get_metadata_field_value_link(store['graph_type']['values'][store['graph_type']['indicators'][indicator]]) if indicator in store['graph_type']['indicators'] else ''
-            })
-                
-        df = pd.DataFrame(rows, columns=['Indicator', 'Reporting status', 'UN designated tier', 'UN custodian agency', 'Data non-statistical', 'Data show map', 'National geographical coverage', 'Computation units', 'Graph type'])
+            row = {}
+            row['Indicator'] = self.get_indicator_link(indicator)
+            for field in self.metadata_fields:
+                key = field['key']
+                row[key] = self.get_metadata_field_value_link(store[key]['values'][store[key]['indicators'][indicator]]) if indicator in store[key]['indicators'] else ''
+            rows.append(row)
+
+        df = pd.DataFrame(rows, columns=['Indicator'] + columns)
         if not df.empty:
             df.sort_values(by=['Indicator'], inplace=True)
         return df

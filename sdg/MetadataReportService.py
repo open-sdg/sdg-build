@@ -231,6 +231,22 @@ class MetadataReportService(Loggable):
 
 
     def get_indicators_dataframe(self):
+        allowed_fields=['reporting_status',
+                'un_designated_tier',
+                'un_custodian_agency',
+                'data_non_statistical',
+                'data_show_map',
+                'national_geographical_coverage',
+                'computation_units',
+                'graph_type']
+        fields_dict= {'reporting_status': 'Reporting status',
+                'un_designated_tier': 'UN designated tier',
+                'un_custodian_agency': 'UN custodian agency',
+                'data_non_statistical': 'Data non-statistical',
+                'data_show_map': 'Data show map',
+                'national_geographical_coverage': 'National geographical coverage',
+                'computation_units': 'Computation units',
+                'graph_type': 'Graph type'}
         grouped = self.group_metadata_field_store_by_indicator()
         store = self.get_metadata_field_store()
         rows = []

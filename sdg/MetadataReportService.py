@@ -1,11 +1,6 @@
-import os
-import sdg
 import pandas as pd
 from slugify import slugify
 from sdg.Loggable import Loggable
-import urllib.request
-import json
-import numpy as np
 
 class MetadataReportService(Loggable):
     """Report generation to document metadata_fields in data."""
@@ -355,7 +350,3 @@ class MetadataReportService(Loggable):
         link = '<a href="{href}">{label}</a>'
         href = self.indicator_url.replace('[id]', indicator_id)
         return link.format(href=href, label=indicator_label)
-
-
-    def remove_links_from_dataframe(self, df):
-        return df.replace('<[^<]+?>', '', regex=True)

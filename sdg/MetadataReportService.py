@@ -72,16 +72,6 @@ class MetadataReportService(Loggable):
                 'national_geographical_coverage',
                 'computation_units',
                 'graph_type']
-        fields_dict= {'reporting_status': 'Reporting status',
-                'un_designated_tier': 'UN designated tier',
-                'un_custodian_agency': 'UN custodian agency',
-                'data_non_statistical': 'Data non-statistical',
-                'data_show_map': 'Data show map',
-                'national_geographical_coverage': 'National geographical coverage',
-                'computation_units': 'Computation units',
-                'graph_type': 'Graph type'}
-                     
-                
         boolean_fields=['data_non_statistical',
                         'data_show_map']
         data_non_statistical_test=['data_non_statistical']
@@ -231,35 +221,26 @@ class MetadataReportService(Loggable):
 
 
     def get_indicators_dataframe(self):
-        allowed_fields=['reporting_status',
-                'un_designated_tier',
-                'un_custodian_agency',
-                'data_non_statistical',
-                'data_show_map',
-                'national_geographical_coverage',
-                'computation_units',
-                'graph_type']
-        fields_dict= {'reporting_status': 'Reporting status',
-                'un_designated_tier': 'UN designated tier',
-                'un_custodian_agency': 'UN custodian agency',
-                'data_non_statistical': 'Data non-statistical',
-                'data_show_map': 'Data show map',
-                'national_geographical_coverage': 'National geographical coverage',
-                'computation_units': 'Computation units',
-                'graph_type': 'Graph type'}
         grouped = self.group_metadata_field_store_by_indicator()
         store = self.get_metadata_field_store()
         rows = []
         for indicator in grouped:
+            metadata_field_links = [self.get_metadata_field_link(metadata_field) for metadata_field in grouped[indicator].values()]
+            if len(metadata_field_links) == 0:
+                continue
             rows.append({
-                'Indicator': self.get_indicator_link(indicator)
+                'Indicator': self.get_indicator_link(indicator),
+                'Reporting status': self.get_metadata_field_value_link(store['reporting_status']['values'][store['reporting_status']['indicators'][indicator]]) if indicator in store['reporting_status']['indicators'] else '',
+                'UN designated tier': self.get_metadata_field_value_link(store['un_designated_tier']['values'][store['un_designated_tier']['indicators'][indicator]]) if indicator in store['un_designated_tier']['indicators'] else '',
+                'UN custodian agency': self.get_metadata_field_value_link(store['un_custodian_agency']['values'][store['un_custodian_agency']['indicators'][indicator]]) if indicator in store['un_custodian_agency']['indicators'] else '',
+                'Data non-statistical': self.get_metadata_field_value_link(store['data_non_statistical']['values'][store['data_non_statistical']['indicators'][indicator]]) if indicator in store['data_non_statistical']['indicators'] else '',
+                'Data show map': self.get_metadata_field_value_link(store['data_show_map']['values'][store['data_show_map']['indicators'][indicator]]) if indicator in store['data_show_map']['indicators'] else '',
+                'National geographical coverage': self.get_metadata_field_value_link(store['national_geographical_coverage']['values'][store['national_geographical_coverage']['indicators'][indicator]]) if indicator in store['national_geographical_coverage']['indicators'] else '',
+                'Computation units': self.get_metadata_field_value_link(store['computation_units']['values'][store['computation_units']['indicators'][indicator]]) if indicator in store['computation_units']['indicators'] else '',
+                'Graph type': self.get_metadata_field_value_link(store['graph_type']['values'][store['graph_type']['indicators'][indicator]]) if indicator in store['graph_type']['indicators'] else ''
             })
-        for field in store:
-            rows.append({
-                fields_dict[field]: self.get_metadata_field_value_link(store[field]['values'][store[field]['indicators'][indicator]]) if indicator in store[field]['indicators'] else ''
-            })
-
-        df = pd.DataFrame(rows, columns=['Indicator', 'Reporting status', 'UN designated tier', 'UN custodian agency', 'Data non-statistical', 'Data show map', 'Graph type'])
+                
+        df = pd.DataFrame(rows, columns=['Indicator', 'Reporting status', 'UN designated tier', 'UN custodian agency', 'Data non-statistical', 'Data show map', 'National geographical coverage', 'Computation units', 'Graph type'])
         if not df.empty:
             df.sort_values(by=['Indicator'], inplace=True)
         return df

@@ -549,6 +549,7 @@ class OutputDocumentationService(Loggable):
         service = self.metadata_report_service
         metadata_field = info['name']
         filename = info['filename']
+        label = info['label']
 
         values_df = service.get_metadata_field_dataframe(info)
         values_download_label = 'Download CSV of values used in this metadata field'
@@ -562,7 +563,7 @@ class OutputDocumentationService(Loggable):
         indicators_download = self.get_csv_download(indicators_df, indicators_download_file, label=indicators_download_label)
         indicators_table = self.html_from_dataframe(indicators_df, table_id='indicators-table')
 
-        detail_html = self.get_html('Metadata field ' + metadata_field, service.get_metadata_field_detail_template().format(
+        detail_html = self.get_html('Metadata field: ' + label, service.get_metadata_field_detail_template().format(
             values_download=values_download,
             values_table=values_table,
             indicators_download=indicators_download,
@@ -574,6 +575,7 @@ class OutputDocumentationService(Loggable):
         service = self.metadata_report_service
         metadata_field = str(info['field'])
         metadata_field_value = str(info['name'])
+        field_label = info['field_label']
         filename = info['filename']
 
         df = service.get_metadata_field_value_dataframe(info)
@@ -582,7 +584,7 @@ class OutputDocumentationService(Loggable):
         download = self.get_csv_download(df, download_file, label=download_label)
         table = self.html_from_dataframe(df, table_id='metadata-field-value-table')
 
-        html = self.get_html(metadata_field + ': ' + metadata_field_value, service.get_metadata_field_value_detail_template().format(
+        html = self.get_html(field_label + ': ' + metadata_field_value, service.get_metadata_field_value_detail_template().format(
             download=download,
             table=table
         ))

@@ -93,6 +93,7 @@ class MetadataReportService(Loggable):
                         "instances": 0,
                         "name": value,
                         "label": value,
+                        "field_label": label,
                 }
 
                 all_fields[field]["values"][value]["instances"] +=1

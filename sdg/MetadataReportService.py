@@ -84,6 +84,8 @@ class MetadataReportService(Loggable):
             for field in fields:
                 if field not in allowed_fields:
                     continue
+                if field not in metadata_store:
+                    continue
                 if field not in all_fields:
                     all_fields[field]= {
                         "filename": self.create_filename(field),

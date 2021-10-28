@@ -82,7 +82,7 @@ class OutputDocumentationService(Loggable):
             extra_disaggregations = extra_disaggregations,
         )
         self.metadata_report_service = None
-        if len(metadata_fields) > 0:
+        if metadata_fields is not None and len(metadata_fields) > 0:
             self.metadata_report_service = sdg.MetadataReportService(
                 self.outputs,
                 languages = self.languages if translate_metadata else [],

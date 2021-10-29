@@ -46,7 +46,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
                    logging=None, indicator_export_filename='all_indicators',
-                   datapackage=None, csvw=None, data_schema=None):
+                   datapackage=None, csvw=None, data_schema=None, docs_metadata_fields=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -83,6 +83,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         data_schema: Dict describing an instance of DataSchemaInputBase subclass
         logging : list or None. The types of logs to print, including 'warn' and 'debug'.
         indicator_export_filename: string. Filename without extension for zip file
+        docs_metadata_fields: list. List of dicts describing metadata fields for
+            the MetadataReportService class.
 
     Returns:
         Boolean status of file writes
@@ -97,6 +99,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         indicator_options = open_sdg_indicator_options_defaults()
     if logging is None:
         logging = ['warn']
+    if docs_metadata_fields is None:
+        docs_metadata_fields = []
 
     status = True
 
@@ -125,6 +129,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'data_schema': data_schema,
         'logging': logging,
         'indicator_export_filename': indicator_export_filename,
+        'docs_metadata_fields': docs_metadata_fields,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -169,6 +174,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         extra_disaggregations=options['docs_extra_disaggregations'],
         translate_disaggregations=options['docs_translate_disaggregations'],
         logging=logging,
+        metadata_fields=options['docs_metadata_fields'],
     )
     documentation_service.generate_documentation()
 

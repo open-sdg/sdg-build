@@ -14,19 +14,11 @@ class OutputDocumentationService(Loggable):
     HTML pages documenting the specifics of the build (such as endpoint URLs).
     """
 
-class OutputDocumentationService(Loggable):
-    """HTML generation to document outputs built with this library.
-    Note that this is meant to document particular builds, not the library in
-    general. The idea is that each time this library is used to build/convert
-    some SDG-related data, this class can be used to generate human-friendly
-    HTML pages documenting the specifics of the build (such as endpoint URLs).
-    """
-
-
     def __init__(self, outputs, folder='_site', branding='Build docs',
                  languages=None, intro='', translations=None, indicator_url=None,
                  subfolder=None, baseurl='', extra_disaggregations=None,
-                 translate_disaggregations=False, translate_metadata=False, logging=None):
+                 translate_disaggregations=False, translate_metadata=False, logging=None,
+                 metadata_fields=None):
         """Constructor for the OutputDocumentationService class.
         Parameters
         ----------
@@ -65,6 +57,8 @@ class OutputDocumentationService(Loggable):
         translate_disaggregations : boolean
             Whether or not to include translation columns in the
             disaggregation report.
+        metadata_fields : list
+            Metadata fields to include in a metadata report.
         """
         Loggable.__init__(self, logging=logging)
         self.outputs = outputs
@@ -87,13 +81,16 @@ class OutputDocumentationService(Loggable):
             indicator_url = self.indicator_url,
             extra_disaggregations = extra_disaggregations,
         )
-        self.metadata_report_service = sdg.MetadataReportService(
-            self.outputs,
-            languages = self.languages if translate_metadata else [],
-            translation_helper = self.translation_helper,
-            indicator_url = self.indicator_url,
-        )
-        
+        self.metadata_report_service = None
+        if metadata_fields is not None and len(metadata_fields) > 0:
+            self.metadata_report_service = sdg.MetadataReportService(
+                self.outputs,
+                languages = self.languages if translate_metadata else [],
+                translation_helper = self.translation_helper,
+                indicator_url = self.indicator_url,
+                metadata_fields = metadata_fields,
+            )
+
 
 
     def fix_folder(self, folder, subfolder):
@@ -234,17 +231,20 @@ class OutputDocumentationService(Loggable):
         card_number += 1
         if card_number % 3 == 0:
             html += row_end
-        if card_number % 3 == 0:
-            html += row_start
-        html += self.get_index_card_template().format(
-            title='Metadata report',
-            description='These tables show information about the indicators.',
-            destination='metadata.html',
-            call_to_action='See metadata report'
-        )
-        card_number += 1
-        if card_number % 3 != 0:
-            html += row_end
+
+        # Add the metadata report.
+        if self.metadata_report_service is not None and self.metadata_report_service.validate_field_config():
+            if card_number % 3 == 0:
+                html += row_start
+            html += self.get_index_card_template().format(
+                title='Metadata report',
+                description='These tables show information about the indicators.',
+                destination='metadata.html',
+                call_to_action='See metadata report'
+            )
+            card_number += 1
+            if card_number % 3 != 0:
+                html += row_end
 
         page_html = self.get_html('Overview', html)
         self.write_page('index.html', page_html)
@@ -511,9 +511,13 @@ class OutputDocumentationService(Loggable):
         filepath = os.path.join(self.folder, filename)
         with open(filepath, 'w', encoding='utf-8') as file:
             file.write(html)
-  
+
     def write_metadata_report(self):
         service = self.metadata_report_service
+
+        if service is None or not service.validate_field_config():
+            return
+
         store = self.metadata_report_service.get_metadata_field_store()
 
         metadata_field_df = service.get_metadata_fields_dataframe()
@@ -545,6 +549,7 @@ class OutputDocumentationService(Loggable):
         service = self.metadata_report_service
         metadata_field = info['name']
         filename = info['filename']
+        label = info['label']
 
         values_df = service.get_metadata_field_dataframe(info)
         values_download_label = 'Download CSV of values used in this metadata field'
@@ -558,7 +563,7 @@ class OutputDocumentationService(Loggable):
         indicators_download = self.get_csv_download(indicators_df, indicators_download_file, label=indicators_download_label)
         indicators_table = self.html_from_dataframe(indicators_df, table_id='indicators-table')
 
-        detail_html = self.get_html('Metadata field ' + metadata_field, service.get_metadata_field_detail_template().format(
+        detail_html = self.get_html('Metadata field: ' + label, service.get_metadata_field_detail_template().format(
             values_download=values_download,
             values_table=values_table,
             indicators_download=indicators_download,
@@ -570,6 +575,7 @@ class OutputDocumentationService(Loggable):
         service = self.metadata_report_service
         metadata_field = str(info['field'])
         metadata_field_value = str(info['name'])
+        field_label = info['field_label']
         filename = info['filename']
 
         df = service.get_metadata_field_value_dataframe(info)
@@ -578,7 +584,7 @@ class OutputDocumentationService(Loggable):
         download = self.get_csv_download(df, download_file, label=download_label)
         table = self.html_from_dataframe(df, table_id='metadata-field-value-table')
 
-        html = self.get_html(metadata_field + ': ' + metadata_field_value, service.get_metadata_field_value_detail_template().format(
+        html = self.get_html(field_label + ': ' + metadata_field_value, service.get_metadata_field_value_detail_template().format(
             download=download,
             table=table
         ))

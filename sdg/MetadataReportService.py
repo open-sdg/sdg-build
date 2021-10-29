@@ -190,6 +190,7 @@ class MetadataReportService(Loggable):
     def get_metadata_fields_dataframe(self):
         store = self.get_metadata_field_store()
         rows = []
+        metadata_field_label = 'Metadata field'
         for metadata_field in store:
 
             num_indicators = len(store[metadata_field]['indicators'].keys())
@@ -201,7 +202,7 @@ class MetadataReportService(Loggable):
                 continue
 
             row = {
-                'metadata_field': self.get_metadata_field_link(store[metadata_field]),
+                metadata_field_label: self.get_metadata_field_link(store[metadata_field]),
                 'Number of indicators':  num_indicators,
                 'Number of values': num_values,
             }
@@ -209,13 +210,13 @@ class MetadataReportService(Loggable):
                 row[language] = self.translate(metadata_field, language, metadata_field)
             rows.append(row)
 
-        columns = ['metadata_field']
+        columns = [metadata_field_label]
         columns.extend(self.get_languages())
         columns.extend(['Number of indicators', 'Number of values'])
 
         df = pd.DataFrame(rows, columns=columns)
         if not df.empty:
-            df.sort_values(by=['metadata_field'], inplace=True)
+            df.sort_values(by=[metadata_field_label], inplace=True)
         return df
 
 
@@ -227,7 +228,7 @@ class MetadataReportService(Loggable):
         grouped = self.group_metadata_field_store_by_indicator()
         store = self.get_metadata_field_store()
         rows = []
-        columns = [field['key'] for field in self.metadata_fields]
+        columns = [field['label'] for field in self.metadata_fields]
         for indicator in grouped:
             metadata_field_links = [self.get_metadata_field_link(metadata_field) for metadata_field in grouped[indicator].values()]
             if len(metadata_field_links) == 0:
@@ -236,7 +237,8 @@ class MetadataReportService(Loggable):
             row['Indicator'] = self.get_indicator_link(indicator)
             for field in self.metadata_fields:
                 key = field['key']
-                row[key] = self.get_metadata_field_value_link(store[key]['values'][store[key]['indicators'][indicator]]) if indicator in store[key]['indicators'] else ''
+                label = field['label']
+                row[label] = self.get_metadata_field_value_link(store[key]['values'][store[key]['indicators'][indicator]]) if indicator in store[key]['indicators'] else ''
             rows.append(row)
 
         df = pd.DataFrame(rows, columns=['Indicator'] + columns)

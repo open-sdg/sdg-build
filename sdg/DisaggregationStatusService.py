@@ -98,19 +98,15 @@ class DisaggregationStatusService(Loggable):
             'statuses': [
                 {
                     'value': 'complete',
-                    'translation_key': 'status.disaggregation_status_complete',
                 },
                 {
                     'value': 'inprogress',
-                    'translation_key': 'status.disaggregation_status_inprogress',
                 },
                 {
                     'value': 'notstarted',
-                    'translation_key': 'status.disaggregation_status_notstarted',
                 },
                 {
                     'value': 'notapplicable',
-                    'translation_key': 'status.disaggregation_status_notapplicable',
                 },
             ],
             'overall': {
@@ -192,25 +188,21 @@ class DisaggregationStatusService(Loggable):
         status['overall']['totals']['total'] = overall_total
         status['overall']['statuses'].append({
             'status': 'complete',
-            'translation_key': 'status.disaggregation_status_complete',
             'count': overall_complete,
             'percentage': self.get_percent(overall_complete, overall_total)
         })
         status['overall']['statuses'].append({
             'status': 'inprogress',
-            'translation_key': 'status.disaggregation_status_inprogress',
             'count': overall_inprogress,
             'percentage': self.get_percent(overall_inprogress, overall_total)
         })
         status['overall']['statuses'].append({
             'status': 'notstarted',
-            'translation_key': 'status.disaggregation_status_notstarted',
             'count': overall_notstarted,
             'percentage': self.get_percent(overall_notstarted, overall_total)
         })
         status['overall']['statuses'].append({
             'status': 'notapplicable',
-            'translation_key': 'status.disaggregation_status_notapplicable',
             'count': overall_notapplicable,
             'percentage': self.get_percent(overall_notapplicable, overall_total)
         })
@@ -228,25 +220,21 @@ class DisaggregationStatusService(Loggable):
                 'statuses': [
                     {
                         'status': 'complete',
-                        'translation_key': 'status.disaggregation_status_complete',
                         'count': num_complete,
                         'percentage': self.get_percent(num_complete, num_total),
                     },
                     {
                         'status': 'inprogress',
-                        'translation_key': 'status.disaggregation_status_inprogress',
                         'count': num_inprogress,
                         'percentage': self.get_percent(num_inprogress, num_total)
                     },
                     {
                         'status': 'notstarted',
-                        'translation_key': 'status.disaggregation_status_notstarted',
                         'count': num_notstarted,
                         'percentage': self.get_percent(num_notstarted, num_total),
                     },
                     {
                         'status': 'notapplicable',
-                        'translation_key': 'status.disaggregation_status_notapplicable',
                         'count': num_notapplicable,
                         'percentage': self.get_percent(num_notapplicable, num_total)
                     },
@@ -269,25 +257,21 @@ class DisaggregationStatusService(Loggable):
                     'statuses': [
                         {
                             'status': 'complete',
-                            'translation_key': 'status.disaggregation_status_complete',
                             'count': num_complete,
                             'percentage': self.get_percent(num_complete, num_total),
                         },
                         {
                             'status': 'inprogress',
-                            'translation_key': 'status.disaggregation_status_inprogress',
                             'count': num_inprogress,
                             'percentage': self.get_percent(num_inprogress, num_total),
                         },
                         {
                             'status': 'notstarted',
-                            'translation_key': 'status.disaggregation_status_notstarted',
                             'count': num_notstarted,
                             'percentage': self.get_percent(num_notstarted, num_total),
                         },
                         {
                             'status': 'notapplicable',
-                            'translation_key': 'status.disaggregation_status_notapplicable',
                             'count': num_notapplicable,
                             'percentage': self.get_percent(num_notapplicable, num_total),
                         },

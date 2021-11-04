@@ -14,4 +14,4 @@ pyquery
 frictionless
 csvw
 Jinja2
-git+git://github.com/dougmet/yamlmd
+git+git://github.com/open-sdg/sdg-build@1.6.0-beta2

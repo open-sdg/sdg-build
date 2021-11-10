@@ -37,16 +37,28 @@ SDG Build can **output** SDG data in the following formats:
 
 ## Alterations of data and metadata
 
-Sometimes you may need to alter data and/or metadata before importing into this library. This can be done after instantiating the input objects, with `add_data_alteration` and `add_meta_alteration`. For example:
+Sometimes you may need to alter data and/or metadata before importing into this library. This can be done after instantiating the input objects, with `add_data_alteration` and `add_meta_alteration` to add callback functions.
+
+In these callback functions, the thing to be altered is passed as the first parameter, followed by an optional "context" dict, containing other information. These "context" dicts currently contain:
+
+* indicator_id : string
+
+For example:
 
 ```
-def my_data_alteration(df):
+def my_data_alteration(df, context):
     # Drop an unnecessary column in the data.
     df = df.drop('unnecessary_column', axis='columns')
+    # Drop an unnecessary column for one particular indicator.
+    if context['indicator_id'] == '1-1-1':
+      df = df.drop('another_column', axis='columns')
     return df
-def my_meta_alteration(meta):
+def my_meta_alteration(meta, context):
     # Drop an unecessary field in the metadata.
     del meta['unnecessary_field']
+    # Set a metadata field for one particular indicator.
+    if context['indicator_id'] == '1-1-1':
+      meta['another_field'] = 'My hardcoded value for indicator 1.1.1'
     return meta
 my_data_input.add_data_alteration(my_data_alteration)
 my_meta_input.add_meta_alteration(my_meta_alteration)

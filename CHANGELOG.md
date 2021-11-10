@@ -1,5 +1,11 @@
 # Changes
 
+### 1.6.0
+
+* Metadata report #279
+* Remove translations from stats reports #278, #281
+* Reporting progress MVP #278
+
 ### 1.5.0
 
 * Keep placeholder indicators out of some calculations #275

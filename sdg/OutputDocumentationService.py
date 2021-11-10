@@ -14,13 +14,12 @@ class OutputDocumentationService(Loggable):
     HTML pages documenting the specifics of the build (such as endpoint URLs).
     """
 
-
     def __init__(self, outputs, folder='_site', branding='Build docs',
                  languages=None, intro='', translations=None, indicator_url=None,
                  subfolder=None, baseurl='', extra_disaggregations=None,
-                 translate_disaggregations=False, logging=None):
+                 translate_disaggregations=False, translate_metadata=False, logging=None,
+                 metadata_fields=None):
         """Constructor for the OutputDocumentationService class.
-
         Parameters
         ----------
         outputs : list
@@ -58,6 +57,8 @@ class OutputDocumentationService(Loggable):
         translate_disaggregations : boolean
             Whether or not to include translation columns in the
             disaggregation report.
+        metadata_fields : list
+            Metadata fields to include in a metadata report.
         """
         Loggable.__init__(self, logging=logging)
         self.outputs = outputs
@@ -80,6 +81,16 @@ class OutputDocumentationService(Loggable):
             indicator_url = self.indicator_url,
             extra_disaggregations = extra_disaggregations,
         )
+        self.metadata_report_service = None
+        if metadata_fields is not None and len(metadata_fields) > 0:
+            self.metadata_report_service = sdg.MetadataReportService(
+                self.outputs,
+                languages = self.languages if translate_metadata else [],
+                translation_helper = self.translation_helper,
+                indicator_url = self.indicator_url,
+                metadata_fields = metadata_fields,
+            )
+
 
 
     def fix_folder(self, folder, subfolder):
@@ -144,6 +155,7 @@ class OutputDocumentationService(Loggable):
 
         self.write_index(pages)
         self.write_disaggregation_report()
+        self.write_metadata_report()
 
 
     def create_filename(self, title):
@@ -182,7 +194,6 @@ class OutputDocumentationService(Loggable):
 
     def write_index(self, pages):
         """Write the index page.
-
         Parameters
         ----------
         pages : list
@@ -221,8 +232,19 @@ class OutputDocumentationService(Loggable):
         if card_number % 3 == 0:
             html += row_end
 
-        if card_number % 3 != 0:
-            html += row_end
+        # Add the metadata report.
+        if self.metadata_report_service is not None and self.metadata_report_service.validate_field_config():
+            if card_number % 3 == 0:
+                html += row_start
+            html += self.get_index_card_template().format(
+                title='Metadata report',
+                description='These tables show information about the indicators.',
+                destination='metadata.html',
+                call_to_action='See metadata report'
+            )
+            card_number += 1
+            if card_number % 3 != 0:
+                html += row_end
 
         page_html = self.get_html('Overview', html)
         self.write_page('index.html', page_html)
@@ -489,3 +511,81 @@ class OutputDocumentationService(Loggable):
         filepath = os.path.join(self.folder, filename)
         with open(filepath, 'w', encoding='utf-8') as file:
             file.write(html)
+
+    def write_metadata_report(self):
+        service = self.metadata_report_service
+
+        if service is None or not service.validate_field_config():
+            return
+
+        store = self.metadata_report_service.get_metadata_field_store()
+
+        metadata_field_df = service.get_metadata_fields_dataframe()
+        metadata_field_table = self.html_from_dataframe(metadata_field_df, table_id='metadata-field-table')
+        metadata_field_download_label = 'Download CSV of disaggregations'
+        metadata_field_download_file = 'metadata_field-report.csv'
+        metadata_field_download = self.get_csv_download(metadata_field_df, metadata_field_download_file, label=metadata_field_download_label)
+
+        indicator_df = service.get_indicators_dataframe()
+        indicator_table = self.html_from_dataframe(indicator_df, table_id='indicator-table')
+        indicator_download_label = 'Download CSV of indicators'
+        indicator_download_file = 'metadata_field-by-indicator-report.csv'
+        indicator_download = self.get_csv_download(indicator_df, indicator_download_file, label=indicator_download_label)
+
+        report_html = self.get_html('Metadata report', service.get_metadata_field_report_template().format(
+            metadata_field_download=metadata_field_download,
+            metadata_field_table=metadata_field_table,
+            indicator_download=indicator_download,
+            indicator_table=indicator_table
+        ))
+        self.write_page('metadata.html', report_html)
+
+        for metadata_field in store:
+            self.write_metadata_field_detail_page(store[metadata_field])
+            for metadata_field_value in store[metadata_field]['values']:
+                self.write_metadata_field_value_detail_page(store[metadata_field]['values'][metadata_field_value])
+
+    def write_metadata_field_detail_page(self, info):
+        service = self.metadata_report_service
+        metadata_field = info['name']
+        filename = info['filename']
+        label = info['label']
+
+        values_df = service.get_metadata_field_dataframe(info)
+        values_download_label = 'Download CSV of values used in this metadata field'
+        values_download_file = 'values--' + filename.replace('.html', '.csv')
+        values_download = self.get_csv_download(values_df, values_download_file, label=values_download_label)
+        values_table = self.html_from_dataframe(values_df, table_id='values-table')
+
+        indicators_df = service.get_metadata_field_indicator_dataframe(info)
+        indicators_download_label = 'Download CSV of indicators using this metadata field'
+        indicators_download_file = 'indicators--' + filename.replace('.html', '.csv')
+        indicators_download = self.get_csv_download(indicators_df, indicators_download_file, label=indicators_download_label)
+        indicators_table = self.html_from_dataframe(indicators_df, table_id='indicators-table')
+
+        detail_html = self.get_html('Metadata field: ' + label, service.get_metadata_field_detail_template().format(
+            values_download=values_download,
+            values_table=values_table,
+            indicators_download=indicators_download,
+            indicators_table=indicators_table
+        ))
+        self.write_page(filename, detail_html)
+
+    def write_metadata_field_value_detail_page(self, info):
+        service = self.metadata_report_service
+        metadata_field = str(info['field'])
+        metadata_field_value = str(info['name'])
+        field_label = info['field_label']
+        filename = info['filename']
+
+        df = service.get_metadata_field_value_dataframe(info)
+        download_label = 'Download CSV of indicators using this metadata field value'
+        download_file = filename.replace('.html', '.csv')
+        download = self.get_csv_download(df, download_file, label=download_label)
+        table = self.html_from_dataframe(df, table_id='metadata-field-value-table')
+
+        html = self.get_html(field_label + ': ' + metadata_field_value, service.get_metadata_field_value_detail_template().format(
+            download=download,
+            table=table
+        ))
+        self.write_page(filename, html)

@@ -24,9 +24,11 @@ from .Indicator import Indicator
 from .IndicatorDownloadService import IndicatorDownloadService
 from .IndicatorExportService import IndicatorExportService
 from .IndicatorOptions import IndicatorOptions
+from .MetadataReportService import MetadataReportService
 from .Series import Series
 from .build import build_data
 from .check_csv import check_all_csv
 from .check_metadata import check_all_meta
 from .open_sdg import open_sdg_build
 from .open_sdg import open_sdg_check
+

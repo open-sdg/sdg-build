@@ -25,7 +25,7 @@ from csvcubed.models.cube.qb import (
 from csvcubed.writers.qbwriter import QbWriter
 
 
-class OutputCsvw(OutputDataPackage):
+class OutputCsvwCube(OutputDataPackage):
     """Output a CSVW package (CSV and JSON file).
     """
 

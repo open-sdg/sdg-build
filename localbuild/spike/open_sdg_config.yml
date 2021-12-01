@@ -1,0 +1,155 @@
+# This config file is for use with the `build_data` and `check_data` functions,
+# which are helpers for implementations of Open SDG. This file allows easy use
+# of those functions without altering Python code.
+
+# Languages
+# ---------
+# This tells sdg-build to perform "translated builds" for each of the specified
+# languages. Each build is in its own subfolder - one for each language.
+languages:
+  - en
+  - es
+
+# Source directory
+# ----------------
+# This identifies the directory that holds the 'data' and 'meta' folders.
+# The default, '', points to the root of this repository.
+src_dir: 'spike'
+
+# Inputs
+# ------
+# The allows control over the inputs of data and metadata. This can be omitted
+# if you are using the standard Open SDG approach of CSV data and YAML metadata.
+# But if you would like to use non-standard inputs (such as SDMX) then you can
+# use this as needed.
+#
+# Each item must have a "class" which corresponds to classes in the sdg/inputs
+# folder. Further, each item can have any/all of the parameters that class uses.
+# The defaults below show what is used when this is omitted.
+inputs:
+  - class: InputCsvData
+    # This describes the data files, relative to the "src_dir" indicated above.
+    path_pattern: data/*-*.csv
+  - class: InputYamlMdMeta
+    # This describes the meta files, relative to the "src_dir" indicated above.
+    path_pattern: meta/*-*.md
+    # This specifies whether or not to use Git to calculate the "last updated"
+    # dates for data files.
+    git: true
+    # This specifies an alternate folder to look in for Git-versioned data files,
+    # when calculating the "last updated" dates for data files. This defaults to
+    # "data" (the folder where the data files actually exist.) Most sites will not
+    # need to change this setting. It is intended for sites where the data needs
+    # to be "built" before being processed by sdg-build.
+    git_data_dir: data
+
+# Translations
+# ------------
+# The allows control over the imported translations. This can be omitted if you
+# are happy with the defaults. But if you are using custom translation repos
+# or non-standard inputs (such as SDMX) then you can use this as needed.
+#
+# Each item must have a "class" which corresponds to classes in the sdg/translations
+# folder. Further, each item can have any/all of the parameters that class uses.
+# The defaults below show what is used when this is omitted.
+translations:
+  - class: TranslationInputSdgTranslations
+    source: https://github.com/open-sdg/sdg-translations.git
+    tag: master
+  - class: TranslationInputYaml
+    source: translations
+
+# Destination directory
+# ---------------------
+# This identifies a directory to hold the "built" files. The default is '_site'.
+site_dir: _site
+
+# Schema file
+# -----------
+# This identifies a file containing the schema (possible fields) for metadata.
+# Currently this needs to be a prose.io config, and defaults to '_prose.yml'.
+schema_file: metadata_schema.yml
+
+# Reporting status extra fields
+# -----------------------------
+# This allows the build to generate stats for reporting status by additional
+# fields, beyond the default "status by goal" report.
+reporting_status_extra_fields: []
+
+# Datapackage properties
+# ----------------------
+# This adds properties to all datapackages.
+datapackage_properties:
+  licenses:
+    - name: CC-BY-4.0
+      title: Creative Commons Attribution 4.0
+      path": https://creativecommons.org/licenses/by/4.0/
+datapackage_resource_properties:
+  licenses:
+    - name: CC-BY-4.0
+      title: Creative Commons Attribution 4.0
+      path": https://creativecommons.org/licenses/by/4.0/
+
+# Map layers
+# ----------
+# This allows the build to generate one or more GeoJSON files to be used by
+# Open SDG maps. The parameters available correspond to the OutputGeoJson class.
+# See sdg/outputs/OutputGeoJson.py for more information.
+map_layers:
+  - geojson_file: https://geoportal1-ons.opendata.arcgis.com/datasets/4fcca2a47fed4bfaa1793015a18537ac_4.geojson
+    name_property: rgn17nm
+    id_property: rgn17cd
+    output_subfolder: regions
+    filename_prefix: indicator_
+  # The above layer will produce GeoJSON files such as this:
+  #     _site/en/geojson/regions/indicator_1-2-1.geojson
+  # Add any number of additional layers, such as one for counties.
+
+# Indicator options
+# -----------------
+# This control optional settings to control how your indicators are loaded.
+# Below are all the possible options, along with the defaults.
+indicator_options:
+  # This specifies the columns that should not be considered disaggregations.
+  non_disaggregation_columns:
+    - Year
+    - Units
+    - Series
+    - Value
+    - GeoCode
+    - Observation status
+    - Unit multiplier
+    - Unit measure
+
+# Documentation settings
+# ----------------------
+# This controls the automatic documentation that is created for your build.
+docs_branding: My build documentation
+docs_intro: This is a list of examples of endpoints and output that are
+  available on this service. Click each of the links below for more information
+  on the available output.
+docs_indicator_url: https://my-github-org/my-site-repository/[id]
+# Extra data columns to include in the disaggregation report.
+docs_extra_disaggregations:
+  - Units
+# Whether to provide columns for translations in the disaggregation report.
+docs_translate_disaggregations: true
+
+# Indicator downloads
+# -------------------
+# This controls any types of indicator downloads that need to be in the build.
+# The following will ensure that all files matching data/indicator_*.csv will
+# be available for download in the build at downloads/data-csv/indicator_*.csv.
+indicator_downloads:
+  - button_label: csv
+    source_pattern: tests/data/indicator_*.csv
+    output_folder: data-csv
+    # The "indicator_id_pattern" is optional, default below:
+    indicator_id_pattern: indicator_(.*)
+
+# Indicator export (zip file)
+# ---------------------------
+# This controls the filename of the zipped file of indicator data.
+# The file extension (.zip) is not needed. The defualt, if omitted,
+# is below:
+indicator_export_filename: all_indicators

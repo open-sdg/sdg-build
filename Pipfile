@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pyyaml = "*"
+pandas = "*"
+pydantic = "*"
+sdmx1 = "*"
+gitpython = "*"
+jsonschema = "*"
+requests = "*"
+humanize = "*"
+unicode-slugify = "*"
+natsort = "*"
+pyjstat = "*"
+mammoth = "*"
+pyquery = "*"
+frictionless = "*"
+csvw = "*"
+jinja2 = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"

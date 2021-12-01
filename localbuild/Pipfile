@@ -1,0 +1,33 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+
+[packages]
+pandas = "*"
+pydantic = "*"
+sdmx1 = "*"
+jsonschema = "*"
+requests = "*"
+humanize = "*"
+unicode-slugify = "*"
+natsort = "*"
+pyjstat = "*"
+mammoth = "*"
+pyquery = "*"
+frictionless = "*"
+csvw = "*"
+PyYAML = "*"
+GitPython = "*"
+Jinja2 = "*"
+yamlmd = {git = "https://github.com/dougmet/yamlmd"}
+loguru = "*"
+rdflib = "==5.0.0"
+
+[requires]
+python_version = "3.9"
+
+[pipenv]
+allow_prereleases = true

@@ -46,7 +46,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
                    logging=None, indicator_export_filename='all_indicators',
-                   datapackage=None, csvw=None, data_schema=None, docs_metadata_fields=None):
+                   datapackage=None, csvw=None, csvw_cube= False, data_schema=None, 
+                   docs_metadata_fields=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -80,6 +81,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             in the disaggregation report
         datapackage: dict. Dict describing an instance of OutputDataPackage
         csvw: dict. Dict describing an instance of OutputCsvw
+        csvw_cube: bool. Toggle csvw_cube creation on or off, defaults to off
         data_schema: Dict describing an instance of DataSchemaInputBase subclass
         logging : list or None. The types of logs to print, including 'warn' and 'debug'.
         indicator_export_filename: string. Filename without extension for zip file
@@ -126,6 +128,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'docs_extra_disaggregations': docs_extra_disaggregations,
         'datapackage': datapackage,
         'csvw': csvw,
+        'csvw_cube': csvw_cube,
         'data_schema': data_schema,
         'logging': logging,
         'indicator_export_filename': indicator_export_filename,
@@ -253,6 +256,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'indicator_downloads': None,
         'datapackage': None,
         'csvw': None,
+        'csvw_cube': None,
         'data_schema': data_schema,
         'logging': logging,
         'indicator_export_filename': None,
@@ -380,6 +384,19 @@ def open_sdg_prep(options):
             logging=options['logging'],
             **csvw_params,
         ))
+
+    if options['csvw_cube']:
+        outputs.append(sdg.outputs.OutputCsvwCube(
+            inputs=inputs,
+            schema=schema,
+            output_folder=options['site_dir'],
+            translations=options['translations'],
+            indicator_options=options['indicator_options'],
+            data_schema=data_schema,
+            logging=options['logging'],
+            **csvw_params,
+        ))
+
 
     # Add SDMX output if configured.
     if 'sdmx_output' in options and 'dsd' in options['sdmx_output']:

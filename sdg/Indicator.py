@@ -468,8 +468,10 @@ class Indicator(Loggable):
         columns_in_schema = [field.name for field in schema.fields]
 
         def row_matches_schema(row):
+            print(row)
             matches = True
             for col in columns_in_data:
+                print(col)
                 schema_field = schema.get_field(col) if col in columns_in_schema else None
                 there_is_data = not pd.isna(row[col])
                 if schema_field is None and there_is_data:

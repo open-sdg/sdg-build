@@ -460,6 +460,8 @@ class Indicator(Loggable):
         if language is None:
             language = ''
         schema = data_schema.get_schema_for_indicator(self)
+        print(schema)
+        
         cache_key = language + str(schema.to_dict())
         if use_cache and cache_key in self.data_matching_schema:
             return self.data_matching_schema[cache_key]

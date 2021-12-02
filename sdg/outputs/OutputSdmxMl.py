@@ -166,6 +166,7 @@ class OutputSdmxMl(OutputBase):
         metadata_base_vars = header_info.copy()
 
         for indicator_id in self.get_indicator_ids():
+            print(indicator_id)
             indicator = self.get_indicator_by_id(indicator_id)
             data = indicator.data.copy()
 

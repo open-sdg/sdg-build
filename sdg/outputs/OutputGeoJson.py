@@ -218,6 +218,14 @@ class OutputGeoJson(OutputBase):
         for column in self.exclude_columns:
             if column in disaggregations:
                 del disaggregations[column]
+        # Also remove any non-disaggregation columns, except for series/units.
+        series_and_units = [
+            self.indicator_options.get_series_column(),
+            self.indicator_options.get_unit_column(),
+        ]
+        for column in self.indicator_options.get_non_disaggregation_columns():
+            if column in disaggregations and column not in series_and_units:
+                del disaggregations[column]
         # Convert null/nan/etc into just null.
         for key in disaggregations:
             if pd.isna(disaggregations[key]):

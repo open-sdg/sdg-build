@@ -225,6 +225,7 @@ class MetadataReportService(Loggable):
 
 
     def get_indicators_dataframe(self):
+        print(indicator)
         grouped = self.group_metadata_field_store_by_indicator()
         store = self.get_metadata_field_store()
         rows = []

@@ -434,12 +434,25 @@ class OutputSdmxMl(OutputBase):
         if self.column_map is not None:
             column_map=pd.read_csv(self.column_map)
             column_dict = dict(zip(column_map['Text'], column_map['Value']))
+            # First avoid duplicate columns by dropping existing columns
+            # that have the same name as what we're going to rename to.
+            existing_columns = list(data.columns)
+            for column_name in column_dict.values():
+                if column_name in existing_columns:
+                    self.warn('Dropping a column to avoid duplicates: ' + column_name)
+                    data.drop(columns=[column_name], inplace=True)
+            # Now we can rename.
             data.rename(columns=column_dict, inplace=True)
         return data
 
 
     def apply_code_map(self, data):
         if self.code_map is not None:
+            # To avoid errors related to NaN, replace them with a
+            # pseudo-unique string that nobody would ever use.
+            temp_nan_fix = 'sdg_build_temp_nan_fix_unique'
+            data.replace(np.nan, temp_nan_fix, inplace=True)
+
             code_map=pd.read_csv(self.code_map)
             code_dict = {}
             for _, row in code_map.iterrows():
@@ -447,6 +460,9 @@ class OutputSdmxMl(OutputBase):
                     code_dict[row['Dimension']] = {}
                 code_dict[row['Dimension']][row['Text']] = row['Value']
             data.replace(to_replace=code_dict, value=None, inplace=True)
+
+            # Now put back the pseudo-unique strings mentioned above.
+            data.replace(temp_nan_fix, np.nan, inplace=True)
         return data
 
     # Remove rows of data that do not comply with the global SDMX content constraints.

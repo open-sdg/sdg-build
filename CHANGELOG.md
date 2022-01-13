@@ -1,5 +1,10 @@
 # Changes
 
+### 1.7.0
+
+* Fixes for code and column mapping in SDMX output #288
+* Provide indicator_id when altering data/metadata #285
+
 ### 1.6.0
 
 * Metadata report #279

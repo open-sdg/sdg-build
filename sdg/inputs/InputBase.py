@@ -204,18 +204,19 @@ class InputBase(Loggable):
         options : IndicatorOptions or None
             The indicator options
         """
-        data = self.alter_data(data)
-        meta = self.alter_meta(meta)
+        data = self.alter_data(data, indicator_id=indicator_id)
+        meta = self.alter_meta(meta, indicator_id=indicator_id)
         indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options, logging=self.logging)
         self.indicators[indicator_id] = indicator
 
 
-    def alter_data(self, data):
+    def alter_data(self, data, indicator_id=None):
         """Perform any alterations on some data.
 
         Parameters
         ---------
         data : DataFrame or None
+        indicator_id : String or None
         """
         # If empty or None, do nothing.
         if data is None or not isinstance(data, pd.DataFrame) or data.empty:
@@ -225,7 +226,16 @@ class InputBase(Loggable):
         data = self.apply_code_map(data)
         # Perform any alterations on the data.
         for alteration in self.data_alterations:
-            data = alteration(data)
+            try:
+                data = alteration(data, {
+                    'indicator_id': indicator_id,
+                })
+            except:
+                # Handle callbacks without the context parameter.
+                data = alteration(data)
+        if data is None:
+            raise Exception('Data alteration functions should return the altered dataframe.')
+
         # Always do these hardcoded steps.
         data = self.fix_dataframe_columns(data)
         data = self.fix_empty_values(data)
@@ -233,12 +243,13 @@ class InputBase(Loggable):
         return data
 
 
-    def alter_meta(self, meta):
+    def alter_meta(self, meta, indicator_id=None):
         """Perform any alterations on some metadata.
 
         Parameters
         ---------
         meta : dict or None
+        indicator_id : String or None
         """
         if not meta or meta is None:
             if len(self.meta_alterations) > 0:
@@ -246,7 +257,16 @@ class InputBase(Loggable):
             else:
                 return meta
         for alteration in self.meta_alterations:
-            meta = alteration(meta)
+            try:
+                meta = alteration(meta, {
+                    'indicator_id': indicator_id,
+                })
+            except:
+                # Handle callbacks without the context parameter.
+                meta = alteration(meta)
+        if meta is None:
+            raise Exception('Metadata alteration functions should return the altered dict.')
+
         if self.meta_suffix is not None:
             for key in list(meta.keys()):
                 if not key.endswith(self.meta_suffix):

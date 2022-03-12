@@ -104,7 +104,12 @@ class Indicator(Loggable):
         if val is None or not isinstance(val, pd.DataFrame) or val.empty:
             return
 
-        self.data = val
+        if self.has_data():
+            self.data = pd.concat([self.data, val], sort=False)
+            self.enforce_column_order()
+        else:
+            self.data = val
+
         self.set_headline()
         self.set_edges()
 
@@ -499,3 +504,13 @@ class Indicator(Loggable):
             if schema_field is not None:
                 matches[key] = meta[key]
         return matches
+
+
+    def enforce_column_order(self):
+        if self.has_data():
+            df = self.data
+            cols = df.columns.tolist()
+            cols.pop(cols.index('Year'))
+            cols.pop(cols.index('Value'))
+            cols = ['Year'] + cols + ['Value']
+            self.data = df[cols]

@@ -195,6 +195,8 @@ def open_sdg_indicator_options_defaults():
              # Support common SDMX codes.
             'UNIT_MEASURE',
             'SERIES',
+            'COMMENT_TS',
+            'DATA_LAST_UPDATE',
         ],
         'series_column': 'Series',
         'unit_column': 'Units',

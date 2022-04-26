@@ -10,6 +10,7 @@ functionality of the following legacy functions that were specific to Open SDG:
 """
 
 import os
+import sys
 import inspect
 import importlib
 import sdg
@@ -153,13 +154,10 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
 
     for output in outputs:
         if options['languages']:
-            # If languages were provided, perform a translated build.
             status = status & output.execute_per_language(options['languages'])
-            # Also provide an untranslated build.
             status = status & output.execute('untranslated')
         else:
-            # Otherwise perform an untranslated build.
-            status = status & output.execute()
+            sys.exit('The data configuration must have a "languages" setting with at least one language. See the documentation here: https://open-sdg.readthedocs.io/en/latest/data-configuration/#languages')
 
     # Output the documentation pages.
     documentation_service = sdg.OutputDocumentationService(outputs,

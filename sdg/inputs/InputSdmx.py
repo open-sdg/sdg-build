@@ -58,8 +58,7 @@ class InputSdmx(InputBase):
             Whether to import names. Set to False to rely on global names
         import_codes : boolean
             Whether to import SDMX codes instead of text values. Set to True
-            to import codes. This overrides the deprecated "import_translation_keys"
-            and inherits its value if set.
+            to import codes.
         dsd : string
             Remote URL of the SDMX DSD (data structure definition) or path to
             local file.
@@ -87,9 +86,6 @@ class InputSdmx(InputBase):
         self.import_codes = import_codes
         self.import_series_attributes = import_series_attributes
         self.import_observation_attributes = import_observation_attributes
-        # Also use deprecated import_translation_keys.
-        if not import_codes and import_translation_keys:
-            self.import_codes = import_translation_keys
         self.indicator_id_xpath = indicator_id_xpath
         self.indicator_name_xpath = indicator_name_xpath
         self.series_dimensions = {}

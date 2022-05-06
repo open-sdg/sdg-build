@@ -333,7 +333,7 @@ def open_sdg_prep(options):
 
     outputs = [opensdg_output]
 
-    # If there are any map layers, create some OutputGeoJson objects.
+    # If there are any map layers, create some OutputGeoJsonOpenSdg objects.
     for map_layer in options['map_layers']:
         geojson_kwargs = {
             'inputs': inputs,
@@ -350,7 +350,7 @@ def open_sdg_prep(options):
             geojson_file = os.path.join(options['src_dir'], geojson_kwargs['geojson_file'])
             geojson_kwargs['geojson_file'] = geojson_file
         # Create the output.
-        outputs.append(sdg.outputs.OutputGeoJson(**geojson_kwargs))
+        outputs.append(sdg.outputs.OutputGeoJsonOpenSdg(**geojson_kwargs))
 
     data_schema = None
     if options['data_schema'] is not None:

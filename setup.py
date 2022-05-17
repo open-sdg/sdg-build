@@ -19,5 +19,5 @@ setup(name='sdg',
       python_requires='>=3.5',
       install_requires=['pyyaml', 'gitpython', 'numpy', 'pandas', 'yamlmd', 'jsonschema', 'requests', 'humanize', 'unicode-slugify', 'sdmx1>=2.6.1', 'frictionless', 'csvw', 'mammoth', 'pyquery', 'pyjstat', 'Jinja2', 'natsort'],
       dependency_links=[
-        "git+https://git@github.com/dougmet/yamlmd.git@0.1.7",
+        "git+https://github.com/dougmet/yamlmd",
     ])

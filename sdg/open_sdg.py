@@ -3,10 +3,7 @@ Historically this library has mainly served to create builds for the Open SDG
 platform. Consequently it has functions dedicated to this purpose. While in
 theory the library is more general-purpose, it remains primarily used by the
 Open SDG platform. So these helper functions are here to provide the
-functionality of the following legacy functions that were specific to Open SDG:
-* build_data
-* check_all_csv
-* check_all_meta
+functionality for easy use with Open SDG.
 """
 
 import os

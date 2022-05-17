@@ -3,13 +3,11 @@ Historically this library has mainly served to create builds for the Open SDG
 platform. Consequently it has functions dedicated to this purpose. While in
 theory the library is more general-purpose, it remains primarily used by the
 Open SDG platform. So these helper functions are here to provide the
-functionality of the following legacy functions that were specific to Open SDG:
-* build_data
-* check_all_csv
-* check_all_meta
+functionality for easy use with Open SDG.
 """
 
 import os
+import sys
 import inspect
 import importlib
 import sdg
@@ -153,13 +151,10 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
 
     for output in outputs:
         if options['languages']:
-            # If languages were provided, perform a translated build.
             status = status & output.execute_per_language(options['languages'])
-            # Also provide an untranslated build.
             status = status & output.execute('untranslated')
         else:
-            # Otherwise perform an untranslated build.
-            status = status & output.execute()
+            sys.exit('The data configuration must have a "languages" setting with at least one language. See the documentation here: https://open-sdg.readthedocs.io/en/latest/data-configuration/#languages')
 
     # Output the documentation pages.
     documentation_service = sdg.OutputDocumentationService(outputs,

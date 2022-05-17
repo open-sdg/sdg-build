@@ -135,9 +135,9 @@ class OutputOpenSdg(OutputBase):
     def minimum_metadata(self, indicator):
         """Provide minimum metadata for an indicator. Overrides parent."""
         minimum = {
-            'indicator': indicator.get_indicator_id(),
-            'target_id': indicator.get_target_id(),
-            'sdg_goal': indicator.get_goal_id(),
+            'indicator_number': indicator.get_indicator_id(),
+            'target_number': indicator.get_target_id(),
+            'goal_number': indicator.get_goal_id(),
             'reporting_status': 'complete' if (indicator.has_data() or indicator.is_statistical() == False) else 'notstarted',
             'data_non_statistical': False if indicator.has_data() else True,
             'graph_type': 'line',

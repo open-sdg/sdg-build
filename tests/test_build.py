@@ -5,7 +5,6 @@ import shutil
 import numpy as np
 import pandas as pd
 import sdg
-from sdg import build_data
 from sdg.path import output_path, input_path, get_ids
 
 src_dir = os.path.dirname(os.path.realpath(__file__))

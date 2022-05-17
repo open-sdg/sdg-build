@@ -133,10 +133,3 @@ def check_empty_rows(df, csv):
         status = False
         print(csv, ': Empty row on rows: ', np.where(empty_rows)[0])
     return status
-
-
-def check_all_csv(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml'):
-    """This function is deprecated but left in for backwards compatibility."""
-
-    print('The check_all_csv function is deprecated. Use open_sdg_check instead.')
-    return open_sdg_check(src_dir=src_dir, schema_file=schema_file, config=config)

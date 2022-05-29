@@ -23,6 +23,6 @@ class InputExcelMeta(InputMetaFiles):
 
     def read_meta_at_path(self, filepath):
         meta_excel = pd.ExcelFile(filepath)
-        meta_df = meta_excel.parse(meta_excel.sheet_names[self.sheet_number], header=None, index_col=0, squeeze=True)
+        meta_df = meta_excel.parse(meta_excel.sheet_names[self.sheet_number], header=None, index_col=0).squeeze('columns')
         meta_df = meta_df.dropna()
         return meta_df.to_dict()

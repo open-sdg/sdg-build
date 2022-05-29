@@ -81,20 +81,20 @@ def detect_all_edges(inid, df, non_disaggregation_columns):
         if a_without_b and not b_without_a and b_not_empty:
             # A is a parent of B
             # so add to df of edges
-            edges = edges.append(pd.DataFrame({'From': [a], 'To': [b]}))
+            edges = pd.concat([edges, pd.DataFrame({'From': [a], 'To': [b]})])
 
         # if ab is not an edge, test whether ba is an edge
         # (at least one case where a has empty and b doesn't)
         elif b_without_a and not a_without_b and a_not_empty:
             # B is a parent of A
             # so add to df of edges
-            edges = edges.append(pd.DataFrame({'From': [b], 'To': [a]}))
+            edges = pd.concat([edges, pd.DataFrame({'From': [b], 'To': [a]})])
 
         # if ab not an edge and ba not an edge, then test that for every
         # element in a there is an element in b and vice versa
         elif not a_without_b and not b_without_a and a_not_empty and b_not_empty:
             # co-depedent; choose A as left-most
-            edges = edges.append(pd.DataFrame({'From': [a], 'To': [b]}))
+            edges = pd.concat([edges, pd.DataFrame({'From': [a], 'To': [b]})])
 
     return edges
 

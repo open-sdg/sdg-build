@@ -275,6 +275,29 @@ class InputSdmx(InputBase):
         return df
 
 
+    def attempt_numeric_time_period(self, df, indicator_id):
+        """SDMX values get imported as strings, so we try to convert years here.
+
+        Parameters
+        ----------
+        Dataframe : df
+            The dataframe containing a 'Year' column.
+
+        string : indicator_id
+            The indicator id that we are fixing.
+
+        Returns
+        -------
+        Dataframe
+            The same dataframe with all numeric years.
+        """
+        try:
+            df['Year'] = pd.to_numeric(df['Year'], errors='raise')
+        except ValueError as e:
+            self.warn('Indicator {inid} has a non-numeric year: {value}', inid=indicator_id, value=str(e))
+        return df
+
+
     def get_dimension_name(self, dimension_id):
         """Determine the human-readable name of a dimension.
 
@@ -393,5 +416,6 @@ class InputSdmx(InputBase):
             data = self.create_dataframe(indicator_data[indicator_id])
             data = self.drop_singleton_columns(data)
             data = self.ensure_numeric_values(data, indicator_id)
+            data = self.attempt_numeric_time_period(data, indicator_id)
             name = indicator_names[indicator_id] if self.import_names else None
             self.add_indicator(indicator_id, data=data, name=name, options=indicator_options)

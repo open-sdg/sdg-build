@@ -164,7 +164,6 @@ class OutputSdmxMl(OutputBase):
         header = self.create_header(header_info)
 
         metadata_base_vars = header_info.copy()
-        print('here')
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id)
             data = indicator.data.copy()
@@ -222,7 +221,6 @@ class OutputSdmxMl(OutputBase):
                 dataset = self.create_dataset(serieses)
                 msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
                 sdmx_path = os.path.join(self.sdmx_folder, indicator_id + '.xml')
-
                 with open(sdmx_path, 'wb') as f:
                     f.write(sdmx.to_xml(msg))
                 all_serieses.update(serieses)

@@ -4,7 +4,7 @@ import inputs_common
 
 def test_excel_meta_input():
 
-    meta_pattern = os.path.join('tests', 'meta', 'excel', '*.xlsx')
+    meta_pattern = os.path.join('tests', 'assets', 'meta', 'excel', '*.xlsx')
     meta_input = sdg.inputs.InputExcelMeta(
         path_pattern=meta_pattern,
         git=False,

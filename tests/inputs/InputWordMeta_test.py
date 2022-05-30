@@ -4,7 +4,7 @@ import inputs_common
 
 def test_word_meta_input():
 
-    meta_pattern = os.path.join('tests', 'meta', 'word', '*.docm')
+    meta_pattern = os.path.join('tests', 'assets', 'meta', 'word', '*.docm')
     meta_input = sdg.inputs.InputWordMeta(
         path_pattern=meta_pattern,
         git=False,

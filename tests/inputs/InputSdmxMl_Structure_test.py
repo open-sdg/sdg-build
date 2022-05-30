@@ -4,7 +4,7 @@ import inputs_common
 
 def test_sdmx_structure_specific_input():
 
-    data_path = os.path.join('tests', 'data', 'sdmx', 'structure', '1-1-1--structure.xml')
+    data_path = os.path.join('tests', 'assets', 'data', 'sdmx', 'structure', '1-1-1--structure.xml')
     data_input = sdg.inputs.InputSdmxMl_Structure(
         source=data_path,
         import_codes=True,

@@ -4,7 +4,7 @@ import inputs_common
 
 def test_yaml_meta_input():
 
-    meta_pattern = os.path.join('tests', 'meta', 'yaml', '*.yml')
+    meta_pattern = os.path.join('tests', 'assets', 'meta', 'yaml', '*.yml')
     meta_input = sdg.inputs.InputYamlMeta(
         path_pattern=meta_pattern,
         git=False,

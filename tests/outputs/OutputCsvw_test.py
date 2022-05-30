@@ -7,9 +7,9 @@ english_build = os.path.join('_site', 'en')
 
 def test_csvw_output():
 
-    data_pattern = os.path.join('tests', 'data', 'csv', '*.csv')
+    data_pattern = os.path.join('tests', 'assets', 'data', 'csv', '*.csv')
     data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
-    schema_path = os.path.join('tests', 'meta', 'metadata_schema.yml')
+    schema_path = os.path.join('tests', 'assets', 'meta', 'metadata_schema.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
     translations = sdg.translations.TranslationInputSdgTranslations()
     data_output = sdg.outputs.OutputCsvw([data_input], schema, translations=[translations])
@@ -41,7 +41,7 @@ def test_datapackage_output_json():
 def test_datapackage_output_data():
 
     output_path = os.path.join(english_build, 'csvw', '1-1-1', 'data.csv')
-    correct_path = os.path.join('tests', 'data', 'csv', 'indicator_1-1-1.csv')
+    correct_path = os.path.join('tests', 'assets', 'data', 'csv', 'indicator_1-1-1.csv')
     output_df = pd.read_csv(output_path)
     correct_df = pd.read_csv(correct_path)
     pd.testing.assert_frame_equal(correct_df, output_df)

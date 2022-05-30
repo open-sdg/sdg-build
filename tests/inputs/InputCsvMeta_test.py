@@ -4,7 +4,7 @@ import inputs_common
 
 def test_csv_meta_input():
 
-    meta_pattern = os.path.join('tests', 'meta', 'csv', '*.csv')
+    meta_pattern = os.path.join('tests', 'assets', 'meta', 'csv', '*.csv')
     meta_input = sdg.inputs.InputCsvMeta(
         path_pattern=meta_pattern,
         git=False,

@@ -4,7 +4,7 @@ import inputs_common
 
 def test_sdmx_multiple_input():
 
-    data_pattern = os.path.join('tests', 'data', 'sdmx', 'multiple', '*.xml')
+    data_pattern = os.path.join('tests', 'assets', 'data', 'sdmx', 'multiple', '*.xml')
     data_input = sdg.inputs.InputSdmxMl_Multiple(
         path_pattern=data_pattern,
         import_codes=True,

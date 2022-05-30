@@ -21,7 +21,7 @@ def reporting_status(all_meta, extra_fields=None):
     """
 
     # Make sure 'goal_number' is in the list of fields.
-    grouping_fields = extra_fields if extra_fields is not None else []
+    grouping_fields = extra_fields.copy() if extra_fields is not None else []
     if 'goal_number' not in grouping_fields:
         grouping_fields.append('goal_number')
 

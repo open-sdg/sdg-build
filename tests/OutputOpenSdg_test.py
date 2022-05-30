@@ -20,7 +20,7 @@ def test_open_sdg_output():
     assert data_output.validate()
     assert data_output.execute_per_language(['en'])
 
-    exp_dirs = set(['comb', 'data', 'edges', 'headline', 'meta', 'stats', 'zip', 'translations', 'geojson'])
+    exp_dirs = set(['comb', 'data', 'edges', 'headline', 'meta', 'stats', 'zip', 'translations'])
     act_dirs = os.listdir(english_build)
     assert all([a in exp_dirs for a in act_dirs])
 

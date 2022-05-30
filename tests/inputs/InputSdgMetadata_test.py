@@ -1,6 +1,6 @@
 import sdg
 import os
-import common
+import inputs_common
 
 def test_sdmx_meta_input():
 

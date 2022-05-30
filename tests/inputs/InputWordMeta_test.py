@@ -1,10 +1,10 @@
 import sdg
 import os
-import common
+import inputs_common
 
 def test_word_meta_input():
 
-    meta_pattern = os.path.join('tests', 'meta2', 'word', '*.docm')
+    meta_pattern = os.path.join('tests', 'meta', 'word', '*.docm')
     meta_input = sdg.inputs.InputWordMeta(
         path_pattern=meta_pattern,
         git=False,

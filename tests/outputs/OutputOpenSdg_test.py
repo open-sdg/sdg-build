@@ -2,18 +2,21 @@ import sdg
 import os
 import json
 import pandas as pd
-import common
+import outputs_common
 
-english_build = os.path.join('_site', 'en')
+english_build = os.path.join('_site_open_sdg', 'en')
 
 def test_open_sdg_output():
 
-    data_pattern = os.path.join('tests', 'data2', 'csv', '*.csv')
+    data_pattern = os.path.join('tests', 'data', 'csv', '*.csv')
     data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
-    schema_path = os.path.join('tests', 'meta2', 'metadata_schema.yml')
+    schema_path = os.path.join('tests', 'meta', 'metadata_schema.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
     translations = sdg.translations.TranslationInputSdgTranslations()
-    data_output = sdg.outputs.OutputOpenSdg([data_input], schema, translations=[translations])
+    data_output = sdg.outputs.OutputOpenSdg([data_input], schema,
+        translations=[translations],
+        output_folder='_site_open_sdg',
+    )
     assert data_output.validate()
     assert data_output.execute_per_language(['en'])
 
@@ -40,7 +43,7 @@ def test_open_sdg_output_data_csv():
 
     csv_path = os.path.join(english_build, 'data', '1-1-1.csv')
     df = pd.read_csv(csv_path)
-    common.assert_input_has_correct_data(df)
+    outputs_common.assert_input_has_correct_data(df)
 
 def test_open_sdg_output_edges_json():
 
@@ -67,7 +70,7 @@ def test_open_sdg_output_headline_csv():
 
     csv_path = os.path.join(english_build, 'headline', '1-1-1.csv')
     df = pd.read_csv(csv_path)
-    common.assert_input_has_correct_headline(df)
+    outputs_common.assert_input_has_correct_headline(df)
 
 def test_open_sdg_output_headline_all():
 

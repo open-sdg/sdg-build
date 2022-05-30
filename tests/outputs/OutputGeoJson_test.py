@@ -2,16 +2,16 @@ import sdg
 import os
 import json
 import pandas as pd
-import common
+import outputs_common
 
 english_build = os.path.join('_site', 'en')
 
 def test_geojson_output():
 
     geojson_file = os.path.join('tests', 'geojson', 'england-regions.geojson')
-    data_pattern = os.path.join('tests', 'data2', 'csv-with-geocodes', '*.csv')
+    data_pattern = os.path.join('tests', 'data', 'csv-with-geocodes', '*.csv')
     data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
-    schema_path = os.path.join('tests', 'meta2', 'metadata_schema.yml')
+    schema_path = os.path.join('tests', 'meta', 'metadata_schema.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
     translations = sdg.translations.TranslationInputSdgTranslations()
     data_output = sdg.outputs.OutputGeoJson([data_input], schema,

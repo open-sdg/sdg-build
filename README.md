@@ -1,5 +1,7 @@
 # SDG Build
 
+[![codecov](https://codecov.io/gh/open-sdg/sdg-build/branch/2.0.0-dev/graph/badge.svg?token=coUSWbb1Ou)](https://codecov.io/gh/open-sdg/sdg-build)
+
 SDG Build is a Python package for converting data on the Sustainable Development Goals (SDG) from one format into another. This is mainly useful to an SDG reporting platform, by providing these benefits:
 
 1. Input of SDG data from various machine-readable formats, for human-friendly visualisation and display

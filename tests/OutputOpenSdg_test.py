@@ -8,9 +8,9 @@ english_build = os.path.join('_site_open_sdg', 'en')
 
 def test_open_sdg_output():
 
-    data_pattern = os.path.join('tests', 'assets', 'data', 'csv', '*.csv')
+    data_pattern = os.path.join('tests', 'assets', 'open-sdg', 'data', '*.csv')
     data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
-    schema_path = os.path.join('tests', 'assets', 'meta', 'metadata_schema.yml')
+    schema_path = os.path.join('tests', 'assets', 'open-sdg', 'metadata_schema.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
     translations = sdg.translations.TranslationInputSdgTranslations()
     data_output = sdg.outputs.OutputOpenSdg([data_input], schema,

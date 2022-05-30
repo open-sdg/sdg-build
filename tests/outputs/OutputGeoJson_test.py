@@ -14,7 +14,7 @@ def test_geojson_output():
     schema_path = os.path.join('tests', 'meta', 'metadata_schema.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
     translations = sdg.translations.TranslationInputSdgTranslations()
-    data_output = sdg.outputs.OutputGeoJson([data_input], schema,
+    data_output = sdg.outputs.OutputGeoJsonOpenSdg([data_input], schema,
         translations=[translations],
         geojson_file=geojson_file,
         name_property='rgn17nm',

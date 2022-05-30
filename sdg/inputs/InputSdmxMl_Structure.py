@@ -122,7 +122,7 @@ class InputSdmxMl_Structure(InputSdmx):
         observations = self.get_observations(series)
         rows = []
         for observation in observations:
-            year = observation.find(".//ObsDimension[@id='TIME_PERIOD']").attrib['value']
+            year = observation.find(".//ObsDimension").attrib['value']
             obsvalue = observation.find(".//ObsValue")
             if obsvalue is None:
                 continue

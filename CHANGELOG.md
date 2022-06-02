@@ -1,5 +1,16 @@
 # Changes
 
+### 1.8.0
+
+* Special treatment of more SDMX-related columns #295
+* Allow multiple data inputs for the same indicator #294
+* Remove version number from API endpoint #293
+
+### 1.7.0
+
+* Fixes for code and column mapping in SDMX output #288
+* Provide indicator_id when altering data/metadata #285
+
 ### 1.6.0
 
 * Metadata report #279

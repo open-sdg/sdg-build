@@ -223,7 +223,7 @@ class OutputSdmxMl(OutputBase):
                 msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
                 sdmx_path = os.path.join(self.sdmx_folder, indicator_id + '.xml')
                 with open(sdmx_path, 'wb') as f:
-                    status = status & f.write(sdmx.to_xml(msg))
+                    f.write(sdmx.to_xml(msg))
                 all_serieses.update(serieses)
                 all_serieses_by_goal[goal].update(serieses)
 
@@ -279,7 +279,7 @@ class OutputSdmxMl(OutputBase):
                 metadata_sdmx = metadata_template.render(metadata)
                 meta_path = os.path.join(self.meta_folder, indicator_id + '.xml')
                 with open(meta_path, 'w') as f:
-                    status = status & f.write(metadata_sdmx)
+                    f.write(metadata_sdmx)
                 all_metadata_serieses = all_metadata_serieses + metadata_serieses
                 all_metadata_serieses_by_goal[goal] = all_metadata_serieses_by_goal[goal] + metadata_serieses
 
@@ -287,21 +287,21 @@ class OutputSdmxMl(OutputBase):
         msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
         all_sdmx_path = os.path.join(self.sdmx_folder, 'all.xml')
         with open(all_sdmx_path, 'wb') as f:
-            status = status & f.write(sdmx.to_xml(msg))
+            f.write(sdmx.to_xml(msg))
 
         for goal in all_serieses_by_goal:
             dataset = self.create_dataset(all_serieses_by_goal[goal])
             msg = DataMessage(data=[dataset], dataflow=dfd, header=header, observation_dimension=time_period)
             goal_sdmx_path = os.path.join(self.sdmx_folder, str(goal) + '.xml')
             with open(goal_sdmx_path, 'wb') as f:
-                status = status & f.write(sdmx.to_xml(msg))
+                f.write(sdmx.to_xml(msg))
 
         metadata = metadata_base_vars.copy()
         metadata['serieses'] = all_metadata_serieses
         metadata_sdmx = metadata_template.render(metadata)
         meta_path = os.path.join(self.meta_folder, 'all.xml')
         with open(meta_path, 'w') as f:
-            status = status & f.write(metadata_sdmx)
+            f.write(metadata_sdmx)
 
         for goal in all_metadata_serieses_by_goal:
             metadata = metadata_base_vars.copy()
@@ -309,7 +309,7 @@ class OutputSdmxMl(OutputBase):
             metadata_sdmx = metadata_template.render(metadata)
             goal_meta_path = os.path.join(self.meta_folder, str(goal) + '.xml')
             with open(goal_meta_path, 'w') as f:
-                status = status & f.write(metadata_sdmx)
+                f.write(metadata_sdmx)
 
         return status
 

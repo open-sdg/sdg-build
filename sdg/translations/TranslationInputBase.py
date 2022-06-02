@@ -94,11 +94,11 @@ class TranslationInputBase(Loggable):
             The name of a Git tag to use (overrides "branch")
         """
 
-        repo = Repo.clone_from(repo_url, folder)
-        if branch:
-            repo.git.checkout(branch)
-        if tag:
-            repo.git.checkout(tag)
+        git_parameters = ['--depth 1']
+        if branch or tag:
+            ref = branch if branch else tag
+            git_parameters.append('--branch ' + ref)
+        Repo.clone_from(repo_url, folder, multi_options=git_parameters)
 
 
     def execute_once(self):

@@ -51,7 +51,7 @@ class InputSdmxMl_UnitedNationsApi(InputSdmxMl_Structure):
         if 'REF_AREA' not in dimension_query and self.reference_area is not None:
             dimension_query['REF_AREA'] = str(self.reference_area)
 
-        prefix = 'https://data.un.org/ws/rest/data/IAEG-SDGs,DF_SDG_GLH,1.3/'
+        prefix = 'https://data.un.org/ws/rest/data/IAEG-SDGs,DF_SDG_GLH/'
         suffix = '/ALL/?detail=full&dimensionAtObservation=TIME_PERIOD'
         values = map(lambda x: str(self.dimension_query[x]) if x in self.dimension_query else '', params)
         query = '.'.join(values)

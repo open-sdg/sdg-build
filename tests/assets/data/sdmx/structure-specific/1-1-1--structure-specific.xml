@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<!--Created with SDMX Converter v7.9.5-->
+<message:StructureSpecificData xmlns:ss="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/data/structurespecific" xmlns:footer="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message/footer" xmlns:ns1="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=IAEG-SDGs:SDG(1.8):ObsLevelDim:TIME_PERIOD" xmlns:message="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message" xmlns:common="http://www.sdmx.org/resources/sdmxml/schemas/v2_1/common" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <message:Header>
+    <message:ID>IREF1653746846574</message:ID>
+    <message:Test>false</message:Test>
+    <message:Prepared>2022-05-28T14:07:26Z</message:Prepared>
+    <message:Sender id="BIS">
+      <message:Contact></message:Contact>
+    </message:Sender>
+    <message:Structure structureID="IAEG-SDGs_SDG_1_8" namespace="urn:sdmx:org.sdmx.infomodel.datastructure.DataStructure=IAEG-SDGs:SDG(1.8):ObsLevelDim:TIME_PERIOD" dimensionAtObservation="TIME_PERIOD">
+      <common:Structure>
+        <Ref agencyID="IAEG-SDGs" id="SDG" version="1.8"></Ref>
+      </common:Structure>
+    </message:Structure>
+    <message:DataSetAction>Information</message:DataSetAction>
+    <message:DataSetID>SDG</message:DataSetID>
+  </message:Header>
+  <message:DataSet ss:dataScope="DataStructure" xsi:type="ns1:DataSetType" ss:structureRef="IAEG-SDGs_SDG_1_8" ss:action="Information">
+  <Series FREQ="A" REPORTING_TYPE="N" SERIES="SI_POV_DAY1" REF_AREA="826" SEX="_T" AGE="_T" URBANISATION="_T" INCOME_WEALTH_QUANTILE="_T" EDUCATION_LEV="_T" OCCUPATION="_T" CUST_BREAKDOWN="_T" COMPOSITE_BREAKDOWN="_T" DISABILITY_STATUS="_T" ACTIVITY="_T" PRODUCT="_T" UNIT_MEASURE="PT">
+    <Obs TIME_PERIOD="2020" OBS_VALUE="100" OBS_STATUS="A" UNIT_MULT="0" NATURE="_X"></Obs>
+    <Obs TIME_PERIOD="2021" OBS_VALUE="120" OBS_STATUS="A" UNIT_MULT="0" NATURE="_X"></Obs>
+  </Series>
+  <Series FREQ="A" REPORTING_TYPE="N" SERIES="SI_POV_DAY1" REF_AREA="826" SEX="M" AGE="_T" URBANISATION="_T" INCOME_WEALTH_QUANTILE="_T" EDUCATION_LEV="_T" OCCUPATION="_T" CUST_BREAKDOWN="_T" COMPOSITE_BREAKDOWN="_T" DISABILITY_STATUS="_T" ACTIVITY="_T" PRODUCT="_T" UNIT_MEASURE="PT">
+    <Obs TIME_PERIOD="2020" OBS_VALUE="50" OBS_STATUS="A" UNIT_MULT="0" NATURE="_X"></Obs>
+    <Obs TIME_PERIOD="2021" OBS_VALUE="60" OBS_STATUS="A" UNIT_MULT="0" NATURE="_X"></Obs>
+  </Series>
+  <Series FREQ="A" REPORTING_TYPE="N" SERIES="SI_POV_DAY1" REF_AREA="826" SEX="F" AGE="_T" URBANISATION="_T" INCOME_WEALTH_QUANTILE="_T" EDUCATION_LEV="_T" OCCUPATION="_T" CUST_BREAKDOWN="_T" COMPOSITE_BREAKDOWN="_T" DISABILITY_STATUS="_T" ACTIVITY="_T" PRODUCT="_T" UNIT_MEASURE="PT">
+    <Obs TIME_PERIOD="2020" OBS_VALUE="70" OBS_STATUS="A" UNIT_MULT="0" NATURE="_X"></Obs>
+    <Obs TIME_PERIOD="2021" OBS_VALUE="80" OBS_STATUS="A" UNIT_MULT="0" NATURE="_X"></Obs>
+  </Series>
+</message:DataSet>
+</message:StructureSpecificData>

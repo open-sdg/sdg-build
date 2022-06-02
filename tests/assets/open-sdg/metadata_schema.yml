@@ -1,0 +1,8 @@
+prose:
+  metadata:
+    meta:
+      - name: "foo"
+        field:
+            element: text
+            label: "Foo"
+            scope: page

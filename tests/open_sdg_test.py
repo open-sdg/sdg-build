@@ -2,11 +2,15 @@ import sdg
 import os
 import OutputOpenSdg_test
 
+
+def my_indicator_callback(indicator):
+    assert isinstance(indicator, sdg.Indicator)
+
+
 def test_open_sdg():
     config_path = os.path.join('tests', 'assets', 'open-sdg', 'config_data.yml')
     assert sdg.open_sdg_check(config=config_path)
-    assert sdg.open_sdg_build(config=config_path)
-
+    assert sdg.open_sdg_build(config=config_path, indicator_callback=my_indicator_callback)
     OutputOpenSdg_test.test_open_sdg_output_comb()
     OutputOpenSdg_test.test_open_sdg_output_data_csv()
     OutputOpenSdg_test.test_open_sdg_output_data_json()

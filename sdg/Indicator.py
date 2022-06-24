@@ -305,6 +305,13 @@ class Indicator(Loggable):
         for column in data_copy:
             data_copy[column] = data_copy[column].apply(lambda x: translate_data(x, column))
         data_copy.rename(mapper=translate_data_columns, axis='columns', inplace=True)
+
+        # Because the above could result in duplicate columns, fix that now.
+        if not data_copy.columns.is_unique:
+            s = pd.Series(data_copy.columns)
+            data_copy.columns = data_copy.columns+s.groupby(s).cumcount().replace(0,'').astype(str)
+
+
         indicator.set_data(data_copy)
 
         # Finally place the translation for later access.

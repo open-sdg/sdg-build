@@ -26,8 +26,10 @@ def test_csv_input_with_duplicates():
     indicator = data_input.indicators['1-1-1']
     indicator.translate('en', translation_helper)
 
+    print(indicator.data)
+
     correct_data = """
-        Year,SEX,SEX.1,Value
+        Year,SEX,SEX1,Value
         2020,,,100
         2021,,,120
         2020,M,M,50
@@ -35,5 +37,4 @@ def test_csv_input_with_duplicates():
         2020,F,F,70
         2021,F,F,80
     """
-    print(indicator.language('en').data)
     inputs_common.assert_input_has_correct_data(indicator.language('en').data, correct_data)

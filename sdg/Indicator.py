@@ -290,15 +290,16 @@ class Indicator(Loggable):
         indicator.set_name(translate_meta(self.name))
 
         # Translate the metadata.
-        meta_copy = copy.deepcopy(self.meta)
-        # But first do overrides of "subfolder" metadata.
-        if language in meta_copy and isinstance(meta_copy[language], dict):
-            meta_copy.update(meta_copy[language])
-            del meta_copy[language]
-        # Now we can actually translate.
-        for key in meta_copy:
-            meta_copy[key] = translate_meta(meta_copy[key])
-        indicator.set_meta(meta_copy)
+        if self.meta is not None:
+            meta_copy = copy.deepcopy(self.meta)
+            # But first do overrides of "subfolder" metadata.
+            if language in meta_copy and isinstance(meta_copy[language], dict):
+                meta_copy.update(meta_copy[language])
+                del meta_copy[language]
+            # Now we can actually translate.
+            for key in meta_copy:
+                meta_copy[key] = translate_meta(meta_copy[key])
+            indicator.set_meta(meta_copy)
 
         # Translate the data cells and headers.
         data_copy = copy.deepcopy(self.data)

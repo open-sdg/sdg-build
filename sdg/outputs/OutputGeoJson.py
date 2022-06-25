@@ -145,7 +145,7 @@ class OutputGeoJson(OutputBase):
                 disaggregations = [series.get_disaggregations() for series in series_by_geocodes[geocode]]
                 values = [series.get_values() for series in series_by_geocodes[geocode]]
                 # Do some cleanup of the disaggregations.
-                disaggregations = [self.clean_disaggregations(disaggregation) for disaggregation in disaggregations]
+                disaggregations = [self.clean_disaggregations(disaggregation, language) for disaggregation in disaggregations]
                 # Figure out a "headline" so we can move it to the front of the list.
                 headline_index = self.get_headline_index(disaggregations)
                 disaggregations.insert(0, disaggregations.pop(headline_index))
@@ -198,7 +198,7 @@ class OutputGeoJson(OutputBase):
         return series_by_geocodes
 
 
-    def clean_disaggregations(self, disaggregations):
+    def clean_disaggregations(self, disaggregations, language):
         """Apply any modifications to disaggregations before saving them into
         the GeoJSON file.
 
@@ -206,6 +206,8 @@ class OutputGeoJson(OutputBase):
         ----------
         disaggregations : dict
             A dict of disaggregations, with category keyed to subcategory.
+        language : String
+            The language code to use for translations.
 
         Returns
         -------
@@ -218,10 +220,13 @@ class OutputGeoJson(OutputBase):
         for column in self.exclude_columns:
             if column in disaggregations:
                 del disaggregations[column]
-        # Convert null/nan/etc into just null.
+        # Convert null/nan/etc into just None, and translate any values.
         for key in disaggregations:
             if pd.isna(disaggregations[key]):
                 disaggregations[key] = None
+            elif language is not None:
+                translated = self.translation_helper.translate(disaggregations[key], language, default_group=[key, 'data'])
+                disaggregations[key] = translated
         return disaggregations
 
 

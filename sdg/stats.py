@@ -20,10 +20,10 @@ def reporting_status(all_meta, extra_fields=None):
         total level
     """
 
-    # Make sure 'sdg_goal' is in the list of fields.
-    grouping_fields = extra_fields if extra_fields is not None else []
-    if 'sdg_goal' not in grouping_fields:
-        grouping_fields.append('sdg_goal')
+    # Make sure 'goal_number' is in the list of fields.
+    grouping_fields = extra_fields.copy() if extra_fields is not None else []
+    if 'goal_number' not in grouping_fields:
+        grouping_fields.append('goal_number')
 
     # Generate a report of the possible statuses.
     status_values_by_type = {}
@@ -95,8 +95,8 @@ def reporting_status(all_meta, extra_fields=None):
         grouped_report = list()
         for index, g in grouped_dfs[field].reset_index().iterrows():
             # Because the goals report is treated differently, standardize on
-            # the key of "goal" instead of "sdg_goals".
-            fixed_field_name = field.replace('sdg_goal', 'goal')
+            # the key of "goal" instead of "goal_number".
+            fixed_field_name = field.replace('goal_number', 'goal')
             grouped_report.append(
                 {
                     fixed_field_name: g[field],
@@ -107,7 +107,7 @@ def reporting_status(all_meta, extra_fields=None):
         output['extra_fields'][field] = grouped_report
 
     # Treat goals specially, by putting it outside of "extra_fields".
-    output['goals'] = output['extra_fields']['sdg_goal']
-    del output['extra_fields']['sdg_goal']
+    output['goals'] = output['extra_fields']['goal_number']
+    del output['extra_fields']['goal_number']
 
     return output

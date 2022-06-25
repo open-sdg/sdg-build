@@ -1,6 +1,5 @@
-# This config file is for use with the `build_data` and `check_data` functions,
-# which are helpers for implementations of Open SDG. This file allows easy use
-# of those functions without altering Python code.
+# This config file is for use with implementations of Open SDG. This file allows easy use
+# of this library without altering Python code.
 
 # Languages
 # ---------

@@ -58,8 +58,7 @@ class InputSdmx(InputBase):
             Whether to import names. Set to False to rely on global names
         import_codes : boolean
             Whether to import SDMX codes instead of text values. Set to True
-            to import codes. This overrides the deprecated "import_translation_keys"
-            and inherits its value if set.
+            to import codes.
         dsd : string
             Remote URL of the SDMX DSD (data structure definition) or path to
             local file.
@@ -87,9 +86,6 @@ class InputSdmx(InputBase):
         self.import_codes = import_codes
         self.import_series_attributes = import_series_attributes
         self.import_observation_attributes = import_observation_attributes
-        # Also use deprecated import_translation_keys.
-        if not import_codes and import_translation_keys:
-            self.import_codes = import_translation_keys
         self.indicator_id_xpath = indicator_id_xpath
         self.indicator_name_xpath = indicator_name_xpath
         self.series_dimensions = {}
@@ -279,6 +275,29 @@ class InputSdmx(InputBase):
         return df
 
 
+    def attempt_numeric_time_period(self, df, indicator_id):
+        """SDMX values get imported as strings, so we try to convert years here.
+
+        Parameters
+        ----------
+        Dataframe : df
+            The dataframe containing a 'Year' column.
+
+        string : indicator_id
+            The indicator id that we are fixing.
+
+        Returns
+        -------
+        Dataframe
+            The same dataframe with all numeric years.
+        """
+        try:
+            df['Year'] = pd.to_numeric(df['Year'], errors='raise')
+        except ValueError as e:
+            self.warn('Indicator {inid} has a non-numeric year: {value}', inid=indicator_id, value=str(e))
+        return df
+
+
     def get_dimension_name(self, dimension_id):
         """Determine the human-readable name of a dimension.
 
@@ -397,5 +416,6 @@ class InputSdmx(InputBase):
             data = self.create_dataframe(indicator_data[indicator_id])
             data = self.drop_singleton_columns(data)
             data = self.ensure_numeric_values(data, indicator_id)
+            data = self.attempt_numeric_time_period(data, indicator_id)
             name = indicator_names[indicator_id] if self.import_names else None
             self.add_indicator(indicator_id, data=data, name=name, options=indicator_options)

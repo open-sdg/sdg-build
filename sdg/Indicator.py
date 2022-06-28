@@ -290,21 +290,29 @@ class Indicator(Loggable):
         indicator.set_name(translate_meta(self.name))
 
         # Translate the metadata.
-        meta_copy = copy.deepcopy(self.meta)
-        # But first do overrides of "subfolder" metadata.
-        if language in meta_copy and isinstance(meta_copy[language], dict):
-            meta_copy.update(meta_copy[language])
-            del meta_copy[language]
-        # Now we can actually translate.
-        for key in meta_copy:
-            meta_copy[key] = translate_meta(meta_copy[key])
-        indicator.set_meta(meta_copy)
+        if self.meta is not None:
+            meta_copy = copy.deepcopy(self.meta)
+            # But first do overrides of "subfolder" metadata.
+            if language in meta_copy and isinstance(meta_copy[language], dict):
+                meta_copy.update(meta_copy[language])
+                del meta_copy[language]
+            # Now we can actually translate.
+            for key in meta_copy:
+                meta_copy[key] = translate_meta(meta_copy[key])
+            indicator.set_meta(meta_copy)
 
         # Translate the data cells and headers.
         data_copy = copy.deepcopy(self.data)
         for column in data_copy:
             data_copy[column] = data_copy[column].apply(lambda x: translate_data(x, column))
         data_copy.rename(mapper=translate_data_columns, axis='columns', inplace=True)
+
+        # Because the above could result in duplicate columns, fix that now.
+        if not data_copy.columns.is_unique:
+            s = pd.Series(data_copy.columns)
+            data_copy.columns = data_copy.columns+s.groupby(s).cumcount().replace(0,'').astype(str)
+
+
         indicator.set_data(data_copy)
 
         # Finally place the translation for later access.

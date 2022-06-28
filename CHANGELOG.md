@@ -1,5 +1,37 @@
 # Changes
 
+### 2.0.0
+
+* Rename columns that become duplicates after translation #316
+* Copy list to avoid side effects when appending to it #313
+* Testing revamp #306, #307, #308, #309, #310, #311, #312
+* Fix for status variable in OutputSdmxMl #305
+* Use concat instead of append #304
+* Avoid deprecation warning about squeeze parameter #303
+* Faster git clone for InputSdgMetadata class #302
+* Convert years to numbers in SDMX inputs, for consistency #301
+* InputSdmxMl_Structure fix: No ID needed on ObsDimension #300
+* Subclass of geojson output for extra validation with Open SDG #297
+* Deprecations for 2.0.0 #296
+
+Here is a summary of the deprecations for 2.0.0 mentioned above:
+
+* Remove the check_all_csv function
+* Remove the check_all_meta function
+* Stop auto-populating some metadata fields:
+    * national_metadata_update_url
+    * national_metadata_update_url_text
+    * national_data_update_url
+    * national_data_update_url_text
+* InputMetaFiles: Remove the get_git_updates and get_git_update methods
+* InputSdmx: Remove the import_translation_keys parameter
+* open_sdg.py: Require at least one language
+* OutputDataPackage: Default to the 'default' sorting logic
+* OutputOpenSdg: Rename some metadata fields:
+    * indicator_number instead of indicator
+    * target_number instead of target_id
+    * goal_number instead of sdg_goal
+
 ### 1.8.0
 
 * Special treatment of more SDMX-related columns #295

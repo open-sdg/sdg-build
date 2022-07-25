@@ -1,0 +1,739 @@
+Year,Type of science,Value
+2010,,70550.79959944433
+2010,,68329.85066142055
+2010,,67303.44623678036
+2010,,69489.09354968125
+2010,,69517.50052468931
+2010,,66024.18001389063
+2010,,57068.350013937976
+2010,,60226.420365685895
+2010,,69403.25275802036
+2010,,80080.9591948497
+2010,,108350.18978014459
+2010,,142335.79261640925
+2010,,173704.36100202432
+2010,,231594.4047165501
+2010,,379661.11428838066
+2010,,981224.0253314862
+2010,,3851344.790756384
+2010,,27631487.286659703
+2011,,73830.70453989519
+2011,,70182.00135603019
+2011,,69712.54027683185
+2011,,70972.41232263345
+2011,,72653.66293717064
+2011,,69201.65765424403
+2011,,60698.97572776271
+2011,,61351.53986419422
+2011,,70168.75777498311
+2011,,80539.21762321012
+2011,,107770.08613121057
+2011,,143206.32987591097
+2011,,179662.9388329853
+2011,,235612.44250614004
+2011,,387097.9843238212
+2011,,943218.3684778821
+2011,,3827252.074736891
+2011,,27361617.500828635
+2012,,73528.84297298786
+2012,,67611.98195284358
+2012,,67783.11584205388
+2012,,68236.91668288942
+2012,,70501.83748059007
+2012,,67852.96327105115
+2012,,60798.83933251085
+2012,,59272.785028587314
+2012,,66448.9670370521
+2012,,78057.59809249433
+2012,,98256.26893724038
+2012,,135329.68132745192
+2012,,174663.9456605862
+2012,,226193.92570133557
+2012,,369673.8844468847
+2012,,859356.718926163
+2012,,3593843.827146765
+2012,,24248199.279711884
+2013,,75721.39982263456
+2013,,67525.14967309253
+2013,,68169.93980139348
+2013,,67659.0996450976
+2013,,70408.76957471238
+2013,,68710.82457621588
+2013,,63304.816357061354
+2013,,59102.13437051536
+2013,,65055.398956211095
+2013,,77307.13251514209
+2013,,93719.25348539474
+2013,,130724.13817966818
+2013,,173720.94137437252
+2013,,225451.4002111232
+2013,,363891.4101823583
+2013,,821861.9199443933
+2013,,3492359.059971748
+2013,,23125000
+2014,,4544.834580763787
+2014,,3974.3561171655037
+2014,,3990.062548270227
+2014,,3934.0854803649095
+2014,,4099.142202350345
+2014,,4076.342314549706
+2014,,3846.4441960032927
+2014,,3455.8466250051138
+2014,,3752.3978523659393
+2014,,4434.499949116071
+2014,,5283.869438494224
+2014,,7384.844734214606
+2014,,10015.111065813735
+2014,,13177.628410036345
+2014,,21045.17829396377
+2014,,46112.51837557521
+2014,,195350.53554040895
+2014,,1246601.941747573
+2014,,76450.44171733393
+2014,,66854.20014741848
+2014,,67118.40417386232
+2014,,66176.79200044773
+2014,,68953.27573818613
+2014,,68569.7498996788
+2014,,64702.543645957776
+2014,,58132.14899112964
+2014,,63120.55328190638
+2014,,74594.45968404073
+2014,,88882.03638023669
+2014,,124223.36432974291
+2014,,168468.10400323645
+2014,,221666.04632832683
+2014,,354009.1829531871
+2014,,775676.7239521733
+2014,,3286067.8351184684
+2014,,20969579.28802589
+2015,,3382.7672852002497
+2015,,2955.3898923161114
+2015,,2914.1115026319612
+2015,,2877.4627606328954
+2015,,2985.793442978304
+2015,,3012.8659589552335
+2015,,2894.739424388425
+2015,,2543.697343129682
+2015,,2707.8007609379088
+2015,,3156.1899437903967
+2015,,3720.4335881585116
+2015,,5214.655243527346
+2015,,7202.2656618760075
+2015,,9632.561322545227
+2015,,15155.244934873119
+2015,,32941.570587085786
+2015,,132366.13819922225
+2015,,894956.3898369359
+2015,,77860.98259833796
+2015,,68024.05887737761
+2015,,67073.9562809187
+2015,,66230.41404982157
+2015,,68723.85585702604
+2015,,69346.98258069842
+2015,,66628.07014100817
+2015,,58548.15240627302
+2015,,62325.31242972339
+2015,,72645.86345198913
+2015,,85633.03072405524
+2015,,120025.45458830739
+2015,,165774.182522502
+2015,,221712.17416976983
+2015,,348827.5020602999
+2015,,758214.4552078389
+2015,,3046664.672449895
+2015,,20599165.718619645
+2016,,3291.9946464296972
+2016,,2873.670351471667
+2016,,2781.713357008985
+2016,,2756.503499875435
+2016,,2846.443501623427
+2016,,2928.8978036682097
+2016,,2821.747031612616
+2016,,2508.6266037291502
+2016,,2573.2880694712753
+2016,,2965.6400767780874
+2016,,3483.681794614106
+2016,,4820.167694055665
+2016,,6763.278356227589
+2016,,9238.074332831928
+2016,,14271.537851821493
+2016,,30722.378969053698
+2016,,116054.81306039587
+2016,,793705.8891588568
+2016,,76291.73598970748
+2016,,66597.10094416409
+2016,,64466.00429989627
+2016,,63881.7676982794
+2016,,65966.1206833954
+2016,,67876.99312349447
+2016,,65393.78179092911
+2016,,58137.238696918415
+2016,,59635.763452557345
+2016,,68728.49262480762
+2016,,80734.07167751466
+2016,,111707.03498556408
+2016,,156738.48295525686
+2016,,214091.69933434692
+2016,,330741.8495164112
+2016,,711988.8933673698
+2016,,2689561.8338690577
+2016,,18394076.13097304
+2017,,2707.359329722883
+2017,,2356.9397926809106
+2017,,2251.6994164279376
+2017,,2250.419170390527
+2017,,2304.6296997547975
+2017,,2404.6938263947013
+2017,,2340.6884436158757
+2017,,2123.913464410565
+2017,,2098.874024542735
+2017,,2370.1286736994443
+2017,,2835.6159373639493
+2017,,3691.2931134557416
+2017,,5351.284402802334
+2017,,7530.190609612834
+2017,,11464.753983799452
+2017,,24643.196126751365
+2017,,88524.64144392135
+2017,,628749.1668518108
+2017,,77705.03941934317
+2017,,67647.5034136067
+2017,,64626.95586549795
+2017,,64590.210994689245
+2017,,66146.12981010014
+2017,,69018.11167805994
+2017,,67181.0667253355
+2017,,60959.31842641278
+2017,,60240.6511107716
+2017,,68026.04294036656
+2017,,81386.185340066
+2017,,105945.32973160518
+2017,,153589.42601329312
+2017,,216127.11387484186
+2017,,329054.64393431466
+2017,,707294.5602103815
+2017,,2540782.3326086616
+2017,,18045989.780048877
+2018,,3033.619050557944
+2018,,2622.658538477356
+2018,,2481.467630827517
+2018,,2502.644617806219
+2018,,2538.3947096517395
+2018,,2683.097243170069
+2018,,2654.132846202347
+2018,,2476.6213149115083
+2018,,2342.3667801804245
+2018,,2600.2182718436648
+2018,,3138.1492875075137
+2018,,3930.817610062893
+2018,,5758.390894713364
+2018,,8336.605788135405
+2018,,12684.208854729086
+2018,,27017.999315036635
+2018,,94278.37941514945
+2018,,675689.9651052131
+2018,,79491.26350945573
+2018,,68722.68320542229
+2018,,65022.9953217151
+2018,,65577.9052903714
+2018,,66514.68077998234
+2018,,70306.38535154871
+2018,,69547.41843006588
+2018,,64896.005159433946
+2018,,61378.074127294254
+2018,,68134.67096048563
+2018,,82230.3156025443
+2018,,103000.95471501265
+2018,,150889.66688745003
+2018,,218447.77357830864
+2018,,332369.94219653175
+2018,,707964.6017699115
+2018,,2470418.1297766236
+2018,,17705403.40488527
+2010,Natural sciences and engineering,58389.16863357517
+2010,Natural sciences and engineering,56551.06952194083
+2010,Natural sciences and engineering,55701.597915994134
+2010,Natural sciences and engineering,57510.48073874098
+2010,Natural sciences and engineering,57533.99088552221
+2010,Natural sciences and engineering,54642.85313011458
+2010,Natural sciences and engineering,47230.839785265314
+2010,Natural sciences and engineering,49844.518203820844
+2010,Natural sciences and engineering,57439.437285110624
+2010,Natural sciences and engineering,66276.50795333237
+2010,Natural sciences and engineering,89672.6548596419
+2010,Natural sciences and engineering,117799.77895159902
+2010,Natural sciences and engineering,143760.99611228926
+2010,Natural sciences and engineering,191671.88505817595
+2010,Natural sciences and engineering,314214.67866637633
+2010,Natural sciences and engineering,812079.4577478726
+2010,Natural sciences and engineering,3187445.3830468976
+2010,Natural sciences and engineering,22868338.557993732
+2010,Social sciences and humanities,12161.630965869172
+2010,Social sciences and humanities,11778.781139479717
+2010,Social sciences and humanities,11601.848320786226
+2010,Social sciences and humanities,11978.612810940262
+2010,Social sciences and humanities,11983.509639167105
+2010,Social sciences and humanities,11381.326883776053
+2010,Social sciences and humanities,9837.510228672656
+2010,Social sciences and humanities,10381.902161865053
+2010,Social sciences and humanities,11963.815472909722
+2010,Social sciences and humanities,13804.451241517329
+2010,Social sciences and humanities,18677.534920502676
+2010,Social sciences and humanities,24536.013664810245
+2010,Social sciences and humanities,29943.364889735065
+2010,Social sciences and humanities,39922.51965837417
+2010,Social sciences and humanities,65446.43562200436
+2010,Social sciences and humanities,169144.5675836137
+2010,Social sciences and humanities,663899.4077094864
+2010,Social sciences and humanities,4763148.72866597
+2011,Natural sciences and engineering,61582.230903627904
+2011,Natural sciences and engineering,58538.84558896982
+2011,Natural sciences and engineering,58147.26784689589
+2011,Natural sciences and engineering,59198.12780708572
+2011,Natural sciences and engineering,60600.45986116154
+2011,Natural sciences and engineering,57721.14037290095
+2011,Natural sciences and engineering,50629.048743005464
+2011,Natural sciences and engineering,51173.352844931476
+2011,Natural sciences and engineering,58527.79911079906
+2011,Natural sciences and engineering,67177.8053233935
+2011,Natural sciences and engineering,89891.08759012118
+2011,Natural sciences and engineering,119448.47781472866
+2011,Natural sciences and engineering,149856.9552192029
+2011,Natural sciences and engineering,196524.46673240792
+2011,Natural sciences and engineering,322878.63974096556
+2011,Natural sciences and engineering,786738.955318529
+2011,Natural sciences and engineering,3192313.041865641
+2011,Natural sciences and engineering,22822340.07292012
+2011,Social sciences and humanities,12244.0017583424
+2011,Social sciences and humanities,11638.904888722633
+2011,Social sciences and humanities,11561.049986551518
+2011,Social sciences and humanities,11769.985762530005
+2011,Social sciences and humanities,12048.802490731267
+2011,Social sciences and humanities,11476.325781788019
+2011,Social sciences and humanities,10066.250487135934
+2011,Social sciences and humanities,10174.47099625462
+2011,Social sciences and humanities,11636.70858800144
+2011,Social sciences and humanities,13356.534091602018
+2011,Social sciences and humanities,17872.470976817352
+2011,Social sciences and humanities,23749.178146592625
+2011,Social sciences and humanities,29795.10154601537
+2011,Social sciences and humanities,39073.70488078809
+2011,Social sciences and humanities,64195.89830882025
+2011,Social sciences and humanities,156422.2830340667
+2011,Social sciences and humanities,634707.2186934954
+2011,Social sciences and humanities,4537620.152469341
+2012,Natural sciences and engineering,60373.82811842334
+2012,Natural sciences and engineering,55515.55025374891
+2012,Natural sciences and engineering,55656.06664969187
+2012,Natural sciences and engineering,56028.67816997196
+2012,Natural sciences and engineering,57888.38292545758
+2012,Natural sciences and engineering,55713.41770408483
+2012,Natural sciences and engineering,49921.34415890549
+2012,Natural sciences and engineering,48668.31559869401
+2012,Natural sciences and engineering,54560.609855041
+2012,Natural sciences and engineering,64092.345534452295
+2012,Natural sciences and engineering,80677.28054083207
+2012,Natural sciences and engineering,111117.9040691028
+2012,Natural sciences and engineering,143414.891455205
+2012,Natural sciences and engineering,185725.6641008305
+2012,Natural sciences and engineering,303535.68282946135
+2012,Natural sciences and engineering,705609.5641260184
+2012,Natural sciences and engineering,2950870.7159219803
+2012,Natural sciences and engineering,19909963.98559424
+2012,Social sciences and humanities,13155.014854564508
+2012,Social sciences and humanities,12096.431699094672
+2012,Social sciences and humanities,12127.049192362014
+2012,Social sciences and humanities,12208.238512917465
+2012,Social sciences and humanities,12613.45455513249
+2012,Social sciences and humanities,12139.545566966328
+2012,Social sciences and humanities,10877.49517360535
+2012,Social sciences and humanities,10604.469429893306
+2012,Social sciences and humanities,11888.35718201112
+2012,Social sciences and humanities,13965.252558042024
+2012,Social sciences and humanities,17578.988396408316
+2012,Social sciences and humanities,24211.777258349128
+2012,Social sciences and humanities,31249.05420538119
+2012,Social sciences and humanities,40468.261600505044
+2012,Social sciences and humanities,66138.20161742333
+2012,Social sciences and humanities,153747.15480014464
+2012,Social sciences and humanities,642973.1112247849
+2012,Social sciences and humanities,4338235.294117646
+2013,Natural sciences and engineering,61971.16953064055
+2013,Natural sciences and engineering,55263.274421430266
+2013,Natural sciences and engineering,55790.97726958439
+2013,Natural sciences and engineering,55372.900451102134
+2013,Natural sciences and engineering,57623.25849731625
+2013,Natural sciences and engineering,56233.64291173542
+2013,Natural sciences and engineering,51809.3103899122
+2013,Natural sciences and engineering,48369.792387317655
+2013,Natural sciences and engineering,53242.00512724417
+2013,Natural sciences and engineering,63268.94941516256
+2013,Natural sciences and engineering,76700.79739192016
+2013,Natural sciences and engineering,106985.97421408891
+2013,Natural sciences and engineering,142174.9985360894
+2013,Natural sciences and engineering,184511.7361291499
+2013,Natural sciences and engineering,297812.458881854
+2013,Natural sciences and engineering,672620.2168865249
+2013,Natural sciences and engineering,2858182.4408201706
+2013,Natural sciences and engineering,18925736.961451247
+2013,Social sciences and humanities,13750.230291994007
+2013,Social sciences and humanities,12261.875251662264
+2013,Social sciences and humanities,12378.962531809088
+2013,Social sciences and humanities,12286.199193995477
+2013,Social sciences and humanities,12785.511077396139
+2013,Social sciences and humanities,12477.181664480457
+2013,Social sciences and humanities,11495.505967149158
+2013,Social sciences and humanities,10732.341983197708
+2013,Social sciences and humanities,11813.393828966937
+2013,Social sciences and humanities,14038.183099979533
+2013,Social sciences and humanities,17018.45609347457
+2013,Social sciences and humanities,23738.16396557926
+2013,Social sciences and humanities,31545.942838283125
+2013,Social sciences and humanities,40939.664081973286
+2013,Social sciences and humanities,66078.95130050422
+2013,Social sciences and humanities,149241.7030578683
+2013,Social sciences and humanities,634176.6191515775
+2013,Social sciences and humanities,4199263.038548753
+2014,Natural sciences and engineering,4544.834580763787
+2014,Natural sciences and engineering,3974.3561171655037
+2014,Natural sciences and engineering,3990.062548270227
+2014,Natural sciences and engineering,3934.0854803649095
+2014,Natural sciences and engineering,4099.142202350345
+2014,Natural sciences and engineering,4076.342314549706
+2014,Natural sciences and engineering,3846.4441960032927
+2014,Natural sciences and engineering,3455.8466250051138
+2014,Natural sciences and engineering,3752.3978523659393
+2014,Natural sciences and engineering,4434.499949116071
+2014,Natural sciences and engineering,5283.869438494224
+2014,Natural sciences and engineering,7384.844734214606
+2014,Natural sciences and engineering,10015.111065813735
+2014,Natural sciences and engineering,13177.628410036345
+2014,Natural sciences and engineering,21045.17829396377
+2014,Natural sciences and engineering,46112.51837557521
+2014,Natural sciences and engineering,195350.53554040895
+2014,Natural sciences and engineering,1246601.941747573
+2014,Natural sciences and engineering,62565.8068921968
+2014,Natural sciences and engineering,54712.39776247465
+2014,Natural sciences and engineering,54928.618071047145
+2014,Natural sciences and engineering,54158.017874556186
+2014,Natural sciences and engineering,56430.24732768279
+2014,Natural sciences and engineering,56116.37597506278
+2014,Natural sciences and engineering,52951.516829092056
+2014,Natural sciences and engineering,47574.41194983676
+2014,Natural sciences and engineering,51656.84146294419
+2014,Natural sciences and engineering,61046.90116867263
+2014,Natural sciences and engineering,72739.62320469151
+2014,Natural sciences and engineering,101662.39526633754
+2014,Natural sciences and engineering,137871.5757004078
+2014,Natural sciences and engineering,181407.91259797697
+2014,Natural sciences and engineering,289715.39838325826
+2014,Natural sciences and engineering,634801.3043665633
+2014,Natural sciences and engineering,2689264.8490749756
+2014,Natural sciences and engineering,17161165.04854369
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,0
+2014,Social sciences and humanities,13884.634825137136
+2014,Social sciences and humanities,12141.802384943836
+2014,Social sciences and humanities,12189.78610281517
+2014,Social sciences and humanities,12018.774125891552
+2014,Social sciences and humanities,12523.028410503339
+2014,Social sciences and humanities,12453.373924616028
+2014,Social sciences and humanities,11751.026816865719
+2014,Social sciences and humanities,10557.737041292881
+2014,Social sciences and humanities,11463.711818962194
+2014,Social sciences and humanities,13547.558515368099
+2014,Social sciences and humanities,16142.413175545176
+2014,Social sciences and humanities,22560.969063405373
+2014,Social sciences and humanities,30596.52830282867
+2014,Social sciences and humanities,40258.13373034987
+2014,Social sciences and humanities,64293.78456992878
+2014,Social sciences and humanities,140875.41958560984
+2014,Social sciences and humanities,596802.9860434923
+2014,Social sciences and humanities,3808414.2394822007
+2015,Natural sciences and engineering,3382.7672852002497
+2015,Natural sciences and engineering,2955.3898923161114
+2015,Natural sciences and engineering,2914.1115026319612
+2015,Natural sciences and engineering,2877.4627606328954
+2015,Natural sciences and engineering,2985.793442978304
+2015,Natural sciences and engineering,3012.8659589552335
+2015,Natural sciences and engineering,2894.739424388425
+2015,Natural sciences and engineering,2543.697343129682
+2015,Natural sciences and engineering,2707.8007609379088
+2015,Natural sciences and engineering,3156.1899437903967
+2015,Natural sciences and engineering,3720.4335881585116
+2015,Natural sciences and engineering,5214.655243527346
+2015,Natural sciences and engineering,7202.2656618760075
+2015,Natural sciences and engineering,9632.561322545227
+2015,Natural sciences and engineering,15155.244934873119
+2015,Natural sciences and engineering,32941.570587085786
+2015,Natural sciences and engineering,132366.13819922225
+2015,Natural sciences and engineering,894956.3898369359
+2015,Natural sciences and engineering,63646.67091264481
+2015,Natural sciences and engineering,55605.57733833746
+2015,Natural sciences and engineering,54828.92560248638
+2015,Natural sciences and engineering,54139.38055704915
+2015,Natural sciences and engineering,56177.61928518924
+2015,Natural sciences and engineering,56686.98790853484
+2015,Natural sciences and engineering,54464.440497568095
+2015,Natural sciences and engineering,47859.593655127814
+2015,Natural sciences and engineering,50947.194825499835
+2015,Natural sciences and engineering,59383.624634508305
+2015,Natural sciences and engineering,69999.85286420837
+2015,Natural sciences and engineering,98113.59110032172
+2015,Natural sciences and engineering,135510.42497436484
+2015,Natural sciences and engineering,181236.3691774364
+2015,Natural sciences and engineering,285145.50533537404
+2015,Natural sciences and engineering,619794.7200431777
+2015,Natural sciences and engineering,2490465.1510619204
+2015,Natural sciences and engineering,16838579.193527997
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,0
+2015,Social sciences and humanities,14209.53376579879
+2015,Social sciences and humanities,12414.307259531237
+2015,Social sciences and humanities,12240.91470173369
+2015,Social sciences and humanities,12086.96927983366
+2015,Social sciences and humanities,12542.019349459712
+2015,Social sciences and humanities,12655.739211769582
+2015,Social sciences and humanities,12159.541028433863
+2015,Social sciences and humanities,10684.965958287674
+2015,Social sciences and humanities,11374.2930268776
+2015,Social sciences and humanities,13257.78092208
+2015,Social sciences and humanities,15627.923010146063
+2015,Social sciences and humanities,21904.4981557208
+2015,Social sciences and humanities,30253.584856524358
+2015,Social sciences and humanities,40462.19967973094
+2015,Social sciences and humanities,63660.591011741024
+2015,Social sciences and humanities,138373.20752258916
+2015,Social sciences and humanities,556012.5635656596
+2015,Social sciences and humanities,3759322.4623941346
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Natural sciences and engineering,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2016,Social sciences and humanities,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Natural sciences and engineering,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2017,Social sciences and humanities,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Natural sciences and engineering,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA
+2018,Social sciences and humanities,NA

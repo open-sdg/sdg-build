@@ -1,0 +1,2311 @@
+Year,Geography,Type of provider,Value
+2015,Canada,Audiologists,5.06
+2016,Canada,Audiologists,5.19
+2017,Canada,Audiologists,5.27
+2018,Canada,Audiologists,5.42
+2019,Canada,Audiologists,5.56
+2015,Canada,Chiropractors,23.66
+2016,Canada,Chiropractors,23.99
+2017,Canada,Chiropractors,24.27
+2018,Canada,Chiropractors,24.69
+2019,Canada,Chiropractors,25.09
+2015,Canada,Dental assistants,53.46
+2016,Canada,Dental assistants,57.52
+2017,Canada,Dental assistants,63.93
+2018,Canada,Dental assistants,45.52
+2019,Canada,Dental assistants,52.89
+2015,Canada,Dental hygienists,80
+2016,Canada,Dental hygienists,80.86
+2017,Canada,Dental hygienists,80.87
+2018,Canada,Dental hygienists,78.93
+2019,Canada,Dental hygienists,81.54
+2015,Canada,Dentists,63.05
+2016,Canada,Dentists,64.01
+2017,Canada,Dentists,64.4
+2018,Canada,Dentists,66.73
+2019,Canada,Dentists,52.5
+2015,Canada,Dietitians,31.58
+2016,Canada,Dietitians,32.27
+2017,Canada,Dietitians,32.64
+2018,Canada,Dietitians,32.84
+2019,Canada,Dietitians,24.59
+2015,Canada,Environmental public health professionals,4.55
+2016,Canada,Environmental public health professionals,4.68
+2017,Canada,Environmental public health professionals,4.76
+2018,Canada,Environmental public health professionals,4.78
+2019,Canada,Environmental public health professionals,4.71
+2015,Canada,Family medicine,116.38
+2016,Canada,Family medicine,117.76
+2017,Canada,Family medicine,120.94
+2018,Canada,Family medicine,122.76
+2019,Canada,Family medicine,124.48
+2015,Canada,Genetic counsellors,0.88
+2016,Canada,Genetic counsellors,0.88
+2017,Canada,Genetic counsellors,0.8
+2018,Canada,Genetic counsellors,0.9
+2019,Canada,Genetic counsellors,0.95
+2015,Canada,Health information management professionals,0
+2016,Canada,Health information management professionals,12.68
+2017,Canada,Health information management professionals,13.03
+2018,Canada,Health information management professionals,1.44
+2019,Canada,Health information management professionals,11.94
+2015,Canada,Licensed practical nurses,317.81
+2016,Canada,Licensed practical nurses,322.87
+2017,Canada,Licensed practical nurses,325.84
+2018,Canada,Licensed practical nurses,331.18
+2019,Canada,Licensed practical nurses,342.96
+2015,Canada,Medical laboratory technologists,58.12
+2016,Canada,Medical laboratory technologists,53.4
+2017,Canada,Medical laboratory technologists,55.75
+2018,Canada,Medical laboratory technologists,54.44
+2019,Canada,Medical laboratory technologists,54.1
+2015,Canada,Medical physicists,1.31
+2016,Canada,Medical physicists,1.28
+2017,Canada,Medical physicists,1.35
+2018,Canada,Medical physicists,1.41
+2019,Canada,Medical physicists,1.37
+2015,Canada,Medical radiation technologists,54.31
+2016,Canada,Medical radiation technologists,57.36
+2017,Canada,Medical radiation technologists,58.03
+2018,Canada,Medical radiation technologists,67.55
+2019,Canada,Medical radiation technologists,68.64
+2015,Canada,Midwives,3.49
+2016,Canada,Midwives,3.87
+2017,Canada,Midwives,4.18
+2018,Canada,Midwives,4.18
+2019,Canada,Midwives,4.32
+2015,Canada,Nurse practitioners,12.07
+2016,Canada,Nurse practitioners,13.27
+2017,Canada,Nurse practitioners,14.28
+2018,Canada,Nurse practitioners,15.24
+2019,Canada,Nurse practitioners,16.5
+2015,Canada,Occupational therapists,46.36
+2016,Canada,Occupational therapists,47.17
+2017,Canada,Occupational therapists,48.37
+2018,Canada,Occupational therapists,49.26
+2019,Canada,Occupational therapists,51.02
+2015,Canada,Opticians,5.46
+2016,Canada,Opticians,22.33
+2017,Canada,Opticians,15.54
+2018,Canada,Opticians,0
+2019,Canada,Opticians,9.73
+2015,Canada,Optometrists,16.58
+2016,Canada,Optometrists,16.89
+2017,Canada,Optometrists,17.02
+2018,Canada,Optometrists,17.16
+2019,Canada,Optometrists,17.83
+2015,Canada,Paramedics,77.77
+2016,Canada,Paramedics,88.07
+2017,Canada,Paramedics,92.63
+2018,Canada,Paramedics,93.93
+2019,Canada,Paramedics,95.48
+2015,Canada,Pharmacists,109.97
+2016,Canada,Pharmacists,113.23
+2017,Canada,Pharmacists,114.51
+2018,Canada,Pharmacists,115.7
+2019,Canada,Pharmacists,118.04
+2015,Canada,Pharmacy technicians,18.49
+2016,Canada,Pharmacy technicians,20.32
+2017,Canada,Pharmacy technicians,22.4
+2018,Canada,Pharmacy technicians,23.92
+2019,Canada,Pharmacy technicians,25.81
+2015,Canada,Physician assistants,1.21
+2016,Canada,Physician assistants,1.49
+2017,Canada,Physician assistants,0.39
+2018,Canada,Physician assistants,1.8
+2019,Canada,Physician assistants,2.13
+2015,Canada,Physicians,230.23
+2016,Canada,Physicians,232.8
+2017,Canada,Physicians,237.12
+2018,Canada,Physicians,242.62
+2019,Canada,Physicians,246.57
+2015,Canada,Physiotherapists,60.99
+2016,Canada,Physiotherapists,62.01
+2017,Canada,Physiotherapists,62.9
+2018,Canada,Physiotherapists,66.55
+2019,Canada,Physiotherapists,68.25
+2015,Canada,Psychologists,37.93
+2016,Canada,Psychologists,50.53
+2017,Canada,Psychologists,50.6
+2018,Canada,Psychologists,50.71
+2019,Canada,Psychologists,51.55
+2015,Canada,Registered nurses,815.93
+2016,Canada,Registered nurses,811.1
+2017,Canada,Registered nurses,806.6
+2018,Canada,Registered nurses,800.46
+2019,Canada,Registered nurses,809.35
+2015,Canada,Registered psychiatric nurses,16.16
+2016,Canada,Registered psychiatric nurses,16.24
+2017,Canada,Registered psychiatric nurses,16.25
+2018,Canada,Registered psychiatric nurses,16.27
+2019,Canada,Registered psychiatric nurses,16.33
+2015,Canada,Regulated nurses,1161.4
+2016,Canada,Regulated nurses,1162.88
+2017,Canada,Regulated nurses,1162.32
+2018,Canada,Regulated nurses,1162.5
+2019,Canada,Regulated nurses,1184.45
+2015,Canada,Respiratory therapists,30.73
+2016,Canada,Respiratory therapists,32
+2017,Canada,Respiratory therapists,29.79
+2018,Canada,Respiratory therapists,29.08
+2019,Canada,Respiratory therapists,33.17
+2015,Canada,Social workers,135.82
+2016,Canada,Social workers,144.79
+2017,Canada,Social workers,141.92
+2018,Canada,Social workers,145.47
+2019,Canada,Social workers,142.54
+2015,Canada,Specialists,113.85
+2016,Canada,Specialists,115.04
+2017,Canada,Specialists,116.18
+2018,Canada,Specialists,119.86
+2019,Canada,Specialists,122.08
+2015,Canada,Speech–language pathologists,25.06
+2016,Canada,Speech–language pathologists,25.94
+2017,Canada,Speech–language pathologists,26.71
+2018,Canada,Speech–language pathologists,27.71
+2019,Canada,Speech–language pathologists,27.82
+2015,Newfoundland and Labrador,Audiologists,6.25
+2016,Newfoundland and Labrador,Audiologists,7.37
+2017,Newfoundland and Labrador,Audiologists,7.19
+2018,Newfoundland and Labrador,Audiologists,7.04
+2019,Newfoundland and Labrador,Audiologists,7.42
+2015,Newfoundland and Labrador,Chiropractors,
+2016,Newfoundland and Labrador,Chiropractors,12.84
+2017,Newfoundland and Labrador,Chiropractors,13.05
+2018,Newfoundland and Labrador,Chiropractors,13.32
+2019,Newfoundland and Labrador,Chiropractors,
+2015,Newfoundland and Labrador,Dental assistants,
+2016,Newfoundland and Labrador,Dental assistants,48.73
+2017,Newfoundland and Labrador,Dental assistants,53.16
+2018,Newfoundland and Labrador,Dental assistants,
+2019,Newfoundland and Labrador,Dental assistants,
+2015,Newfoundland and Labrador,Dental hygienists,39.2
+2016,Newfoundland and Labrador,Dental hygienists,40.61
+2017,Newfoundland and Labrador,Dental hygienists,41.81
+2018,Newfoundland and Labrador,Dental hygienists,41.88
+2019,Newfoundland and Labrador,Dental hygienists,44.35
+2015,Newfoundland and Labrador,Dentists,38.82
+2016,Newfoundland and Labrador,Dentists,38.91
+2017,Newfoundland and Labrador,Dentists,42.19
+2018,Newfoundland and Labrador,Dentists,44.73
+2019,Newfoundland and Labrador,Dentists,41.31
+2015,Newfoundland and Labrador,Dietitians,33.7
+2016,Newfoundland and Labrador,Dietitians,34
+2017,Newfoundland and Labrador,Dietitians,33.49
+2018,Newfoundland and Labrador,Dietitians,35.21
+2019,Newfoundland and Labrador,Dietitians,34.45
+2015,Newfoundland and Labrador,Environmental public health professionals,5.3
+2016,Newfoundland and Labrador,Environmental public health professionals,4.16
+2017,Newfoundland and Labrador,Environmental public health professionals,3.78
+2018,Newfoundland and Labrador,Environmental public health professionals,5.52
+2019,Newfoundland and Labrador,Environmental public health professionals,5.52
+2015,Newfoundland and Labrador,Genetic counsellors,1.7
+2016,Newfoundland and Labrador,Genetic counsellors,1.51
+2017,Newfoundland and Labrador,Genetic counsellors,1.7
+2018,Newfoundland and Labrador,Genetic counsellors,1.9
+2019,Newfoundland and Labrador,Genetic counsellors,1.71
+2015,Newfoundland and Labrador,Health information management professionals,
+2016,Newfoundland and Labrador,Health information management professionals,17.57
+2017,Newfoundland and Labrador,Health information management professionals,17.22
+2018,Newfoundland and Labrador,Health information management professionals,
+2019,Newfoundland and Labrador,Health information management professionals,18.65
+2015,Newfoundland and Labrador,Medical laboratory technologists,102.63
+2016,Newfoundland and Labrador,Medical laboratory technologists,96.9
+2017,Newfoundland and Labrador,Medical laboratory technologists,97.62
+2018,Newfoundland and Labrador,Medical laboratory technologists,97.27
+2019,Newfoundland and Labrador,Medical laboratory technologists,98.41
+2015,Newfoundland and Labrador,Medical physicists,1.14
+2016,Newfoundland and Labrador,Medical physicists,1.13
+2017,Newfoundland and Labrador,Medical physicists,1.51
+2018,Newfoundland and Labrador,Medical physicists,1.71
+2019,Newfoundland and Labrador,Medical physicists,1.52
+2015,Newfoundland and Labrador,Medical radiation technologists,68.36
+2016,Newfoundland and Labrador,Medical radiation technologists,70.08
+2017,Newfoundland and Labrador,Medical radiation technologists,74.16
+2018,Newfoundland and Labrador,Medical radiation technologists,75.38
+2019,Newfoundland and Labrador,Medical radiation technologists,74.05
+2015,Newfoundland and Labrador,Midwives,
+2016,Newfoundland and Labrador,Midwives,0
+2017,Newfoundland and Labrador,Midwives,0.19
+2018,Newfoundland and Labrador,Midwives,0.38
+2019,Newfoundland and Labrador,Midwives,0.76
+2015,Newfoundland and Labrador,Occupational therapists,38.82
+2016,Newfoundland and Labrador,Occupational therapists,39.29
+2017,Newfoundland and Labrador,Occupational therapists,38.78
+2018,Newfoundland and Labrador,Occupational therapists,40.73
+2019,Newfoundland and Labrador,Occupational therapists,40.92
+2015,Newfoundland and Labrador,Opticians,
+2016,Newfoundland and Labrador,Opticians,21.91
+2017,Newfoundland and Labrador,Opticians,23.65
+2018,Newfoundland and Labrador,Opticians,
+2019,Newfoundland and Labrador,Opticians,23.41
+2015,Newfoundland and Labrador,Optometrists,11.55
+2016,Newfoundland and Labrador,Optometrists,11.52
+2017,Newfoundland and Labrador,Optometrists,11.73
+2018,Newfoundland and Labrador,Optometrists,12.18
+2019,Newfoundland and Labrador,Optometrists,13.51
+2015,Newfoundland and Labrador,Paramedics,
+2016,Newfoundland and Labrador,Paramedics,
+2017,Newfoundland and Labrador,Paramedics,189.57
+2018,Newfoundland and Labrador,Paramedics,186.16
+2019,Newfoundland and Labrador,Paramedics,
+2015,Newfoundland and Labrador,Pharmacists,135.95
+2016,Newfoundland and Labrador,Pharmacists,142.04
+2017,Newfoundland and Labrador,Pharmacists,138.87
+2018,Newfoundland and Labrador,Pharmacists,143.9
+2019,Newfoundland and Labrador,Pharmacists,143.14
+2015,Newfoundland and Labrador,Pharmacy technicians,1.14
+2016,Newfoundland and Labrador,Pharmacy technicians,2.64
+2017,Newfoundland and Labrador,Pharmacy technicians,26.3
+2018,Newfoundland and Labrador,Pharmacy technicians,33.12
+2019,Newfoundland and Labrador,Pharmacy technicians,37.69
+2015,Newfoundland and Labrador,Physician assistants,0.19
+2016,Newfoundland and Labrador,Physician assistants,
+2017,Newfoundland and Labrador,Physician assistants,0.19
+2018,Newfoundland and Labrador,Physician assistants,0.38
+2019,Newfoundland and Labrador,Physician assistants,0.19
+2015,Newfoundland and Labrador,Physicians,242.75
+2016,Newfoundland and Labrador,Physicians,248.38
+2017,Newfoundland and Labrador,Physicians,254.84
+2018,Newfoundland and Labrador,Physicians,269.15
+2019,Newfoundland and Labrador,Physicians,258.3
+2015,Newfoundland and Labrador,Family medicine,126.11
+2016,Newfoundland and Labrador,Family medicine,128.82
+2017,Newfoundland and Labrador,Family medicine,137.73
+2018,Newfoundland and Labrador,Family medicine,137.81
+2019,Newfoundland and Labrador,Family medicine,131.72
+2015,Newfoundland and Labrador,Specialists,116.64
+2016,Newfoundland and Labrador,Specialists,119.56
+2017,Newfoundland and Labrador,Specialists,117.11
+2018,Newfoundland and Labrador,Specialists,131.34
+2019,Newfoundland and Labrador,Specialists,126.58
+2015,Newfoundland and Labrador,Physiotherapists,50.94
+2016,Newfoundland and Labrador,Physiotherapists,52.7
+2017,Newfoundland and Labrador,Physiotherapists,53.73
+2018,Newfoundland and Labrador,Physiotherapists,55.96
+2019,Newfoundland and Labrador,Physiotherapists,57.1
+2015,Newfoundland and Labrador,Psychologists,44.69
+2016,Newfoundland and Labrador,Psychologists,47.79
+2017,Newfoundland and Labrador,Psychologists,47.3
+2018,Newfoundland and Labrador,Psychologists,48.35
+2019,Newfoundland and Labrador,Psychologists,53.49
+2015,Newfoundland and Labrador,Regulated nurses,1599.65
+2016,Newfoundland and Labrador,Regulated nurses,1609.1
+2017,Newfoundland and Labrador,Regulated nurses,1615.12
+2018,Newfoundland and Labrador,Regulated nurses,1601.39
+2019,Newfoundland and Labrador,Regulated nurses,1588.26
+2015,Newfoundland and Labrador,Licensed practical nurses,436.27
+2016,Newfoundland and Labrador,Licensed practical nurses,443.31
+2017,Newfoundland and Labrador,Licensed practical nurses,454.63
+2018,Newfoundland and Labrador,Licensed practical nurses,452.27
+2019,Newfoundland and Labrador,Licensed practical nurses,454.93
+2015,Newfoundland and Labrador,Nurse practitioners,25.75
+2016,Newfoundland and Labrador,Nurse practitioners,28.14
+2017,Newfoundland and Labrador,Nurse practitioners,31.22
+2018,Newfoundland and Labrador,Nurse practitioners,31.98
+2019,Newfoundland and Labrador,Nurse practitioners,34.83
+2015,Newfoundland and Labrador,Registered nurses,1137.63
+2016,Newfoundland and Labrador,Registered nurses,1137.65
+2017,Newfoundland and Labrador,Registered nurses,1129.28
+2018,Newfoundland and Labrador,Registered nurses,1117.15
+2019,Newfoundland and Labrador,Registered nurses,1098.5
+2015,Newfoundland and Labrador,Registered psychiatric nurses,
+2016,Newfoundland and Labrador,Registered psychiatric nurses,
+2017,Newfoundland and Labrador,Registered psychiatric nurses,
+2018,Newfoundland and Labrador,Registered psychiatric nurses,
+2019,Newfoundland and Labrador,Registered psychiatric nurses,
+2015,Newfoundland and Labrador,Respiratory therapists,26.7
+2016,Newfoundland and Labrador,Respiratory therapists,28.14
+2017,Newfoundland and Labrador,Respiratory therapists,28
+2018,Newfoundland and Labrador,Respiratory therapists,29.69
+2019,Newfoundland and Labrador,Respiratory therapists,30.84
+2015,Newfoundland and Labrador,Social workers,283.65
+2016,Newfoundland and Labrador,Social workers,284.84
+2017,Newfoundland and Labrador,Social workers,288.71
+2018,Newfoundland and Labrador,Social workers,295.61
+2019,Newfoundland and Labrador,Social workers,300.75
+2015,Newfoundland and Labrador,Speech–language pathologists,25.18
+2016,Newfoundland and Labrador,Speech–language pathologists,26.63
+2017,Newfoundland and Labrador,Speech–language pathologists,26.87
+2018,Newfoundland and Labrador,Speech–language pathologists,27.98
+2019,Newfoundland and Labrador,Speech–language pathologists,28.17
+2015,Prince Edward Island,Audiologists,3.46
+2016,Prince Edward Island,Audiologists,3.4
+2017,Prince Edward Island,Audiologists,3.32
+2018,Prince Edward Island,Audiologists,4.57
+2019,Prince Edward Island,Audiologists,6.53
+2015,Prince Edward Island,Chiropractors,
+2016,Prince Edward Island,Chiropractors,5.44
+2017,Prince Edward Island,Chiropractors,7.97
+2018,Prince Edward Island,Chiropractors,9.14
+2019,Prince Edward Island,Chiropractors,7.18
+2015,Prince Edward Island,Dental assistants,
+2016,Prince Edward Island,Dental assistants,
+2017,Prince Edward Island,Dental assistants,
+2018,Prince Edward Island,Dental assistants,
+2019,Prince Edward Island,Dental assistants,
+2015,Prince Edward Island,Dental hygienists,60.19
+2016,Prince Edward Island,Dental hygienists,60.56
+2017,Prince Edward Island,Dental hygienists,61.1
+2018,Prince Edward Island,Dental hygienists,61.99
+2019,Prince Edward Island,Dental hygienists,
+2015,Prince Edward Island,Dentists,53.27
+2016,Prince Edward Island,Dentists,54.43
+2017,Prince Edward Island,Dentists,53.13
+2018,Prince Edward Island,Dentists,54.81
+2019,Prince Edward Island,Dentists,49.59
+2015,Prince Edward Island,Dietitians,
+2016,Prince Edward Island,Dietitians,
+2017,Prince Edward Island,Dietitians,52.47
+2018,Prince Edward Island,Dietitians,54.81
+2019,Prince Edward Island,Dietitians,60.03
+2015,Prince Edward Island,Environmental public health professionals,6.92
+2016,Prince Edward Island,Environmental public health professionals,7.48
+2017,Prince Edward Island,Environmental public health professionals,7.97
+2018,Prince Edward Island,Environmental public health professionals,7.18
+2019,Prince Edward Island,Environmental public health professionals,5.22
+2015,Prince Edward Island,Genetic counsellors,
+2016,Prince Edward Island,Genetic counsellors,
+2017,Prince Edward Island,Genetic counsellors,
+2018,Prince Edward Island,Genetic counsellors,
+2019,Prince Edward Island,Genetic counsellors,0.65
+2015,Prince Edward Island,Health information management professionals,
+2016,Prince Edward Island,Health information management professionals,15.65
+2017,Prince Edward Island,Health information management professionals,15.94
+2018,Prince Edward Island,Health information management professionals,
+2019,Prince Edward Island,Health information management professionals,16.31
+2015,Prince Edward Island,Medical laboratory technologists,84.4
+2016,Prince Edward Island,Medical laboratory technologists,83.01
+2017,Prince Edward Island,Medical laboratory technologists,75.05
+2018,Prince Edward Island,Medical laboratory technologists,73.09
+2019,Prince Edward Island,Medical laboratory technologists,74.39
+2015,Prince Edward Island,Medical physicists,4.15
+2016,Prince Edward Island,Medical physicists,4.76
+2017,Prince Edward Island,Medical physicists,3.98
+2018,Prince Edward Island,Medical physicists,3.92
+2019,Prince Edward Island,Medical physicists,3.92
+2015,Prince Edward Island,Medical radiation technologists,76.1
+2016,Prince Edward Island,Medical radiation technologists,75.53
+2017,Prince Edward Island,Medical radiation technologists,75.05
+2018,Prince Edward Island,Medical radiation technologists,73.74
+2019,Prince Edward Island,Medical radiation technologists,70.48
+2015,Prince Edward Island,Midwives,
+2016,Prince Edward Island,Midwives,
+2017,Prince Edward Island,Midwives,
+2018,Prince Edward Island,Midwives,
+2019,Prince Edward Island,Midwives,
+2015,Prince Edward Island,Occupational therapists,40.13
+2016,Prince Edward Island,Occupational therapists,42.19
+2017,Prince Edward Island,Occupational therapists,42.51
+2018,Prince Edward Island,Occupational therapists,43.07
+2019,Prince Edward Island,Occupational therapists,45.68
+2015,Prince Edward Island,Opticians,
+2016,Prince Edward Island,Opticians,25.86
+2017,Prince Edward Island,Opticians,17.93
+2018,Prince Edward Island,Opticians,
+2019,Prince Edward Island,Opticians,20.23
+2015,Prince Edward Island,Optometrists,14.53
+2016,Prince Edward Island,Optometrists,14.29
+2017,Prince Edward Island,Optometrists,13.95
+2018,Prince Edward Island,Optometrists,15.01
+2019,Prince Edward Island,Optometrists,15.01
+2015,Prince Edward Island,Paramedics,
+2016,Prince Edward Island,Paramedics,
+2017,Prince Edward Island,Paramedics,
+2018,Prince Edward Island,Paramedics,100.49
+2019,Prince Edward Island,Paramedics,
+2015,Prince Edward Island,Pharmacists,125.22
+2016,Prince Edward Island,Pharmacists,127.92
+2017,Prince Edward Island,Pharmacists,124.2
+2018,Prince Edward Island,Pharmacists,124.64
+2019,Prince Edward Island,Pharmacists,129.21
+2015,Prince Edward Island,Pharmacy technicians,6.23
+2016,Prince Edward Island,Pharmacy technicians,9.53
+2017,Prince Edward Island,Pharmacy technicians,17.93
+2018,Prince Edward Island,Pharmacy technicians,50.25
+2019,Prince Edward Island,Pharmacy technicians,46.98
+2015,Prince Edward Island,Physician assistants,0.69
+2016,Prince Edward Island,Physician assistants,0.68
+2017,Prince Edward Island,Physician assistants,0.66
+2018,Prince Edward Island,Physician assistants,0.65
+2019,Prince Edward Island,Physician assistants,1.31
+2015,Prince Edward Island,Physicians,184.02
+2016,Prince Edward Island,Physicians,189.84
+2017,Prince Edward Island,Physicians,191.94
+2018,Prince Edward Island,Physicians,199.03
+2019,Prince Edward Island,Physicians,210.77
+2015,Prince Edward Island,Family medicine,101.7
+2016,Prince Edward Island,Family medicine,103.42
+2017,Prince Edward Island,Family medicine,104.94
+2018,Prince Edward Island,Family medicine,113.54
+2019,Prince Edward Island,Family medicine,114.85
+2015,Prince Edward Island,Specialists,82.33
+2016,Prince Edward Island,Specialists,86.41
+2017,Prince Edward Island,Specialists,87.01
+2018,Prince Edward Island,Specialists,85.48
+2019,Prince Edward Island,Specialists,95.93
+2015,Prince Edward Island,Physiotherapists,51.89
+2016,Prince Edward Island,Physiotherapists,61.92
+2017,Prince Edward Island,Physiotherapists,62.43
+2018,Prince Edward Island,Physiotherapists,55.47
+2019,Prince Edward Island,Physiotherapists,67.87
+2015,Prince Edward Island,Psychologists,28.36
+2016,Prince Edward Island,Psychologists,31.3
+2017,Prince Edward Island,Psychologists,28.56
+2018,Prince Edward Island,Psychologists,31.32
+2019,Prince Edward Island,Psychologists,35.89
+2015,Prince Edward Island,Regulated nurses,1554.52
+2016,Prince Edward Island,Regulated nurses,1554.07
+2017,Prince Edward Island,Regulated nurses,1542.18
+2018,Prince Edward Island,Regulated nurses,1579.18
+2019,Prince Edward Island,Regulated nurses,1624.21
+2015,Prince Edward Island,Licensed practical nurses,445.53
+2016,Prince Edward Island,Licensed practical nurses,442.95
+2017,Prince Edward Island,Licensed practical nurses,444.99
+2018,Prince Edward Island,Licensed practical nurses,473.1
+2019,Prince Edward Island,Licensed practical nurses,484.2
+2015,Prince Edward Island,Nurse practitioners,11.76
+2016,Prince Edward Island,Nurse practitioners,14.97
+2017,Prince Edward Island,Nurse practitioners,15.94
+2018,Prince Edward Island,Nurse practitioners,18.92
+2019,Prince Edward Island,Nurse practitioners,28.06
+2015,Prince Edward Island,Registered nurses,1097.23
+2016,Prince Edward Island,Registered nurses,1096.15
+2017,Prince Edward Island,Registered nurses,1081.25
+2018,Prince Edward Island,Registered nurses,1087.16
+2019,Prince Edward Island,Registered nurses,1111.95
+2015,Prince Edward Island,Registered psychiatric nurses,
+2016,Prince Edward Island,Registered psychiatric nurses,
+2017,Prince Edward Island,Registered psychiatric nurses,
+2018,Prince Edward Island,Registered psychiatric nurses,
+2019,Prince Edward Island,Registered psychiatric nurses,
+2015,Prince Edward Island,Respiratory therapists,17.3
+2016,Prince Edward Island,Respiratory therapists,19.73
+2017,Prince Edward Island,Respiratory therapists,19.92
+2018,Prince Edward Island,Respiratory therapists,16.97
+2019,Prince Edward Island,Respiratory therapists,20.23
+2015,Prince Edward Island,Social workers,
+2016,Prince Edward Island,Social workers,
+2017,Prince Edward Island,Social workers,209.87
+2018,Prince Edward Island,Social workers,223.83
+2019,Prince Edward Island,Social workers,216.65
+2015,Prince Edward Island,Speech–language pathologists,27.67
+2016,Prince Edward Island,Speech–language pathologists,27.9
+2017,Prince Edward Island,Speech–language pathologists,27.23
+2018,Prince Edward Island,Speech–language pathologists,25.45
+2019,Prince Edward Island,Speech–language pathologists,31.32
+2015,Nova Scotia,Audiologists,8.65
+2016,Nova Scotia,Audiologists,8.91
+2017,Nova Scotia,Audiologists,9.47
+2018,Nova Scotia,Audiologists,10.21
+2019,Nova Scotia,Audiologists,10.52
+2015,Nova Scotia,Chiropractors,15.38
+2016,Nova Scotia,Chiropractors,16.02
+2017,Nova Scotia,Chiropractors,16.41
+2018,Nova Scotia,Chiropractors,17.29
+2019,Nova Scotia,Chiropractors,18.02
+2015,Nova Scotia,Dental assistants,
+2016,Nova Scotia,Dental assistants,79.13
+2017,Nova Scotia,Dental assistants,79.63
+2018,Nova Scotia,Dental assistants,83.86
+2019,Nova Scotia,Dental assistants,86.57
+2015,Nova Scotia,Dental hygienists,70.69
+2016,Nova Scotia,Dental hygienists,71.81
+2017,Nova Scotia,Dental hygienists,77.42
+2018,Nova Scotia,Dental hygienists,74.28
+2019,Nova Scotia,Dental hygienists,78.03
+2015,Nova Scotia,Dentists,56.38
+2016,Nova Scotia,Dentists,57.17
+2017,Nova Scotia,Dentists,58.17
+2018,Nova Scotia,Dentists,58.86
+2019,Nova Scotia,Dentists,58.34
+2015,Nova Scotia,Dietitians,59.8
+2016,Nova Scotia,Dietitians,61.73
+2017,Nova Scotia,Dietitians,62.27
+2018,Nova Scotia,Dietitians,62.82
+2019,Nova Scotia,Dietitians,64.17
+2015,Nova Scotia,Environmental public health professionals,8.86
+2016,Nova Scotia,Environmental public health professionals,10.18
+2017,Nova Scotia,Environmental public health professionals,8.42
+2018,Nova Scotia,Environmental public health professionals,8.65
+2019,Nova Scotia,Environmental public health professionals,10.63
+2015,Nova Scotia,Genetic counsellors,1.49
+2016,Nova Scotia,Genetic counsellors,1.27
+2017,Nova Scotia,Genetic counsellors,1.37
+2018,Nova Scotia,Genetic counsellors,1.46
+2019,Nova Scotia,Genetic counsellors,1.46
+2015,Nova Scotia,Health information management professionals,
+2016,Nova Scotia,Health information management professionals,16.86
+2017,Nova Scotia,Health information management professionals,18.09
+2018,Nova Scotia,Health information management professionals,
+2019,Nova Scotia,Health information management professionals,20.52
+2015,Nova Scotia,Medical laboratory technologists,89.37
+2016,Nova Scotia,Medical laboratory technologists,
+2017,Nova Scotia,Medical laboratory technologists,85.1
+2018,Nova Scotia,Medical laboratory technologists,83.76
+2019,Nova Scotia,Medical laboratory technologists,80.53
+2015,Nova Scotia,Medical physicists,1.71
+2016,Nova Scotia,Medical physicists,1.7
+2017,Nova Scotia,Medical physicists,1.58
+2018,Nova Scotia,Medical physicists,1.56
+2019,Nova Scotia,Medical physicists,1.67
+2015,Nova Scotia,Medical radiation technologists,61.18
+2016,Nova Scotia,Medical radiation technologists,64.28
+2017,Nova Scotia,Medical radiation technologists,65.11
+2018,Nova Scotia,Medical radiation technologists,63.44
+2019,Nova Scotia,Medical radiation technologists,64.59
+2015,Nova Scotia,Midwives,1.07
+2016,Nova Scotia,Midwives,1.06
+2017,Nova Scotia,Midwives,1.05
+2018,Nova Scotia,Midwives,1.04
+2019,Nova Scotia,Midwives,
+2015,Nova Scotia,Occupational therapists,52.85
+2016,Nova Scotia,Occupational therapists,54.73
+2017,Nova Scotia,Occupational therapists,55.85
+2018,Nova Scotia,Occupational therapists,56.46
+2019,Nova Scotia,Occupational therapists,59.48
+2015,Nova Scotia,Opticians,
+2016,Nova Scotia,Opticians,28.32
+2017,Nova Scotia,Opticians,19.04
+2018,Nova Scotia,Opticians,
+2019,Nova Scotia,Opticians,17.19
+2015,Nova Scotia,Optometrists,13.88
+2016,Nova Scotia,Optometrists,14
+2017,Nova Scotia,Optometrists,14.52
+2018,Nova Scotia,Optometrists,14.17
+2019,Nova Scotia,Optometrists,14.48
+2015,Nova Scotia,Paramedics,
+2016,Nova Scotia,Paramedics,
+2017,Nova Scotia,Paramedics,126.54
+2018,Nova Scotia,Paramedics,133.45
+2019,Nova Scotia,Paramedics,135.74
+2015,Nova Scotia,Pharmacists,141.48
+2016,Nova Scotia,Pharmacists,140.22
+2017,Nova Scotia,Pharmacists,138.95
+2018,Nova Scotia,Pharmacists,139.18
+2019,Nova Scotia,Pharmacists,138.45
+2015,Nova Scotia,Pharmacy technicians,7.37
+2016,Nova Scotia,Pharmacy technicians,12.83
+2017,Nova Scotia,Pharmacy technicians,20.83
+2018,Nova Scotia,Pharmacy technicians,18.75
+2019,Nova Scotia,Pharmacy technicians,20.21
+2015,Nova Scotia,Physician assistants,2.88
+2016,Nova Scotia,Physician assistants,3.18
+2017,Nova Scotia,Physician assistants,4.1
+2018,Nova Scotia,Physician assistants,3.44
+2019,Nova Scotia,Physician assistants,3.54
+2015,Nova Scotia,Physicians,263.21
+2016,Nova Scotia,Physicians,260.61
+2017,Nova Scotia,Physicians,258.34
+2018,Nova Scotia,Physicians,272.62
+2019,Nova Scotia,Physicians,273.35
+2015,Nova Scotia,Family medicine,132.51
+2016,Nova Scotia,Family medicine,128.87
+2017,Nova Scotia,Family medicine,129.8
+2018,Nova Scotia,Family medicine,134.59
+2019,Nova Scotia,Family medicine,134.9
+2015,Nova Scotia,Specialists,130.7
+2016,Nova Scotia,Specialists,131.74
+2017,Nova Scotia,Specialists,128.54
+2018,Nova Scotia,Specialists,138.03
+2019,Nova Scotia,Specialists,138.45
+2015,Nova Scotia,Physiotherapists,69.73
+2016,Nova Scotia,Physiotherapists,71.17
+2017,Nova Scotia,Physiotherapists,73.11
+2018,Nova Scotia,Physiotherapists,74.9
+2019,Nova Scotia,Physiotherapists,78.55
+2015,Nova Scotia,Psychologists,
+2016,Nova Scotia,Psychologists,58.55
+2017,Nova Scotia,Psychologists,59.12
+2018,Nova Scotia,Psychologists,62.61
+2019,Nova Scotia,Psychologists,65
+2015,Nova Scotia,Regulated nurses,1450.15
+2016,Nova Scotia,Regulated nurses,1447.72
+2017,Nova Scotia,Regulated nurses,1451.91
+2018,Nova Scotia,Regulated nurses,1445.5
+2019,Nova Scotia,Regulated nurses,1461.55
+2015,Nova Scotia,Licensed practical nurses,417.29
+2016,Nova Scotia,Licensed practical nurses,425.76
+2017,Nova Scotia,Licensed practical nurses,435.69
+2018,Nova Scotia,Licensed practical nurses,442.94
+2019,Nova Scotia,Licensed practical nurses,449.82
+2015,Nova Scotia,Nurse practitioners,15.91
+2016,Nova Scotia,Nurse practitioners,15.49
+2017,Nova Scotia,Nurse practitioners,17.15
+2018,Nova Scotia,Nurse practitioners,18.96
+2019,Nova Scotia,Nurse practitioners,21.25
+2015,Nova Scotia,Registered nurses,1016.95
+2016,Nova Scotia,Registered nurses,1006.48
+2017,Nova Scotia,Registered nurses,999.07
+2018,Nova Scotia,Registered nurses,983.6
+2019,Nova Scotia,Registered nurses,990.48
+2015,Nova Scotia,Registered psychiatric nurses,
+2016,Nova Scotia,Registered psychiatric nurses,
+2017,Nova Scotia,Registered psychiatric nurses,
+2018,Nova Scotia,Registered psychiatric nurses,
+2019,Nova Scotia,Registered psychiatric nurses,
+2015,Nova Scotia,Respiratory therapists,30.86
+2016,Nova Scotia,Respiratory therapists,32.67
+2017,Nova Scotia,Respiratory therapists,33.45
+2018,Nova Scotia,Respiratory therapists,33.86
+2019,Nova Scotia,Respiratory therapists,36.04
+2015,Nova Scotia,Social workers,166.57
+2016,Nova Scotia,Social workers,187.32
+2017,Nova Scotia,Social workers,199.23
+2018,Nova Scotia,Social workers,204.18
+2019,Nova Scotia,Social workers,230.43
+2015,Nova Scotia,Speech–language pathologists,24.56
+2016,Nova Scotia,Speech–language pathologists,24.82
+2017,Nova Scotia,Speech–language pathologists,24.4
+2018,Nova Scotia,Speech–language pathologists,26.56
+2019,Nova Scotia,Speech–language pathologists,35.11
+2015,New Brunswick,Audiologists,9.88
+2016,New Brunswick,Audiologists,10.09
+2017,New Brunswick,Audiologists,9.78
+2018,New Brunswick,Audiologists,9.86
+2019,New Brunswick,Audiologists,10.38
+2015,New Brunswick,Chiropractors,10.28
+2016,New Brunswick,Chiropractors,11.4
+2017,New Brunswick,Chiropractors,10.95
+2018,New Brunswick,Chiropractors,12.2
+2019,New Brunswick,Chiropractors,12.85
+2015,New Brunswick,Dental assistants,71.03
+2016,New Brunswick,Dental assistants,69.17
+2017,New Brunswick,Dental assistants,70.16
+2018,New Brunswick,Dental assistants,
+2019,New Brunswick,Dental assistants,69.55
+2015,New Brunswick,Dental hygienists,63.25
+2016,New Brunswick,Dental hygienists,64.06
+2017,New Brunswick,Dental hygienists,66.24
+2018,New Brunswick,Dental hygienists,65.92
+2019,New Brunswick,Dental hygienists,67.09
+2015,New Brunswick,Dentists,43.09
+2016,New Brunswick,Dentists,44.15
+2017,New Brunswick,Dentists,41.86
+2018,New Brunswick,Dentists,42.3
+2019,New Brunswick,Dentists,42.95
+2015,New Brunswick,Dietitians,46.39
+2016,New Brunswick,Dietitians,48.99
+2017,New Brunswick,Dietitians,48.64
+2018,New Brunswick,Dietitians,51.13
+2019,New Brunswick,Dietitians,50.22
+2015,New Brunswick,Environmental public health professionals,6.98
+2016,New Brunswick,Environmental public health professionals,5.9
+2017,New Brunswick,Environmental public health professionals,6.52
+2018,New Brunswick,Environmental public health professionals,6.49
+2019,New Brunswick,Environmental public health professionals,6.36
+2015,New Brunswick,Genetic counsellors,
+2016,New Brunswick,Genetic counsellors,
+2017,New Brunswick,Genetic counsellors,
+2018,New Brunswick,Genetic counsellors,
+2019,New Brunswick,Genetic counsellors,0
+2015,New Brunswick,Health information management professionals,
+2016,New Brunswick,Health information management professionals,16.24
+2017,New Brunswick,Health information management professionals,16.69
+2018,New Brunswick,Health information management professionals,
+2019,New Brunswick,Health information management professionals,16.22
+2015,New Brunswick,Medical laboratory technologists,84.6
+2016,New Brunswick,Medical laboratory technologists,87.12
+2017,New Brunswick,Medical laboratory technologists,84.37
+2018,New Brunswick,Medical laboratory technologists,82.66
+2019,New Brunswick,Medical laboratory technologists,85.51
+2015,New Brunswick,Medical physicists,1.84
+2016,New Brunswick,Medical physicists,1.83
+2017,New Brunswick,Medical physicists,1.7
+2018,New Brunswick,Medical physicists,1.69
+2019,New Brunswick,Medical physicists,1.69
+2015,New Brunswick,Medical radiation technologists,74.72
+2016,New Brunswick,Medical radiation technologists,76.24
+2017,New Brunswick,Medical radiation technologists,79.55
+2018,New Brunswick,Medical radiation technologists,77.21
+2019,New Brunswick,Medical radiation technologists,75.26
+2015,New Brunswick,Midwives,0
+2016,New Brunswick,Midwives,0
+2017,New Brunswick,Midwives,0.39
+2018,New Brunswick,Midwives,0.52
+2019,New Brunswick,Midwives,0.91
+2015,New Brunswick,Occupational therapists,45.33
+2016,New Brunswick,Occupational therapists,46.77
+2017,New Brunswick,Occupational therapists,47.99
+2018,New Brunswick,Occupational therapists,48.4
+2019,New Brunswick,Occupational therapists,52.29
+2015,New Brunswick,Opticians,
+2016,New Brunswick,Opticians,27.38
+2017,New Brunswick,Opticians,29.21
+2018,New Brunswick,Opticians,
+2019,New Brunswick,Opticians,32.83
+2015,New Brunswick,Optometrists,15.55
+2016,New Brunswick,Optometrists,16.24
+2017,New Brunswick,Optometrists,15.91
+2018,New Brunswick,Optometrists,15.44
+2019,New Brunswick,Optometrists,16.61
+2015,New Brunswick,Paramedics,160.11
+2016,New Brunswick,Paramedics,
+2017,New Brunswick,Paramedics,
+2018,New Brunswick,Paramedics,
+2019,New Brunswick,Paramedics,
+2015,New Brunswick,Pharmacists,113.46
+2016,New Brunswick,Pharmacists,113.32
+2017,New Brunswick,Pharmacists,119.06
+2018,New Brunswick,Pharmacists,118.6
+2019,New Brunswick,Pharmacists,118.99
+2015,New Brunswick,Pharmacy technicians,2.9
+2016,New Brunswick,Pharmacy technicians,4.98
+2017,New Brunswick,Pharmacy technicians,10.56
+2018,New Brunswick,Pharmacy technicians,17.65
+2019,New Brunswick,Pharmacy technicians,31.66
+2015,New Brunswick,Physician assistants,0.66
+2016,New Brunswick,Physician assistants,1.05
+2017,New Brunswick,Physician assistants,1.3
+2018,New Brunswick,Physician assistants,1.17
+2019,New Brunswick,Physician assistants,1.17
+2015,New Brunswick,Physicians,220.6
+2016,New Brunswick,Physicians,227.29
+2017,New Brunswick,Physicians,234.33
+2018,New Brunswick,Physicians,244.73
+2019,New Brunswick,Physicians,249.54
+2015,New Brunswick,Family medicine,120.45
+2016,New Brunswick,Family medicine,125.76
+2017,New Brunswick,Family medicine,128.84
+2018,New Brunswick,Family medicine,133.27
+2019,New Brunswick,Family medicine,137.29
+2015,New Brunswick,Specialists,100.15
+2016,New Brunswick,Specialists,101.53
+2017,New Brunswick,Specialists,105.5
+2018,New Brunswick,Specialists,111.47
+2019,New Brunswick,Specialists,112.25
+2015,New Brunswick,Physiotherapists,67.08
+2016,New Brunswick,Physiotherapists,67.6
+2017,New Brunswick,Physiotherapists,66.38
+2018,New Brunswick,Physiotherapists,70.2
+2019,New Brunswick,Physiotherapists,73.58
+2015,New Brunswick,Psychologists,
+2016,New Brunswick,Psychologists,47.68
+2017,New Brunswick,Psychologists,47.21
+2018,New Brunswick,Psychologists,46.2
+2019,New Brunswick,Psychologists,47.23
+2015,New Brunswick,Regulated nurses,1532.33
+2016,New Brunswick,Regulated nurses,1505.86
+2017,New Brunswick,Regulated nurses,1489.47
+2018,New Brunswick,Regulated nurses,1500.2
+2019,New Brunswick,Regulated nurses,1485.01
+2015,New Brunswick,Licensed practical nurses,432.11
+2016,New Brunswick,Licensed practical nurses,438.2
+2017,New Brunswick,Licensed practical nurses,424.07
+2018,New Brunswick,Licensed practical nurses,440.42
+2019,New Brunswick,Licensed practical nurses,426.4
+2015,New Brunswick,Nurse practitioners,14.36
+2016,New Brunswick,Nurse practitioners,15.33
+2017,New Brunswick,Nurse practitioners,16.3
+2018,New Brunswick,Nurse practitioners,16.87
+2019,New Brunswick,Nurse practitioners,18.04
+2015,New Brunswick,Registered nurses,1085.87
+2016,New Brunswick,Registered nurses,1052.34
+2017,New Brunswick,Registered nurses,1049.09
+2018,New Brunswick,Registered nurses,1042.91
+2019,New Brunswick,Registered nurses,1040.57
+2015,New Brunswick,Registered psychiatric nurses,
+2016,New Brunswick,Registered psychiatric nurses,
+2017,New Brunswick,Registered psychiatric nurses,
+2018,New Brunswick,Registered psychiatric nurses,
+2019,New Brunswick,Registered psychiatric nurses,
+2015,New Brunswick,Respiratory therapists,48.63
+2016,New Brunswick,Respiratory therapists,46.9
+2017,New Brunswick,Respiratory therapists,50.73
+2018,New Brunswick,Respiratory therapists,53.2
+2019,New Brunswick,Respiratory therapists,55.67
+2015,New Brunswick,Social workers,221.92
+2016,New Brunswick,Social workers,228.34
+2017,New Brunswick,Social workers,254.03
+2018,New Brunswick,Social workers,262.25
+2019,New Brunswick,Social workers,268.48
+2015,New Brunswick,Speech–language pathologists,31.36
+2016,New Brunswick,Speech–language pathologists,32.1
+2017,New Brunswick,Speech–language pathologists,31.43
+2018,New Brunswick,Speech–language pathologists,31.53
+2019,New Brunswick,Speech–language pathologists,32.44
+2015,Quebec,Audiologists,4.99
+2016,Quebec,Audiologists,5.02
+2017,Quebec,Audiologists,5.23
+2018,Quebec,Audiologists,5.34
+2019,Quebec,Audiologists,5.61
+2015,Quebec,Chiropractors,16.05
+2016,Quebec,Chiropractors,16.19
+2017,Quebec,Chiropractors,16.32
+2018,Quebec,Chiropractors,16.13
+2019,Quebec,Chiropractors,16.32
+2015,Quebec,Dental assistants,
+2016,Quebec,Dental assistants,
+2017,Quebec,Dental assistants,26.79
+2018,Quebec,Dental assistants,33.05
+2019,Quebec,Dental assistants,
+2015,Quebec,Dental hygienists,75.23
+2016,Quebec,Dental hygienists,76.79
+2017,Quebec,Dental hygienists,78
+2018,Quebec,Dental hygienists,78.31
+2019,Quebec,Dental hygienists,80
+2015,Quebec,Dentists,61.83
+2016,Quebec,Dentists,62.89
+2017,Quebec,Dentists,62.37
+2018,Quebec,Dentists,63.76
+2019,Quebec,Dentists,
+2015,Quebec,Dietitians,37.69
+2016,Quebec,Dietitians,38.6
+2017,Quebec,Dietitians,38.81
+2018,Quebec,Dietitians,38.62
+2019,Quebec,Dietitians,
+2015,Quebec,Environmental public health professionals,0.12
+2016,Quebec,Environmental public health professionals,0.12
+2017,Quebec,Environmental public health professionals,0.11
+2018,Quebec,Environmental public health professionals,0.13
+2019,Quebec,Environmental public health professionals,0.14
+2015,Quebec,Genetic counsellors,0.53
+2016,Quebec,Genetic counsellors,0.67
+2017,Quebec,Genetic counsellors,0.57
+2018,Quebec,Genetic counsellors,0.69
+2019,Quebec,Genetic counsellors,0.64
+2015,Quebec,Health information management professionals,
+2016,Quebec,Health information management professionals,6.41
+2017,Quebec,Health information management professionals,6.42
+2018,Quebec,Health information management professionals,6.36
+2019,Quebec,Health information management professionals,
+2015,Quebec,Medical laboratory technologists,56.62
+2016,Quebec,Medical laboratory technologists,58.6
+2017,Quebec,Medical laboratory technologists,58.98
+2018,Quebec,Medical laboratory technologists,58.61
+2019,Quebec,Medical laboratory technologists,58.2
+2015,Quebec,Medical physicists,1.1
+2016,Quebec,Medical physicists,1.09
+2017,Quebec,Medical physicists,1.21
+2018,Quebec,Medical physicists,1.26
+2019,Quebec,Medical physicists,1.17
+2015,Quebec,Medical radiation technologists,67.44
+2016,Quebec,Medical radiation technologists,77.66
+2017,Quebec,Medical radiation technologists,78.26
+2018,Quebec,Medical radiation technologists,78.51
+2019,Quebec,Medical radiation technologists,80.34
+2015,Quebec,Midwives,1.9
+2016,Quebec,Midwives,2.69
+2017,Quebec,Midwives,2.66
+2018,Quebec,Midwives,2.91
+2019,Quebec,Midwives,3.07
+2015,Quebec,Occupational therapists,59.03
+2016,Quebec,Occupational therapists,60.54
+2017,Quebec,Occupational therapists,62.58
+2018,Quebec,Occupational therapists,64.19
+2019,Quebec,Occupational therapists,66.27
+2015,Quebec,Opticians,23.85
+2016,Quebec,Opticians,24.42
+2017,Quebec,Opticians,25.01
+2018,Quebec,Opticians,
+2019,Quebec,Opticians,1.29
+2015,Quebec,Optometrists,17.97
+2016,Quebec,Optometrists,18.83
+2017,Quebec,Optometrists,18.2
+2018,Quebec,Optometrists,18.23
+2019,Quebec,Optometrists,18.69
+2015,Quebec,Paramedics,70.05
+2016,Quebec,Paramedics,70.53
+2017,Quebec,Paramedics,64.26
+2018,Quebec,Paramedics,66.41
+2019,Quebec,Paramedics,66.34
+2015,Quebec,Pharmacists,106.94
+2016,Quebec,Pharmacists,113.18
+2017,Quebec,Pharmacists,110.4
+2018,Quebec,Pharmacists,110.4
+2019,Quebec,Pharmacists,112.75
+2015,Quebec,Pharmacy technicians,
+2016,Quebec,Pharmacy technicians,
+2017,Quebec,Pharmacy technicians,
+2018,Quebec,Pharmacy technicians,
+2019,Quebec,Pharmacy technicians,
+2015,Quebec,Physician assistants,0.2
+2016,Quebec,Physician assistants,0.24
+2017,Quebec,Physician assistants,0.3
+2018,Quebec,Physician assistants,0.27
+2019,Quebec,Physician assistants,0.25
+2015,Quebec,Physicians,245.31
+2016,Quebec,Physicians,246.42
+2017,Quebec,Physicians,251.97
+2018,Quebec,Physicians,248.83
+2019,Quebec,Physicians,256.06
+2015,Quebec,Family medicine,118.69
+2016,Quebec,Family medicine,119.41
+2017,Quebec,Family medicine,122.93
+2018,Quebec,Family medicine,122.66
+2019,Quebec,Family medicine,128.55
+2015,Quebec,Specialists,126.63
+2016,Quebec,Specialists,127
+2017,Quebec,Specialists,129.05
+2018,Quebec,Specialists,126.17
+2019,Quebec,Specialists,127.51
+2015,Quebec,Physiotherapists,56.6
+2016,Quebec,Physiotherapists,54.77
+2017,Quebec,Physiotherapists,55.77
+2018,Quebec,Physiotherapists,64.48
+2019,Quebec,Physiotherapists,64.64
+2015,Quebec,Psychologists,95.72
+2016,Quebec,Psychologists,95.83
+2017,Quebec,Psychologists,93.39
+2018,Quebec,Psychologists,92.49
+2019,Quebec,Psychologists,92.1
+2015,Quebec,Regulated nurses,1211.69
+2016,Quebec,Regulated nurses,1201.49
+2017,Quebec,Regulated nurses,1185.37
+2018,Quebec,Regulated nurses,1186.96
+2019,Quebec,Regulated nurses,1206.52
+2015,Quebec,Licensed practical nurses,351.21
+2016,Quebec,Licensed practical nurses,338.61
+2017,Quebec,Licensed practical nurses,328.99
+2018,Quebec,Licensed practical nurses,328.99
+2019,Quebec,Licensed practical nurses,333.63
+2015,Quebec,Nurse practitioners,3.73
+2016,Quebec,Nurse practitioners,4.62
+2017,Quebec,Nurse practitioners,5.19
+2018,Quebec,Nurse practitioners,6.07
+2019,Quebec,Nurse practitioners,6.5
+2015,Quebec,Registered nurses,856.75
+2016,Quebec,Registered nurses,858.26
+2017,Quebec,Registered nurses,851.19
+2018,Quebec,Registered nurses,851.9
+2019,Quebec,Registered nurses,866.4
+2015,Quebec,Registered psychiatric nurses,
+2016,Quebec,Registered psychiatric nurses,
+2017,Quebec,Registered psychiatric nurses,
+2018,Quebec,Registered psychiatric nurses,
+2019,Quebec,Registered psychiatric nurses,
+2015,Quebec,Respiratory therapists,50.68
+2016,Quebec,Respiratory therapists,51.56
+2017,Quebec,Respiratory therapists,51.13
+2018,Quebec,Respiratory therapists,47.72
+2019,Quebec,Respiratory therapists,52.49
+2015,Quebec,Social workers,158.69
+2016,Quebec,Social workers,163.56
+2017,Quebec,Social workers,164.71
+2018,Quebec,Social workers,169.12
+2019,Quebec,Social workers,176.2
+2015,Quebec,Speech–language pathologists,28.73
+2016,Quebec,Speech–language pathologists,29.93
+2017,Quebec,Speech–language pathologists,32.54
+2018,Quebec,Speech–language pathologists,33.82
+2019,Quebec,Speech–language pathologists,35
+2015,Ontario,Audiologists,4.76
+2016,Ontario,Audiologists,4.99
+2017,Ontario,Audiologists,5.1
+2018,Ontario,Audiologists,5.22
+2019,Ontario,Audiologists,5.51
+2015,Ontario,Chiropractors,31.03
+2016,Ontario,Chiropractors,31.29
+2017,Ontario,Chiropractors,31.5
+2018,Ontario,Chiropractors,32.07
+2019,Ontario,Chiropractors,32.3
+2015,Ontario,Dental assistants,38.53
+2016,Ontario,Dental assistants,37.75
+2017,Ontario,Dental assistants,35.55
+2018,Ontario,Dental assistants,
+2019,Ontario,Dental assistants,33.15
+2015,Ontario,Dental hygienists,94.21
+2016,Ontario,Dental hygienists,94.3
+2017,Ontario,Dental hygienists,93.45
+2018,Ontario,Dental hygienists,90.09
+2019,Ontario,Dental hygienists,95.61
+2015,Ontario,Dentists,68.96
+2016,Ontario,Dentists,70.17
+2017,Ontario,Dentists,70.63
+2018,Ontario,Dentists,72.73
+2019,Ontario,Dentists,73.43
+2015,Ontario,Dietitians,27.76
+2016,Ontario,Dietitians,28.14
+2017,Ontario,Dietitians,28.31
+2018,Ontario,Dietitians,28.9
+2019,Ontario,Dietitians,29.24
+2015,Ontario,Environmental public health professionals,5.19
+2016,Ontario,Environmental public health professionals,5.32
+2017,Ontario,Environmental public health professionals,5.32
+2018,Ontario,Environmental public health professionals,5.52
+2019,Ontario,Environmental public health professionals,5.37
+2015,Ontario,Genetic counsellors,1.12
+2016,Ontario,Genetic counsellors,1.06
+2017,Ontario,Genetic counsellors,0.91
+2018,Ontario,Genetic counsellors,1.04
+2019,Ontario,Genetic counsellors,1.13
+2015,Ontario,Health information management professionals,
+2016,Ontario,Health information management professionals,14.02
+2017,Ontario,Health information management professionals,14.53
+2018,Ontario,Health information management professionals,
+2019,Ontario,Health information management professionals,14.91
+2015,Ontario,Medical laboratory technologists,53.16
+2016,Ontario,Medical laboratory technologists,49.17
+2017,Ontario,Medical laboratory technologists,51.61
+2018,Ontario,Medical laboratory technologists,49.79
+2019,Ontario,Medical laboratory technologists,50.64
+2015,Ontario,Medical physicists,1.47
+2016,Ontario,Medical physicists,1.36
+2017,Ontario,Medical physicists,1.46
+2018,Ontario,Medical physicists,1.53
+2019,Ontario,Medical physicists,1.49
+2015,Ontario,Medical radiation technologists,50.35
+2016,Ontario,Medical radiation technologists,50.37
+2017,Ontario,Medical radiation technologists,50.04
+2018,Ontario,Medical radiation technologists,74.85
+2019,Ontario,Medical radiation technologists,76.92
+2015,Ontario,Midwives,4.95
+2016,Ontario,Midwives,5.12
+2017,Ontario,Midwives,5.32
+2018,Ontario,Midwives,5.42
+2019,Ontario,Midwives,5.59
+2015,Ontario,Occupational therapists,39.81
+2016,Ontario,Occupational therapists,40.47
+2017,Ontario,Occupational therapists,41.47
+2018,Ontario,Occupational therapists,42.01
+2019,Ontario,Occupational therapists,43.53
+2015,Ontario,Opticians,
+2016,Ontario,Opticians,19.09
+2017,Ontario,Opticians,9.1
+2018,Ontario,Opticians,
+2019,Ontario,Opticians,11.57
+2015,Ontario,Optometrists,16.91
+2016,Ontario,Optometrists,16.91
+2017,Ontario,Optometrists,17.23
+2018,Ontario,Optometrists,17.57
+2019,Ontario,Optometrists,18.31
+2015,Ontario,Paramedics,57.59
+2016,Ontario,Paramedics,59.05
+2017,Ontario,Paramedics,59.89
+2018,Ontario,Paramedics,61.85
+2019,Ontario,Paramedics,62.81
+2015,Ontario,Pharmacists,104.98
+2016,Ontario,Pharmacists,107.76
+2017,Ontario,Pharmacists,109.53
+2018,Ontario,Pharmacists,110.94
+2019,Ontario,Pharmacists,113.88
+2015,Ontario,Pharmacy technicians,27.98
+2016,Ontario,Pharmacy technicians,30.89
+2017,Ontario,Pharmacy technicians,32.67
+2018,Ontario,Pharmacy technicians,33.8
+2019,Ontario,Pharmacy technicians,35.27
+2015,Ontario,Physician assistants,2
+2016,Ontario,Physician assistants,2.5
+2017,Ontario,Physician assistants,
+2018,Ontario,Physician assistants,3.06
+2019,Ontario,Physician assistants,3.62
+2015,Ontario,Physicians,222.47
+2016,Ontario,Physicians,223.54
+2017,Ontario,Physicians,227.8
+2018,Ontario,Physicians,236.49
+2019,Ontario,Physicians,238.04
+2015,Ontario,Family medicine,109.99
+2016,Ontario,Family medicine,111.11
+2017,Ontario,Family medicine,114.33
+2018,Ontario,Family medicine,117.39
+2019,Ontario,Family medicine,117.74
+2015,Ontario,Specialists,112.47
+2016,Ontario,Specialists,112.43
+2017,Ontario,Specialists,113.47
+2018,Ontario,Specialists,119.1
+2019,Ontario,Specialists,120.3
+2015,Ontario,Physiotherapists,59.54
+2016,Ontario,Physiotherapists,61.35
+2017,Ontario,Physiotherapists,62.17
+2018,Ontario,Physiotherapists,64.42
+2019,Ontario,Physiotherapists,66.55
+2015,Ontario,Psychologists,27.18
+2016,Ontario,Psychologists,27.23
+2017,Ontario,Psychologists,27.32
+2018,Ontario,Psychologists,27.54
+2019,Ontario,Psychologists,27.93
+2015,Ontario,Regulated nurses,1084.59
+2016,Ontario,Regulated nurses,1088.45
+2017,Ontario,Regulated nurses,1087.08
+2018,Ontario,Regulated nurses,1086.17
+2019,Ontario,Regulated nurses,1118.06
+2015,Ontario,Licensed practical nurses,318.49
+2016,Ontario,Licensed practical nurses,333.34
+2017,Ontario,Licensed practical nurses,341.44
+2018,Ontario,Licensed practical nurses,348.87
+2019,Ontario,Licensed practical nurses,368.71
+2015,Ontario,Nurse practitioners,18.38
+2016,Ontario,Nurse practitioners,19.96
+2017,Ontario,Nurse practitioners,21.4
+2018,Ontario,Nurse practitioners,22.38
+2019,Ontario,Nurse practitioners,24.09
+2015,Ontario,Registered nurses,747.71
+2016,Ontario,Registered nurses,735.16
+2017,Ontario,Registered nurses,724.25
+2018,Ontario,Registered nurses,714.92
+2019,Ontario,Registered nurses,725.26
+2015,Ontario,Registered psychiatric nurses,
+2016,Ontario,Registered psychiatric nurses,
+2017,Ontario,Registered psychiatric nurses,
+2018,Ontario,Registered psychiatric nurses,
+2019,Ontario,Registered psychiatric nurses,
+2015,Ontario,Respiratory therapists,23
+2016,Ontario,Respiratory therapists,23.3
+2017,Ontario,Respiratory therapists,23.77
+2018,Ontario,Respiratory therapists,23.77
+2019,Ontario,Respiratory therapists,24.06
+2015,Ontario,Social workers,122.58
+2016,Ontario,Social workers,134.58
+2017,Ontario,Social workers,122.43
+2018,Ontario,Social workers,125.05
+2019,Ontario,Social workers,137.72
+2015,Ontario,Speech–language pathologists,20.33
+2016,Ontario,Speech–language pathologists,21.14
+2017,Ontario,Speech–language pathologists,21.16
+2018,Ontario,Speech–language pathologists,22.01
+2019,Ontario,Speech–language pathologists,22.87
+2015,Manitoba,Audiologists,5.57
+2016,Manitoba,Audiologists,5.4
+2017,Manitoba,Audiologists,5.69
+2018,Manitoba,Audiologists,5.1
+2019,Manitoba,Audiologists,5.03
+2015,Manitoba,Chiropractors,22.21
+2016,Manitoba,Chiropractors,22.3
+2017,Manitoba,Chiropractors,22.32
+2018,Manitoba,Chiropractors,22.26
+2019,Manitoba,Chiropractors,21.74
+2015,Manitoba,Dental assistants,95.26
+2016,Manitoba,Dental assistants,98.62
+2017,Manitoba,Dental assistants,100.42
+2018,Manitoba,Dental assistants,
+2019,Manitoba,Dental assistants,
+2015,Manitoba,Dental hygienists,53.16
+2016,Manitoba,Dental hygienists,55.47
+2017,Manitoba,Dental hygienists,55.41
+2018,Manitoba,Dental hygienists,56.06
+2019,Manitoba,Dental hygienists,57.17
+2015,Manitoba,Dentists,53.94
+2016,Manitoba,Dentists,54.64
+2017,Manitoba,Dentists,53.24
+2018,Manitoba,Dentists,53.99
+2019,Manitoba,Dentists,54.43
+2015,Manitoba,Dietitians,36.76
+2016,Manitoba,Dietitians,37.21
+2017,Manitoba,Dietitians,36.39
+2018,Manitoba,Dietitians,35.42
+2019,Manitoba,Dietitians,35.79
+2015,Manitoba,Environmental public health professionals,5.49
+2016,Manitoba,Environmental public health professionals,5.4
+2017,Manitoba,Environmental public health professionals,5.17
+2018,Manitoba,Environmental public health professionals,5.32
+2019,Manitoba,Environmental public health professionals,5.1
+2015,Manitoba,Genetic counsellors,0.62
+2016,Manitoba,Genetic counsellors,0.61
+2017,Manitoba,Genetic counsellors,0.37
+2018,Manitoba,Genetic counsellors,0.59
+2019,Manitoba,Genetic counsellors,0.96
+2015,Manitoba,Health information management professionals,
+2016,Manitoba,Health information management professionals,12.25
+2017,Manitoba,Health information management professionals,11.68
+2018,Manitoba,Health information management professionals,
+2019,Manitoba,Health information management professionals,12.28
+2015,Manitoba,Medical laboratory technologists,81.1
+2016,Manitoba,Medical laboratory technologists,63.16
+2017,Manitoba,Medical laboratory technologists,56.54
+2018,Manitoba,Medical laboratory technologists,56.06
+2019,Manitoba,Medical laboratory technologists,51.55
+2015,Manitoba,Medical physicists,1.55
+2016,Manitoba,Medical physicists,1.45
+2017,Manitoba,Medical physicists,1.65
+2018,Manitoba,Medical physicists,1.55
+2019,Manitoba,Medical physicists,1.7
+2015,Manitoba,Medical radiation technologists,54.94
+2016,Manitoba,Medical radiation technologists,53.34
+2017,Manitoba,Medical radiation technologists,64.48
+2018,Manitoba,Medical radiation technologists,62.2
+2019,Manitoba,Medical radiation technologists,62.86
+2015,Manitoba,Midwives,4.02
+2016,Manitoba,Midwives,3.96
+2017,Manitoba,Midwives,6.14
+2018,Manitoba,Midwives,5.69
+2019,Manitoba,Midwives,4.36
+2015,Manitoba,Occupational therapists,49.99
+2016,Manitoba,Occupational therapists,48.09
+2017,Manitoba,Occupational therapists,48.6
+2018,Manitoba,Occupational therapists,49.99
+2019,Manitoba,Occupational therapists,51.03
+2015,Manitoba,Opticians,
+2016,Manitoba,Opticians,20.93
+2017,Manitoba,Opticians,15.05
+2018,Manitoba,Opticians,
+2019,Manitoba,Opticians,17.23
+2015,Manitoba,Optometrists,12.38
+2016,Manitoba,Optometrists,12.56
+2017,Manitoba,Optometrists,13.25
+2018,Manitoba,Optometrists,13.16
+2019,Manitoba,Optometrists,13.83
+2015,Manitoba,Paramedics,199.35
+2016,Manitoba,Paramedics,204.85
+2017,Manitoba,Paramedics,211.85
+2018,Manitoba,Paramedics,223.94
+2019,Manitoba,Paramedics,277.26
+2015,Manitoba,Pharmacists,112.21
+2016,Manitoba,Pharmacists,115.97
+2017,Manitoba,Pharmacists,117.94
+2018,Manitoba,Pharmacists,119.81
+2019,Manitoba,Pharmacists,121.21
+2015,Manitoba,Pharmacy technicians,
+2016,Manitoba,Pharmacy technicians,
+2017,Manitoba,Pharmacy technicians,
+2018,Manitoba,Pharmacy technicians,7.54
+2019,Manitoba,Pharmacy technicians,13.09
+2015,Manitoba,Physician assistants,4.49
+2016,Manitoba,Physician assistants,6.16
+2017,Manitoba,Physician assistants,
+2018,Manitoba,Physician assistants,7.25
+2019,Manitoba,Physician assistants,9.91
+2015,Manitoba,Physicians,205.77
+2016,Manitoba,Physicians,209.11
+2017,Manitoba,Physicians,212.15
+2018,Manitoba,Physicians,225.94
+2019,Manitoba,Physicians,220.32
+2015,Manitoba,Family medicine,107.26
+2016,Manitoba,Family medicine,108.28
+2017,Manitoba,Family medicine,110.9
+2018,Manitoba,Family medicine,113.15
+2019,Manitoba,Family medicine,110.27
+2015,Manitoba,Specialists,98.51
+2016,Manitoba,Specialists,100.83
+2017,Manitoba,Specialists,101.24
+2018,Manitoba,Specialists,112.78
+2019,Manitoba,Specialists,110.05
+2015,Manitoba,Physiotherapists,54.71
+2016,Manitoba,Physiotherapists,55.55
+2017,Manitoba,Physiotherapists,56.91
+2018,Manitoba,Physiotherapists,58.35
+2019,Manitoba,Physiotherapists,60.2
+2015,Manitoba,Psychologists,
+2016,Manitoba,Psychologists,16.06
+2017,Manitoba,Psychologists,19.62
+2018,Manitoba,Psychologists,19.52
+2019,Manitoba,Psychologists,19.67
+2015,Manitoba,Regulated nurses,1314.32
+2016,Manitoba,Regulated nurses,1303.29
+2017,Manitoba,Regulated nurses,1323.28
+2018,Manitoba,Regulated nurses,1317.53
+2019,Manitoba,Regulated nurses,1315.97
+2015,Manitoba,Licensed practical nurses,247.79
+2016,Manitoba,Licensed practical nurses,246.17
+2017,Manitoba,Licensed practical nurses,248.09
+2018,Manitoba,Licensed practical nurses,249.45
+2019,Manitoba,Licensed practical nurses,260.18
+2015,Manitoba,Nurse practitioners,11.76
+2016,Manitoba,Nurse practitioners,12.4
+2017,Manitoba,Nurse practitioners,13.33
+2018,Manitoba,Nurse practitioners,14.27
+2019,Manitoba,Nurse practitioners,16.05
+2015,Manitoba,Registered nurses,977.69
+2016,Manitoba,Registered nurses,966.94
+2017,Manitoba,Registered nurses,982.93
+2018,Manitoba,Registered nurses,974.15
+2019,Manitoba,Registered nurses,961.06
+2015,Manitoba,Registered psychiatric nurses,77.08
+2016,Manitoba,Registered psychiatric nurses,77.77
+2017,Manitoba,Registered psychiatric nurses,78.93
+2018,Manitoba,Registered psychiatric nurses,79.65
+2019,Manitoba,Registered psychiatric nurses,78.69
+2015,Manitoba,Respiratory therapists,
+2016,Manitoba,Respiratory therapists,24.96
+2017,Manitoba,Respiratory therapists,25.61
+2018,Manitoba,Respiratory therapists,25.07
+2019,Manitoba,Respiratory therapists,24.48
+2015,Manitoba,Social workers,92.86
+2016,Manitoba,Social workers,153.48
+2017,Manitoba,Social workers,153.96
+2018,Manitoba,Social workers,160.26
+2019,Manitoba,Social workers,167.95
+2015,Manitoba,Speech–language pathologists,27.7
+2016,Manitoba,Speech–language pathologists,27.47
+2017,Manitoba,Speech–language pathologists,28.76
+2018,Manitoba,Speech–language pathologists,28.77
+2019,Manitoba,Speech–language pathologists,29.29
+2015,Saskatchewan,Audiologists,3.12
+2016,Saskatchewan,Audiologists,3.52
+2017,Saskatchewan,Audiologists,3.22
+2018,Saskatchewan,Audiologists,3.36
+2019,Saskatchewan,Audiologists,
+2015,Saskatchewan,Chiropractors,18.29
+2016,Saskatchewan,Chiropractors,18.31
+2017,Saskatchewan,Chiropractors,18.25
+2018,Saskatchewan,Chiropractors,18.59
+2019,Saskatchewan,Chiropractors,18.76
+2015,Saskatchewan,Dental assistants,101.61
+2016,Saskatchewan,Dental assistants,102.29
+2017,Saskatchewan,Dental assistants,105.84
+2018,Saskatchewan,Dental assistants,107.14
+2019,Saskatchewan,Dental assistants,111.27
+2015,Saskatchewan,Dental hygienists,52.19
+2016,Saskatchewan,Dental hygienists,54.84
+2017,Saskatchewan,Dental hygienists,55.96
+2018,Saskatchewan,Dental hygienists,57.05
+2019,Saskatchewan,Dental hygienists,
+2015,Saskatchewan,Dentists,39.07
+2016,Saskatchewan,Dentists,38.91
+2017,Saskatchewan,Dentists,42.49
+2018,Saskatchewan,Dentists,45.87
+2019,Saskatchewan,Dentists,44.15
+2015,Saskatchewan,Dietitians,31.85
+2016,Saskatchewan,Dietitians,31.51
+2017,Saskatchewan,Dietitians,32.85
+2018,Saskatchewan,Dietitians,34.68
+2019,Saskatchewan,Dietitians,33.13
+2015,Saskatchewan,Environmental public health professionals,8.92
+2016,Saskatchewan,Environmental public health professionals,10.12
+2017,Saskatchewan,Environmental public health professionals,9.65
+2018,Saskatchewan,Environmental public health professionals,9.55
+2019,Saskatchewan,Environmental public health professionals,10.33
+2015,Saskatchewan,Genetic counsellors,0.54
+2016,Saskatchewan,Genetic counsellors,0.44
+2017,Saskatchewan,Genetic counsellors,0.61
+2018,Saskatchewan,Genetic counsellors,0.6
+2019,Saskatchewan,Genetic counsellors,0.6
+2015,Saskatchewan,Health information management professionals,
+2016,Saskatchewan,Health information management professionals,31.69
+2017,Saskatchewan,Health information management professionals,32.24
+2018,Saskatchewan,Health information management professionals,
+2019,Saskatchewan,Health information management professionals,32.79
+2015,Saskatchewan,Medical laboratory technologists,76.81
+2016,Saskatchewan,Medical laboratory technologists,73.5
+2017,Saskatchewan,Medical laboratory technologists,72.99
+2018,Saskatchewan,Medical laboratory technologists,69.19
+2019,Saskatchewan,Medical laboratory technologists,66.95
+2015,Saskatchewan,Medical physicists,1.16
+2016,Saskatchewan,Medical physicists,1.23
+2017,Saskatchewan,Medical physicists,1.22
+2018,Saskatchewan,Medical physicists,1.29
+2019,Saskatchewan,Medical physicists,1.2
+2015,Saskatchewan,Medical radiation technologists,44.52
+2016,Saskatchewan,Medical radiation technologists,55.9
+2017,Saskatchewan,Medical radiation technologists,54.48
+2018,Saskatchewan,Medical radiation technologists,54.04
+2019,Saskatchewan,Medical radiation technologists,54.3
+2015,Saskatchewan,Midwives,0.98
+2016,Saskatchewan,Midwives,1.32
+2017,Saskatchewan,Midwives,1.3
+2018,Saskatchewan,Midwives,1.29
+2019,Saskatchewan,Midwives,1.46
+2015,Saskatchewan,Occupational therapists,29.8
+2016,Saskatchewan,Occupational therapists,29.93
+2017,Saskatchewan,Occupational therapists,29.98
+2018,Saskatchewan,Occupational therapists,30.03
+2019,Saskatchewan,Occupational therapists,30.89
+2015,Saskatchewan,Opticians,
+2016,Saskatchewan,Opticians,18.93
+2017,Saskatchewan,Opticians,9.82
+2018,Saskatchewan,Opticians,
+2019,Saskatchewan,Opticians,10.93
+2015,Saskatchewan,Optometrists,15.52
+2016,Saskatchewan,Optometrists,16.11
+2017,Saskatchewan,Optometrists,15.82
+2018,Saskatchewan,Optometrists,15.49
+2019,Saskatchewan,Optometrists,15.66
+2015,Saskatchewan,Paramedics,185.91
+2016,Saskatchewan,Paramedics,187.68
+2017,Saskatchewan,Paramedics,179.36
+2018,Saskatchewan,Paramedics,155.33
+2019,Saskatchewan,Paramedics,167.63
+2015,Saskatchewan,Pharmacists,133.1
+2016,Saskatchewan,Pharmacists,136.8
+2017,Saskatchewan,Pharmacists,139.56
+2018,Saskatchewan,Pharmacists,141.56
+2019,Saskatchewan,Pharmacists,145
+2015,Saskatchewan,Pharmacy technicians,0.54
+2016,Saskatchewan,Pharmacy technicians,7.22
+2017,Saskatchewan,Pharmacy technicians,16.94
+2018,Saskatchewan,Pharmacy technicians,23.66
+2019,Saskatchewan,Pharmacy technicians,31.93
+2015,Saskatchewan,Physician assistants,0.36
+2016,Saskatchewan,Physician assistants,0.09
+2017,Saskatchewan,Physician assistants,0.09
+2018,Saskatchewan,Physician assistants,0.17
+2019,Saskatchewan,Physician assistants,0.09
+2015,Saskatchewan,Physicians,199.92
+2016,Saskatchewan,Physicians,200.88
+2017,Saskatchewan,Physicians,204.73
+2018,Saskatchewan,Physicians,205.67
+2019,Saskatchewan,Physicians,213.76
+2015,Saskatchewan,Family medicine,111.06
+2016,Saskatchewan,Family medicine,109.24
+2017,Saskatchewan,Family medicine,114.62
+2018,Saskatchewan,Family medicine,113.51
+2019,Saskatchewan,Family medicine,117.29
+2015,Saskatchewan,Specialists,88.85
+2016,Saskatchewan,Specialists,91.64
+2017,Saskatchewan,Specialists,90.11
+2018,Saskatchewan,Specialists,92.16
+2019,Saskatchewan,Specialists,96.47
+2015,Saskatchewan,Physiotherapists,62.98
+2016,Saskatchewan,Physiotherapists,64.53
+2017,Saskatchewan,Physiotherapists,63.52
+2018,Saskatchewan,Physiotherapists,64.2
+2019,Saskatchewan,Physiotherapists,64.2
+2015,Saskatchewan,Psychologists,46.3
+2016,Saskatchewan,Psychologists,47.27
+2017,Saskatchewan,Psychologists,43.54
+2018,Saskatchewan,Psychologists,43.54
+2019,Saskatchewan,Psychologists,44.32
+2015,Saskatchewan,Regulated nurses,1319.66
+2016,Saskatchewan,Regulated nurses,1328.36
+2017,Saskatchewan,Regulated nurses,1335.61
+2018,Saskatchewan,Regulated nurses,1336.16
+2019,Saskatchewan,Regulated nurses,1349.15
+2015,Saskatchewan,Licensed practical nurses,312.5
+2016,Saskatchewan,Licensed practical nurses,310.39
+2017,Saskatchewan,Licensed practical nurses,315.44
+2018,Saskatchewan,Licensed practical nurses,314.01
+2019,Saskatchewan,Licensed practical nurses,318.4
+2015,Saskatchewan,Nurse practitioners,16.59
+2016,Saskatchewan,Nurse practitioners,18.13
+2017,Saskatchewan,Nurse practitioners,18.77
+2018,Saskatchewan,Nurse practitioners,19.62
+2019,Saskatchewan,Nurse practitioners,20.31
+2015,Saskatchewan,Registered nurses,912.25
+2016,Saskatchewan,Registered nurses,924.92
+2017,Saskatchewan,Registered nurses,927.8
+2018,Saskatchewan,Registered nurses,931.53
+2019,Saskatchewan,Registered nurses,941.43
+2015,Saskatchewan,Registered psychiatric nurses,78.33
+2016,Saskatchewan,Registered psychiatric nurses,74.91
+2017,Saskatchewan,Registered psychiatric nurses,73.6
+2018,Saskatchewan,Registered psychiatric nurses,70.99
+2019,Saskatchewan,Registered psychiatric nurses,69.02
+2015,Saskatchewan,Respiratory therapists,19.89
+2016,Saskatchewan,Respiratory therapists,20.33
+2017,Saskatchewan,Respiratory therapists,20.16
+2018,Saskatchewan,Respiratory therapists,21
+2019,Saskatchewan,Respiratory therapists,22.03
+2015,Saskatchewan,Social workers,148.44
+2016,Saskatchewan,Social workers,149.74
+2017,Saskatchewan,Social workers,158.41
+2018,Saskatchewan,Social workers,169.61
+2019,Saskatchewan,Social workers,179.77
+2015,Saskatchewan,Speech–language pathologists,29.8
+2016,Saskatchewan,Speech–language pathologists,31.95
+2017,Saskatchewan,Speech–language pathologists,32.59
+2018,Saskatchewan,Speech–language pathologists,32.87
+2019,Saskatchewan,Speech–language pathologists,
+2015,Alberta,Audiologists,3.96
+2016,Alberta,Audiologists,4.12
+2017,Alberta,Audiologists,4.01
+2018,Alberta,Audiologists,4.27
+2019,Alberta,Audiologists,4.32
+2015,Alberta,Chiropractors,25
+2016,Alberta,Chiropractors,24.83
+2017,Alberta,Chiropractors,24.98
+2018,Alberta,Chiropractors,25.38
+2019,Alberta,Chiropractors,27.35
+2015,Alberta,Dental assistants,119.58
+2016,Alberta,Dental assistants,131.67
+2017,Alberta,Dental assistants,138.97
+2018,Alberta,Dental assistants,137.15
+2019,Alberta,Dental assistants,140.3
+2015,Alberta,Dental hygienists,73.95
+2016,Alberta,Dental hygienists,74.57
+2017,Alberta,Dental hygienists,74.84
+2018,Alberta,Dental hygienists,75.46
+2019,Alberta,Dental hygienists,76.13
+2015,Alberta,Dentists,58.63
+2016,Alberta,Dentists,58.65
+2017,Alberta,Dentists,59.33
+2018,Alberta,Dentists,62.55
+2019,Alberta,Dentists,62.2
+2015,Alberta,Dietitians,29.92
+2016,Alberta,Dietitians,30.43
+2017,Alberta,Dietitians,30.35
+2018,Alberta,Dietitians,30.53
+2019,Alberta,Dietitians,31.18
+2015,Alberta,Environmental public health professionals,9
+2016,Alberta,Environmental public health professionals,9.32
+2017,Alberta,Environmental public health professionals,9.35
+2018,Alberta,Environmental public health professionals,8.99
+2019,Alberta,Environmental public health professionals,8.89
+2015,Alberta,Genetic counsellors,0.68
+2016,Alberta,Genetic counsellors,0.69
+2017,Alberta,Genetic counsellors,0.66
+2018,Alberta,Genetic counsellors,0.6
+2019,Alberta,Genetic counsellors,0.63
+2015,Alberta,Health information management professionals,
+2016,Alberta,Health information management professionals,17.09
+2017,Alberta,Health information management professionals,17.65
+2018,Alberta,Health information management professionals,
+2019,Alberta,Health information management professionals,17.99
+2015,Alberta,Medical laboratory technologists,61
+2016,Alberta,Medical laboratory technologists,60.37
+2017,Alberta,Medical laboratory technologists,60.49
+2018,Alberta,Medical laboratory technologists,59.6
+2019,Alberta,Medical laboratory technologists,59.85
+2015,Alberta,Medical physicists,1.13
+2016,Alberta,Medical physicists,1.07
+2017,Alberta,Medical physicists,0.99
+2018,Alberta,Medical physicists,1.09
+2019,Alberta,Medical physicists,1.07
+2015,Alberta,Medical radiation technologists,52.87
+2016,Alberta,Medical radiation technologists,57.55
+2017,Alberta,Medical radiation technologists,54.26
+2018,Alberta,Medical radiation technologists,56.09
+2019,Alberta,Medical radiation technologists,55.93
+2015,Alberta,Midwives,2.27
+2016,Alberta,Midwives,2.65
+2017,Alberta,Midwives,2.83
+2018,Alberta,Midwives,2.95
+2019,Alberta,Midwives,3.2
+2015,Alberta,Occupational therapists,49.13
+2016,Alberta,Occupational therapists,49.38
+2017,Alberta,Occupational therapists,50.54
+2018,Alberta,Occupational therapists,51.29
+2019,Alberta,Occupational therapists,52.47
+2015,Alberta,Opticians,
+2016,Alberta,Opticians,25.12
+2017,Alberta,Opticians,24.43
+2018,Alberta,Opticians,
+2019,Alberta,Opticians,7.22
+2015,Alberta,Optometrists,17.88
+2016,Alberta,Optometrists,18.26
+2017,Alberta,Optometrists,18.71
+2018,Alberta,Optometrists,18.53
+2019,Alberta,Optometrists,19.25
+2015,Alberta,Paramedics,199.52
+2016,Alberta,Paramedics,197.66
+2017,Alberta,Paramedics,195.24
+2018,Alberta,Paramedics,191.36
+2019,Alberta,Paramedics,206.73
+2015,Alberta,Pharmacists,116.25
+2016,Alberta,Pharmacists,122.02
+2017,Alberta,Pharmacists,124.32
+2018,Alberta,Pharmacists,126.19
+2019,Alberta,Pharmacists,129.14
+2015,Alberta,Pharmacy technicians,32.48
+2016,Alberta,Pharmacy technicians,32.98
+2017,Alberta,Pharmacy technicians,34.31
+2018,Alberta,Pharmacy technicians,35.1
+2019,Alberta,Pharmacy technicians,37.43
+2015,Alberta,Physician assistants,0.6
+2016,Alberta,Physician assistants,0.69
+2017,Alberta,Physician assistants,0.94
+2018,Alberta,Physician assistants,0.93
+2019,Alberta,Physician assistants,1.04
+2015,Alberta,Physicians,241.74
+2016,Alberta,Physicians,245.33
+2017,Alberta,Physicians,251.65
+2018,Alberta,Physicians,250.89
+2019,Alberta,Physicians,260.15
+2015,Alberta,Family medicine,125.78
+2016,Alberta,Family medicine,126.79
+2017,Alberta,Family medicine,130.16
+2018,Alberta,Family medicine,127.44
+2019,Alberta,Family medicine,129.99
+2015,Alberta,Specialists,115.96
+2016,Alberta,Specialists,118.54
+2017,Alberta,Specialists,121.49
+2018,Alberta,Specialists,123.45
+2019,Alberta,Specialists,130.16
+2015,Alberta,Physiotherapists,63.39
+2016,Alberta,Physiotherapists,66.01
+2017,Alberta,Physiotherapists,67.06
+2018,Alberta,Physiotherapists,69
+2019,Alberta,Physiotherapists,71.65
+2015,Alberta,Psychologists,
+2016,Alberta,Psychologists,80.86
+2017,Alberta,Psychologists,84.52
+2018,Alberta,Psychologists,86.48
+2019,Alberta,Psychologists,91.2
+2015,Alberta,Regulated nurses,1177.85
+2016,Alberta,Regulated nurses,1191.98
+2017,Alberta,Regulated nurses,1206.5
+2018,Alberta,Regulated nurses,1215.64
+2019,Alberta,Regulated nurses,1238.42
+2015,Alberta,Licensed practical nurses,297.5
+2016,Alberta,Licensed practical nurses,316.03
+2017,Alberta,Licensed practical nurses,328.89
+2018,Alberta,Licensed practical nurses,343.73
+2019,Alberta,Licensed practical nurses,360.17
+2015,Alberta,Nurse practitioners,9.99
+2016,Alberta,Nurse practitioners,10.7
+2017,Alberta,Nurse practitioners,11.33
+2018,Alberta,Nurse practitioners,12.28
+2019,Alberta,Nurse practitioners,13.26
+2015,Alberta,Registered nurses,838.8
+2016,Alberta,Registered nurses,833.92
+2017,Alberta,Registered nurses,835.25
+2018,Alberta,Registered nurses,828.65
+2019,Alberta,Registered nurses,833.67
+2015,Alberta,Registered psychiatric nurses,31.56
+2016,Alberta,Registered psychiatric nurses,31.32
+2017,Alberta,Registered psychiatric nurses,31.03
+2018,Alberta,Registered psychiatric nurses,30.97
+2019,Alberta,Registered psychiatric nurses,31.32
+2015,Alberta,Respiratory therapists,40.46
+2016,Alberta,Respiratory therapists,39.89
+2017,Alberta,Respiratory therapists,42.95
+2018,Alberta,Respiratory therapists,43.02
+2019,Alberta,Respiratory therapists,44
+2015,Alberta,Social workers,164.8
+2016,Alberta,Social workers,171.78
+2017,Alberta,Social workers,165.76
+2018,Alberta,Social workers,169.77
+2019,Alberta,Social workers,176.87
+2015,Alberta,Speech–language pathologists,32.62
+2016,Alberta,Speech–language pathologists,33.51
+2017,Alberta,Speech–language pathologists,33.67
+2018,Alberta,Speech–language pathologists,34.48
+2019,Alberta,Speech–language pathologists,34.94
+2015,British Columbia,Audiologists,5.82
+2016,British Columbia,Audiologists,5.64
+2017,British Columbia,Audiologists,5.61
+2018,British Columbia,Audiologists,5.99
+2019,British Columbia,Audiologists,6.21
+2015,British Columbia,Chiropractors,23.53
+2016,British Columbia,Chiropractors,23.17
+2017,British Columbia,Chiropractors,24.26
+2018,British Columbia,Chiropractors,24.94
+2019,British Columbia,Chiropractors,26.52
+2015,British Columbia,Dental assistants,124.34
+2016,British Columbia,Dental assistants,123.85
+2017,British Columbia,Dental assistants,123.95
+2018,British Columbia,Dental assistants,122.96
+2019,British Columbia,Dental assistants,123.16
+2015,British Columbia,Dental hygienists,77.26
+2016,British Columbia,Dental hygienists,78.43
+2017,British Columbia,Dental hygienists,76.15
+2018,British Columbia,Dental hygienists,69.84
+2019,British Columbia,Dental hygienists,83.58
+2015,British Columbia,Dentists,68.27
+2016,British Columbia,Dentists,69.54
+2017,British Columbia,Dentists,68.49
+2018,British Columbia,Dentists,71.94
+2019,British Columbia,Dentists,72.16
+2015,British Columbia,Dietitians,25.71
+2016,British Columbia,Dietitians,27
+2017,British Columbia,Dietitians,27.39
+2018,British Columbia,Dietitians,25.84
+2019,British Columbia,Dietitians,28.05
+2015,British Columbia,Environmental public health professionals,3.89
+2016,British Columbia,Environmental public health professionals,3.89
+2017,British Columbia,Environmental public health professionals,4.63
+2018,British Columbia,Environmental public health professionals,4.21
+2019,British Columbia,Environmental public health professionals,3.77
+2015,British Columbia,Genetic counsellors,1.11
+2016,British Columbia,Genetic counsellors,1.09
+2017,British Columbia,Genetic counsellors,1.12
+2018,British Columbia,Genetic counsellors,1.18
+2019,British Columbia,Genetic counsellors,1.28
+2015,British Columbia,Health information management professionals,
+2016,British Columbia,Health information management professionals,9.49
+2017,British Columbia,Health information management professionals,9.47
+2018,British Columbia,Health information management professionals,
+2019,British Columbia,Health information management professionals,9.94
+2015,British Columbia,Medical laboratory technologists,45.79
+2016,British Columbia,Medical laboratory technologists,43.53
+2017,British Columbia,Medical laboratory technologists,38.78
+2018,British Columbia,Medical laboratory technologists,37.48
+2019,British Columbia,Medical laboratory technologists,34.56
+2015,British Columbia,Medical physicists,1.15
+2016,British Columbia,Medical physicists,1.3
+2017,British Columbia,Medical physicists,1.38
+2018,British Columbia,Medical physicists,1.44
+2019,British Columbia,Medical physicists,1.38
+2015,British Columbia,Medical radiation technologists,40.39
+2016,British Columbia,Medical radiation technologists,39.02
+2017,British Columbia,Medical radiation technologists,42.77
+2018,British Columbia,Medical radiation technologists,42.63
+2019,British Columbia,Medical radiation technologists,41.43
+2015,British Columbia,Midwives,5.17
+2016,British Columbia,Midwives,5.62
+2017,British Columbia,Midwives,5.97
+2018,British Columbia,Midwives,5.75
+2019,British Columbia,Midwives,6.17
+2015,British Columbia,Occupational therapists,44.22
+2016,British Columbia,Occupational therapists,45.54
+2017,British Columbia,Occupational therapists,46.87
+2018,British Columbia,Occupational therapists,47.74
+2019,British Columbia,Occupational therapists,49.9
+2015,British Columbia,Opticians,
+2016,British Columbia,Opticians,25.37
+2017,British Columbia,Opticians,8.47
+2018,British Columbia,Opticians,
+2019,British Columbia,Opticians,12
+2015,British Columbia,Optometrists,15.07
+2016,British Columbia,Optometrists,15.33
+2017,British Columbia,Optometrists,15.95
+2018,British Columbia,Optometrists,16.17
+2019,British Columbia,Optometrists,17.05
+2015,British Columbia,Paramedics,
+2016,British Columbia,Paramedics,96.5
+2017,British Columbia,Paramedics,95.53
+2018,British Columbia,Paramedics,98
+2019,British Columbia,Paramedics,98.52
+2015,British Columbia,Pharmacists,108.81
+2016,British Columbia,Pharmacists,106.77
+2017,British Columbia,Pharmacists,112.39
+2018,British Columbia,Pharmacists,113.73
+2019,British Columbia,Pharmacists,114.93
+2015,British Columbia,Pharmacy technicians,27.38
+2016,British Columbia,Pharmacy technicians,28.81
+2017,British Columbia,Pharmacy technicians,30.31
+2018,British Columbia,Pharmacy technicians,31.39
+2019,British Columbia,Pharmacy technicians,32.95
+2015,British Columbia,Physician assistants,0.44
+2016,British Columbia,Physician assistants,0.41
+2017,British Columbia,Physician assistants,0.49
+2018,British Columbia,Physician assistants,0.42
+2019,British Columbia,Physician assistants,0.44
+2015,British Columbia,Physicians,228.56
+2016,British Columbia,Physicians,237.63
+2017,British Columbia,Physicians,239.79
+2018,British Columbia,Physicians,251.48
+2019,British Columbia,Physicians,255.56
+2015,British Columbia,Family medicine,122.52
+2016,British Columbia,Family medicine,127.37
+2017,British Columbia,Family medicine,129.46
+2018,British Columbia,Family medicine,134.64
+2019,British Columbia,Family medicine,133.96
+2015,British Columbia,Specialists,106.04
+2016,British Columbia,Specialists,110.26
+2017,British Columbia,Specialists,110.34
+2018,British Columbia,Specialists,116.83
+2019,British Columbia,Specialists,121.6
+2015,British Columbia,Physiotherapists,71.27
+2016,British Columbia,Physiotherapists,72.81
+2017,British Columbia,Physiotherapists,74.97
+2018,British Columbia,Physiotherapists,76.61
+2019,British Columbia,Physiotherapists,78.43
+2015,British Columbia,Psychologists,25
+2016,British Columbia,Psychologists,25.27
+2017,British Columbia,Psychologists,25.05
+2018,British Columbia,Psychologists,24.98
+2019,British Columbia,Psychologists,25.08
+2015,British Columbia,Regulated nurses,1045.04
+2016,British Columbia,Regulated nurses,1056.5
+2017,British Columbia,Regulated nurses,1066.08
+2018,British Columbia,Regulated nurses,1061.69
+2019,British Columbia,Regulated nurses,1076.45
+2015,British Columbia,Licensed practical nurses,243.26
+2016,British Columbia,Licensed practical nurses,242.32
+2017,British Columbia,Licensed practical nurses,243.43
+2018,British Columbia,Licensed practical nurses,243.44
+2019,British Columbia,Licensed practical nurses,247.43
+2015,British Columbia,Nurse practitioners,6.59
+2016,British Columbia,Nurse practitioners,7.92
+2017,British Columbia,Nurse practitioners,8.49
+2018,British Columbia,Nurse practitioners,9.32
+2019,British Columbia,Nurse practitioners,10.3
+2015,British Columbia,Registered nurses,741.08
+2016,British Columbia,Registered nurses,751.27
+2017,British Columbia,Registered nurses,758.92
+2018,British Columbia,Registered nurses,753.09
+2019,British Columbia,Registered nurses,762.09
+2015,British Columbia,Registered psychiatric nurses,54.1
+2016,British Columbia,Registered psychiatric nurses,54.99
+2017,British Columbia,Registered psychiatric nurses,55.24
+2018,British Columbia,Registered psychiatric nurses,55.83
+2019,British Columbia,Registered psychiatric nurses,56.63
+2015,British Columbia,Respiratory therapists,19.89
+2016,British Columbia,Respiratory therapists,20.58
+2017,British Columbia,Respiratory therapists,
+2018,British Columbia,Respiratory therapists,
+2019,British Columbia,Respiratory therapists,19.61
+2015,British Columbia,Social workers,87.3
+2016,British Columbia,Social workers,84.25
+2017,British Columbia,Social workers,85.86
+2018,British Columbia,Social workers,87.31
+2019,British Columbia,Social workers,
+2015,British Columbia,Speech–language pathologists,23.24
+2016,British Columbia,Speech–language pathologists,23.93
+2017,British Columbia,Speech–language pathologists,24.52
+2018,British Columbia,Speech–language pathologists,26.12
+2019,British Columbia,Speech–language pathologists,27.47
+2015,Yukon,Audiologists,7.96
+2016,Yukon,Audiologists,5.19
+2017,Yukon,Audiologists,7.57
+2018,Yukon,Audiologists,2.47
+2019,Yukon,Audiologists,2.47
+2015,Yukon,Chiropractors,15.92
+2016,Yukon,Chiropractors,15.57
+2017,Yukon,Chiropractors,
+2018,Yukon,Chiropractors,12.35
+2019,Yukon,Chiropractors,14.82
+2015,Yukon,Dental assistants,
+2016,Yukon,Dental assistants,
+2017,Yukon,Dental assistants,
+2018,Yukon,Dental assistants,
+2019,Yukon,Dental assistants,
+2015,Yukon,Dental hygienists,95.52
+2016,Yukon,Dental hygienists,93.39
+2017,Yukon,Dental hygienists,
+2018,Yukon,Dental hygienists,66.71
+2019,Yukon,Dental hygienists,91.41
+2015,Yukon,Dentists,111.44
+2016,Yukon,Dentists,108.96
+2017,Yukon,Dentists,
+2018,Yukon,Dentists,113.65
+2019,Yukon,Dentists,172.94
+2015,Yukon,Dietitians,
+2016,Yukon,Dietitians,
+2017,Yukon,Dietitians,
+2018,Yukon,Dietitians,27.18
+2019,Yukon,Dietitians,29.65
+2015,Yukon,Environmental public health professionals,2.65
+2016,Yukon,Environmental public health professionals,2.59
+2017,Yukon,Environmental public health professionals,5.05
+2018,Yukon,Environmental public health professionals,17.29
+2019,Yukon,Environmental public health professionals,17.29
+2015,Yukon,Genetic counsellors,2.65
+2016,Yukon,Genetic counsellors,2.59
+2017,Yukon,Genetic counsellors,2.52
+2018,Yukon,Genetic counsellors,2.47
+2019,Yukon,Genetic counsellors,2.47
+2015,Yukon,Health information management professionals,
+2016,Yukon,Health information management professionals,18.16
+2017,Yukon,Health information management professionals,17.66
+2018,Yukon,Health information management professionals,
+2019,Yukon,Health information management professionals,14.82
+2015,Yukon,Medical laboratory technologists,61.02
+2016,Yukon,Medical laboratory technologists,67.45
+2017,Yukon,Medical laboratory technologists,55.52
+2018,Yukon,Medical laboratory technologists,54.35
+2019,Yukon,Medical laboratory technologists,66.71
+2015,Yukon,Medical physicists,
+2016,Yukon,Medical physicists,
+2017,Yukon,Medical physicists,
+2018,Yukon,Medical physicists,
+2019,Yukon,Medical physicists,
+2015,Yukon,Medical radiation technologists,45.1
+2016,Yukon,Medical radiation technologists,44.1
+2017,Yukon,Medical radiation technologists,50.47
+2018,Yukon,Medical radiation technologists,
+2019,Yukon,Medical radiation technologists,44.47
+2015,Yukon,Midwives,
+2016,Yukon,Midwives,7.78
+2017,Yukon,Midwives,0
+2018,Yukon,Midwives,0
+2019,Yukon,Midwives,
+2015,Yukon,Occupational therapists,50.41
+2016,Yukon,Occupational therapists,46.7
+2017,Yukon,Occupational therapists,40.38
+2018,Yukon,Occupational therapists,44.47
+2019,Yukon,Occupational therapists,66.71
+2015,Yukon,Opticians,
+2016,Yukon,Opticians,
+2017,Yukon,Opticians,
+2018,Yukon,Opticians,
+2019,Yukon,Opticians,
+2015,Yukon,Optometrists,18.57
+2016,Yukon,Optometrists,18.16
+2017,Yukon,Optometrists,
+2018,Yukon,Optometrists,17.29
+2019,Yukon,Optometrists,19.76
+2015,Yukon,Paramedics,
+2016,Yukon,Paramedics,
+2017,Yukon,Paramedics,
+2018,Yukon,Paramedics,
+2019,Yukon,Paramedics,
+2015,Yukon,Pharmacists,127.35
+2016,Yukon,Pharmacists,108.96
+2017,Yukon,Pharmacists,133.74
+2018,Yukon,Pharmacists,163.06
+2019,Yukon,Pharmacists,163.06
+2015,Yukon,Pharmacy technicians,
+2016,Yukon,Pharmacy technicians,
+2017,Yukon,Pharmacy technicians,
+2018,Yukon,Pharmacy technicians,
+2019,Yukon,Pharmacy technicians,
+2015,Yukon,Physician assistants,0
+2016,Yukon,Physician assistants,0
+2017,Yukon,Physician assistants,0
+2018,Yukon,Physician assistants,0
+2019,Yukon,Physician assistants,0
+2015,Yukon,Physicians,209.6
+2016,Yukon,Physicians,202.35
+2017,Yukon,Physicians,194.31
+2018,Yukon,Physicians,190.24
+2019,Yukon,Physicians,195.18
+2015,Yukon,Family medicine,180.42
+2016,Yukon,Family medicine,176.41
+2017,Yukon,Family medicine,169.07
+2018,Yukon,Family medicine,158.12
+2019,Yukon,Family medicine,165.53
+2015,Yukon,Specialists,29.19
+2016,Yukon,Specialists,25.94
+2017,Yukon,Specialists,25.23
+2018,Yukon,Specialists,32.12
+2019,Yukon,Specialists,29.65
+2015,Yukon,Physiotherapists,100.82
+2016,Yukon,Physiotherapists,116.74
+2017,Yukon,Physiotherapists,
+2018,Yukon,Physiotherapists,133.41
+2019,Yukon,Physiotherapists,128.47
+2015,Yukon,Psychologists,
+2016,Yukon,Psychologists,
+2017,Yukon,Psychologists,
+2018,Yukon,Psychologists,
+2019,Yukon,Psychologists,
+2015,Yukon,Regulated nurses,1374.37
+2016,Yukon,Regulated nurses,1380.13
+2017,Yukon,Regulated nurses,1478.75
+2018,Yukon,Regulated nurses,1682.48
+2019,Yukon,Regulated nurses,1786.24
+2015,Yukon,Licensed practical nurses,291.85
+2016,Yukon,Licensed practical nurses,295.74
+2017,Yukon,Licensed practical nurses,338.14
+2018,Yukon,Licensed practical nurses,481.77
+2019,Yukon,Licensed practical nurses,555.88
+2015,Yukon,Nurse practitioners,13.27
+2016,Yukon,Nurse practitioners,12.97
+2017,Yukon,Nurse practitioners,15.14
+2018,Yukon,Nurse practitioners,19.76
+2019,Yukon,Nurse practitioners,24.71
+2015,Yukon,Registered nurses,1055.98
+2016,Yukon,Registered nurses,1061.04
+2017,Yukon,Registered nurses,1125.47
+2018,Yukon,Registered nurses,1168.59
+2019,Yukon,Registered nurses,1185.89
+2015,Yukon,Registered psychiatric nurses,13.27
+2016,Yukon,Registered psychiatric nurses,10.38
+2017,Yukon,Registered psychiatric nurses,
+2018,Yukon,Registered psychiatric nurses,12.35
+2019,Yukon,Registered psychiatric nurses,19.76
+2015,Yukon,Respiratory therapists,10.61
+2016,Yukon,Respiratory therapists,10.38
+2017,Yukon,Respiratory therapists,12.62
+2018,Yukon,Respiratory therapists,12.35
+2019,Yukon,Respiratory therapists,12.35
+2015,Yukon,Social workers,
+2016,Yukon,Social workers,
+2017,Yukon,Social workers,
+2018,Yukon,Social workers,
+2019,Yukon,Social workers,
+2015,Yukon,Speech–language pathologists,45.1
+2016,Yukon,Speech–language pathologists,41.51
+2017,Yukon,Speech–language pathologists,40.38
+2018,Yukon,Speech–language pathologists,42
+2019,Yukon,Speech–language pathologists,56.82
+2015,Northwest Territories,Audiologists,4.52
+2016,Northwest Territories,Audiologists,6.72
+2017,Northwest Territories,Audiologists,6.68
+2018,Northwest Territories,Audiologists,6.74
+2019,Northwest Territories,Audiologists,6.74
+2015,Northwest Territories,Chiropractors,
+2016,Northwest Territories,Chiropractors,
+2017,Northwest Territories,Chiropractors,
+2018,Northwest Territories,Chiropractors,
+2019,Northwest Territories,Chiropractors,
+2015,Northwest Territories,Dental assistants,
+2016,Northwest Territories,Dental assistants,
+2017,Northwest Territories,Dental assistants,
+2018,Northwest Territories,Dental assistants,
+2019,Northwest Territories,Dental assistants,
+2015,Northwest Territories,Dental hygienists,59.46
+2016,Northwest Territories,Dental hygienists,57.58
+2017,Northwest Territories,Dental hygienists,82.34
+2018,Northwest Territories,Dental hygienists,78.58
+2019,Northwest Territories,Dental hygienists,62.86
+2015,Northwest Territories,Dentists,189.53
+2016,Northwest Territories,Dentists,180.09
+2017,Northwest Territories,Dentists,131.3
+2018,Northwest Territories,Dentists,134.71
+2019,Northwest Territories,Dentists,130.22
+2015,Northwest Territories,Dietitians,
+2016,Northwest Territories,Dietitians,
+2017,Northwest Territories,Dietitians,
+2018,Northwest Territories,Dietitians,31.43
+2019,Northwest Territories,Dietitians,29.19
+2015,Northwest Territories,Environmental public health professionals,14.87
+2016,Northwest Territories,Environmental public health professionals,11.03
+2017,Northwest Territories,Environmental public health professionals,22.25
+2018,Northwest Territories,Environmental public health professionals,20.21
+2019,Northwest Territories,Environmental public health professionals,20.21
+2015,Northwest Territories,Genetic counsellors,
+2016,Northwest Territories,Genetic counsellors,
+2017,Northwest Territories,Genetic counsellors,
+2018,Northwest Territories,Genetic counsellors,
+2019,Northwest Territories,Genetic counsellors,0
+2015,Northwest Territories,Health information management professionals,
+2016,Northwest Territories,Health information management professionals,18.38
+2017,Northwest Territories,Health information management professionals,37.83
+2018,Northwest Territories,Health information management professionals,
+2019,Northwest Territories,Health information management professionals,40.41
+2015,Northwest Territories,Medical laboratory technologists,65.56
+2016,Northwest Territories,Medical laboratory technologists,55.13
+2017,Northwest Territories,Medical laboratory technologists,62.31
+2018,Northwest Territories,Medical laboratory technologists,65.11
+2019,Northwest Territories,Medical laboratory technologists,71.84
+2015,Northwest Territories,Medical physicists,
+2016,Northwest Territories,Medical physicists,
+2017,Northwest Territories,Medical physicists,
+2018,Northwest Territories,Medical physicists,
+2019,Northwest Territories,Medical physicists,
+2015,Northwest Territories,Medical radiation technologists,24.87
+2016,Northwest Territories,Medical radiation technologists,23.28
+2017,Northwest Territories,Medical radiation technologists,22.25
+2018,Northwest Territories,Medical radiation technologists,
+2019,Northwest Territories,Medical radiation technologists,
+2015,Northwest Territories,Midwives,32.21
+2016,Northwest Territories,Midwives,34.3
+2017,Northwest Territories,Midwives,15.58
+2018,Northwest Territories,Midwives,15.72
+2019,Northwest Territories,Midwives,22.45
+2015,Northwest Territories,Occupational therapists,38.43
+2016,Northwest Territories,Occupational therapists,35.84
+2017,Northwest Territories,Occupational therapists,24.48
+2018,Northwest Territories,Occupational therapists,38.17
+2019,Northwest Territories,Occupational therapists,42.66
+2015,Northwest Territories,Opticians,
+2016,Northwest Territories,Opticians,
+2017,Northwest Territories,Opticians,
+2018,Northwest Territories,Opticians,
+2019,Northwest Territories,Opticians,
+2015,Northwest Territories,Optometrists,1.24
+2016,Northwest Territories,Optometrists,2.45
+2017,Northwest Territories,Optometrists,2.23
+2018,Northwest Territories,Optometrists,0
+2019,Northwest Territories,Optometrists,0
+2015,Northwest Territories,Paramedics,
+2016,Northwest Territories,Paramedics,
+2017,Northwest Territories,Paramedics,
+2018,Northwest Territories,Paramedics,
+2019,Northwest Territories,Paramedics,
+2015,Northwest Territories,Pharmacists,67.82
+2016,Northwest Territories,Pharmacists,76.15
+2017,Northwest Territories,Pharmacists,91.24
+2018,Northwest Territories,Pharmacists,94.3
+2019,Northwest Territories,Pharmacists,98.79
+2015,Northwest Territories,Pharmacy technicians,
+2016,Northwest Territories,Pharmacy technicians,
+2017,Northwest Territories,Pharmacy technicians,
+2018,Northwest Territories,Pharmacy technicians,
+2019,Northwest Territories,Pharmacy technicians,
+2015,Northwest Territories,Physician assistants,2.26
+2016,Northwest Territories,Physician assistants,0
+2017,Northwest Territories,Physician assistants,0
+2018,Northwest Territories,Physician assistants,0
+2019,Northwest Territories,Physician assistants,0
+2015,Northwest Territories,Physicians,83.64
+2016,Northwest Territories,Physicians,73.91
+2017,Northwest Territories,Physicians,77.89
+2018,Northwest Territories,Physicians,92.05
+2019,Northwest Territories,Physicians,98.79
+2015,Northwest Territories,Family medicine,67.82
+2016,Northwest Territories,Family medicine,55.99
+2017,Northwest Territories,Family medicine,60.09
+2018,Northwest Territories,Family medicine,78.58
+2019,Northwest Territories,Family medicine,83.07
+2015,Northwest Territories,Specialists,15.82
+2016,Northwest Territories,Specialists,17.92
+2017,Northwest Territories,Specialists,17.8
+2018,Northwest Territories,Specialists,13.47
+2019,Northwest Territories,Specialists,15.72
+2015,Northwest Territories,Physiotherapists,
+2016,Northwest Territories,Physiotherapists,
+2017,Northwest Territories,Physiotherapists,
+2018,Northwest Territories,Physiotherapists,
+2019,Northwest Territories,Physiotherapists,
+2015,Northwest Territories,Psychologists,105.3
+2016,Northwest Territories,Psychologists,101.69
+2017,Northwest Territories,Psychologists,158
+2018,Northwest Territories,Psychologists,145.93
+2019,Northwest Territories,Psychologists,141.44
+2015,Northwest Territories,Regulated nurses,
+2016,Northwest Territories,Regulated nurses,
+2017,Northwest Territories,Regulated nurses,
+2018,Northwest Territories,Regulated nurses,
+2019,Northwest Territories,Regulated nurses,
+2015,Northwest Territories,Licensed practical nurses,226.06
+2016,Northwest Territories,Licensed practical nurses,262.04
+2017,Northwest Territories,Licensed practical nurses,258.14
+2018,Northwest Territories,Licensed practical nurses,240.23
+2019,Northwest Territories,Licensed practical nurses,237.98
+2015,Northwest Territories,Nurse practitioners,55.74
+2016,Northwest Territories,Nurse practitioners,50.23
+2017,Northwest Territories,Nurse practitioners,67.89
+2018,Northwest Territories,Nurse practitioners,60.29
+2019,Northwest Territories,Nurse practitioners,55.46
+2015,Northwest Territories,Registered nurses,1295.76
+2016,Northwest Territories,Registered nurses,1249.63
+2017,Northwest Territories,Registered nurses,1209.87
+2018,Northwest Territories,Registered nurses,971.82
+2019,Northwest Territories,Registered nurses,882.6
+2015,Northwest Territories,Registered psychiatric nurses,
+2016,Northwest Territories,Registered psychiatric nurses,
+2017,Northwest Territories,Registered psychiatric nurses,
+2018,Northwest Territories,Registered psychiatric nurses,
+2019,Northwest Territories,Registered psychiatric nurses,
+2015,Northwest Territories,Respiratory therapists,8.67
+2016,Northwest Territories,Respiratory therapists,9.8
+2017,Northwest Territories,Respiratory therapists,13.35
+2018,Northwest Territories,Respiratory therapists,13.47
+2019,Northwest Territories,Respiratory therapists,15.72
+2015,Northwest Territories,Social workers,250.92
+2016,Northwest Territories,Social workers,264.28
+2017,Northwest Territories,Social workers,311.55
+2018,Northwest Territories,Social workers,282.89
+2019,Northwest Territories,Social workers,318.81
+2015,Northwest Territories,Speech–language pathologists,14.87
+2016,Northwest Territories,Speech–language pathologists,14.7
+2017,Northwest Territories,Speech–language pathologists,31.16
+2018,Northwest Territories,Speech–language pathologists,29.19
+2019,Northwest Territories,Speech–language pathologists,35.92
+2015,Nunavut,Audiologists,
+2016,Nunavut,Audiologists,
+2017,Nunavut,Audiologists,0
+2018,Nunavut,Audiologists,2.6
+2019,Nunavut,Audiologists,2.6
+2015,Nunavut,Chiropractors,
+2016,Nunavut,Chiropractors,
+2017,Nunavut,Chiropractors,
+2018,Nunavut,Chiropractors,
+2019,Nunavut,Chiropractors,
+2015,Nunavut,Dental assistants,
+2016,Nunavut,Dental assistants,
+2017,Nunavut,Dental assistants,
+2018,Nunavut,Dental assistants,
+2019,Nunavut,Dental assistants,
+2015,Nunavut,Dental hygienists,59.46
+2016,Nunavut,Dental hygienists,57.58
+2017,Nunavut,Dental hygienists,66.57
+2018,Nunavut,Dental hygienists,57.3
+2019,Nunavut,Dental hygienists,65.11
+2015,Nunavut,Dentists,189.53
+2016,Nunavut,Dentists,180.09
+2017,Nunavut,Dentists,244.99
+2018,Nunavut,Dentists,260.44
+2019,Nunavut,Dentists,250.03
+2015,Nunavut,Dietitians,
+2016,Nunavut,Dietitians,
+2017,Nunavut,Dietitians,
+2018,Nunavut,Dietitians,33.86
+2019,Nunavut,Dietitians,33.86
+2015,Nunavut,Environmental public health professionals,14.87
+2016,Nunavut,Environmental public health professionals,11.03
+2017,Nunavut,Environmental public health professionals,7.99
+2018,Nunavut,Environmental public health professionals,7.81
+2019,Nunavut,Environmental public health professionals,5.21
+2015,Nunavut,Genetic counsellors,
+2016,Nunavut,Genetic counsellors,
+2017,Nunavut,Genetic counsellors,
+2018,Nunavut,Genetic counsellors,
+2019,Nunavut,Genetic counsellors,0
+2015,Nunavut,Health information management professionals,
+2016,Nunavut,Health information management professionals,18.38
+2017,Nunavut,Health information management professionals,2.66
+2018,Nunavut,Health information management professionals,
+2019,Nunavut,Health information management professionals,5.21
+2015,Nunavut,Medical laboratory technologists,38.37
+2016,Nunavut,Medical laboratory technologists,55.13
+2017,Nunavut,Medical laboratory technologists,26.63
+2018,Nunavut,Medical laboratory technologists,20.84
+2019,Nunavut,Medical laboratory technologists,31.25
+2015,Nunavut,Medical physicists,
+2016,Nunavut,Medical physicists,
+2017,Nunavut,Medical physicists,
+2018,Nunavut,Medical physicists,
+2019,Nunavut,Medical physicists,
+2015,Nunavut,Medical radiation technologists,21.93
+2016,Nunavut,Medical radiation technologists,23.28
+2017,Nunavut,Medical radiation technologists,26.63
+2018,Nunavut,Medical radiation technologists,
+2019,Nunavut,Medical radiation technologists,20.84
+2015,Nunavut,Midwives,32.21
+2016,Nunavut,Midwives,34.3
+2017,Nunavut,Midwives,71.9
+2018,Nunavut,Midwives,104.18
+2019,Nunavut,Midwives,106.78
+2015,Nunavut,Occupational therapists,8.22
+2016,Nunavut,Occupational therapists,10.82
+2017,Nunavut,Occupational therapists,15.98
+2018,Nunavut,Occupational therapists,10.42
+2019,Nunavut,Occupational therapists,15.63
+2015,Nunavut,Opticians,
+2016,Nunavut,Opticians,
+2017,Nunavut,Opticians,
+2018,Nunavut,Opticians,
+2019,Nunavut,Opticians,
+2015,Nunavut,Optometrists,1.24
+2016,Nunavut,Optometrists,2.45
+2017,Nunavut,Optometrists,5.33
+2018,Nunavut,Optometrists,0
+2019,Nunavut,Optometrists,
+2015,Nunavut,Paramedics,
+2016,Nunavut,Paramedics,
+2017,Nunavut,Paramedics,
+2018,Nunavut,Paramedics,
+2019,Nunavut,Paramedics,
+2015,Nunavut,Pharmacists,27.41
+2016,Nunavut,Pharmacists,100.07
+2017,Nunavut,Pharmacists,82.55
+2018,Nunavut,Pharmacists,109.39
+2019,Nunavut,Pharmacists,114.6
+2015,Nunavut,Pharmacy technicians,
+2016,Nunavut,Pharmacy technicians,
+2017,Nunavut,Pharmacy technicians,
+2018,Nunavut,Pharmacy technicians,
+2019,Nunavut,Pharmacy technicians,
+2015,Nunavut,Physician assistants,
+2016,Nunavut,Physician assistants,
+2017,Nunavut,Physician assistants,0
+2018,Nunavut,Physician assistants,2.6
+2019,Nunavut,Physician assistants,2.6
+2015,Nunavut,Physicians,27.41
+2016,Nunavut,Physicians,21.64
+2017,Nunavut,Physicians,21.3
+2018,Nunavut,Physicians,44.28
+2019,Nunavut,Physicians,54.69
+2015,Nunavut,Family medicine,24.67
+2016,Nunavut,Family medicine,18.93
+2017,Nunavut,Family medicine,15.98
+2018,Nunavut,Family medicine,31.25
+2019,Nunavut,Family medicine,44.28
+2015,Nunavut,Specialists,2.74
+2016,Nunavut,Specialists,2.7
+2017,Nunavut,Specialists,5.33
+2018,Nunavut,Specialists,13.02
+2019,Nunavut,Specialists,10.42
+2015,Nunavut,Physiotherapists,
+2016,Nunavut,Physiotherapists,
+2017,Nunavut,Physiotherapists,
+2018,Nunavut,Physiotherapists,
+2019,Nunavut,Physiotherapists,
+2015,Nunavut,Psychologists,105.3
+2016,Nunavut,Psychologists,101.69
+2017,Nunavut,Psychologists,63.91
+2018,Nunavut,Psychologists,59.9
+2019,Nunavut,Psychologists,67.72
+2015,Nunavut,Regulated nurses,
+2016,Nunavut,Regulated nurses,
+2017,Nunavut,Regulated nurses,
+2018,Nunavut,Regulated nurses,
+2019,Nunavut,Regulated nurses,
+2015,Nunavut,Licensed practical nurses,271.32
+2016,Nunavut,Licensed practical nurses,262.34
+2017,Nunavut,Licensed practical nurses,314.23
+2018,Nunavut,Licensed practical nurses,343.79
+2019,Nunavut,Licensed practical nurses,380.25
+2015,Nunavut,Nurse practitioners,55.74
+2016,Nunavut,Nurse practitioners,50.23
+2017,Nunavut,Nurse practitioners,67.89
+2018,Nunavut,Nurse practitioners,60.29
+2019,Nunavut,Nurse practitioners,55.46
+2015,Nunavut,Registered nurses,1295.76
+2016,Nunavut,Registered nurses,1249.63
+2017,Nunavut,Registered nurses,1209.87
+2018,Nunavut,Registered nurses,971.82
+2019,Nunavut,Registered nurses,882.6
+2015,Nunavut,Registered psychiatric nurses,
+2016,Nunavut,Registered psychiatric nurses,
+2017,Nunavut,Registered psychiatric nurses,
+2018,Nunavut,Registered psychiatric nurses,
+2019,Nunavut,Registered psychiatric nurses,
+2015,Nunavut,Respiratory therapists,8.67
+2016,Nunavut,Respiratory therapists,9.8
+2017,Nunavut,Respiratory therapists,7.99
+2018,Nunavut,Respiratory therapists,7.81
+2019,Nunavut,Respiratory therapists,7.81
+2015,Nunavut,Social workers,
+2016,Nunavut,Social workers,
+2017,Nunavut,Social workers,
+2018,Nunavut,Social workers,
+2019,Nunavut,Social workers,
+2015,Nunavut,Speech–language pathologists,14.87
+2016,Nunavut,Speech–language pathologists,14.7
+2017,Nunavut,Speech–language pathologists,2.66
+2018,Nunavut,Speech–language pathologists,13
+2019,Nunavut,Speech–language pathologists,7.81

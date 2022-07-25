@@ -7,7 +7,7 @@ from sdg.inputs import InputFiles
 class InputMetaFiles(InputFiles):
     """Sources of SDG metadata that are local files."""
 
-    def __init__(self, path_pattern='', git=True, git_data_dir='data',
+    def __init__(self, path_pattern='', git=False, git_data_dir='data',
                  git_data_filemask='indicator_*.csv', metadata_mapping=None,
                  logging=None, column_map=None, code_map=None):
         """Constructor for InputMetaFiles.

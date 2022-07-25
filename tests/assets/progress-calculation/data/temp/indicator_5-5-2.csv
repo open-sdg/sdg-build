@@ -1,0 +1,386 @@
+Year,Geography,Occupation,Value
+2015,"","",35.1
+2016,"","",34.6
+2017,"","",34.4
+2018,"","",34.8
+2019,"","",35.2
+2020,"","",35.9
+2021,"","",35.6
+2015,Canada,Senior management occupations,31.5
+2015,Canada,Specialized middle management occupations,47.2
+2015,Canada,Middle management occupations in retail and wholesale trade and customer services,41.8
+2015,Canada,"Middle management occupations in trades, transportation, production and utilities",17
+2015,Newfoundland and Labrador,Management occupations,38.9
+2015,Newfoundland and Labrador,Senior management occupations,
+2015,Newfoundland and Labrador,Specialized middle management occupations,48.2
+2015,Newfoundland and Labrador,Middle management occupations in retail and wholesale trade and customer services,41
+2015,Newfoundland and Labrador,"Middle management occupations in trades, transportation, production and utilities",17.9
+2015,Prince Edward Island,Management occupations,35.4
+2015,Prince Edward Island,Senior management occupations,
+2015,Prince Edward Island,Specialized middle management occupations,50
+2015,Prince Edward Island,Middle management occupations in retail and wholesale trade and customer services,44
+2015,Prince Edward Island,"Middle management occupations in trades, transportation, production and utilities",13.6
+2015,Nova Scotia,Management occupations,37.9
+2015,Nova Scotia,Senior management occupations,
+2015,Nova Scotia,Specialized middle management occupations,47.1
+2015,Nova Scotia,Middle management occupations in retail and wholesale trade and customer services,44.6
+2015,Nova Scotia,"Middle management occupations in trades, transportation, production and utilities",14.3
+2015,New Brunswick,Management occupations,36.8
+2015,New Brunswick,Senior management occupations,
+2015,New Brunswick,Specialized middle management occupations,45.3
+2015,New Brunswick,Middle management occupations in retail and wholesale trade and customer services,42.9
+2015,New Brunswick,"Middle management occupations in trades, transportation, production and utilities",15.3
+2015,Quebec,Management occupations,33.7
+2015,Quebec,Senior management occupations,36
+2015,Quebec,Specialized middle management occupations,49.2
+2015,Quebec,Middle management occupations in retail and wholesale trade and customer services,35.9
+2015,Quebec,"Middle management occupations in trades, transportation, production and utilities",15.7
+2015,Ontario,Management occupations,36.9
+2015,Ontario,Senior management occupations,28.4
+2015,Ontario,Specialized middle management occupations,48.1
+2015,Ontario,Middle management occupations in retail and wholesale trade and customer services,43.2
+2015,Ontario,"Middle management occupations in trades, transportation, production and utilities",15.3
+2015,Manitoba,Management occupations,31.5
+2015,Manitoba,Senior management occupations,30
+2015,Manitoba,Specialized middle management occupations,47.9
+2015,Manitoba,Middle management occupations in retail and wholesale trade and customer services,39.6
+2015,Manitoba,"Middle management occupations in trades, transportation, production and utilities",17
+2015,Saskatchewan,Management occupations,30.5
+2015,Saskatchewan,Senior management occupations,
+2015,Saskatchewan,Specialized middle management occupations,50.4
+2015,Saskatchewan,Middle management occupations in retail and wholesale trade and customer services,45.1
+2015,Saskatchewan,"Middle management occupations in trades, transportation, production and utilities",19.6
+2015,Alberta,Management occupations,33.2
+2015,Alberta,Senior management occupations,37.5
+2015,Alberta,Specialized middle management occupations,41.8
+2015,Alberta,Middle management occupations in retail and wholesale trade and customer services,45.6
+2015,Alberta,"Middle management occupations in trades, transportation, production and utilities",19.1
+2015,British Columbia,Management occupations,35.9
+2015,British Columbia,Senior management occupations,28.6
+2015,British Columbia,Specialized middle management occupations,45.2
+2015,British Columbia,Middle management occupations in retail and wholesale trade and customer services,42.9
+2015,British Columbia,"Middle management occupations in trades, transportation, production and utilities",19.2
+2016,Canada,Senior management occupations,36.9
+2016,Canada,Specialized middle management occupations,46.8
+2016,Canada,Middle management occupations in retail and wholesale trade and customer services,40.3
+2016,Canada,"Middle management occupations in trades, transportation, production and utilities",16.7
+2016,Newfoundland and Labrador,Management occupations,37.9
+2016,Newfoundland and Labrador,Senior management occupations,
+2016,Newfoundland and Labrador,Specialized middle management occupations,44.2
+2016,Newfoundland and Labrador,Middle management occupations in retail and wholesale trade and customer services,40.4
+2016,Newfoundland and Labrador,"Middle management occupations in trades, transportation, production and utilities",23.3
+2016,Prince Edward Island,Management occupations,33.9
+2016,Prince Edward Island,Senior management occupations,
+2016,Prince Edward Island,Specialized middle management occupations,53.3
+2016,Prince Edward Island,Middle management occupations in retail and wholesale trade and customer services,47.4
+2016,Prince Edward Island,"Middle management occupations in trades, transportation, production and utilities",12.5
+2016,Nova Scotia,Management occupations,40.7
+2016,Nova Scotia,Senior management occupations,45.5
+2016,Nova Scotia,Specialized middle management occupations,53.9
+2016,Nova Scotia,Middle management occupations in retail and wholesale trade and customer services,45.1
+2016,Nova Scotia,"Middle management occupations in trades, transportation, production and utilities",15.5
+2016,New Brunswick,Management occupations,38.5
+2016,New Brunswick,Senior management occupations,
+2016,New Brunswick,Specialized middle management occupations,54.7
+2016,New Brunswick,Middle management occupations in retail and wholesale trade and customer services,41.1
+2016,New Brunswick,"Middle management occupations in trades, transportation, production and utilities",18.1
+2016,Quebec,Management occupations,35.5
+2016,Quebec,Senior management occupations,40.2
+2016,Quebec,Specialized middle management occupations,46.7
+2016,Quebec,Middle management occupations in retail and wholesale trade and customer services,41.6
+2016,Quebec,"Middle management occupations in trades, transportation, production and utilities",16.6
+2016,Ontario,Management occupations,35.1
+2016,Ontario,Senior management occupations,35.7
+2016,Ontario,Specialized middle management occupations,46
+2016,Ontario,Middle management occupations in retail and wholesale trade and customer services,38.7
+2016,Ontario,"Middle management occupations in trades, transportation, production and utilities",15.8
+2016,Manitoba,Management occupations,30
+2016,Manitoba,Senior management occupations,
+2016,Manitoba,Specialized middle management occupations,48.9
+2016,Manitoba,Middle management occupations in retail and wholesale trade and customer services,36.5
+2016,Manitoba,"Middle management occupations in trades, transportation, production and utilities",15.9
+2016,Saskatchewan,Management occupations,31
+2016,Saskatchewan,Senior management occupations,50
+2016,Saskatchewan,Specialized middle management occupations,53.5
+2016,Saskatchewan,Middle management occupations in retail and wholesale trade and customer services,43
+2016,Saskatchewan,"Middle management occupations in trades, transportation, production and utilities",19.6
+2016,Alberta,Management occupations,32.2
+2016,Alberta,Senior management occupations,38.6
+2016,Alberta,Specialized middle management occupations,43.9
+2016,Alberta,Middle management occupations in retail and wholesale trade and customer services,42.3
+2016,Alberta,"Middle management occupations in trades, transportation, production and utilities",16.3
+2016,British Columbia,Management occupations,34.8
+2016,British Columbia,Senior management occupations,32.8
+2016,British Columbia,Specialized middle management occupations,47.4
+2016,British Columbia,Middle management occupations in retail and wholesale trade and customer services,40
+2016,British Columbia,"Middle management occupations in trades, transportation, production and utilities",18.2
+2017,Canada,Senior management occupations,28.6
+2017,Canada,Specialized middle management occupations,47.4
+2017,Canada,Middle management occupations in retail and wholesale trade and customer services,38.5
+2017,Canada,"Middle management occupations in trades, transportation, production and utilities",17.6
+2017,Newfoundland and Labrador,Management occupations,39.3
+2017,Newfoundland and Labrador,Senior management occupations,
+2017,Newfoundland and Labrador,Specialized middle management occupations,47.9
+2017,Newfoundland and Labrador,Middle management occupations in retail and wholesale trade and customer services,48.4
+2017,Newfoundland and Labrador,"Middle management occupations in trades, transportation, production and utilities",17
+2017,Prince Edward Island,Management occupations,37.9
+2017,Prince Edward Island,Senior management occupations,
+2017,Prince Edward Island,Specialized middle management occupations,50
+2017,Prince Edward Island,Middle management occupations in retail and wholesale trade and customer services,50
+2017,Prince Edward Island,"Middle management occupations in trades, transportation, production and utilities",13
+2017,Nova Scotia,Management occupations,37.3
+2017,Nova Scotia,Senior management occupations,
+2017,Nova Scotia,Specialized middle management occupations,57.5
+2017,Nova Scotia,Middle management occupations in retail and wholesale trade and customer services,35.8
+2017,Nova Scotia,"Middle management occupations in trades, transportation, production and utilities",12.6
+2017,New Brunswick,Management occupations,35
+2017,New Brunswick,Senior management occupations,
+2017,New Brunswick,Specialized middle management occupations,46
+2017,New Brunswick,Middle management occupations in retail and wholesale trade and customer services,41.8
+2017,New Brunswick,"Middle management occupations in trades, transportation, production and utilities",12
+2017,Quebec,Management occupations,32.6
+2017,Quebec,Senior management occupations,36.4
+2017,Quebec,Specialized middle management occupations,41.4
+2017,Quebec,Middle management occupations in retail and wholesale trade and customer services,36.5
+2017,Quebec,"Middle management occupations in trades, transportation, production and utilities",18
+2017,Ontario,Management occupations,35.7
+2017,Ontario,Senior management occupations,25.2
+2017,Ontario,Specialized middle management occupations,47.9
+2017,Ontario,Middle management occupations in retail and wholesale trade and customer services,38
+2017,Ontario,"Middle management occupations in trades, transportation, production and utilities",17.6
+2017,Manitoba,Management occupations,29.6
+2017,Manitoba,Senior management occupations,
+2017,Manitoba,Specialized middle management occupations,43.2
+2017,Manitoba,Middle management occupations in retail and wholesale trade and customer services,39.6
+2017,Manitoba,"Middle management occupations in trades, transportation, production and utilities",17
+2017,Saskatchewan,Management occupations,31.5
+2017,Saskatchewan,Senior management occupations,55
+2017,Saskatchewan,Specialized middle management occupations,56.1
+2017,Saskatchewan,Middle management occupations in retail and wholesale trade and customer services,39.2
+2017,Saskatchewan,"Middle management occupations in trades, transportation, production and utilities",19.5
+2017,Alberta,Management occupations,32.1
+2017,Alberta,Senior management occupations,
+2017,Alberta,Specialized middle management occupations,47
+2017,Alberta,Middle management occupations in retail and wholesale trade and customer services,37.6
+2017,Alberta,"Middle management occupations in trades, transportation, production and utilities",18.2
+2017,British Columbia,Management occupations,36.8
+2017,British Columbia,Senior management occupations,
+2017,British Columbia,Specialized middle management occupations,55.4
+2017,British Columbia,Middle management occupations in retail and wholesale trade and customer services,41.8
+2017,British Columbia,"Middle management occupations in trades, transportation, production and utilities",17
+2018,Canada,Senior management occupations,32
+2018,Canada,Specialized middle management occupations,48.3
+2018,Canada,Middle management occupations in retail and wholesale trade and customer services,38.3
+2018,Canada,"Middle management occupations in trades, transportation, production and utilities",18
+2018,Newfoundland and Labrador,Management occupations,45.1
+2018,Newfoundland and Labrador,Senior management occupations,
+2018,Newfoundland and Labrador,Specialized middle management occupations,55.6
+2018,Newfoundland and Labrador,Middle management occupations in retail and wholesale trade and customer services,53.4
+2018,Newfoundland and Labrador,"Middle management occupations in trades, transportation, production and utilities",14.7
+2018,Prince Edward Island,Management occupations,35.4
+2018,Prince Edward Island,Senior management occupations,
+2018,Prince Edward Island,Specialized middle management occupations,53.3
+2018,Prince Edward Island,Middle management occupations in retail and wholesale trade and customer services,45.5
+2018,Prince Edward Island,"Middle management occupations in trades, transportation, production and utilities",14.3
+2018,Nova Scotia,Management occupations,39.9
+2018,Nova Scotia,Senior management occupations,
+2018,Nova Scotia,Specialized middle management occupations,55.9
+2018,Nova Scotia,Middle management occupations in retail and wholesale trade and customer services,46.1
+2018,Nova Scotia,"Middle management occupations in trades, transportation, production and utilities",16.5
+2018,New Brunswick,Management occupations,35.4
+2018,New Brunswick,Senior management occupations,
+2018,New Brunswick,Specialized middle management occupations,49.3
+2018,New Brunswick,Middle management occupations in retail and wholesale trade and customer services,38
+2018,New Brunswick,"Middle management occupations in trades, transportation, production and utilities",14.9
+2018,Quebec,Management occupations,36.1
+2018,Quebec,Senior management occupations,36.8
+2018,Quebec,Specialized middle management occupations,52
+2018,Quebec,Middle management occupations in retail and wholesale trade and customer services,36
+2018,Quebec,"Middle management occupations in trades, transportation, production and utilities",19.5
+2018,Ontario,Management occupations,35.5
+2018,Ontario,Senior management occupations,31.5
+2018,Ontario,Specialized middle management occupations,47.6
+2018,Ontario,Middle management occupations in retail and wholesale trade and customer services,37.4
+2018,Ontario,"Middle management occupations in trades, transportation, production and utilities",16.2
+2018,Manitoba,Management occupations,31.6
+2018,Manitoba,Senior management occupations,
+2018,Manitoba,Specialized middle management occupations,50.7
+2018,Manitoba,Middle management occupations in retail and wholesale trade and customer services,41.3
+2018,Manitoba,"Middle management occupations in trades, transportation, production and utilities",16
+2018,Saskatchewan,Management occupations,31.3
+2018,Saskatchewan,Senior management occupations,
+2018,Saskatchewan,Specialized middle management occupations,56.3
+2018,Saskatchewan,Middle management occupations in retail and wholesale trade and customer services,41.3
+2018,Saskatchewan,"Middle management occupations in trades, transportation, production and utilities",19.5
+2018,Alberta,Management occupations,32.1
+2018,Alberta,Senior management occupations,40.9
+2018,Alberta,Specialized middle management occupations,40.8
+2018,Alberta,Middle management occupations in retail and wholesale trade and customer services,40.7
+2018,Alberta,"Middle management occupations in trades, transportation, production and utilities",20.5
+2018,British Columbia,Management occupations,33.8
+2018,British Columbia,Senior management occupations,
+2018,British Columbia,Specialized middle management occupations,46.9
+2018,British Columbia,Middle management occupations in retail and wholesale trade and customer services,38.7
+2018,British Columbia,"Middle management occupations in trades, transportation, production and utilities",17.7
+2019,Canada,Senior management occupations,31.6
+2019,Canada,Specialized middle management occupations,51.3
+2019,Canada,Middle management occupations in retail and wholesale trade and customer services,39.2
+2019,Canada,"Middle management occupations in trades, transportation, production and utilities",16
+2019,Newfoundland and Labrador,Management occupations,36
+2019,Newfoundland and Labrador,Senior management occupations,
+2019,Newfoundland and Labrador,Specialized middle management occupations,50
+2019,Newfoundland and Labrador,Middle management occupations in retail and wholesale trade and customer services,41.2
+2019,Newfoundland and Labrador,"Middle management occupations in trades, transportation, production and utilities",
+2019,Prince Edward Island,Management occupations,35
+2019,Prince Edward Island,Senior management occupations,
+2019,Prince Edward Island,Specialized middle management occupations,46.2
+2019,Prince Edward Island,Middle management occupations in retail and wholesale trade and customer services,50
+2019,Prince Edward Island,"Middle management occupations in trades, transportation, production and utilities",23.1
+2019,Nova Scotia,Management occupations,39.2
+2019,Nova Scotia,Senior management occupations,
+2019,Nova Scotia,Specialized middle management occupations,56.1
+2019,Nova Scotia,Middle management occupations in retail and wholesale trade and customer services,42.5
+2019,Nova Scotia,"Middle management occupations in trades, transportation, production and utilities",16.5
+2019,New Brunswick,Management occupations,38
+2019,New Brunswick,Senior management occupations,
+2019,New Brunswick,Specialized middle management occupations,53.2
+2019,New Brunswick,Middle management occupations in retail and wholesale trade and customer services,41.7
+2019,New Brunswick,"Middle management occupations in trades, transportation, production and utilities",16.9
+2019,Quebec,Management occupations,35.8
+2019,Quebec,Senior management occupations,45.4
+2019,Quebec,Specialized middle management occupations,49.3
+2019,Quebec,Middle management occupations in retail and wholesale trade and customer services,38.6
+2019,Quebec,"Middle management occupations in trades, transportation, production and utilities",16.8
+2019,Ontario,Management occupations,36.2
+2019,Ontario,Senior management occupations,28.8
+2019,Ontario,Specialized middle management occupations,52.3
+2019,Ontario,Middle management occupations in retail and wholesale trade and customer services,38.9
+2019,Ontario,"Middle management occupations in trades, transportation, production and utilities",14.5
+2019,Manitoba,Management occupations,30.4
+2019,Manitoba,Senior management occupations,
+2019,Manitoba,Specialized middle management occupations,47.3
+2019,Manitoba,Middle management occupations in retail and wholesale trade and customer services,43.6
+2019,Manitoba,"Middle management occupations in trades, transportation, production and utilities",14.7
+2019,Saskatchewan,Management occupations,29.4
+2019,Saskatchewan,Senior management occupations,50
+2019,Saskatchewan,Specialized middle management occupations,51.1
+2019,Saskatchewan,Middle management occupations in retail and wholesale trade and customer services,36.8
+2019,Saskatchewan,"Middle management occupations in trades, transportation, production and utilities",18.7
+2019,Alberta,Management occupations,32.4
+2019,Alberta,Senior management occupations,28
+2019,Alberta,Specialized middle management occupations,52.7
+2019,Alberta,Middle management occupations in retail and wholesale trade and customer services,37.6
+2019,Alberta,"Middle management occupations in trades, transportation, production and utilities",16.1
+2019,British Columbia,Management occupations,35.6
+2019,British Columbia,Senior management occupations,
+2019,British Columbia,Specialized middle management occupations,49.8
+2019,British Columbia,Middle management occupations in retail and wholesale trade and customer services,40.3
+2019,British Columbia,"Middle management occupations in trades, transportation, production and utilities",17.9
+2020,Canada,Senior management occupations,28.6
+2020,Canada,Specialized middle management occupations,49.3
+2020,Canada,Middle management occupations in retail and wholesale trade and customer services,39.6
+2020,Canada,"Middle management occupations in trades, transportation, production and utilities",17.6
+2020,Newfoundland and Labrador,Management occupations,38.5
+2020,Newfoundland and Labrador,Senior management occupations,
+2020,Newfoundland and Labrador,Specialized middle management occupations,54.5
+2020,Newfoundland and Labrador,Middle management occupations in retail and wholesale trade and customer services,43.1
+2020,Newfoundland and Labrador,"Middle management occupations in trades, transportation, production and utilities",
+2020,Prince Edward Island,Management occupations,37.7
+2020,Prince Edward Island,Senior management occupations,
+2020,Prince Edward Island,Specialized middle management occupations,62.5
+2020,Prince Edward Island,Middle management occupations in retail and wholesale trade and customer services,54.5
+2020,Prince Edward Island,"Middle management occupations in trades, transportation, production and utilities",16.7
+2020,Nova Scotia,Management occupations,40.3
+2020,Nova Scotia,Senior management occupations,42.9
+2020,Nova Scotia,Specialized middle management occupations,54
+2020,Nova Scotia,Middle management occupations in retail and wholesale trade and customer services,46.8
+2020,Nova Scotia,"Middle management occupations in trades, transportation, production and utilities",17.6
+2020,New Brunswick,Management occupations,34.1
+2020,New Brunswick,Senior management occupations,
+2020,New Brunswick,Specialized middle management occupations,51.8
+2020,New Brunswick,Middle management occupations in retail and wholesale trade and customer services,36.4
+2020,New Brunswick,"Middle management occupations in trades, transportation, production and utilities",10.5
+2020,Quebec,Management occupations,36.2
+2020,Quebec,Senior management occupations,42.7
+2020,Quebec,Specialized middle management occupations,51.5
+2020,Quebec,Middle management occupations in retail and wholesale trade and customer services,35.1
+2020,Quebec,"Middle management occupations in trades, transportation, production and utilities",17.4
+2020,Ontario,Management occupations,36.1
+2020,Ontario,Senior management occupations,22.4
+2020,Ontario,Specialized middle management occupations,47.4
+2020,Ontario,Middle management occupations in retail and wholesale trade and customer services,40.4
+2020,Ontario,"Middle management occupations in trades, transportation, production and utilities",16.5
+2020,Manitoba,Management occupations,30.6
+2020,Manitoba,Senior management occupations,46.7
+2020,Manitoba,Specialized middle management occupations,47.3
+2020,Manitoba,Middle management occupations in retail and wholesale trade and customer services,40.2
+2020,Manitoba,"Middle management occupations in trades, transportation, production and utilities",16.4
+2020,Saskatchewan,Management occupations,32.7
+2020,Saskatchewan,Senior management occupations,50
+2020,Saskatchewan,Specialized middle management occupations,54.9
+2020,Saskatchewan,Middle management occupations in retail and wholesale trade and customer services,41
+2020,Saskatchewan,"Middle management occupations in trades, transportation, production and utilities",19.5
+2020,Alberta,Management occupations,33.2
+2020,Alberta,Senior management occupations,
+2020,Alberta,Specialized middle management occupations,49.1
+2020,Alberta,Middle management occupations in retail and wholesale trade and customer services,36.4
+2020,Alberta,"Middle management occupations in trades, transportation, production and utilities",20.2
+2020,British Columbia,Management occupations,38.6
+2020,British Columbia,Senior management occupations,32.2
+2020,British Columbia,Specialized middle management occupations,50.4
+2020,British Columbia,Middle management occupations in retail and wholesale trade and customer services,43.4
+2020,British Columbia,"Middle management occupations in trades, transportation, production and utilities",18.7
+2021,Canada,Senior management occupations,30.9
+2021,Canada,Specialized middle management occupations,49.1
+2021,Canada,Middle management occupations in retail and wholesale trade and customer services,40
+2021,Canada,"Middle management occupations in trades, transportation, production and utilities",17
+2021,Newfoundland and Labrador,Management occupations,36.2
+2021,Newfoundland and Labrador,Senior management occupations,
+2021,Newfoundland and Labrador,Specialized middle management occupations,45.5
+2021,Newfoundland and Labrador,Middle management occupations in retail and wholesale trade and customer services,37.3
+2021,Newfoundland and Labrador,"Middle management occupations in trades, transportation, production and utilities",
+2021,Prince Edward Island,Management occupations,35.3
+2021,Prince Edward Island,Senior management occupations,
+2021,Prince Edward Island,Specialized middle management occupations,50
+2021,Prince Edward Island,Middle management occupations in retail and wholesale trade and customer services,45.8
+2021,Prince Edward Island,"Middle management occupations in trades, transportation, production and utilities",16
+2021,Nova Scotia,Management occupations,45.7
+2021,Nova Scotia,Senior management occupations,
+2021,Nova Scotia,Specialized middle management occupations,55.9
+2021,Nova Scotia,Middle management occupations in retail and wholesale trade and customer services,52.8
+2021,Nova Scotia,"Middle management occupations in trades, transportation, production and utilities",22
+2021,New Brunswick,Management occupations,35.2
+2021,New Brunswick,Senior management occupations,
+2021,New Brunswick,Specialized middle management occupations,52.1
+2021,New Brunswick,Middle management occupations in retail and wholesale trade and customer services,36.5
+2021,New Brunswick,"Middle management occupations in trades, transportation, production and utilities",11
+2021,Quebec,Management occupations,35.9
+2021,Quebec,Senior management occupations,34.7
+2021,Quebec,Specialized middle management occupations,51.6
+2021,Quebec,Middle management occupations in retail and wholesale trade and customer services,36.1
+2021,Quebec,"Middle management occupations in trades, transportation, production and utilities",17.4
+2021,Ontario,Management occupations,36.5
+2021,Ontario,Senior management occupations,29
+2021,Ontario,Specialized middle management occupations,48.6
+2021,Ontario,Middle management occupations in retail and wholesale trade and customer services,39.5
+2021,Ontario,"Middle management occupations in trades, transportation, production and utilities",17.8
+2021,Manitoba,Management occupations,32.9
+2021,Manitoba,Senior management occupations,27.8
+2021,Manitoba,Specialized middle management occupations,50.6
+2021,Manitoba,Middle management occupations in retail and wholesale trade and customer services,40
+2021,Manitoba,"Middle management occupations in trades, transportation, production and utilities",18.8
+2021,Saskatchewan,Management occupations,29.9
+2021,Saskatchewan,Senior management occupations,
+2021,Saskatchewan,Specialized middle management occupations,49.6
+2021,Saskatchewan,Middle management occupations in retail and wholesale trade and customer services,38.1
+2021,Saskatchewan,"Middle management occupations in trades, transportation, production and utilities",17.6
+2021,Alberta,Management occupations,34.4
+2021,Alberta,Senior management occupations,39.3
+2021,Alberta,Specialized middle management occupations,50.3
+2021,Alberta,Middle management occupations in retail and wholesale trade and customer services,41.7
+2021,Alberta,"Middle management occupations in trades, transportation, production and utilities",15.3
+2021,British Columbia,Management occupations,34.2
+2021,British Columbia,Senior management occupations,22.9
+2021,British Columbia,Specialized middle management occupations,43.2
+2021,British Columbia,Middle management occupations in retail and wholesale trade and customer services,44
+2021,British Columbia,"Middle management occupations in trades, transportation, production and utilities",15.3

@@ -1,0 +1,45 @@
+Year,Antigen,Value
+2013,Diphtheria 4 doses,76.6
+2015,Diphtheria 4 doses,76.9
+2017,Diphtheria 4 doses,75.8
+2019,Diphtheria 4 doses,77.5
+2013,Pertussis 4 doses,76.4
+2015,Pertussis 4 doses,77
+2017,Pertussis 4 doses,75.8
+2019,Pertussis 4 doses,77.5
+2013,Tetanus 4 doses,76.4
+2015,Tetanus 4 doses,76.7
+2017,Tetanus 4 doses,75.8
+2019,Tetanus 4 doses,77.5
+2013,Polio 3 doses,90.9
+2015,Polio 3 doses,91.2
+2017,Polio 3 doses,90.7
+2019,Polio 3 doses,91.9
+2013,Hib 4 doses,71.9
+2015,Hib 4 doses,71.9
+2017,Hib 4 doses,73.4
+2019,Hib 4 doses,74.4
+2013,Measles 1 dose,89.7
+2015,Measles 1 dose,89.2
+2017,Measles 1 dose,90.2
+2019,Measles 1 dose,90.2
+2013,Mumps 1 dose,89.4
+2015,Mumps 1 dose,88.9
+2017,Mumps 1 dose,89.9
+2019,Mumps 1 dose,89.2
+2013,Rubella 1 dose,89.4
+2015,Rubella 1 dose,88.9
+2017,Rubella 1 dose,90
+2019,Rubella 1 dose,89.4
+2013,Meningococcal C 1 dose,88.7
+2015,Meningococcal C 1 dose,87.8
+2017,Meningococcal C 1 dose,87.6
+2019,Meningococcal C 1 dose,91.1
+2013,Pneumococcal 3 doses,79.2
+2015,Pneumococcal 3 doses,80.3
+2017,Pneumococcal 3 doses,79.1
+2019,Pneumococcal 3 doses,84.4
+2013,Varicella 1 dose,NA
+2015,Varicella 1 dose,NA
+2017,Varicella 1 dose,82.9
+2019,Varicella 1 dose,82.7

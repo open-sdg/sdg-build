@@ -1,0 +1,207 @@
+Year,Geography,Government,Elected officials,Value
+2015,Canada,National,Members of Parliament,25.3
+2016,Canada,National,Members of Parliament,26.1
+2017,Canada,National,Members of Parliament,27.2
+2018,Canada,National,Members of Parliament,27
+2019,Canada,National,Members of Parliament,27.2
+2020,Canada,National,Members of Parliament,29
+2021,Canada,National,Members of Parliament,29.4
+2015,Canada,National,Members of Cabinet,30.8
+2016,Canada,National,Members of Cabinet,50
+2017,Canada,National,Members of Cabinet,50
+2018,Canada,National,Members of Cabinet,50
+2019,Canada,National,Members of Cabinet,48.6
+2020,Canada,National,Members of Cabinet,48.6
+2021,Canada,National,Members of Cabinet,48.6
+2015,Newfoundland and Labrador,National,Members of Parliament,28.6
+2016,Newfoundland and Labrador,National,Members of Parliament,42.9
+2017,Newfoundland and Labrador,National,Members of Parliament,42.9
+2018,Newfoundland and Labrador,National,Members of Parliament,28.6
+2019,Newfoundland and Labrador,National,Members of Parliament,28.6
+2020,Newfoundland and Labrador,National,Members of Parliament,28.6
+2021,Newfoundland and Labrador,National,Members of Parliament,28.6
+2015,Newfoundland and Labrador,National,Members of Cabinet,0
+2016,Newfoundland and Labrador,National,Members of Cabinet,100
+2017,Newfoundland and Labrador,National,Members of Cabinet,100
+2018,Newfoundland and Labrador,National,Members of Cabinet,0
+2019,Newfoundland and Labrador,National,Members of Cabinet,0
+2020,Newfoundland and Labrador,National,Members of Cabinet,0
+2021,Newfoundland and Labrador,National,Members of Cabinet,0
+2015,Prince Edward Island,National,Members of Parliament,25
+2016,Prince Edward Island,National,Members of Parliament,0
+2017,Prince Edward Island,National,Members of Parliament,0
+2018,Prince Edward Island,National,Members of Parliament,0
+2019,Prince Edward Island,National,Members of Parliament,0
+2020,Prince Edward Island,National,Members of Parliament,0
+2021,Prince Edward Island,National,Members of Parliament,0
+2015,Prince Edward Island,National,Members of Cabinet,100
+2016,Prince Edward Island,National,Members of Cabinet,0
+2017,Prince Edward Island,National,Members of Cabinet,0
+2018,Prince Edward Island,National,Members of Cabinet,0
+2019,Prince Edward Island,National,Members of Cabinet,0
+2020,Prince Edward Island,National,Members of Cabinet,0
+2021,Prince Edward Island,National,Members of Cabinet,0
+2015,Nova Scotia,National,Members of Parliament,9.1
+2016,Nova Scotia,National,Members of Parliament,9.1
+2017,Nova Scotia,National,Members of Parliament,9.1
+2018,Nova Scotia,National,Members of Parliament,9.1
+2019,Nova Scotia,National,Members of Parliament,10
+2020,Nova Scotia,National,Members of Parliament,18.2
+2021,Nova Scotia,National,Members of Parliament,18.2
+2015,Nova Scotia,National,Members of Cabinet,0
+2016,Nova Scotia,National,Members of Cabinet,0
+2017,Nova Scotia,National,Members of Cabinet,0
+2018,Nova Scotia,National,Members of Cabinet,0
+2019,Nova Scotia,National,Members of Cabinet,100
+2020,Nova Scotia,National,Members of Cabinet,100
+2021,Nova Scotia,National,Members of Cabinet,100
+2015,New Brunswick,National,Members of Parliament,10
+2016,New Brunswick,National,Members of Parliament,30
+2017,New Brunswick,National,Members of Parliament,30
+2018,New Brunswick,National,Members of Parliament,30
+2019,New Brunswick,National,Members of Parliament,30
+2020,New Brunswick,National,Members of Parliament,20
+2021,New Brunswick,National,Members of Parliament,20
+2015,New Brunswick,National,Members of Cabinet,0
+2016,New Brunswick,National,Members of Cabinet,0
+2017,New Brunswick,National,Members of Cabinet,0
+2018,New Brunswick,National,Members of Cabinet,50
+2019,New Brunswick,National,Members of Cabinet,50
+2020,New Brunswick,National,Members of Cabinet,0
+2021,New Brunswick,National,Members of Cabinet,0
+2015,Quebec,National,Members of Parliament,37.3
+2016,Quebec,National,Members of Parliament,24.4
+2017,Quebec,National,Members of Parliament,25.6
+2018,Quebec,National,Members of Parliament,25.6
+2019,Quebec,National,Members of Parliament,27.3
+2020,Quebec,National,Members of Parliament,33.3
+2021,Quebec,National,Members of Parliament,33.3
+2015,Quebec,National,Members of Cabinet,0
+2016,Quebec,National,Members of Cabinet,42.9
+2017,Quebec,National,Members of Cabinet,42.9
+2018,Quebec,National,Members of Cabinet,42.9
+2019,Quebec,National,Members of Cabinet,33.3
+2020,Quebec,National,Members of Cabinet,27.3
+2021,Quebec,National,Members of Cabinet,27.3
+2015,Ontario,National,Members of Parliament,19.6
+2016,Ontario,National,Members of Parliament,31.4
+2017,Ontario,National,Members of Parliament,33.1
+2018,Ontario,National,Members of Parliament,34.2
+2019,Ontario,National,Members of Parliament,33.9
+2020,Ontario,National,Members of Parliament,31.4
+2021,Ontario,National,Members of Parliament,32.5
+2015,Ontario,National,Members of Cabinet,20
+2016,Ontario,National,Members of Cabinet,72.7
+2017,Ontario,National,Members of Cabinet,75
+2018,Ontario,National,Members of Cabinet,75
+2019,Ontario,National,Members of Cabinet,71.4
+2020,Ontario,National,Members of Cabinet,70.6
+2021,Ontario,National,Members of Cabinet,75
+2015,Manitoba,National,Members of Parliament,35.7
+2016,Manitoba,National,Members of Parliament,21.4
+2017,Manitoba,National,Members of Parliament,21.4
+2018,Manitoba,National,Members of Parliament,21.4
+2019,Manitoba,National,Members of Parliament,21.4
+2020,Manitoba,National,Members of Parliament,28.6
+2021,Manitoba,National,Members of Parliament,28.6
+2015,Manitoba,National,Members of Cabinet,100
+2016,Manitoba,National,Members of Cabinet,50
+2017,Manitoba,National,Members of Cabinet,0
+2018,Manitoba,National,Members of Cabinet,0
+2019,Manitoba,National,Members of Cabinet,0
+2020,Manitoba,National,Members of Cabinet,0
+2021,Manitoba,National,Members of Cabinet,0
+2015,Saskatchewan,National,Members of Parliament,14.3
+2016,Saskatchewan,National,Members of Parliament,28.6
+2017,Saskatchewan,National,Members of Parliament,28.6
+2018,Saskatchewan,National,Members of Parliament,35.7
+2019,Saskatchewan,National,Members of Parliament,35.7
+2020,Saskatchewan,National,Members of Parliament,21.4
+2021,Saskatchewan,National,Members of Parliament,21.4
+2015,Saskatchewan,National,Members of Cabinet,50
+2016,Saskatchewan,National,Members of Cabinet,0
+2017,Saskatchewan,National,Members of Cabinet,0
+2018,Saskatchewan,National,Members of Cabinet,0
+2019,Saskatchewan,National,Members of Cabinet,0
+2020,Saskatchewan,National,Members of Cabinet,0
+2021,Saskatchewan,National,Members of Cabinet,0
+2015,Alberta,National,Members of Parliament,17.9
+2016,Alberta,National,Members of Parliament,15.2
+2017,Alberta,National,Members of Parliament,17.6
+2018,Alberta,National,Members of Parliament,14.7
+2019,Alberta,National,Members of Parliament,14.7
+2020,Alberta,National,Members of Parliament,17.6
+2021,Alberta,National,Members of Parliament,17.6
+2015,Alberta,National,Members of Cabinet,33.3
+2016,Alberta,National,Members of Cabinet,0
+2017,Alberta,National,Members of Cabinet,0
+2018,Alberta,National,Members of Cabinet,0
+2019,Alberta,National,Members of Cabinet,0
+2020,Alberta,National,Members of Cabinet,0
+2021,Alberta,National,Members of Cabinet,0
+2015,British Columbia,National,Members of Parliament,30.6
+2016,British Columbia,National,Members of Parliament,28.6
+2017,British Columbia,National,Members of Parliament,28.6
+2018,British Columbia,National,Members of Parliament,26.2
+2019,British Columbia,National,Members of Parliament,24.4
+2020,British Columbia,National,Members of Parliament,33.3
+2021,British Columbia,National,Members of Parliament,33.3
+2015,British Columbia,National,Members of Cabinet,40
+2016,British Columbia,National,Members of Cabinet,66.7
+2017,British Columbia,National,Members of Cabinet,66.7
+2018,British Columbia,National,Members of Cabinet,66.7
+2019,British Columbia,National,Members of Cabinet,50
+2020,British Columbia,National,Members of Cabinet,50
+2021,British Columbia,National,Members of Cabinet,50
+2015,Yukon,National,Members of Parliament,0
+2016,Yukon,National,Members of Parliament,0
+2017,Yukon,National,Members of Parliament,0
+2018,Yukon,National,Members of Parliament,0
+2019,Yukon,National,Members of Parliament,0
+2020,Yukon,National,Members of Parliament,0
+2021,Yukon,National,Members of Parliament,0
+2015,Yukon,National,Members of Cabinet,0
+2016,Yukon,National,Members of Cabinet,0
+2017,Yukon,National,Members of Cabinet,0
+2018,Yukon,National,Members of Cabinet,0
+2019,Yukon,National,Members of Cabinet,0
+2020,Yukon,National,Members of Cabinet,0
+2021,Yukon,National,Members of Cabinet,0
+2015,Northwest Territories,National,Members of Parliament,0
+2016,Northwest Territories,National,Members of Parliament,0
+2017,Northwest Territories,National,Members of Parliament,0
+2018,Northwest Territories,National,Members of Parliament,0
+2019,Northwest Territories,National,Members of Parliament,0
+2020,Northwest Territories,National,Members of Parliament,0
+2021,Northwest Territories,National,Members of Parliament,0
+2015,Northwest Territories,National,Members of Cabinet,0
+2016,Northwest Territories,National,Members of Cabinet,0
+2017,Northwest Territories,National,Members of Cabinet,0
+2018,Northwest Territories,National,Members of Cabinet,0
+2019,Northwest Territories,National,Members of Cabinet,0
+2020,Northwest Territories,National,Members of Cabinet,0
+2021,Northwest Territories,National,Members of Cabinet,0
+2015,Nunavut,National,Members of Parliament,100
+2016,Nunavut,National,Members of Parliament,0
+2017,Nunavut,National,Members of Parliament,0
+2018,Nunavut,National,Members of Parliament,0
+2019,Nunavut,National,Members of Parliament,0
+2020,Nunavut,National,Members of Parliament,100
+2021,Nunavut,National,Members of Parliament,100
+2015,Nunavut,National,Members of Cabinet,100
+2016,Nunavut,National,Members of Cabinet,0
+2017,Nunavut,National,Members of Cabinet,0
+2018,Nunavut,National,Members of Cabinet,0
+2019,Nunavut,National,Members of Cabinet,0
+2020,Nunavut,National,Members of Cabinet,0
+2021,Nunavut,National,Members of Cabinet,0
+2015,Canada,Local,Chiefs in First Nation communities,19.5
+2015,Canada,Local,First Nations council members,30.5
+2016,Canada,Local,Chiefs in First Nation communities,19.7
+2016,Canada,Local,First Nations council members,30.7
+2017,Canada,Local,Chiefs in First Nation communities,18.8
+2017,Canada,Local,First Nations council members,28.6
+2018,Canada,Local,Chiefs in First Nation communities,20.4
+2018,Canada,Local,First Nations council members,28.2
+2019,Canada,Local,Chiefs in First Nation communities,18.5
+2019,Canada,Local,First Nations council members,27.4

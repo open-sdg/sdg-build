@@ -7,8 +7,6 @@ import sdg
 import os
 
 
-
-
 def measure_indicator_progress(indicator):
     """Assigns year values and determines methodology to be run.
 
@@ -25,12 +23,17 @@ def measure_indicator_progress(indicator):
     # check if progress calculation is turned on and if inputs have been configured
     # return None if auto progress calculation is not turned on
     print('checking if progress calc is turned on...')
-    if config['auto_progress_calculation']:
-        print('progress calc is turned on. continuing...')
-        if 'progress_calculation_options' in config.keys():
-            print('taking user configured inputs')
-            config = config['progress_calculation_options'][0]
-            print(config)
+    if 'auto_progress_calculation' in config.keys():
+        print('meta field required exists')
+        if config['auto_progress_calculation']:
+            print('progress calc is turned on. continuing...')
+            if 'progress_calculation_options' in config.keys():
+                print('taking user configured inputs')
+                config = config['progress_calculation_options'][0]
+                print(config)
+        else:
+            print('progress calc is not turned on. exit...')
+            return(None)
     else:
         print('progress calc is not turned on. exit...')
         return(None)
@@ -42,6 +45,9 @@ def measure_indicator_progress(indicator):
     data = data_progress_measure(data)
     print(data)
 
+    if data is None:
+        return(None)
+
     years = data["Year"]                           # get years from data
     print(years)
     current_year = {'current_year': years.max()}   # set current year to be MAX(Year)
@@ -49,14 +55,20 @@ def measure_indicator_progress(indicator):
     config.update(current_year)
     print(config)
 
+
+
     if config['base_year'] not in years.values:          # check if assigned base year is in data
         print('base year is not in year values')
+        if config['base_year'] > years.max():
+            print('base year is ahead of most recently available data')
+            return None
         config['base_year'] = years[years > 2015].min()  # if not, assign MIN(Year > 2015) to be base year
         print('updating base year to ' + str(config['base_year']))
     print(config)
 
     # check if there is enough data to calculate progress
     if config['current_year'] - config['base_year'] < 1:
+        print('not enough data')
         return None
 
 
@@ -73,8 +85,10 @@ def measure_indicator_progress(indicator):
         print('running methodology 2')
         output = methodology_2(data=data, config=config)
 
-    print(output)
     return(output)
+
+def check_auto_calc():
+    print('temp')
 
 def config_defaults(config):
     """Set progress calculation defaults and update them from the configuration.
@@ -168,11 +182,9 @@ def data_progress_measure(data):
         data = data.iloc[:, [0, -1]]
     data = data[data["Value"].notna()]  # remove any NA values from data
 
-    # TODO: shape <1 or <2?
     if data.shape[0] < 1:
-        # TODO: return an empty pandas dataframe? or a None value? what does this do i cant remember
-        print('not enough data')
-        sys.exit()
+        print('no aggregate')
+        return(None)
 
     return data
 
@@ -218,6 +230,7 @@ def methodology_1(data, config):
 
     if direction=="negative":
         cagr_o = -1*cagr_o
+    print('cagr_o:' + str(cagr_o))
 
     # TODO: Adopt categories to Open SDG progress categories (or make our categories work with Open SDG)
     # TODO: Change progress labels: Negative, negligeable, fair/moderate, substantial, target achieved.
@@ -229,7 +242,7 @@ def methodology_1(data, config):
     elif z <= cagr_o <= y:
         return "moderate_deterioration"
     elif cagr_o < z:
-        return "negative_progress"
+        return "significant_deterioration"
     else:
         return None
 
@@ -300,11 +313,11 @@ def methodology_2(data, config):
 # measure_indicator_progress('3-2-1') # example with not enough data/fiscal year input
 # measure_indicator_progress('3-4-1')   # example with no target
 
-data_pattern = os.path.join('assets', 'data', 'csv', '*-*.csv')
+data_pattern = os.path.join('assets', 'progress-calculation', 'data', '*-*.csv')
 data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
 
 # Input metadata from YAML files matching this pattern: tests/meta/*-*.md
-meta_pattern = os.path.join('assets', 'meta', 'yaml', '*-*.yml')
+meta_pattern = os.path.join('assets', 'progress-calculation', 'indicator-config', '*-*.yml')
 meta_input = sdg.inputs.InputYamlMeta(path_pattern=meta_pattern)
 
 # Combine these inputs into one list
@@ -320,5 +333,9 @@ opensdg_output = sdg.outputs.OutputOpenSdg(
     output_folder='_site')
 
 test_indicator = opensdg_output.test_indicator()
+indicator_id = test_indicator.meta['indicator_number']
 
-measure_indicator_progress(test_indicator)
+progress_measure = measure_indicator_progress(test_indicator)
+print(progress_measure)
+# prog_calcs = {indicator_id: progress_measure}
+# print(prog_calcs)

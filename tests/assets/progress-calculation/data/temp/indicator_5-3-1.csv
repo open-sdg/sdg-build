@@ -1,0 +1,415 @@
+Year,Geography,Marital status,Age group,Value
+2016,Canada,Married or living common law,15 to 19 years,1.66
+2016,Canada,Married or living common law,20 to 24 years,18.78
+2016,Canada,Married,15 to 19 years,0.19
+2016,Canada,Married,20 to 24 years,5.03
+2016,Canada,Living common law,15 to 19 years,1.47
+2016,Canada,Living common law,20 to 24 years,13.75
+2011,Canada,Married or living common law,15 to 19 years,2.22
+2011,Canada,Married or living common law,20 to 24 years,21.44
+2011,Canada,Married,15 to 19 years,0.32
+2011,Canada,Married,20 to 24 years,6.66
+2011,Canada,Living common law,15 to 19 years,1.9
+2011,Canada,Living common law,20 to 24 years,14.78
+2006,Canada,Married or living common law,15 to 19 years,2.91
+2006,Canada,Married or living common law,20 to 24 years,23.56
+2006,Canada,Married,15 to 19 years,0.71
+2006,Canada,Married,20 to 24 years,8.24
+2006,Canada,Living common law,15 to 19 years,2.2
+2006,Canada,Living common law,20 to 24 years,15.32
+2001,Canada,Married or living common law,15 to 19 years,2.96
+2001,Canada,Married or living common law,20 to 24 years,25.61
+2001,Canada,Married,15 to 19 years,0.61
+2001,Canada,Married,20 to 24 years,10.19
+2001,Canada,Living common law,15 to 19 years,2.35
+2001,Canada,Living common law,20 to 24 years,15.42
+1996,Canada,Married or living common law,15 to 19 years,3.41
+1996,Canada,Married or living common law,20 to 24 years,27.77
+1996,Canada,Married,15 to 19 years,0.78
+1996,Canada,Married,20 to 24 years,13.18
+1996,Canada,Living common law,15 to 19 years,2.64
+1996,Canada,Living common law,20 to 24 years,14.6
+2016,Newfoundland and Labrador,Married or living common law,15 to 19 years,1.85
+2016,Newfoundland and Labrador,Married or living common law,20 to 24 years,19.77
+2016,Newfoundland and Labrador,Married,15 to 19 years,0.08
+2016,Newfoundland and Labrador,Married,20 to 24 years,2.9
+2016,Newfoundland and Labrador,Living common law,15 to 19 years,1.73
+2016,Newfoundland and Labrador,Living common law,20 to 24 years,16.87
+2011,Newfoundland and Labrador,Married or living common law,15 to 19 years,2.05
+2011,Newfoundland and Labrador,Married or living common law,20 to 24 years,19
+2011,Newfoundland and Labrador,Married,15 to 19 years,0.1
+2011,Newfoundland and Labrador,Married,20 to 24 years,3.61
+2011,Newfoundland and Labrador,Living common law,15 to 19 years,1.94
+2011,Newfoundland and Labrador,Living common law,20 to 24 years,15.39
+2006,Newfoundland and Labrador,Married or living common law,15 to 19 years,1.94
+2006,Newfoundland and Labrador,Married or living common law,20 to 24 years,16.87
+2006,Newfoundland and Labrador,Married,15 to 19 years,0.42
+2006,Newfoundland and Labrador,Married,20 to 24 years,4.63
+2006,Newfoundland and Labrador,Living common law,15 to 19 years,1.49
+2006,Newfoundland and Labrador,Living common law,20 to 24 years,12.24
+2001,Newfoundland and Labrador,Married or living common law,15 to 19 years,1.78
+2001,Newfoundland and Labrador,Married or living common law,20 to 24 years,20.44
+2001,Newfoundland and Labrador,Married,15 to 19 years,0.28
+2001,Newfoundland and Labrador,Married,20 to 24 years,7.35
+2001,Newfoundland and Labrador,Living common law,15 to 19 years,1.5
+2001,Newfoundland and Labrador,Living common law,20 to 24 years,13.12
+1996,Newfoundland and Labrador,Married or living common law,15 to 19 years,2.16
+1996,Newfoundland and Labrador,Married or living common law,20 to 24 years,24.37
+1996,Newfoundland and Labrador,Married,15 to 19 years,0.42
+1996,Newfoundland and Labrador,Married,20 to 24 years,10.93
+1996,Newfoundland and Labrador,Living common law,15 to 19 years,1.76
+1996,Newfoundland and Labrador,Living common law,20 to 24 years,13.44
+2016,Prince Edward Island,Married or living common law,15 to 19 years,1.78
+2016,Prince Edward Island,Married or living common law,20 to 24 years,19.03
+2016,Prince Edward Island,Married,15 to 19 years,0.36
+2016,Prince Edward Island,Married,20 to 24 years,4.02
+2016,Prince Edward Island,Living common law,15 to 19 years,1.43
+2016,Prince Edward Island,Living common law,20 to 24 years,14.89
+2011,Prince Edward Island,Married or living common law,15 to 19 years,2.01
+2011,Prince Edward Island,Married or living common law,20 to 24 years,19.14
+2011,Prince Edward Island,Married,15 to 19 years,0.11
+2011,Prince Edward Island,Married,20 to 24 years,5.41
+2011,Prince Edward Island,Living common law,15 to 19 years,1.91
+2011,Prince Edward Island,Living common law,20 to 24 years,13.74
+2006,Prince Edward Island,Married or living common law,15 to 19 years,2.13
+2006,Prince Edward Island,Married or living common law,20 to 24 years,20.57
+2006,Prince Edward Island,Married,15 to 19 years,0.51
+2006,Prince Edward Island,Married,20 to 24 years,7.16
+2006,Prince Edward Island,Living common law,15 to 19 years,1.62
+2006,Prince Edward Island,Living common law,20 to 24 years,13.41
+2001,Prince Edward Island,Married or living common law,15 to 19 years,2.97
+2001,Prince Edward Island,Married or living common law,20 to 24 years,25.93
+2001,Prince Edward Island,Married,15 to 19 years,0.4
+2001,Prince Edward Island,Married,20 to 24 years,11.1
+2001,Prince Edward Island,Living common law,15 to 19 years,2.57
+2001,Prince Edward Island,Living common law,20 to 24 years,14.84
+1996,Prince Edward Island,Married or living common law,15 to 19 years,2.56
+1996,Prince Edward Island,Married or living common law,20 to 24 years,27.81
+1996,Prince Edward Island,Married,15 to 19 years,0.51
+1996,Prince Edward Island,Married,20 to 24 years,14.07
+1996,Prince Edward Island,Living common law,15 to 19 years,2.15
+1996,Prince Edward Island,Living common law,20 to 24 years,13.74
+2016,Nova Scotia,Married or living common law,15 to 19 years,1.92
+2016,Nova Scotia,Married or living common law,20 to 24 years,19.42
+2016,Nova Scotia,Married,15 to 19 years,0.1
+2016,Nova Scotia,Married,20 to 24 years,3.34
+2016,Nova Scotia,Living common law,15 to 19 years,1.78
+2016,Nova Scotia,Living common law,20 to 24 years,16.08
+2011,Nova Scotia,Married or living common law,15 to 19 years,2.15
+2011,Nova Scotia,Married or living common law,20 to 24 years,20.59
+2011,Nova Scotia,Married,15 to 19 years,0.21
+2011,Nova Scotia,Married,20 to 24 years,4.57
+2011,Nova Scotia,Living common law,15 to 19 years,1.93
+2011,Nova Scotia,Living common law,20 to 24 years,16.04
+2006,Nova Scotia,Married or living common law,15 to 19 years,2.45
+2006,Nova Scotia,Married or living common law,20 to 24 years,21.33
+2006,Nova Scotia,Married,15 to 19 years,0.45
+2006,Nova Scotia,Married,20 to 24 years,5.36
+2006,Nova Scotia,Living common law,15 to 19 years,1.98
+2006,Nova Scotia,Living common law,20 to 24 years,15.98
+2001,Nova Scotia,Married or living common law,15 to 19 years,2.19
+2001,Nova Scotia,Married or living common law,20 to 24 years,23.41
+2001,Nova Scotia,Married,15 to 19 years,0.31
+2001,Nova Scotia,Married,20 to 24 years,8.02
+2001,Nova Scotia,Living common law,15 to 19 years,1.89
+2001,Nova Scotia,Living common law,20 to 24 years,15.39
+1996,Nova Scotia,Married or living common law,15 to 19 years,2.4
+1996,Nova Scotia,Married or living common law,20 to 24 years,25.61
+1996,Nova Scotia,Married,15 to 19 years,0.44
+1996,Nova Scotia,Married,20 to 24 years,11.71
+1996,Nova Scotia,Living common law,15 to 19 years,1.96
+1996,Nova Scotia,Living common law,20 to 24 years,13.9
+2016,New Brunswick,Married or living common law,15 to 19 years,2.59
+2016,New Brunswick,Married or living common law,20 to 24 years,24.85
+2016,New Brunswick,Married,15 to 19 years,0.13
+2016,New Brunswick,Married,20 to 24 years,4.51
+2016,New Brunswick,Living common law,15 to 19 years,2.46
+2016,New Brunswick,Living common law,20 to 24 years,20.36
+2011,New Brunswick,Married or living common law,15 to 19 years,3.03
+2011,New Brunswick,Married or living common law,20 to 24 years,25.97
+2011,New Brunswick,Married,15 to 19 years,0.22
+2011,New Brunswick,Married,20 to 24 years,6.2
+2011,New Brunswick,Living common law,15 to 19 years,2.81
+2011,New Brunswick,Living common law,20 to 24 years,19.79
+2006,New Brunswick,Married or living common law,15 to 19 years,3.12
+2006,New Brunswick,Married or living common law,20 to 24 years,26.55
+2006,New Brunswick,Married,15 to 19 years,0.49
+2006,New Brunswick,Married,20 to 24 years,7.21
+2006,New Brunswick,Living common law,15 to 19 years,2.6
+2006,New Brunswick,Living common law,20 to 24 years,19.33
+2001,New Brunswick,Married or living common law,15 to 19 years,3.39
+2001,New Brunswick,Married or living common law,20 to 24 years,30.28
+2001,New Brunswick,Married,15 to 19 years,0.46
+2001,New Brunswick,Married,20 to 24 years,10.84
+2001,New Brunswick,Living common law,15 to 19 years,2.91
+2001,New Brunswick,Living common law,20 to 24 years,19.43
+1996,New Brunswick,Married or living common law,15 to 19 years,3.66
+1996,New Brunswick,Married or living common law,20 to 24 years,31.38
+1996,New Brunswick,Married,15 to 19 years,0.69
+1996,New Brunswick,Married,20 to 24 years,13.42
+1996,New Brunswick,Living common law,15 to 19 years,2.97
+1996,New Brunswick,Living common law,20 to 24 years,17.96
+2016,Quebec,Married or living common law,15 to 19 years,2.14
+2016,Quebec,Married or living common law,20 to 24 years,22.62
+2016,Quebec,Married,15 to 19 years,0.14
+2016,Quebec,Married,20 to 24 years,3.24
+2016,Quebec,Living common law,15 to 19 years,2
+2016,Quebec,Living common law,20 to 24 years,19.38
+2011,Quebec,Married or living common law,15 to 19 years,2.93
+2011,Quebec,Married or living common law,20 to 24 years,26.39
+2011,Quebec,Married,15 to 19 years,0.28
+2011,Quebec,Married,20 to 24 years,4.1
+2011,Quebec,Living common law,15 to 19 years,2.65
+2011,Quebec,Living common law,20 to 24 years,22.28
+2006,Quebec,Married or living common law,15 to 19 years,3.49
+2006,Quebec,Married or living common law,20 to 24 years,28.45
+2006,Quebec,Married,15 to 19 years,0.6
+2006,Quebec,Married,20 to 24 years,4.62
+2006,Quebec,Living common law,15 to 19 years,2.89
+2006,Quebec,Living common law,20 to 24 years,23.83
+2001,Quebec,Married or living common law,15 to 19 years,3.78
+2001,Quebec,Married or living common law,20 to 24 years,29.53
+2001,Quebec,Married,15 to 19 years,0.47
+2001,Quebec,Married,20 to 24 years,5.51
+2001,Quebec,Living common law,15 to 19 years,3.3
+2001,Quebec,Living common law,20 to 24 years,24.02
+1996,Quebec,Married or living common law,15 to 19 years,3.76
+1996,Quebec,Married or living common law,20 to 24 years,31.55
+1996,Quebec,Married,15 to 19 years,0.52
+1996,Quebec,Married,20 to 24 years,8.43
+1996,Quebec,Living common law,15 to 19 years,3.24
+1996,Quebec,Living common law,20 to 24 years,23.12
+2016,Ontario,Married or living common law,15 to 19 years,1.07
+2016,Ontario,Married or living common law,20 to 24 years,13.76
+2016,Ontario,Married,15 to 19 years,0.18
+2016,Ontario,Married,20 to 24 years,4.66
+2016,Ontario,Living common law,15 to 19 years,0.89
+2016,Ontario,Living common law,20 to 24 years,9.1
+2011,Ontario,Married or living common law,15 to 19 years,1.41
+2011,Ontario,Married or living common law,20 to 24 years,16.14
+2011,Ontario,Married,15 to 19 years,0.29
+2011,Ontario,Married,20 to 24 years,6.52
+2011,Ontario,Living common law,15 to 19 years,1.11
+2011,Ontario,Living common law,20 to 24 years,9.62
+2006,Ontario,Married or living common law,15 to 19 years,2.1
+2006,Ontario,Married or living common law,20 to 24 years,18.79
+2006,Ontario,Married,15 to 19 years,0.76
+2006,Ontario,Married,20 to 24 years,8.72
+2006,Ontario,Living common law,15 to 19 years,1.35
+2006,Ontario,Living common law,20 to 24 years,10.07
+2001,Ontario,Married or living common law,15 to 19 years,2.14
+2001,Ontario,Married or living common law,20 to 24 years,21.47
+2001,Ontario,Married,15 to 19 years,0.68
+2001,Ontario,Married,20 to 24 years,11.18
+2001,Ontario,Living common law,15 to 19 years,1.46
+2001,Ontario,Living common law,20 to 24 years,10.29
+1996,Ontario,Married or living common law,15 to 19 years,2.71
+1996,Ontario,Married or living common law,20 to 24 years,22.83
+1996,Ontario,Married,15 to 19 years,0.87
+1996,Ontario,Married,20 to 24 years,13.64
+1996,Ontario,Living common law,15 to 19 years,1.84
+1996,Ontario,Living common law,20 to 24 years,9.2
+2016,Manitoba,Married or living common law,15 to 19 years,2.06
+2016,Manitoba,Married or living common law,20 to 24 years,21.96
+2016,Manitoba,Married,15 to 19 years,0.29
+2016,Manitoba,Married,20 to 24 years,8.23
+2016,Manitoba,Living common law,15 to 19 years,1.75
+2016,Manitoba,Living common law,20 to 24 years,13.74
+2011,Manitoba,Married or living common law,15 to 19 years,2.75
+2011,Manitoba,Married or living common law,20 to 24 years,24.04
+2011,Manitoba,Married,15 to 19 years,0.57
+2011,Manitoba,Married,20 to 24 years,9.89
+2011,Manitoba,Living common law,15 to 19 years,2.18
+2011,Manitoba,Living common law,20 to 24 years,14.15
+2006,Manitoba,Married or living common law,15 to 19 years,3.37
+2006,Manitoba,Married or living common law,20 to 24 years,25.18
+2006,Manitoba,Married,15 to 19 years,0.86
+2006,Manitoba,Married,20 to 24 years,11.65
+2006,Manitoba,Living common law,15 to 19 years,2.52
+2006,Manitoba,Living common law,20 to 24 years,13.55
+2001,Manitoba,Married or living common law,15 to 19 years,3.74
+2001,Manitoba,Married or living common law,20 to 24 years,28.83
+2001,Manitoba,Married,15 to 19 years,0.89
+2001,Manitoba,Married,20 to 24 years,14.65
+2001,Manitoba,Living common law,15 to 19 years,2.84
+2001,Manitoba,Living common law,20 to 24 years,14.18
+1996,Manitoba,Married or living common law,15 to 19 years,4.26
+1996,Manitoba,Married or living common law,20 to 24 years,30.53
+1996,Manitoba,Married,15 to 19 years,1.12
+1996,Manitoba,Married,20 to 24 years,16.96
+1996,Manitoba,Living common law,15 to 19 years,3.14
+1996,Manitoba,Living common law,20 to 24 years,13.57
+2016,Saskatchewan,Married or living common law,15 to 19 years,2.73
+2016,Saskatchewan,Married or living common law,20 to 24 years,25.7
+2016,Saskatchewan,Married,15 to 19 years,0.21
+2016,Saskatchewan,Married,20 to 24 years,7.56
+2016,Saskatchewan,Living common law,15 to 19 years,2.5
+2016,Saskatchewan,Living common law,20 to 24 years,18.14
+2011,Saskatchewan,Married or living common law,15 to 19 years,3.28
+2011,Saskatchewan,Married or living common law,20 to 24 years,27.4
+2011,Saskatchewan,Married,15 to 19 years,0.33
+2011,Saskatchewan,Married,20 to 24 years,9.44
+2011,Saskatchewan,Living common law,15 to 19 years,2.97
+2011,Saskatchewan,Living common law,20 to 24 years,17.97
+2006,Saskatchewan,Married or living common law,15 to 19 years,3.96
+2006,Saskatchewan,Married or living common law,20 to 24 years,28.17
+2006,Saskatchewan,Married,15 to 19 years,0.52
+2006,Saskatchewan,Married,20 to 24 years,10.75
+2006,Saskatchewan,Living common law,15 to 19 years,3.44
+2006,Saskatchewan,Living common law,20 to 24 years,17.42
+2001,Saskatchewan,Married or living common law,15 to 19 years,3.73
+2001,Saskatchewan,Married or living common law,20 to 24 years,30.51
+2001,Saskatchewan,Married,15 to 19 years,0.56
+2001,Saskatchewan,Married,20 to 24 years,14.36
+2001,Saskatchewan,Living common law,15 to 19 years,3.15
+2001,Saskatchewan,Living common law,20 to 24 years,16.14
+1996,Saskatchewan,Married or living common law,15 to 19 years,4.59
+1996,Saskatchewan,Married or living common law,20 to 24 years,34.07
+1996,Saskatchewan,Married,15 to 19 years,0.7
+1996,Saskatchewan,Married,20 to 24 years,18.05
+1996,Saskatchewan,Living common law,15 to 19 years,3.89
+1996,Saskatchewan,Living common law,20 to 24 years,16.02
+2016,Alberta,Married or living common law,15 to 19 years,2.11
+2016,Alberta,Married or living common law,20 to 24 years,25.09
+2016,Alberta,Married,15 to 19 years,0.33
+2016,Alberta,Married,20 to 24 years,8.72
+2016,Alberta,Living common law,15 to 19 years,1.78
+2016,Alberta,Living common law,20 to 24 years,16.36
+2011,Alberta,Married or living common law,15 to 19 years,3.09
+2011,Alberta,Married or living common law,20 to 24 years,27.99
+2011,Alberta,Married,15 to 19 years,0.49
+2011,Alberta,Married,20 to 24 years,10.6
+2011,Alberta,Living common law,15 to 19 years,2.6
+2011,Alberta,Living common law,20 to 24 years,17.39
+2006,Alberta,Married or living common law,15 to 19 years,4.32
+2006,Alberta,Married or living common law,20 to 24 years,29.89
+2006,Alberta,Married,15 to 19 years,0.93
+2006,Alberta,Married,20 to 24 years,12.28
+2006,Alberta,Living common law,15 to 19 years,3.38
+2006,Alberta,Living common law,20 to 24 years,17.61
+2001,Alberta,Married or living common law,15 to 19 years,3.96
+2001,Alberta,Married or living common law,20 to 24 years,31.14
+2001,Alberta,Married,15 to 19 years,0.75
+2001,Alberta,Married,20 to 24 years,14.92
+2001,Alberta,Living common law,15 to 19 years,3.21
+2001,Alberta,Living common law,20 to 24 years,16.23
+1996,Alberta,Married or living common law,15 to 19 years,4.64
+1996,Alberta,Married or living common law,20 to 24 years,33.7
+1996,Alberta,Married,15 to 19 years,1.1
+1996,Alberta,Married,20 to 24 years,18.26
+1996,Alberta,Living common law,15 to 19 years,3.54
+1996,Alberta,Living common law,20 to 24 years,15.44
+2016,British Columbia,Married or living common law,15 to 19 years,1.57
+2016,British Columbia,Married or living common law,20 to 24 years,17.72
+2016,British Columbia,Married,15 to 19 years,0.18
+2016,British Columbia,Married,20 to 24 years,5.09
+2016,British Columbia,Living common law,15 to 19 years,1.39
+2016,British Columbia,Living common law,20 to 24 years,12.63
+2011,British Columbia,Married or living common law,15 to 19 years,2.08
+2011,British Columbia,Married or living common law,20 to 24 years,19.96
+2011,British Columbia,Married,15 to 19 years,0.31
+2011,British Columbia,Married,20 to 24 years,7.19
+2011,British Columbia,Living common law,15 to 19 years,1.77
+2011,British Columbia,Living common law,20 to 24 years,12.77
+2006,British Columbia,Married or living common law,15 to 19 years,2.79
+2006,British Columbia,Married or living common law,20 to 24 years,22.26
+2006,British Columbia,Married,15 to 19 years,0.71
+2006,British Columbia,Married,20 to 24 years,9.15
+2006,British Columbia,Living common law,15 to 19 years,2.08
+2006,British Columbia,Living common law,20 to 24 years,13.1
+2001,British Columbia,Married or living common law,15 to 19 years,2.76
+2001,British Columbia,Married or living common law,20 to 24 years,22.99
+2001,British Columbia,Married,15 to 19 years,0.65
+2001,British Columbia,Married,20 to 24 years,10.83
+2001,British Columbia,Living common law,15 to 19 years,2.11
+2001,British Columbia,Living common law,20 to 24 years,12.16
+1996,British Columbia,Married or living common law,15 to 19 years,3.39
+1996,British Columbia,Married or living common law,20 to 24 years,27.99
+1996,British Columbia,Married,15 to 19 years,0.87
+1996,British Columbia,Married,20 to 24 years,15.07
+1996,British Columbia,Living common law,15 to 19 years,2.51
+1996,British Columbia,Living common law,20 to 24 years,12.92
+2016,Yukon,Married or living common law,15 to 19 years,2.15
+2016,Yukon,Married or living common law,20 to 24 years,25.27
+2016,Yukon,Married,15 to 19 years,0.54
+2016,Yukon,Married,20 to 24 years,4.84
+2016,Yukon,Living common law,15 to 19 years,1.61
+2016,Yukon,Living common law,20 to 24 years,20.43
+2011,Yukon,Married or living common law,15 to 19 years,3.74
+2011,Yukon,Married or living common law,20 to 24 years,27.23
+2011,Yukon,Married,15 to 19 years,0.47
+2011,Yukon,Married,20 to 24 years,5.16
+2011,Yukon,Living common law,15 to 19 years,3.27
+2011,Yukon,Living common law,20 to 24 years,22.07
+2006,Yukon,Married or living common law,15 to 19 years,5.24
+2006,Yukon,Married or living common law,20 to 24 years,25.41
+2006,Yukon,Married,15 to 19 years,0.48
+2006,Yukon,Married,20 to 24 years,4.86
+2006,Yukon,Living common law,15 to 19 years,4.76
+2006,Yukon,Living common law,20 to 24 years,21.08
+2001,Yukon,Married or living common law,15 to 19 years,4.04
+2001,Yukon,Married or living common law,20 to 24 years,29.7
+2001,Yukon,Married,15 to 19 years,0.45
+2001,Yukon,Married,20 to 24 years,9.09
+2001,Yukon,Living common law,15 to 19 years,3.59
+2001,Yukon,Living common law,20 to 24 years,21.21
+1996,Yukon,Married or living common law,15 to 19 years,6.88
+1996,Yukon,Married or living common law,20 to 24 years,37.68
+1996,Yukon,Married,15 to 19 years,0.53
+1996,Yukon,Married,20 to 24 years,14.98
+1996,Yukon,Living common law,15 to 19 years,6.35
+1996,Yukon,Living common law,20 to 24 years,22.71
+2016,Northwest Territories,Married or living common law,15 to 19 years,2.68
+2016,Northwest Territories,Married or living common law,20 to 24 years,26.92
+2016,Northwest Territories,Married,15 to 19 years,0
+2016,Northwest Territories,Married,20 to 24 years,3.5
+2016,Northwest Territories,Living common law,15 to 19 years,2.68
+2016,Northwest Territories,Living common law,20 to 24 years,23.43
+2011,Northwest Territories,Married or living common law,15 to 19 years,4
+2011,Northwest Territories,Married or living common law,20 to 24 years,30.91
+2011,Northwest Territories,Married,15 to 19 years,0.31
+2011,Northwest Territories,Married,20 to 24 years,5.15
+2011,Northwest Territories,Living common law,15 to 19 years,3.69
+2011,Northwest Territories,Living common law,20 to 24 years,26.06
+2006,Northwest Territories,Married or living common law,15 to 19 years,5.68
+2006,Northwest Territories,Married or living common law,20 to 24 years,33.55
+2006,Northwest Territories,Married,15 to 19 years,0.85
+2006,Northwest Territories,Married,20 to 24 years,4.61
+2006,Northwest Territories,Living common law,15 to 19 years,4.55
+2006,Northwest Territories,Living common law,20 to 24 years,28.95
+2001,Northwest Territories,Married or living common law,15 to 19 years,4.64
+2001,Northwest Territories,Married or living common law,20 to 24 years,34.57
+2001,Northwest Territories,Married,15 to 19 years,0
+2001,Northwest Territories,Married,20 to 24 years,6.69
+2001,Northwest Territories,Living common law,15 to 19 years,4.29
+2001,Northwest Territories,Living common law,20 to 24 years,27.88
+1996,Northwest Territories,Married or living common law,15 to 19 years,11.15
+1996,Northwest Territories,Married or living common law,20 to 24 years,45.45
+1996,Northwest Territories,Married,15 to 19 years,0.58
+1996,Northwest Territories,Married,20 to 24 years,11.31
+1996,Northwest Territories,Living common law,15 to 19 years,10.58
+1996,Northwest Territories,Living common law,20 to 24 years,34.14
+2016,Nunavut,Married or living common law,15 to 19 years,11.04
+2016,Nunavut,Married or living common law,20 to 24 years,41.72
+2016,Nunavut,Married,15 to 19 years,0
+2016,Nunavut,Married,20 to 24 years,3.31
+2016,Nunavut,Living common law,15 to 19 years,11.04
+2016,Nunavut,Living common law,20 to 24 years,38.74
+2011,Nunavut,Married or living common law,15 to 19 years,9.52
+2011,Nunavut,Married or living common law,20 to 24 years,43.42
+2011,Nunavut,Married,15 to 19 years,0.68
+2011,Nunavut,Married,20 to 24 years,5.69
+2011,Nunavut,Living common law,15 to 19 years,9.18
+2011,Nunavut,Living common law,20 to 24 years,38.08
+2006,Nunavut,Married or living common law,15 to 19 years,11.55
+2006,Nunavut,Married or living common law,20 to 24 years,42.8
+2006,Nunavut,Married,15 to 19 years,0.33
+2006,Nunavut,Married,20 to 24 years,5.76
+2006,Nunavut,Living common law,15 to 19 years,10.89
+2006,Nunavut,Living common law,20 to 24 years,37.04
+2001,Nunavut,Married or living common law,15 to 19 years,12.96
+2001,Nunavut,Married or living common law,20 to 24 years,51.9
+2001,Nunavut,Married,15 to 19 years,0.81
+2001,Nunavut,Married,20 to 24 years,8.57
+2001,Nunavut,Living common law,15 to 19 years,12.15
+2001,Nunavut,Living common law,20 to 24 years,42.86

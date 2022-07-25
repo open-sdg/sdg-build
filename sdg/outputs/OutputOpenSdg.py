@@ -285,3 +285,19 @@ class OutputOpenSdg(OutputBase):
         return """This output includes a variety of endpoints designed to
         support the <a href="https://open-sdg.readthedocs.io">Open SDG</a>
         platform."""
+
+
+    def test_indicator_data(self, language=None):
+        for indicator_id in self.get_indicator_ids():
+            indicator = self.get_indicator_by_id(indicator_id).language(language)
+            return(indicator.data)
+
+    def test_indicator_meta(self, language=None):
+        for indicator_id in self.get_indicator_ids():
+            indicator = self.get_indicator_by_id(indicator_id).language(language)
+            return(indicator.meta)
+
+    def test_indicator(self, language=None):
+        for indicator_id in self.get_indicator_ids():
+            indicator = self.get_indicator_by_id(indicator_id).language(language)
+            return(indicator)

@@ -1,0 +1,883 @@
+Year,Geography,Gender,Indigenous identity,GeoCode,Value
+2014,"","","",,1.48
+2015,"","","",,1.71
+2016,"","","",,1.71
+2017,"","","",,1.83
+2018,"","","",,1.78
+2019,"","","",,1.83
+2020,"","","",,1.96
+2014,Canada,All genders,Indigenous identity,,7.19
+2014,Canada,All genders,Non-Indigenous identity,,1.18
+2014,Canada,Male,Total,,2.12
+2014,Canada,Male,Indigenous identity,,10.87
+2014,Canada,Male,Non-Indigenous identity,,1.65
+2014,Canada,Female,Total,,0.86
+2014,Canada,Female,Indigenous identity,,3.63
+2014,Canada,Female,Non-Indigenous identity,,0.71
+2014,Newfoundland and Labrador,All genders,Total,10,0.38
+2014,Newfoundland and Labrador,All genders,Indigenous identity,,0
+2014,Newfoundland and Labrador,All genders,Non-Indigenous identity,,0.41
+2014,Newfoundland and Labrador,Male,Total,,0.77
+2014,Newfoundland and Labrador,Male,Indigenous identity,,0
+2014,Newfoundland and Labrador,Male,Non-Indigenous identity,,0.83
+2014,Newfoundland and Labrador,Female,Total,,0
+2014,Newfoundland and Labrador,Female,Indigenous identity,,0
+2014,Newfoundland and Labrador,Female,Non-Indigenous identity,,0
+2014,Prince Edward Island,All genders,Total,11,2.06
+2014,Prince Edward Island,All genders,Indigenous identity,,0
+2014,Prince Edward Island,All genders,Non-Indigenous identity,,2.1
+2014,Prince Edward Island,Male,Total,,4.23
+2014,Prince Edward Island,Male,Indigenous identity,,0
+2014,Prince Edward Island,Male,Non-Indigenous identity,,4.31
+2014,Prince Edward Island,Female,Total,,0
+2014,Prince Edward Island,Female,Indigenous identity,,0
+2014,Prince Edward Island,Female,Non-Indigenous identity,,0
+2014,Nova Scotia,All genders,Total,12,0.64
+2014,Nova Scotia,All genders,Indigenous identity,,2.14
+2014,Nova Scotia,All genders,Non-Indigenous identity,,0.45
+2014,Nova Scotia,Male,Total,,0.87
+2014,Nova Scotia,Male,Indigenous identity,,0
+2014,Nova Scotia,Male,Non-Indigenous identity,,0.68
+2014,Nova Scotia,Female,Total,,0.42
+2014,Nova Scotia,Female,Indigenous identity,,4.19
+2014,Nova Scotia,Female,Non-Indigenous identity,,0.22
+2014,New Brunswick,All genders,Total,13,1.32
+2014,New Brunswick,All genders,Indigenous identity,,0
+2014,New Brunswick,All genders,Non-Indigenous identity,,1.37
+2014,New Brunswick,Male,Total,,1.6
+2014,New Brunswick,Male,Indigenous identity,,0
+2014,New Brunswick,Male,Non-Indigenous identity,,1.66
+2014,New Brunswick,Female,Total,,1.04
+2014,New Brunswick,Female,Indigenous identity,,0
+2014,New Brunswick,Female,Non-Indigenous identity,,1.08
+2014,Quebec,All genders,Total,24,0.89
+2014,Quebec,All genders,Indigenous identity,,2.15
+2014,Quebec,All genders,Non-Indigenous identity,,0.83
+2014,Quebec,Male,Total,,1.19
+2014,Quebec,Male,Indigenous identity,,2.12
+2014,Quebec,Male,Non-Indigenous identity,,1.11
+2014,Quebec,Female,Total,,0.59
+2014,Quebec,Female,Indigenous identity,,2.17
+2014,Quebec,Female,Non-Indigenous identity,,0.55
+2014,Ontario,All genders,Total,35,1.15
+2014,Ontario,All genders,Indigenous identity,,5.57
+2014,Ontario,All genders,Non-Indigenous identity,,1
+2014,Ontario,Male,Total,,1.72
+2014,Ontario,Male,Indigenous identity,,9.8
+2014,Ontario,Male,Non-Indigenous identity,,1.46
+2014,Ontario,Female,Total,,0.59
+2014,Ontario,Female,Indigenous identity,,1.55
+2014,Ontario,Female,Non-Indigenous identity,,0.55
+2014,Manitoba,All genders,Total,46,3.51
+2014,Manitoba,All genders,Indigenous identity,,12.88
+2014,Manitoba,All genders,Non-Indigenous identity,,1.52
+2014,Manitoba,Male,Total,,5.18
+2014,Manitoba,Male,Indigenous identity,,19.87
+2014,Manitoba,Male,Non-Indigenous identity,,2.09
+2014,Manitoba,Female,Total,,1.87
+2014,Manitoba,Female,Indigenous identity,,6.12
+2014,Manitoba,Female,Non-Indigenous identity,,0.95
+2014,Saskatchewan,All genders,Total,47,2.17
+2014,Saskatchewan,All genders,Indigenous identity,,6.73
+2014,Saskatchewan,All genders,Non-Indigenous identity,,1.29
+2014,Saskatchewan,Male,Total,,3.41
+2014,Saskatchewan,Male,Indigenous identity,,12.59
+2014,Saskatchewan,Male,Non-Indigenous identity,,1.7
+2014,Saskatchewan,Female,Total,,0.91
+2014,Saskatchewan,Female,Indigenous identity,,1.1
+2014,Saskatchewan,Female,Non-Indigenous identity,,0.87
+2014,Alberta,All genders,Total,48,2.65
+2014,Alberta,All genders,Indigenous identity,,12.23
+2014,Alberta,All genders,Non-Indigenous identity,,1.99
+2014,Alberta,Male,Total,,3.63
+2014,Alberta,Male,Indigenous identity,,17.08
+2014,Alberta,Male,Non-Indigenous identity,,2.72
+2014,Alberta,Female,Total,,1.65
+2014,Alberta,Female,Indigenous identity,,7.53
+2014,Alberta,Female,Non-Indigenous identity,,1.24
+2014,British Columbia,All genders,Total,59,1.89
+2014,British Columbia,All genders,Indigenous identity,,5.17
+2014,British Columbia,All genders,Non-Indigenous identity,,1.69
+2014,British Columbia,Male,Total,,2.61
+2014,British Columbia,Male,Indigenous identity,,8.29
+2014,British Columbia,Male,Non-Indigenous identity,,2.27
+2014,British Columbia,Female,Total,,1.18
+2014,British Columbia,Female,Indigenous identity,,2.17
+2014,British Columbia,Female,Non-Indigenous identity,,1.12
+2014,Yukon,All genders,Total,60,8.08
+2014,Yukon,All genders,Indigenous identity,,11.52
+2014,Yukon,All genders,Non-Indigenous identity,,7.03
+2014,Yukon,Male,Total,,10.58
+2014,Yukon,Male,Indigenous identity,,0
+2014,Yukon,Male,Non-Indigenous identity,,13.6
+2014,Yukon,Female,Total,,5.49
+2014,Yukon,Female,Indigenous identity,,22.34
+2014,Yukon,Female,Non-Indigenous identity,,0
+2014,Northwest Territories,All genders,Total,61,6.78
+2014,Northwest Territories,All genders,Indigenous identity,,13.27
+2014,Northwest Territories,All genders,Non-Indigenous identity,,0
+2014,Northwest Territories,Male,Total,,8.8
+2014,Northwest Territories,Male,Indigenous identity,,17.71
+2014,Northwest Territories,Male,Non-Indigenous identity,,0
+2014,Northwest Territories,Female,Total,,4.65
+2014,Northwest Territories,Female,Indigenous identity,,8.84
+2014,Northwest Territories,Female,Non-Indigenous identity,,0
+2014,Nunavut,All genders,Total,62,11.17
+2014,Nunavut,All genders,Indigenous identity,,13.01
+2014,Nunavut,All genders,Non-Indigenous identity,,0
+2014,Nunavut,Male,Total,,10.85
+2014,Nunavut,Male,Indigenous identity,,12.78
+2014,Nunavut,Male,Non-Indigenous identity,,0
+2014,Nunavut,Female,Total,,11.51
+2014,Nunavut,Female,Indigenous identity,,13.25
+2014,Nunavut,Female,Non-Indigenous identity,,0
+2015,Canada,All genders,Indigenous identity,,8.62
+2015,Canada,All genders,Non-Indigenous identity,,1.34
+2015,Canada,Male,Total,,2.44
+2015,Canada,Male,Indigenous identity,,12.49
+2015,Canada,Male,Non-Indigenous identity,,1.9
+2015,Canada,Female,Total,,0.99
+2015,Canada,Female,Indigenous identity,,4.87
+2015,Canada,Female,Non-Indigenous identity,,0.78
+2015,Newfoundland and Labrador,All genders,Total,10,0.57
+2015,Newfoundland and Labrador,All genders,Indigenous identity,,2.2
+2015,Newfoundland and Labrador,All genders,Non-Indigenous identity,,0.41
+2015,Newfoundland and Labrador,Male,Total,,0.76
+2015,Newfoundland and Labrador,Male,Indigenous identity,,0
+2015,Newfoundland and Labrador,Male,Non-Indigenous identity,,0.83
+2015,Newfoundland and Labrador,Female,Total,,0.37
+2015,Newfoundland and Labrador,Female,Indigenous identity,,4.33
+2015,Newfoundland and Labrador,Female,Non-Indigenous identity,,0
+2015,Prince Edward Island,All genders,Total,11,0.69
+2015,Prince Edward Island,All genders,Indigenous identity,,0
+2015,Prince Edward Island,All genders,Non-Indigenous identity,,0.7
+2015,Prince Edward Island,Male,Total,,0
+2015,Prince Edward Island,Male,Indigenous identity,,0
+2015,Prince Edward Island,Male,Non-Indigenous identity,,0
+2015,Prince Edward Island,Female,Total,,1.34
+2015,Prince Edward Island,Female,Indigenous identity,,0
+2015,Prince Edward Island,Female,Non-Indigenous identity,,1.36
+2015,Nova Scotia,All genders,Total,12,1.27
+2015,Nova Scotia,All genders,Indigenous identity,,1.98
+2015,Nova Scotia,All genders,Non-Indigenous identity,,1.12
+2015,Nova Scotia,Male,Total,,1.52
+2015,Nova Scotia,Male,Indigenous identity,,4.04
+2015,Nova Scotia,Male,Non-Indigenous identity,,1.38
+2015,Nova Scotia,Female,Total,,1.04
+2015,Nova Scotia,Female,Indigenous identity,,0
+2015,Nova Scotia,Female,Non-Indigenous identity,,0.88
+2015,New Brunswick,All genders,Total,13,1.44
+2015,New Brunswick,All genders,Indigenous identity,,0
+2015,New Brunswick,All genders,Non-Indigenous identity,,1.5
+2015,New Brunswick,Male,Total,,1.59
+2015,New Brunswick,Male,Indigenous identity,,0
+2015,New Brunswick,Male,Non-Indigenous identity,,1.66
+2015,New Brunswick,Female,Total,,1.3
+2015,New Brunswick,Female,Indigenous identity,,0
+2015,New Brunswick,Female,Non-Indigenous identity,,1.35
+2015,Quebec,All genders,Total,24,0.97
+2015,Quebec,All genders,Indigenous identity,,3.09
+2015,Quebec,All genders,Non-Indigenous identity,,0.91
+2015,Quebec,Male,Total,,1.48
+2015,Quebec,Male,Indigenous identity,,4.06
+2015,Quebec,Male,Non-Indigenous identity,,1.41
+2015,Quebec,Female,Total,,0.46
+2015,Quebec,Female,Indigenous identity,,2.09
+2015,Quebec,Female,Non-Indigenous identity,,0.42
+2015,Ontario,All genders,Total,35,1.27
+2015,Ontario,All genders,Indigenous identity,,3.33
+2015,Ontario,All genders,Non-Indigenous identity,,1.18
+2015,Ontario,Male,Total,,1.83
+2015,Ontario,Male,Indigenous identity,,5.25
+2015,Ontario,Male,Non-Indigenous identity,,1.69
+2015,Ontario,Female,Total,,0.72
+2015,Ontario,Female,Indigenous identity,,1.5
+2015,Ontario,Female,Non-Indigenous identity,,0.68
+2015,Manitoba,All genders,Total,46,3.7
+2015,Manitoba,All genders,Indigenous identity,,15.55
+2015,Manitoba,All genders,Non-Indigenous identity,,1.13
+2015,Manitoba,Male,Total,,5.73
+2015,Manitoba,Male,Indigenous identity,,24.58
+2015,Manitoba,Male,Non-Indigenous identity,,1.69
+2015,Manitoba,Female,Total,,1.69
+2015,Manitoba,Female,Indigenous identity,,6.81
+2015,Manitoba,Female,Non-Indigenous identity,,0.56
+2015,Saskatchewan,All genders,Total,47,4.01
+2015,Saskatchewan,All genders,Indigenous identity,,16.46
+2015,Saskatchewan,All genders,Non-Indigenous identity,,1.6
+2015,Saskatchewan,Male,Total,,5.67
+2015,Saskatchewan,Male,Indigenous identity,,29.02
+2015,Saskatchewan,Male,Non-Indigenous identity,,1.26
+2015,Saskatchewan,Female,Total,,2.33
+2015,Saskatchewan,Female,Indigenous identity,,4.32
+2015,Saskatchewan,Female,Non-Indigenous identity,,1.94
+2015,Alberta,All genders,Total,48,3.23
+2015,Alberta,All genders,Indigenous identity,,13.72
+2015,Alberta,All genders,Non-Indigenous identity,,2.47
+2015,Alberta,Male,Total,,4.23
+2015,Alberta,Male,Indigenous identity,,15.84
+2015,Alberta,Male,Non-Indigenous identity,,3.39
+2015,Alberta,Female,Total,,2.21
+2015,Alberta,Female,Indigenous identity,,11.67
+2015,Alberta,Female,Non-Indigenous identity,,1.53
+2015,British Columbia,All genders,Total,59,2.01
+2015,British Columbia,All genders,Indigenous identity,,6.42
+2015,British Columbia,All genders,Non-Indigenous identity,,1.73
+2015,British Columbia,Male,Total,,3
+2015,British Columbia,Male,Indigenous identity,,9.48
+2015,British Columbia,Male,Non-Indigenous identity,,2.6
+2015,British Columbia,Female,Total,,1.04
+2015,British Columbia,Female,Indigenous identity,,3.49
+2015,British Columbia,Female,Non-Indigenous identity,,0.88
+2015,Yukon,All genders,Total,60,2.65
+2015,Yukon,All genders,Indigenous identity,,0
+2015,Yukon,All genders,Non-Indigenous identity,,3.46
+2015,Yukon,Male,Total,,5.21
+2015,Yukon,Male,Indigenous identity,,0
+2015,Yukon,Male,Non-Indigenous identity,,6.71
+2015,Yukon,Female,Total,,0
+2015,Yukon,Female,Indigenous identity,,0
+2015,Yukon,Female,Non-Indigenous identity,,0
+2015,Northwest Territories,All genders,Total,61,13.48
+2015,Northwest Territories,All genders,Indigenous identity,,26.53
+2015,Northwest Territories,All genders,Non-Indigenous identity,,0
+2015,Northwest Territories,Male,Total,,13.12
+2015,Northwest Territories,Male,Indigenous identity,,26.49
+2015,Northwest Territories,Male,Non-Indigenous identity,,0
+2015,Northwest Territories,Female,Total,,13.86
+2015,Northwest Territories,Female,Indigenous identity,,26.57
+2015,Northwest Territories,Female,Non-Indigenous identity,,0
+2015,Nunavut,All genders,Total,62,5.5
+2015,Nunavut,All genders,Indigenous identity,,6.41
+2015,Nunavut,All genders,Non-Indigenous identity,,0
+2015,Nunavut,Male,Total,,5.35
+2015,Nunavut,Male,Indigenous identity,,6.31
+2015,Nunavut,Male,Non-Indigenous identity,,0
+2015,Nunavut,Female,Total,,5.66
+2015,Nunavut,Female,Indigenous identity,,6.52
+2015,Nunavut,Female,Non-Indigenous identity,,0
+2016,Canada,All genders,Indigenous identity,,7.96
+2016,Canada,All genders,Non-Indigenous identity,,1.36
+2016,Canada,Male,Total,,2.57
+2016,Canada,Male,Indigenous identity,,12.76
+2016,Canada,Male,Non-Indigenous identity,,2.02
+2016,Canada,Female,Total,,0.85
+2016,Canada,Female,Indigenous identity,,3.29
+2016,Canada,Female,Non-Indigenous identity,,0.71
+2016,Newfoundland and Labrador,All genders,Total,10,1.32
+2016,Newfoundland and Labrador,All genders,Indigenous identity,,2.11
+2016,Newfoundland and Labrador,All genders,Non-Indigenous identity,,1.25
+2016,Newfoundland and Labrador,Male,Total,,1.91
+2016,Newfoundland and Labrador,Male,Indigenous identity,,4.3
+2016,Newfoundland and Labrador,Male,Non-Indigenous identity,,1.67
+2016,Newfoundland and Labrador,Female,Total,,0.75
+2016,Newfoundland and Labrador,Female,Indigenous identity,,0
+2016,Newfoundland and Labrador,Female,Non-Indigenous identity,,0.82
+2016,Prince Edward Island,All genders,Total,11,0
+2016,Prince Edward Island,All genders,Indigenous identity,,0
+2016,Prince Edward Island,All genders,Non-Indigenous identity,,0
+2016,Prince Edward Island,Male,Total,,0
+2016,Prince Edward Island,Male,Indigenous identity,,0
+2016,Prince Edward Island,Male,Non-Indigenous identity,,0
+2016,Prince Edward Island,Female,Total,,0
+2016,Prince Edward Island,Female,Indigenous identity,,0
+2016,Prince Edward Island,Female,Non-Indigenous identity,,0
+2016,Nova Scotia,All genders,Total,12,1.38
+2016,Nova Scotia,All genders,Indigenous identity,,1.85
+2016,Nova Scotia,All genders,Non-Indigenous identity,,1.13
+2016,Nova Scotia,Male,Total,,2.39
+2016,Nova Scotia,Male,Indigenous identity,,3.78
+2016,Nova Scotia,Male,Non-Indigenous identity,,1.84
+2016,Nova Scotia,Female,Total,,0.42
+2016,Nova Scotia,Female,Indigenous identity,,0
+2016,Nova Scotia,Female,Non-Indigenous identity,,0.44
+2016,New Brunswick,All genders,Total,13,1.44
+2016,New Brunswick,All genders,Indigenous identity,,0
+2016,New Brunswick,All genders,Non-Indigenous identity,,1.5
+2016,New Brunswick,Male,Total,,2.38
+2016,New Brunswick,Male,Indigenous identity,,0
+2016,New Brunswick,Male,Non-Indigenous identity,,2.49
+2016,New Brunswick,Female,Total,,0.52
+2016,New Brunswick,Female,Indigenous identity,,0
+2016,New Brunswick,Female,Non-Indigenous identity,,0.54
+2016,Quebec,All genders,Total,24,0.81
+2016,Quebec,All genders,Indigenous identity,,1.98
+2016,Quebec,All genders,Non-Indigenous identity,,0.77
+2016,Quebec,Male,Total,,1.25
+2016,Quebec,Male,Indigenous identity,,3.9
+2016,Quebec,Male,Non-Indigenous identity,,1.15
+2016,Quebec,Female,Total,,0.39
+2016,Quebec,Female,Indigenous identity,,0
+2016,Quebec,Female,Non-Indigenous identity,,0.4
+2016,Ontario,All genders,Total,35,1.49
+2016,Ontario,All genders,Indigenous identity,,4.45
+2016,Ontario,All genders,Non-Indigenous identity,,1.36
+2016,Ontario,Male,Total,,2.21
+2016,Ontario,Male,Indigenous identity,,8.61
+2016,Ontario,Male,Non-Indigenous identity,,1.99
+2016,Ontario,Female,Total,,0.78
+2016,Ontario,Female,Indigenous identity,,0.48
+2016,Ontario,Female,Non-Indigenous identity,,0.75
+2016,Manitoba,All genders,Total,46,3.2
+2016,Manitoba,All genders,Indigenous identity,,11.35
+2016,Manitoba,All genders,Non-Indigenous identity,,1.4
+2016,Manitoba,Male,Total,,5.04
+2016,Manitoba,Male,Indigenous identity,,17.93
+2016,Manitoba,Male,Non-Indigenous identity,,2.23
+2016,Manitoba,Female,Total,,1.37
+2016,Manitoba,Female,Indigenous identity,,4.97
+2016,Manitoba,Female,Non-Indigenous identity,,0.56
+2016,Saskatchewan,All genders,Total,47,4.93
+2016,Saskatchewan,All genders,Indigenous identity,,20.39
+2016,Saskatchewan,All genders,Non-Indigenous identity,,1.9
+2016,Saskatchewan,Male,Total,,7.34
+2016,Saskatchewan,Male,Indigenous identity,,31.58
+2016,Saskatchewan,Male,Non-Indigenous identity,,2.71
+2016,Saskatchewan,Female,Total,,2.48
+2016,Saskatchewan,Female,Indigenous identity,,9.52
+2016,Saskatchewan,Female,Non-Indigenous identity,,1.07
+2016,Alberta,All genders,Total,48,2.76
+2016,Alberta,All genders,Indigenous identity,,11.15
+2016,Alberta,All genders,Non-Indigenous identity,,2.17
+2016,Alberta,Male,Total,,4.1
+2016,Alberta,Male,Indigenous identity,,15.38
+2016,Alberta,Male,Non-Indigenous identity,,3.33
+2016,Alberta,Female,Total,,1.39
+2016,Alberta,Female,Indigenous identity,,7.07
+2016,Alberta,Female,Non-Indigenous identity,,0.98
+2016,British Columbia,All genders,Total,59,1.85
+2016,British Columbia,All genders,Indigenous identity,,5.87
+2016,British Columbia,All genders,Non-Indigenous identity,,1.6
+2016,British Columbia,Male,Total,,2.75
+2016,British Columbia,Male,Indigenous identity,,10.6
+2016,British Columbia,Male,Non-Indigenous identity,,2.26
+2016,British Columbia,Female,Total,,0.98
+2016,British Columbia,Female,Indigenous identity,,1.35
+2016,British Columbia,Female,Non-Indigenous identity,,0.96
+2016,Yukon,All genders,Total,60,10.43
+2016,Yukon,All genders,Indigenous identity,,22.35
+2016,Yukon,All genders,Non-Indigenous identity,,6.8
+2016,Yukon,Male,Total,,20.52
+2016,Yukon,Male,Indigenous identity,,45.68
+2016,Yukon,Male,Non-Indigenous identity,,13.23
+2016,Yukon,Female,Total,,0
+2016,Yukon,Female,Indigenous identity,,0
+2016,Yukon,Female,Non-Indigenous identity,,0
+2016,Northwest Territories,All genders,Total,61,6.71
+2016,Northwest Territories,All genders,Indigenous identity,,13.26
+2016,Northwest Territories,All genders,Non-Indigenous identity,,0
+2016,Northwest Territories,Male,Total,,8.71
+2016,Northwest Territories,Male,Indigenous identity,,17.63
+2016,Northwest Territories,Male,Non-Indigenous identity,,0
+2016,Northwest Territories,Female,Total,,4.6
+2016,Northwest Territories,Female,Indigenous identity,,8.86
+2016,Northwest Territories,Female,Non-Indigenous identity,,0
+2016,Nunavut,All genders,Total,62,2.7
+2016,Nunavut,All genders,Indigenous identity,,3.15
+2016,Nunavut,All genders,Non-Indigenous identity,,0
+2016,Nunavut,Male,Total,,0
+2016,Nunavut,Male,Indigenous identity,,0
+2016,Nunavut,Male,Non-Indigenous identity,,0
+2016,Nunavut,Female,Total,,5.56
+2016,Nunavut,Female,Indigenous identity,,6.41
+2016,Nunavut,Female,Non-Indigenous identity,,0
+2017,Canada,All genders,Indigenous identity,,8.48
+2017,Canada,All genders,Non-Indigenous identity,,1.44
+2017,Canada,Male,Total,,2.71
+2017,Canada,Male,Indigenous identity,,13.04
+2017,Canada,Male,Non-Indigenous identity,,2.13
+2017,Canada,Female,Total,,0.94
+2017,Canada,Female,Indigenous identity,,4.05
+2017,Canada,Female,Non-Indigenous identity,,0.76
+2017,Newfoundland and Labrador,All genders,Total,10,0.76
+2017,Newfoundland and Labrador,All genders,Indigenous identity,,2.05
+2017,Newfoundland and Labrador,All genders,Non-Indigenous identity,,0.63
+2017,Newfoundland and Labrador,Male,Total,,0.38
+2017,Newfoundland and Labrador,Male,Indigenous identity,,0
+2017,Newfoundland and Labrador,Male,Non-Indigenous identity,,0.42
+2017,Newfoundland and Labrador,Female,Total,,1.13
+2017,Newfoundland and Labrador,Female,Indigenous identity,,4.03
+2017,Newfoundland and Labrador,Female,Non-Indigenous identity,,0.83
+2017,Prince Edward Island,All genders,Total,11,1.35
+2017,Prince Edward Island,All genders,Indigenous identity,,0
+2017,Prince Edward Island,All genders,Non-Indigenous identity,,1.37
+2017,Prince Edward Island,Male,Total,,2.75
+2017,Prince Edward Island,Male,Indigenous identity,,0
+2017,Prince Edward Island,Male,Non-Indigenous identity,,2.81
+2017,Prince Edward Island,Female,Total,,0
+2017,Prince Edward Island,Female,Indigenous identity,,0
+2017,Prince Edward Island,Female,Non-Indigenous identity,,0
+2017,Nova Scotia,All genders,Total,12,2.22
+2017,Nova Scotia,All genders,Indigenous identity,,0
+2017,Nova Scotia,All genders,Non-Indigenous identity,,2.25
+2017,Nova Scotia,Male,Total,,1.52
+2017,Nova Scotia,Male,Indigenous identity,,0
+2017,Nova Scotia,Male,Non-Indigenous identity,,1.61
+2017,Nova Scotia,Female,Total,,2.9
+2017,Nova Scotia,Female,Indigenous identity,,0
+2017,Nova Scotia,Female,Non-Indigenous identity,,2.87
+2017,New Brunswick,All genders,Total,13,1.31
+2017,New Brunswick,All genders,Indigenous identity,,0
+2017,New Brunswick,All genders,Non-Indigenous identity,,1.37
+2017,New Brunswick,Male,Total,,1.85
+2017,New Brunswick,Male,Indigenous identity,,0
+2017,New Brunswick,Male,Non-Indigenous identity,,1.94
+2017,New Brunswick,Female,Total,,0.78
+2017,New Brunswick,Female,Indigenous identity,,0
+2017,New Brunswick,Female,Non-Indigenous identity,,0.81
+2017,Quebec,All genders,Total,24,1.12
+2017,Quebec,All genders,Indigenous identity,,5.74
+2017,Quebec,All genders,Non-Indigenous identity,,1
+2017,Quebec,Male,Total,,1.5
+2017,Quebec,Male,Indigenous identity,,7.52
+2017,Quebec,Male,Non-Indigenous identity,,1.34
+2017,Quebec,Female,Total,,0.7
+2017,Quebec,Female,Indigenous identity,,3.89
+2017,Quebec,Female,Non-Indigenous identity,,0.62
+2017,Ontario,All genders,Total,35,1.41
+2017,Ontario,All genders,Indigenous identity,,4.79
+2017,Ontario,All genders,Non-Indigenous identity,,1.27
+2017,Ontario,Male,Total,,2.14
+2017,Ontario,Male,Indigenous identity,,7.84
+2017,Ontario,Male,Non-Indigenous identity,,1.92
+2017,Ontario,Female,Total,,0.7
+2017,Ontario,Female,Indigenous identity,,1.87
+2017,Ontario,Female,Non-Indigenous identity,,0.64
+2017,Manitoba,All genders,Total,46,3.53
+2017,Manitoba,All genders,Indigenous identity,,11.89
+2017,Manitoba,All genders,Non-Indigenous identity,,1.56
+2017,Manitoba,Male,Total,,5.72
+2017,Manitoba,Male,Indigenous identity,,19.97
+2017,Manitoba,Male,Non-Indigenous identity,,2.39
+2017,Manitoba,Female,Total,,1.35
+2017,Manitoba,Female,Indigenous identity,,4.04
+2017,Manitoba,Female,Non-Indigenous identity,,0.74
+2017,Saskatchewan,All genders,Total,47,3.31
+2017,Saskatchewan,All genders,Indigenous identity,,15.74
+2017,Saskatchewan,All genders,Non-Indigenous identity,,0.83
+2017,Saskatchewan,Male,Total,,5.01
+2017,Saskatchewan,Male,Indigenous identity,,26.61
+2017,Saskatchewan,Male,Non-Indigenous identity,,0.83
+2017,Saskatchewan,Female,Total,,1.58
+2017,Saskatchewan,Female,Indigenous identity,,5.17
+2017,Saskatchewan,Female,Non-Indigenous identity,,0.84
+2017,Alberta,All genders,Total,48,2.78
+2017,Alberta,All genders,Indigenous identity,,14.3
+2017,Alberta,All genders,Non-Indigenous identity,,1.9
+2017,Alberta,Male,Total,,4.39
+2017,Alberta,Male,Indigenous identity,,21.99
+2017,Alberta,Male,Non-Indigenous identity,,3.07
+2017,Alberta,Female,Total,,1.13
+2017,Alberta,Female,Indigenous identity,,6.86
+2017,Alberta,Female,Non-Indigenous identity,,0.71
+2017,British Columbia,All genders,Total,59,2.42
+2017,British Columbia,All genders,Indigenous identity,,3.69
+2017,British Columbia,All genders,Non-Indigenous identity,,2.34
+2017,British Columbia,Male,Total,,3.74
+2017,British Columbia,Male,Indigenous identity,,4.12
+2017,British Columbia,Male,Non-Indigenous identity,,3.72
+2017,British Columbia,Female,Total,,1.13
+2017,British Columbia,Female,Indigenous identity,,3.28
+2017,British Columbia,Female,Non-Indigenous identity,,0.99
+2017,Yukon,All genders,Total,60,20.65
+2017,Yukon,All genders,Indigenous identity,,66.96
+2017,Yukon,All genders,Non-Indigenous identity,,6.72
+2017,Yukon,Male,Total,,30.51
+2017,Yukon,Male,Indigenous identity,,91.22
+2017,Yukon,Male,Non-Indigenous identity,,13.09
+2017,Yukon,Female,Total,,10.48
+2017,Yukon,Female,Indigenous identity,,43.72
+2017,Yukon,Female,Non-Indigenous identity,,0
+2017,Northwest Territories,All genders,Total,61,4.44
+2017,Northwest Territories,All genders,Indigenous identity,,8.81
+2017,Northwest Territories,All genders,Non-Indigenous identity,,0
+2017,Northwest Territories,Male,Total,,8.68
+2017,Northwest Territories,Male,Indigenous identity,,17.58
+2017,Northwest Territories,Male,Non-Indigenous identity,,0
+2017,Northwest Territories,Female,Total,,0
+2017,Northwest Territories,Female,Indigenous identity,,0
+2017,Northwest Territories,Female,Non-Indigenous identity,,0
+2017,Nunavut,All genders,Total,62,15.97
+2017,Nunavut,All genders,Indigenous identity,,15.44
+2017,Nunavut,All genders,Non-Indigenous identity,,19.28
+2017,Nunavut,Male,Total,,20.86
+2017,Nunavut,Male,Indigenous identity,,18.28
+2017,Nunavut,Male,Non-Indigenous identity,,36.15
+2017,Nunavut,Female,Total,,10.87
+2017,Nunavut,Female,Indigenous identity,,12.52
+2017,Nunavut,Female,Non-Indigenous identity,,0
+2018,Canada,All genders,Indigenous identity,,7.47
+2018,Canada,All genders,Non-Indigenous identity,,1.46
+2018,Canada,Male,Total,,2.68
+2018,Canada,Male,Indigenous identity,,10.34
+2018,Canada,Male,Non-Indigenous identity,,2.25
+2018,Canada,Female,Total,,0.89
+2018,Canada,Female,Indigenous identity,,4.67
+2018,Canada,Female,Non-Indigenous identity,,0.68
+2018,Newfoundland and Labrador,All genders,Total,10,0.38
+2018,Newfoundland and Labrador,All genders,Indigenous identity,,0
+2018,Newfoundland and Labrador,All genders,Non-Indigenous identity,,0.21
+2018,Newfoundland and Labrador,Male,Total,,0.77
+2018,Newfoundland and Labrador,Male,Indigenous identity,,0
+2018,Newfoundland and Labrador,Male,Non-Indigenous identity,,0.42
+2018,Newfoundland and Labrador,Female,Total,,0
+2018,Newfoundland and Labrador,Female,Indigenous identity,,0
+2018,Newfoundland and Labrador,Female,Non-Indigenous identity,,0
+2018,Prince Edward Island,All genders,Total,11,0
+2018,Prince Edward Island,All genders,Indigenous identity,,0
+2018,Prince Edward Island,All genders,Non-Indigenous identity,,0
+2018,Prince Edward Island,Male,Total,,0
+2018,Prince Edward Island,Male,Indigenous identity,,0
+2018,Prince Edward Island,Male,Non-Indigenous identity,,0
+2018,Prince Edward Island,Female,Total,,0
+2018,Prince Edward Island,Female,Indigenous identity,,0
+2018,Prince Edward Island,Female,Non-Indigenous identity,,0
+2018,Nova Scotia,All genders,Total,12,1.16
+2018,Nova Scotia,All genders,Indigenous identity,,0
+2018,Nova Scotia,All genders,Non-Indigenous identity,,1.24
+2018,Nova Scotia,Male,Total,,1.51
+2018,Nova Scotia,Male,Indigenous identity,,0
+2018,Nova Scotia,Male,Non-Indigenous identity,,1.61
+2018,Nova Scotia,Female,Total,,0.83
+2018,Nova Scotia,Female,Indigenous identity,,0
+2018,Nova Scotia,Female,Non-Indigenous identity,,0.88
+2018,New Brunswick,All genders,Total,13,1.7
+2018,New Brunswick,All genders,Indigenous identity,,2.99
+2018,New Brunswick,All genders,Non-Indigenous identity,,1.64
+2018,New Brunswick,Male,Total,,1.32
+2018,New Brunswick,Male,Indigenous identity,,0
+2018,New Brunswick,Male,Non-Indigenous identity,,1.38
+2018,New Brunswick,Female,Total,,2.07
+2018,New Brunswick,Female,Indigenous identity,,6.05
+2018,New Brunswick,Female,Non-Indigenous identity,,1.89
+2018,Quebec,All genders,Total,24,1
+2018,Quebec,All genders,Indigenous identity,,2.31
+2018,Quebec,All genders,Non-Indigenous identity,,0.97
+2018,Quebec,Male,Total,,1.58
+2018,Quebec,Male,Indigenous identity,,2.73
+2018,Quebec,Male,Non-Indigenous identity,,1.55
+2018,Quebec,Female,Total,,0.43
+2018,Quebec,Female,Indigenous identity,,1.88
+2018,Quebec,Female,Non-Indigenous identity,,0.39
+2018,Ontario,All genders,Total,35,1.9
+2018,Ontario,All genders,Indigenous identity,,3.95
+2018,Ontario,All genders,Non-Indigenous identity,,1.83
+2018,Ontario,Male,Total,,2.81
+2018,Ontario,Male,Indigenous identity,,4.28
+2018,Ontario,Male,Non-Indigenous identity,,2.75
+2018,Ontario,Female,Total,,1.02
+2018,Ontario,Female,Indigenous identity,,3.63
+2018,Ontario,Female,Non-Indigenous identity,,0.93
+2018,Manitoba,All genders,Total,46,4.08
+2018,Manitoba,All genders,Indigenous identity,,16.02
+2018,Manitoba,All genders,Non-Indigenous identity,,1.36
+2018,Manitoba,Male,Total,,6.38
+2018,Manitoba,Male,Indigenous identity,,24.35
+2018,Manitoba,Male,Non-Indigenous identity,,2.36
+2018,Manitoba,Female,Total,,1.78
+2018,Manitoba,Female,Indigenous identity,,7.9
+2018,Manitoba,Female,Non-Indigenous identity,,0.36
+2018,Saskatchewan,All genders,Total,47,3
+2018,Saskatchewan,All genders,Indigenous identity,,11.29
+2018,Saskatchewan,All genders,Non-Indigenous identity,,1.34
+2018,Saskatchewan,Male,Total,,4.61
+2018,Saskatchewan,Male,Indigenous identity,,18.75
+2018,Saskatchewan,Male,Non-Indigenous identity,,1.84
+2018,Saskatchewan,Female,Total,,1.38
+2018,Saskatchewan,Female,Indigenous identity,,4.05
+2018,Saskatchewan,Female,Non-Indigenous identity,,0.83
+2018,Alberta,All genders,Total,48,1.85
+2018,Alberta,All genders,Indigenous identity,,10.16
+2018,Alberta,All genders,Non-Indigenous identity,,1.23
+2018,Alberta,Male,Total,,2.77
+2018,Alberta,Male,Indigenous identity,,13.76
+2018,Alberta,Male,Non-Indigenous identity,,1.94
+2018,Alberta,Female,Total,,0.92
+2018,Alberta,Female,Indigenous identity,,6.67
+2018,Alberta,Female,Non-Indigenous identity,,0.5
+2018,British Columbia,All genders,Total,59,1.8
+2018,British Columbia,All genders,Indigenous identity,,3.93
+2018,British Columbia,All genders,Non-Indigenous identity,,1.67
+2018,British Columbia,Male,Total,,2.92
+2018,British Columbia,Male,Indigenous identity,,4.69
+2018,British Columbia,Male,Non-Indigenous identity,,2.81
+2018,British Columbia,Female,Total,,0.71
+2018,British Columbia,Female,Indigenous identity,,3.21
+2018,British Columbia,Female,Non-Indigenous identity,,0.55
+2018,Yukon,All genders,Total,60,7.63
+2018,Yukon,All genders,Indigenous identity,,22.22
+2018,Yukon,All genders,Non-Indigenous identity,,3.3
+2018,Yukon,Male,Total,,10.01
+2018,Yukon,Male,Indigenous identity,,22.73
+2018,Yukon,Male,Non-Indigenous identity,,6.42
+2018,Yukon,Female,Total,,5.17
+2018,Yukon,Female,Indigenous identity,,21.73
+2018,Yukon,Female,Non-Indigenous identity,,0
+2018,Northwest Territories,All genders,Total,61,13.27
+2018,Northwest Territories,All genders,Indigenous identity,,21.96
+2018,Northwest Territories,All genders,Non-Indigenous identity,,4.46
+2018,Northwest Territories,Male,Total,,26
+2018,Northwest Territories,Male,Indigenous identity,,43.89
+2018,Northwest Territories,Male,Non-Indigenous identity,,8.56
+2018,Northwest Territories,Female,Total,,0
+2018,Northwest Territories,Female,Indigenous identity,,0
+2018,Northwest Territories,Female,Non-Indigenous identity,,0
+2018,Nunavut,All genders,Total,62,20.96
+2018,Nunavut,All genders,Indigenous identity,,24.22
+2018,Nunavut,All genders,Non-Indigenous identity,,0
+2018,Nunavut,Male,Total,,20.56
+2018,Nunavut,Male,Indigenous identity,,23.92
+2018,Nunavut,Male,Non-Indigenous identity,,0
+2018,Nunavut,Female,Total,,21.39
+2018,Nunavut,Female,Indigenous identity,,24.53
+2018,Nunavut,Female,Non-Indigenous identity,,0
+2019,Canada,All genders,Indigenous identity,,9.17
+2019,Canada,All genders,Non-Indigenous identity,,1.34
+2019,Canada,Male,Total,,2.82
+2019,Canada,Male,Indigenous identity,,13.6
+2019,Canada,Male,Non-Indigenous identity,,2.13
+2019,Canada,Female,Total,,0.82
+2019,Canada,Female,Indigenous identity,,4.76
+2019,Canada,Female,Non-Indigenous identity,,0.56
+2019,Newfoundland and Labrador,All genders,Total,10,0.96
+2019,Newfoundland and Labrador,All genders,Indigenous identity,,3.95
+2019,Newfoundland and Labrador,All genders,Non-Indigenous identity,,0.64
+2019,Newfoundland and Labrador,Male,Total,,1.16
+2019,Newfoundland and Labrador,Male,Indigenous identity,,4.03
+2019,Newfoundland and Labrador,Male,Non-Indigenous identity,,0.85
+2019,Newfoundland and Labrador,Female,Total,,0.76
+2019,Newfoundland and Labrador,Female,Indigenous identity,,3.87
+2019,Newfoundland and Labrador,Female,Non-Indigenous identity,,0.42
+2019,Prince Edward Island,All genders,Total,11,1.31
+2019,Prince Edward Island,All genders,Indigenous identity,,0
+2019,Prince Edward Island,All genders,Non-Indigenous identity,,1.34
+2019,Prince Edward Island,Male,Total,,2.67
+2019,Prince Edward Island,Male,Indigenous identity,,0
+2019,Prince Edward Island,Male,Non-Indigenous identity,,2.73
+2019,Prince Edward Island,Female,Total,,0
+2019,Prince Edward Island,Female,Indigenous identity,,0
+2019,Prince Edward Island,Female,Non-Indigenous identity,,0
+2019,Nova Scotia,All genders,Total,12,0.63
+2019,Nova Scotia,All genders,Indigenous identity,,3.26
+2019,Nova Scotia,All genders,Non-Indigenous identity,,0.34
+2019,Nova Scotia,Male,Total,,0.86
+2019,Nova Scotia,Male,Indigenous identity,,3.31
+2019,Nova Scotia,Male,Non-Indigenous identity,,0.69
+2019,Nova Scotia,Female,Total,,0.41
+2019,Nova Scotia,Female,Indigenous identity,,3.2
+2019,Nova Scotia,Female,Non-Indigenous identity,,0
+2019,New Brunswick,All genders,Total,13,2.22
+2019,New Brunswick,All genders,Indigenous identity,,2.9
+2019,New Brunswick,All genders,Non-Indigenous identity,,2.19
+2019,New Brunswick,Male,Total,,3.17
+2019,New Brunswick,Male,Indigenous identity,,5.75
+2019,New Brunswick,Male,Non-Indigenous identity,,3.04
+2019,New Brunswick,Female,Total,,1.29
+2019,New Brunswick,Female,Indigenous identity,,0
+2019,New Brunswick,Female,Non-Indigenous identity,,1.35
+2019,Quebec,All genders,Total,24,0.91
+2019,Quebec,All genders,Indigenous identity,,4.04
+2019,Quebec,All genders,Non-Indigenous identity,,0.8
+2019,Quebec,Male,Total,,1.3
+2019,Quebec,Male,Indigenous identity,,4.42
+2019,Quebec,Male,Non-Indigenous identity,,1.19
+2019,Quebec,Female,Total,,0.49
+2019,Quebec,Female,Indigenous identity,,3.65
+2019,Quebec,Female,Non-Indigenous identity,,0.41
+2019,Ontario,All genders,Total,35,1.74
+2019,Ontario,All genders,Indigenous identity,,5.87
+2019,Ontario,All genders,Non-Indigenous identity,,1.51
+2019,Ontario,Male,Total,,2.68
+2019,Ontario,Male,Indigenous identity,,7.38
+2019,Ontario,Male,Non-Indigenous identity,,2.42
+2019,Ontario,Female,Total,,0.79
+2019,Ontario,Female,Indigenous identity,,3.98
+2019,Ontario,Female,Non-Indigenous identity,,0.63
+2019,Manitoba,All genders,Total,46,5.27
+2019,Manitoba,All genders,Indigenous identity,,16.44
+2019,Manitoba,All genders,Non-Indigenous identity,,1.98
+2019,Manitoba,Male,Total,,9.08
+2019,Manitoba,Male,Indigenous identity,,29.35
+2019,Manitoba,Male,Non-Indigenous identity,,3.41
+2019,Manitoba,Female,Total,,1.46
+2019,Manitoba,Female,Indigenous identity,,3.87
+2019,Manitoba,Female,Non-Indigenous identity,,0.54
+2019,Saskatchewan,All genders,Total,47,4.65
+2019,Saskatchewan,All genders,Indigenous identity,,18.62
+2019,Saskatchewan,All genders,Non-Indigenous identity,,1.32
+2019,Saskatchewan,Male,Total,,7.39
+2019,Saskatchewan,Male,Indigenous identity,,29.62
+2019,Saskatchewan,Male,Non-Indigenous identity,,2.41
+2019,Saskatchewan,Female,Total,,1.7
+2019,Saskatchewan,Female,Indigenous identity,,7.94
+2019,Saskatchewan,Female,Non-Indigenous identity,,0.21
+2019,Alberta,All genders,Total,48,2.24
+2019,Alberta,All genders,Indigenous identity,,11.53
+2019,Alberta,All genders,Non-Indigenous identity,,1.56
+2019,Alberta,Male,Total,,3.33
+2019,Alberta,Male,Indigenous identity,,15.38
+2019,Alberta,Male,Non-Indigenous identity,,2.48
+2019,Alberta,Female,Total,,1.13
+2019,Alberta,Female,Indigenous identity,,7.79
+2019,Alberta,Female,Non-Indigenous identity,,0.63
+2019,British Columbia,All genders,Total,59,1.78
+2019,British Columbia,All genders,Indigenous identity,,4.8
+2019,British Columbia,All genders,Non-Indigenous identity,,1.56
+2019,British Columbia,Male,Total,,2.87
+2019,British Columbia,Male,Indigenous identity,,7.84
+2019,British Columbia,Male,Non-Indigenous identity,,2.51
+2019,British Columbia,Female,Total,,0.7
+2019,British Columbia,Female,Indigenous identity,,1.88
+2019,British Columbia,Female,Non-Indigenous identity,,0.62
+2019,Yukon,All genders,Total,60,2.52
+2019,Yukon,All genders,Indigenous identity,,11.07
+2019,Yukon,All genders,Non-Indigenous identity,,0
+2019,Yukon,Male,Total,,0
+2019,Yukon,Male,Indigenous identity,,0
+2019,Yukon,Male,Non-Indigenous identity,,0
+2019,Yukon,Female,Total,,5.11
+2019,Yukon,Female,Indigenous identity,,21.71
+2019,Yukon,Female,Non-Indigenous identity,,0
+2019,Northwest Territories,All genders,Total,61,4.4
+2019,Northwest Territories,All genders,Indigenous identity,,8.74
+2019,Northwest Territories,All genders,Non-Indigenous identity,,0
+2019,Northwest Territories,Male,Total,,8.64
+2019,Northwest Territories,Male,Indigenous identity,,17.49
+2019,Northwest Territories,Male,Non-Indigenous identity,,0
+2019,Northwest Territories,Female,Total,,0
+2019,Northwest Territories,Female,Indigenous identity,,0
+2019,Northwest Territories,Female,Non-Indigenous identity,,0
+2019,Nunavut,All genders,Total,62,18.06
+2019,Nunavut,All genders,Indigenous identity,,20.8
+2019,Nunavut,All genders,Non-Indigenous identity,,0
+2019,Nunavut,Male,Total,,20.3
+2019,Nunavut,Male,Indigenous identity,,23.5
+2019,Nunavut,Male,Non-Indigenous identity,,0
+2019,Nunavut,Female,Total,,15.74
+2019,Nunavut,Female,Indigenous identity,,18.04
+2019,Nunavut,Female,Non-Indigenous identity,,0
+2020,Canada,All genders,Indigenous identity,,10.05
+2020,Canada,All genders,Non-Indigenous identity,,1.42
+2020,Canada,Male,Total,,3.01
+2020,Canada,Male,Indigenous identity,,16.5
+2020,Canada,Male,Non-Indigenous identity,,2.14
+2020,Canada,Female,Total,,0.89
+2020,Canada,Female,Indigenous identity,,3.76
+2020,Canada,Female,Non-Indigenous identity,,0.69
+2020,Newfoundland and Labrador,All genders,Total,10,0.77
+2020,Newfoundland and Labrador,All genders,Indigenous identity,,1.94
+2020,Newfoundland and Labrador,All genders,Non-Indigenous identity,,0.21
+2020,Newfoundland and Labrador,Male,Total,,1.55
+2020,Newfoundland and Labrador,Male,Indigenous identity,,3.96
+2020,Newfoundland and Labrador,Male,Non-Indigenous identity,,0.43
+2020,Newfoundland and Labrador,Female,Total,,0
+2020,Newfoundland and Labrador,Female,Indigenous identity,,0
+2020,Newfoundland and Labrador,Female,Non-Indigenous identity,,0
+2020,Prince Edward Island,All genders,Total,11,0.65
+2020,Prince Edward Island,All genders,Indigenous identity,,0
+2020,Prince Edward Island,All genders,Non-Indigenous identity,,0.66
+2020,Prince Edward Island,Male,Total,,0
+2020,Prince Edward Island,Male,Indigenous identity,,0
+2020,Prince Edward Island,Male,Non-Indigenous identity,,0
+2020,Prince Edward Island,Female,Total,,1.28
+2020,Prince Edward Island,Female,Indigenous identity,,0
+2020,Prince Edward Island,Female,Non-Indigenous identity,,1.31
+2020,Nova Scotia,All genders,Total,12,3.67
+2020,Nova Scotia,All genders,Indigenous identity,,1.57
+2020,Nova Scotia,All genders,Non-Indigenous identity,,3.6
+2020,Nova Scotia,Male,Total,,4.06
+2020,Nova Scotia,Male,Indigenous identity,,0
+2020,Nova Scotia,Male,Non-Indigenous identity,,4.12
+2020,Nova Scotia,Female,Total,,3.3
+2020,Nova Scotia,Female,Indigenous identity,,3.09
+2020,Nova Scotia,Female,Non-Indigenous identity,,3.09
+2020,New Brunswick,All genders,Total,13,1.83
+2020,New Brunswick,All genders,Indigenous identity,,5.64
+2020,New Brunswick,All genders,Non-Indigenous identity,,1.65
+2020,New Brunswick,Male,Total,,2.91
+2020,New Brunswick,Male,Indigenous identity,,11.2
+2020,New Brunswick,Male,Non-Indigenous identity,,2.5
+2020,New Brunswick,Female,Total,,0.78
+2020,New Brunswick,Female,Indigenous identity,,0
+2020,New Brunswick,Female,Non-Indigenous identity,,0.81
+2020,Quebec,All genders,Total,24,1.02
+2020,Quebec,All genders,Indigenous identity,,4.8
+2020,Quebec,All genders,Non-Indigenous identity,,0.9
+2020,Quebec,Male,Total,,1.48
+2020,Quebec,Male,Indigenous identity,,7.73
+2020,Quebec,Male,Non-Indigenous identity,,1.28
+2020,Quebec,Female,Total,,0.56
+2020,Quebec,Female,Indigenous identity,,1.77
+2020,Quebec,Female,Non-Indigenous identity,,0.53
+2020,Ontario,All genders,Total,35,1.59
+2020,Ontario,All genders,Indigenous identity,,5.05
+2020,Ontario,All genders,Non-Indigenous identity,,1.35
+2020,Ontario,Male,Total,,2.42
+2020,Ontario,Male,Indigenous identity,,8.51
+2020,Ontario,Male,Non-Indigenous identity,,2.07
+2020,Ontario,Female,Total,,0.75
+2020,Ontario,Female,Indigenous identity,,1.72
+2020,Ontario,Female,Non-Indigenous identity,,0.64
+2020,Manitoba,All genders,Total,46,4.51
+2020,Manitoba,All genders,Indigenous identity,,15.32
+2020,Manitoba,All genders,Non-Indigenous identity,,1.26
+2020,Manitoba,Male,Total,,7.57
+2020,Manitoba,Male,Indigenous identity,,24.83
+2020,Manitoba,Male,Non-Indigenous identity,,2.33
+2020,Manitoba,Female,Total,,1.45
+2020,Manitoba,Female,Indigenous identity,,6.05
+2020,Manitoba,Female,Non-Indigenous identity,,0.18
+2020,Saskatchewan,All genders,Total,47,5.02
+2020,Saskatchewan,All genders,Indigenous identity,,22.74
+2020,Saskatchewan,All genders,Non-Indigenous identity,,1.31
+2020,Saskatchewan,Male,Total,,7.99
+2020,Saskatchewan,Male,Indigenous identity,,37.11
+2020,Saskatchewan,Male,Non-Indigenous identity,,1.99
+2020,Saskatchewan,Female,Total,,2.02
+2020,Saskatchewan,Female,Indigenous identity,,8.77
+2020,Saskatchewan,Female,Non-Indigenous identity,,0.61
+2020,Alberta,All genders,Total,48,3.06
+2020,Alberta,All genders,Indigenous identity,,18.29
+2020,Alberta,All genders,Non-Indigenous identity,,1.94
+2020,Alberta,Male,Total,,5.11
+2020,Alberta,Male,Indigenous identity,,31.87
+2020,Alberta,Male,Non-Indigenous identity,,3.18
+2020,Alberta,Female,Total,,0.93
+2020,Alberta,Female,Indigenous identity,,5.07
+2020,Alberta,Female,Non-Indigenous identity,,0.62
+2020,British Columbia,All genders,Total,59,1.92
+2020,British Columbia,All genders,Indigenous identity,,4.07
+2020,British Columbia,All genders,Non-Indigenous identity,,1.78
+2020,British Columbia,Male,Total,,2.89
+2020,British Columbia,Male,Indigenous identity,,6.38
+2020,British Columbia,Male,Non-Indigenous identity,,2.66
+2020,British Columbia,Female,Total,,0.93
+2020,British Columbia,Female,Indigenous identity,,1.84
+2020,British Columbia,Female,Non-Indigenous identity,,0.87
+2020,Yukon,All genders,Total,60,0
+2020,Yukon,All genders,Indigenous identity,,0
+2020,Yukon,All genders,Non-Indigenous identity,,0
+2020,Yukon,Male,Total,,0
+2020,Yukon,Male,Indigenous identity,,0
+2020,Yukon,Male,Non-Indigenous identity,,0
+2020,Yukon,Female,Total,,0
+2020,Yukon,Female,Indigenous identity,,0
+2020,Yukon,Female,Non-Indigenous identity,,0
+2020,Northwest Territories,All genders,Total,61,13.11
+2020,Northwest Territories,All genders,Indigenous identity,,17.42
+2020,Northwest Territories,All genders,Non-Indigenous identity,,8.77
+2020,Northwest Territories,Male,Total,,12.92
+2020,Northwest Territories,Male,Indigenous identity,,17.45
+2020,Northwest Territories,Male,Non-Indigenous identity,,8.5
+2020,Northwest Territories,Female,Total,,13.31
+2020,Northwest Territories,Female,Indigenous identity,,17.39
+2020,Northwest Territories,Female,Non-Indigenous identity,,9.06
+2020,Nunavut,All genders,Total,62,7.63
+2020,Nunavut,All genders,Indigenous identity,,8.76
+2020,Nunavut,All genders,Non-Indigenous identity,,0
+2020,Nunavut,Male,Total,,10.02
+2020,Nunavut,Male,Indigenous identity,,11.55
+2020,Nunavut,Male,Non-Indigenous identity,,0
+2020,Nunavut,Female,Total,,5.16
+2020,Nunavut,Female,Indigenous identity,,5.91
+2020,Nunavut,Female,Non-Indigenous identity,,0

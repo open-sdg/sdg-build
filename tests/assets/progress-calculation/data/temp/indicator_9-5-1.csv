@@ -1,0 +1,457 @@
+Year,Geography,Science type,GeoCode,Value
+2010,,,NA,1.83
+2011,,,NA,1.79
+2012,,,NA,1.77
+2013,,,NA,1.71
+2014,,,NA,1.71
+2015,,,NA,1.69
+2016,,,NA,1.73
+2017,,,NA,1.69
+2018,,,NA,1.74
+2019,,,NA,1.75
+2020,,,NA,1.84
+2021,,,NA,NA
+2010,Canada,Natural sciences and engineering,NA,1.67
+2010,Canada,"Social sciences, humanities and the arts",NA,0.16
+2010,Newfoundland and Labrador,Total sciences,10,0.86
+2010,Newfoundland and Labrador,Natural sciences and engineering,NA,0.72
+2010,Newfoundland and Labrador,"Social sciences, humanities and the arts",NA,0.14
+2010,Prince Edward Island,Total sciences,11,1.3
+2010,Prince Edward Island,Natural sciences and engineering,NA,1.07
+2010,Prince Edward Island,"Social sciences, humanities and the arts",NA,0.23
+2010,Nova Scotia,Total sciences,12,1.42
+2010,Nova Scotia,Natural sciences and engineering,NA,1.19
+2010,Nova Scotia,"Social sciences, humanities and the arts",NA,0.23
+2010,New Brunswick,Total sciences,13,0.96
+2010,New Brunswick,Natural sciences and engineering,NA,0.79
+2010,New Brunswick,"Social sciences, humanities and the arts",NA,0.17
+2010,Quebec,Total sciences,24,2.42
+2010,Quebec,Natural sciences and engineering,NA,2.23
+2010,Quebec,"Social sciences, humanities and the arts",NA,0.18
+2010,Ontario,Total sciences,35,2.2
+2010,Ontario,Natural sciences and engineering,NA,2.01
+2010,Ontario,"Social sciences, humanities and the arts",NA,0.19
+2010,Manitoba,Total sciences,46,1.26
+2010,Manitoba,Natural sciences and engineering,NA,1.1
+2010,Manitoba,"Social sciences, humanities and the arts",NA,0.16
+2010,Saskatchewan,Total sciences,47,0.94
+2010,Saskatchewan,Natural sciences and engineering,NA,0.84
+2010,Saskatchewan,"Social sciences, humanities and the arts",NA,0.09
+2010,Alberta,Total sciences,48,1.1
+2010,Alberta,Natural sciences and engineering,NA,1.02
+2010,Alberta,"Social sciences, humanities and the arts",NA,0.08
+2010,British Columbia,Total sciences,59,1.46
+2010,British Columbia,Natural sciences and engineering,NA,1.33
+2010,British Columbia,"Social sciences, humanities and the arts",NA,0.13
+2010,"Yukon, Northwest Territories and Nunavut",Total sciences,NA,NA
+2010,"Yukon, Northwest Territories and Nunavut",Natural sciences and engineering,NA,NA
+2010,"Yukon, Northwest Territories and Nunavut","Social sciences, humanities and the arts",NA,NA
+2010,"National Capital Region, Ontario/Quebec",Total sciences,NA,NA
+2010,"National Capital Region, Ontario/Quebec",Natural sciences and engineering,NA,NA
+2010,"National Capital Region, Ontario/Quebec","Social sciences, humanities and the arts",NA,NA
+2010,"National Capital Region, Quebec",Total sciences,NA,NA
+2010,"National Capital Region, Quebec",Natural sciences and engineering,NA,NA
+2010,"National Capital Region, Quebec","Social sciences, humanities and the arts",NA,NA
+2010,"National Capital Region, Ontario",Total sciences,NA,NA
+2010,"National Capital Region, Ontario",Natural sciences and engineering,NA,NA
+2010,"National Capital Region, Ontario","Social sciences, humanities and the arts",NA,NA
+2011,Canada,Natural sciences and engineering,NA,1.64
+2011,Canada,"Social sciences, humanities and the arts",NA,0.15
+2011,Newfoundland and Labrador,Total sciences,10,0.91
+2011,Newfoundland and Labrador,Natural sciences and engineering,NA,0.74
+2011,Newfoundland and Labrador,"Social sciences, humanities and the arts",NA,0.17
+2011,Prince Edward Island,Total sciences,11,1.2
+2011,Prince Edward Island,Natural sciences and engineering,NA,0.98
+2011,Prince Edward Island,"Social sciences, humanities and the arts",NA,0.24
+2011,Nova Scotia,Total sciences,12,1.34
+2011,Nova Scotia,Natural sciences and engineering,NA,1.12
+2011,Nova Scotia,"Social sciences, humanities and the arts",NA,0.22
+2011,New Brunswick,Total sciences,13,0.94
+2011,New Brunswick,Natural sciences and engineering,NA,0.79
+2011,New Brunswick,"Social sciences, humanities and the arts",NA,0.15
+2011,Quebec,Total sciences,24,2.43
+2011,Quebec,Natural sciences and engineering,NA,2.25
+2011,Quebec,"Social sciences, humanities and the arts",NA,0.18
+2011,Ontario,Total sciences,35,2.18
+2011,Ontario,Natural sciences and engineering,NA,2
+2011,Ontario,"Social sciences, humanities and the arts",NA,0.18
+2011,Manitoba,Total sciences,46,1.16
+2011,Manitoba,Natural sciences and engineering,NA,1
+2011,Manitoba,"Social sciences, humanities and the arts",NA,0.16
+2011,Saskatchewan,Total sciences,47,0.77
+2011,Saskatchewan,Natural sciences and engineering,NA,0.7
+2011,Saskatchewan,"Social sciences, humanities and the arts",NA,0.07
+2011,Alberta,Total sciences,48,1.1
+2011,Alberta,Natural sciences and engineering,NA,1.03
+2011,Alberta,"Social sciences, humanities and the arts",NA,0.07
+2011,British Columbia,Total sciences,59,1.39
+2011,British Columbia,Natural sciences and engineering,NA,1.27
+2011,British Columbia,"Social sciences, humanities and the arts",NA,0.12
+2011,"Yukon, Northwest Territories and Nunavut",Total sciences,NA,NA
+2011,"Yukon, Northwest Territories and Nunavut",Natural sciences and engineering,NA,NA
+2011,"Yukon, Northwest Territories and Nunavut","Social sciences, humanities and the arts",NA,NA
+2011,"National Capital Region, Ontario/Quebec",Total sciences,NA,NA
+2011,"National Capital Region, Ontario/Quebec",Natural sciences and engineering,NA,NA
+2011,"National Capital Region, Ontario/Quebec","Social sciences, humanities and the arts",NA,NA
+2011,"National Capital Region, Quebec",Total sciences,NA,NA
+2011,"National Capital Region, Quebec",Natural sciences and engineering,NA,NA
+2011,"National Capital Region, Quebec","Social sciences, humanities and the arts",NA,NA
+2011,"National Capital Region, Ontario",Total sciences,NA,NA
+2011,"National Capital Region, Ontario",Natural sciences and engineering,NA,NA
+2011,"National Capital Region, Ontario","Social sciences, humanities and the arts",NA,NA
+2012,Canada,Natural sciences and engineering,NA,1.6
+2012,Canada,"Social sciences, humanities and the arts",NA,0.17
+2012,Newfoundland and Labrador,Total sciences,10,1.18
+2012,Newfoundland and Labrador,Natural sciences and engineering,NA,0.99
+2012,Newfoundland and Labrador,"Social sciences, humanities and the arts",NA,0.19
+2012,Prince Edward Island,Total sciences,11,1.4
+2012,Prince Edward Island,Natural sciences and engineering,NA,1.13
+2012,Prince Edward Island,"Social sciences, humanities and the arts",NA,0.27
+2012,Nova Scotia,Total sciences,12,1.35
+2012,Nova Scotia,Natural sciences and engineering,NA,1.05
+2012,Nova Scotia,"Social sciences, humanities and the arts",NA,0.29
+2012,New Brunswick,Total sciences,13,0.89
+2012,New Brunswick,Natural sciences and engineering,NA,0.68
+2012,New Brunswick,"Social sciences, humanities and the arts",NA,0.21
+2012,Quebec,Total sciences,24,2.33
+2012,Quebec,Natural sciences and engineering,NA,2.12
+2012,Quebec,"Social sciences, humanities and the arts",NA,0.21
+2012,Ontario,Total sciences,35,2.15
+2012,Ontario,Natural sciences and engineering,NA,1.94
+2012,Ontario,"Social sciences, humanities and the arts",NA,0.21
+2012,Manitoba,Total sciences,46,1.15
+2012,Manitoba,Natural sciences and engineering,NA,0.98
+2012,Manitoba,"Social sciences, humanities and the arts",NA,0.18
+2012,Saskatchewan,Total sciences,47,0.79
+2012,Saskatchewan,Natural sciences and engineering,NA,0.7
+2012,Saskatchewan,"Social sciences, humanities and the arts",NA,0.09
+2012,Alberta,Total sciences,48,1.19
+2012,Alberta,Natural sciences and engineering,NA,1.11
+2012,Alberta,"Social sciences, humanities and the arts",NA,0.08
+2012,British Columbia,Total sciences,59,1.35
+2012,British Columbia,Natural sciences and engineering,NA,1.21
+2012,British Columbia,"Social sciences, humanities and the arts",NA,0.14
+2012,"Yukon, Northwest Territories and Nunavut",Total sciences,NA,NA
+2012,"Yukon, Northwest Territories and Nunavut",Natural sciences and engineering,NA,NA
+2012,"Yukon, Northwest Territories and Nunavut","Social sciences, humanities and the arts",NA,NA
+2012,"National Capital Region, Ontario/Quebec",Total sciences,NA,NA
+2012,"National Capital Region, Ontario/Quebec",Natural sciences and engineering,NA,NA
+2012,"National Capital Region, Ontario/Quebec","Social sciences, humanities and the arts",NA,NA
+2012,"National Capital Region, Quebec",Total sciences,NA,NA
+2012,"National Capital Region, Quebec",Natural sciences and engineering,NA,NA
+2012,"National Capital Region, Quebec","Social sciences, humanities and the arts",NA,NA
+2012,"National Capital Region, Ontario",Total sciences,NA,NA
+2012,"National Capital Region, Ontario",Natural sciences and engineering,NA,NA
+2012,"National Capital Region, Ontario","Social sciences, humanities and the arts",NA,NA
+2013,Canada,Natural sciences and engineering,NA,1.53
+2013,Canada,"Social sciences, humanities and the arts",NA,0.18
+2013,Newfoundland and Labrador,Total sciences,10,0.91
+2013,Newfoundland and Labrador,Natural sciences and engineering,NA,0.76
+2013,Newfoundland and Labrador,"Social sciences, humanities and the arts",NA,0.16
+2013,Prince Edward Island,Total sciences,11,1.3
+2013,Prince Edward Island,Natural sciences and engineering,NA,1.06
+2013,Prince Edward Island,"Social sciences, humanities and the arts",NA,0.23
+2013,Nova Scotia,Total sciences,12,1.36
+2013,Nova Scotia,Natural sciences and engineering,NA,1.09
+2013,Nova Scotia,"Social sciences, humanities and the arts",NA,0.27
+2013,New Brunswick,Total sciences,13,0.91
+2013,New Brunswick,Natural sciences and engineering,NA,0.71
+2013,New Brunswick,"Social sciences, humanities and the arts",NA,0.2
+2013,Quebec,Total sciences,24,2.31
+2013,Quebec,Natural sciences and engineering,NA,2.08
+2013,Quebec,"Social sciences, humanities and the arts",NA,0.23
+2013,Ontario,Total sciences,35,2.04
+2013,Ontario,Natural sciences and engineering,NA,1.83
+2013,Ontario,"Social sciences, humanities and the arts",NA,0.21
+2013,Manitoba,Total sciences,46,1.13
+2013,Manitoba,Natural sciences and engineering,NA,0.95
+2013,Manitoba,"Social sciences, humanities and the arts",NA,0.18
+2013,Saskatchewan,Total sciences,47,0.85
+2013,Saskatchewan,Natural sciences and engineering,NA,0.77
+2013,Saskatchewan,"Social sciences, humanities and the arts",NA,0.08
+2013,Alberta,Total sciences,48,1.09
+2013,Alberta,Natural sciences and engineering,NA,1.02
+2013,Alberta,"Social sciences, humanities and the arts",NA,0.07
+2013,British Columbia,Total sciences,59,1.4
+2013,British Columbia,Natural sciences and engineering,NA,1.23
+2013,British Columbia,"Social sciences, humanities and the arts",NA,0.17
+2013,"Yukon, Northwest Territories and Nunavut",Total sciences,NA,NA
+2013,"Yukon, Northwest Territories and Nunavut",Natural sciences and engineering,NA,NA
+2013,"Yukon, Northwest Territories and Nunavut","Social sciences, humanities and the arts",NA,NA
+2013,"National Capital Region, Ontario/Quebec",Total sciences,NA,NA
+2013,"National Capital Region, Ontario/Quebec",Natural sciences and engineering,NA,NA
+2013,"National Capital Region, Ontario/Quebec","Social sciences, humanities and the arts",NA,NA
+2013,"National Capital Region, Quebec",Total sciences,NA,NA
+2013,"National Capital Region, Quebec",Natural sciences and engineering,NA,NA
+2013,"National Capital Region, Quebec","Social sciences, humanities and the arts",NA,NA
+2013,"National Capital Region, Ontario",Total sciences,NA,NA
+2013,"National Capital Region, Ontario",Natural sciences and engineering,NA,NA
+2013,"National Capital Region, Ontario","Social sciences, humanities and the arts",NA,NA
+2014,Canada,Natural sciences and engineering,NA,1.54
+2014,Canada,"Social sciences, humanities and the arts",NA,0.17
+2014,Newfoundland and Labrador,Total sciences,10,1.05
+2014,Newfoundland and Labrador,Natural sciences and engineering,NA,0.89
+2014,Newfoundland and Labrador,"Social sciences, humanities and the arts",NA,0.16
+2014,Prince Edward Island,Total sciences,11,1.14
+2014,Prince Edward Island,Natural sciences and engineering,NA,0.96
+2014,Prince Edward Island,"Social sciences, humanities and the arts",NA,0.19
+2014,Nova Scotia,Total sciences,12,1.48
+2014,Nova Scotia,Natural sciences and engineering,NA,1.2
+2014,Nova Scotia,"Social sciences, humanities and the arts",NA,0.28
+2014,New Brunswick,Total sciences,13,0.93
+2014,New Brunswick,Natural sciences and engineering,NA,0.72
+2014,New Brunswick,"Social sciences, humanities and the arts",NA,0.21
+2014,Quebec,Total sciences,24,2.41
+2014,Quebec,Natural sciences and engineering,NA,2.19
+2014,Quebec,"Social sciences, humanities and the arts",NA,0.22
+2014,Ontario,Total sciences,35,2.08
+2014,Ontario,Natural sciences and engineering,NA,1.88
+2014,Ontario,"Social sciences, humanities and the arts",NA,0.2
+2014,Manitoba,Total sciences,46,1.19
+2014,Manitoba,Natural sciences and engineering,NA,1.01
+2014,Manitoba,"Social sciences, humanities and the arts",NA,0.18
+2014,Saskatchewan,Total sciences,47,0.81
+2014,Saskatchewan,Natural sciences and engineering,NA,0.73
+2014,Saskatchewan,"Social sciences, humanities and the arts",NA,0.08
+2014,Alberta,Total sciences,48,1
+2014,Alberta,Natural sciences and engineering,NA,0.93
+2014,Alberta,"Social sciences, humanities and the arts",NA,0.07
+2014,British Columbia,Total sciences,59,1.35
+2014,British Columbia,Natural sciences and engineering,NA,1.19
+2014,British Columbia,"Social sciences, humanities and the arts",NA,0.16
+2014,"Yukon, Northwest Territories and Nunavut",Total sciences,NA,NA
+2014,"Yukon, Northwest Territories and Nunavut",Natural sciences and engineering,NA,NA
+2014,"Yukon, Northwest Territories and Nunavut","Social sciences, humanities and the arts",NA,NA
+2014,"National Capital Region, Ontario/Quebec",Total sciences,NA,NA
+2014,"National Capital Region, Ontario/Quebec",Natural sciences and engineering,NA,NA
+2014,"National Capital Region, Ontario/Quebec","Social sciences, humanities and the arts",NA,NA
+2014,"National Capital Region, Quebec",Total sciences,NA,NA
+2014,"National Capital Region, Quebec",Natural sciences and engineering,NA,NA
+2014,"National Capital Region, Quebec","Social sciences, humanities and the arts",NA,NA
+2014,"National Capital Region, Ontario",Total sciences,NA,NA
+2014,"National Capital Region, Ontario",Natural sciences and engineering,NA,NA
+2014,"National Capital Region, Ontario","Social sciences, humanities and the arts",NA,NA
+2015,Canada,Natural sciences and engineering,NA,1.52
+2015,Canada,"Social sciences, humanities and the arts",NA,0.18
+2015,Newfoundland and Labrador,Total sciences,10,1.19
+2015,Newfoundland and Labrador,Natural sciences and engineering,NA,1.03
+2015,Newfoundland and Labrador,"Social sciences, humanities and the arts",NA,0.17
+2015,Prince Edward Island,Total sciences,11,1.3
+2015,Prince Edward Island,Natural sciences and engineering,NA,1.08
+2015,Prince Edward Island,"Social sciences, humanities and the arts",NA,0.21
+2015,Nova Scotia,Total sciences,12,1.52
+2015,Nova Scotia,Natural sciences and engineering,NA,1.23
+2015,Nova Scotia,"Social sciences, humanities and the arts",NA,0.28
+2015,New Brunswick,Total sciences,13,0.92
+2015,New Brunswick,Natural sciences and engineering,NA,0.72
+2015,New Brunswick,"Social sciences, humanities and the arts",NA,0.2
+2015,Quebec,Total sciences,24,2.26
+2015,Quebec,Natural sciences and engineering,NA,2.04
+2015,Quebec,"Social sciences, humanities and the arts",NA,0.22
+2015,Ontario,Total sciences,35,1.93
+2015,Ontario,Natural sciences and engineering,NA,1.73
+2015,Ontario,"Social sciences, humanities and the arts",NA,0.2
+2015,Manitoba,Total sciences,46,1.22
+2015,Manitoba,Natural sciences and engineering,NA,1.05
+2015,Manitoba,"Social sciences, humanities and the arts",NA,0.17
+2015,Saskatchewan,Total sciences,47,0.96
+2015,Saskatchewan,Natural sciences and engineering,NA,0.87
+2015,Saskatchewan,"Social sciences, humanities and the arts",NA,0.08
+2015,Alberta,Total sciences,48,1.09
+2015,Alberta,Natural sciences and engineering,NA,1.01
+2015,Alberta,"Social sciences, humanities and the arts",NA,0.08
+2015,British Columbia,Total sciences,59,1.43
+2015,British Columbia,Natural sciences and engineering,NA,1.26
+2015,British Columbia,"Social sciences, humanities and the arts",NA,0.17
+2015,"Yukon, Northwest Territories and Nunavut",Total sciences,NA,NA
+2015,"Yukon, Northwest Territories and Nunavut",Natural sciences and engineering,NA,NA
+2015,"Yukon, Northwest Territories and Nunavut","Social sciences, humanities and the arts",NA,NA
+2015,"National Capital Region, Ontario/Quebec",Total sciences,NA,NA
+2015,"National Capital Region, Ontario/Quebec",Natural sciences and engineering,NA,NA
+2015,"National Capital Region, Ontario/Quebec","Social sciences, humanities and the arts",NA,NA
+2015,"National Capital Region, Quebec",Total sciences,NA,NA
+2015,"National Capital Region, Quebec",Natural sciences and engineering,NA,NA
+2015,"National Capital Region, Quebec","Social sciences, humanities and the arts",NA,NA
+2015,"National Capital Region, Ontario",Total sciences,NA,NA
+2015,"National Capital Region, Ontario",Natural sciences and engineering,NA,NA
+2015,"National Capital Region, Ontario","Social sciences, humanities and the arts",NA,NA
+2016,Canada,Natural sciences and engineering,NA,1.55
+2016,Canada,"Social sciences, humanities and the arts",NA,0.18
+2016,Newfoundland and Labrador,Total sciences,10,1.15
+2016,Newfoundland and Labrador,Natural sciences and engineering,NA,0.98
+2016,Newfoundland and Labrador,"Social sciences, humanities and the arts",NA,0.17
+2016,Prince Edward Island,Total sciences,11,1.32
+2016,Prince Edward Island,Natural sciences and engineering,NA,1.13
+2016,Prince Edward Island,"Social sciences, humanities and the arts",NA,0.19
+2016,Nova Scotia,Total sciences,12,1.54
+2016,Nova Scotia,Natural sciences and engineering,NA,1.24
+2016,Nova Scotia,"Social sciences, humanities and the arts",NA,0.29
+2016,New Brunswick,Total sciences,13,1.05
+2016,New Brunswick,Natural sciences and engineering,NA,0.86
+2016,New Brunswick,"Social sciences, humanities and the arts",NA,0.2
+2016,Quebec,Total sciences,24,2.21
+2016,Quebec,Natural sciences and engineering,NA,1.99
+2016,Quebec,"Social sciences, humanities and the arts",NA,0.22
+2016,Ontario,Total sciences,35,1.97
+2016,Ontario,Natural sciences and engineering,NA,1.78
+2016,Ontario,"Social sciences, humanities and the arts",NA,0.19
+2016,Manitoba,Total sciences,46,1.22
+2016,Manitoba,Natural sciences and engineering,NA,1.04
+2016,Manitoba,"Social sciences, humanities and the arts",NA,0.18
+2016,Saskatchewan,Total sciences,47,0.93
+2016,Saskatchewan,Natural sciences and engineering,NA,0.83
+2016,Saskatchewan,"Social sciences, humanities and the arts",NA,0.1
+2016,Alberta,Total sciences,48,1.07
+2016,Alberta,Natural sciences and engineering,NA,0.98
+2016,Alberta,"Social sciences, humanities and the arts",NA,0.09
+2016,British Columbia,Total sciences,59,1.59
+2016,British Columbia,Natural sciences and engineering,NA,1.43
+2016,British Columbia,"Social sciences, humanities and the arts",NA,0.16
+2016,"Yukon, Northwest Territories and Nunavut",Total sciences,NA,NA
+2016,"Yukon, Northwest Territories and Nunavut",Natural sciences and engineering,NA,NA
+2016,"Yukon, Northwest Territories and Nunavut","Social sciences, humanities and the arts",NA,NA
+2016,"National Capital Region, Ontario/Quebec",Total sciences,NA,NA
+2016,"National Capital Region, Ontario/Quebec",Natural sciences and engineering,NA,NA
+2016,"National Capital Region, Ontario/Quebec","Social sciences, humanities and the arts",NA,NA
+2016,"National Capital Region, Quebec",Total sciences,NA,NA
+2016,"National Capital Region, Quebec",Natural sciences and engineering,NA,NA
+2016,"National Capital Region, Quebec","Social sciences, humanities and the arts",NA,NA
+2016,"National Capital Region, Ontario",Total sciences,NA,NA
+2016,"National Capital Region, Ontario",Natural sciences and engineering,NA,NA
+2016,"National Capital Region, Ontario","Social sciences, humanities and the arts",NA,NA
+2017,Canada,Natural sciences and engineering,NA,1.51
+2017,Canada,"Social sciences, humanities and the arts",NA,0.18
+2017,Newfoundland and Labrador,Total sciences,10,1.24
+2017,Newfoundland and Labrador,Natural sciences and engineering,NA,1.04
+2017,Newfoundland and Labrador,"Social sciences, humanities and the arts",NA,0.21
+2017,Prince Edward Island,Total sciences,11,1.25
+2017,Prince Edward Island,Natural sciences and engineering,NA,1.08
+2017,Prince Edward Island,"Social sciences, humanities and the arts",NA,0.19
+2017,Nova Scotia,Total sciences,12,1.55
+2017,Nova Scotia,Natural sciences and engineering,NA,1.26
+2017,Nova Scotia,"Social sciences, humanities and the arts",NA,0.29
+2017,New Brunswick,Total sciences,13,0.91
+2017,New Brunswick,Natural sciences and engineering,NA,0.72
+2017,New Brunswick,"Social sciences, humanities and the arts",NA,0.2
+2017,Quebec,Total sciences,24,2.26
+2017,Quebec,Natural sciences and engineering,NA,2.04
+2017,Quebec,"Social sciences, humanities and the arts",NA,0.22
+2017,Ontario,Total sciences,35,1.93
+2017,Ontario,Natural sciences and engineering,NA,1.73
+2017,Ontario,"Social sciences, humanities and the arts",NA,0.2
+2017,Manitoba,Total sciences,46,1.21
+2017,Manitoba,Natural sciences and engineering,NA,1.04
+2017,Manitoba,"Social sciences, humanities and the arts",NA,0.17
+2017,Saskatchewan,Total sciences,47,0.83
+2017,Saskatchewan,Natural sciences and engineering,NA,0.74
+2017,Saskatchewan,"Social sciences, humanities and the arts",NA,0.09
+2017,Alberta,Total sciences,48,1
+2017,Alberta,Natural sciences and engineering,NA,0.91
+2017,Alberta,"Social sciences, humanities and the arts",NA,0.09
+2017,British Columbia,Total sciences,59,1.49
+2017,British Columbia,Natural sciences and engineering,NA,1.34
+2017,British Columbia,"Social sciences, humanities and the arts",NA,0.16
+2017,"Yukon, Northwest Territories and Nunavut",Total sciences,NA,NA
+2017,"Yukon, Northwest Territories and Nunavut",Natural sciences and engineering,NA,NA
+2017,"Yukon, Northwest Territories and Nunavut","Social sciences, humanities and the arts",NA,NA
+2017,"National Capital Region, Ontario/Quebec",Total sciences,NA,NA
+2017,"National Capital Region, Ontario/Quebec",Natural sciences and engineering,NA,NA
+2017,"National Capital Region, Ontario/Quebec","Social sciences, humanities and the arts",NA,NA
+2017,"National Capital Region, Quebec",Total sciences,NA,NA
+2017,"National Capital Region, Quebec",Natural sciences and engineering,NA,NA
+2017,"National Capital Region, Quebec","Social sciences, humanities and the arts",NA,NA
+2017,"National Capital Region, Ontario",Total sciences,NA,NA
+2017,"National Capital Region, Ontario",Natural sciences and engineering,NA,NA
+2017,"National Capital Region, Ontario","Social sciences, humanities and the arts",NA,NA
+2018,Canada,Natural sciences and engineering,NA,1.56
+2018,Canada,"Social sciences, humanities and the arts",NA,0.18
+2018,Newfoundland and Labrador,Total sciences,10,1.53
+2018,Newfoundland and Labrador,Natural sciences and engineering,NA,1.3
+2018,Newfoundland and Labrador,"Social sciences, humanities and the arts",NA,0.23
+2018,Prince Edward Island,Total sciences,11,1.22
+2018,Prince Edward Island,Natural sciences and engineering,NA,1.03
+2018,Prince Edward Island,"Social sciences, humanities and the arts",NA,0.19
+2018,Nova Scotia,Total sciences,12,1.46
+2018,Nova Scotia,Natural sciences and engineering,NA,1.19
+2018,Nova Scotia,"Social sciences, humanities and the arts",NA,0.28
+2018,New Brunswick,Total sciences,13,0.98
+2018,New Brunswick,Natural sciences and engineering,NA,0.78
+2018,New Brunswick,"Social sciences, humanities and the arts",NA,0.2
+2018,Quebec,Total sciences,24,2.26
+2018,Quebec,Natural sciences and engineering,NA,2.04
+2018,Quebec,"Social sciences, humanities and the arts",NA,0.22
+2018,Ontario,Total sciences,35,1.99
+2018,Ontario,Natural sciences and engineering,NA,1.79
+2018,Ontario,"Social sciences, humanities and the arts",NA,0.19
+2018,Manitoba,Total sciences,46,1.12
+2018,Manitoba,Natural sciences and engineering,NA,0.96
+2018,Manitoba,"Social sciences, humanities and the arts",NA,0.17
+2018,Saskatchewan,Total sciences,47,0.89
+2018,Saskatchewan,Natural sciences and engineering,NA,0.79
+2018,Saskatchewan,"Social sciences, humanities and the arts",NA,0.1
+2018,Alberta,Total sciences,48,1.05
+2018,Alberta,Natural sciences and engineering,NA,0.97
+2018,Alberta,"Social sciences, humanities and the arts",NA,0.09
+2018,British Columbia,Total sciences,59,1.6
+2018,British Columbia,Natural sciences and engineering,NA,1.44
+2018,British Columbia,"Social sciences, humanities and the arts",NA,0.16
+2018,"Yukon, Northwest Territories and Nunavut",Total sciences,NA,NA
+2018,"Yukon, Northwest Territories and Nunavut",Natural sciences and engineering,NA,NA
+2018,"Yukon, Northwest Territories and Nunavut","Social sciences, humanities and the arts",NA,NA
+2018,"National Capital Region, Ontario/Quebec",Total sciences,NA,NA
+2018,"National Capital Region, Ontario/Quebec",Natural sciences and engineering,NA,NA
+2018,"National Capital Region, Ontario/Quebec","Social sciences, humanities and the arts",NA,NA
+2018,"National Capital Region, Quebec",Total sciences,NA,NA
+2018,"National Capital Region, Quebec",Natural sciences and engineering,NA,NA
+2018,"National Capital Region, Quebec","Social sciences, humanities and the arts",NA,NA
+2018,"National Capital Region, Ontario",Total sciences,NA,NA
+2018,"National Capital Region, Ontario",Natural sciences and engineering,NA,NA
+2018,"National Capital Region, Ontario","Social sciences, humanities and the arts",NA,NA
+2019,Canada,Natural sciences and engineering,NA,1.56
+2019,Canada,"Social sciences, humanities and the arts",NA,0.18
+2019,Newfoundland and Labrador,Total sciences,10,1.62
+2019,Newfoundland and Labrador,Natural sciences and engineering,NA,1.42
+2019,Newfoundland and Labrador,"Social sciences, humanities and the arts",NA,0.2
+2019,Prince Edward Island,Total sciences,11,1.13
+2019,Prince Edward Island,Natural sciences and engineering,NA,0.97
+2019,Prince Edward Island,"Social sciences, humanities and the arts",NA,0.17
+2019,Nova Scotia,Total sciences,12,1.5
+2019,Nova Scotia,Natural sciences and engineering,NA,1.24
+2019,Nova Scotia,"Social sciences, humanities and the arts",NA,0.26
+2019,New Brunswick,Total sciences,13,0.93
+2019,New Brunswick,Natural sciences and engineering,NA,0.73
+2019,New Brunswick,"Social sciences, humanities and the arts",NA,0.2
+2019,Quebec,Total sciences,24,2.18
+2019,Quebec,Natural sciences and engineering,NA,1.96
+2019,Quebec,"Social sciences, humanities and the arts",NA,0.22
+2019,Ontario,Total sciences,35,2.02
+2019,Ontario,Natural sciences and engineering,NA,1.82
+2019,Ontario,"Social sciences, humanities and the arts",NA,0.2
+2019,Manitoba,Total sciences,46,1.17
+2019,Manitoba,Natural sciences and engineering,NA,1
+2019,Manitoba,"Social sciences, humanities and the arts",NA,0.18
+2019,Saskatchewan,Total sciences,47,0.95
+2019,Saskatchewan,Natural sciences and engineering,NA,0.84
+2019,Saskatchewan,"Social sciences, humanities and the arts",NA,0.11
+2019,Alberta,Total sciences,48,1.08
+2019,Alberta,Natural sciences and engineering,NA,0.99
+2019,Alberta,"Social sciences, humanities and the arts",NA,0.09
+2019,British Columbia,Total sciences,59,1.57
+2019,British Columbia,Natural sciences and engineering,NA,1.41
+2019,British Columbia,"Social sciences, humanities and the arts",NA,0.17
+2019,"Yukon, Northwest Territories and Nunavut",Total sciences,NA,NA
+2019,"Yukon, Northwest Territories and Nunavut",Natural sciences and engineering,NA,NA
+2019,"Yukon, Northwest Territories and Nunavut","Social sciences, humanities and the arts",NA,NA
+2019,"National Capital Region, Ontario/Quebec",Total sciences,NA,NA
+2019,"National Capital Region, Ontario/Quebec",Natural sciences and engineering,NA,NA
+2019,"National Capital Region, Ontario/Quebec","Social sciences, humanities and the arts",NA,NA
+2019,"National Capital Region, Quebec",Total sciences,NA,NA
+2019,"National Capital Region, Quebec",Natural sciences and engineering,NA,NA
+2019,"National Capital Region, Quebec","Social sciences, humanities and the arts",NA,NA
+2019,"National Capital Region, Ontario",Total sciences,NA,NA
+2019,"National Capital Region, Ontario",Natural sciences and engineering,NA,NA
+2019,"National Capital Region, Ontario","Social sciences, humanities and the arts",NA,NA
+2020,Canada,Natural sciences and engineering,NA,1.65
+2020,Canada,"Social sciences, humanities and the arts",NA,0.19
+2021,Canada,Natural sciences and engineering,NA,NA
+2021,Canada,"Social sciences, humanities and the arts",NA,NA

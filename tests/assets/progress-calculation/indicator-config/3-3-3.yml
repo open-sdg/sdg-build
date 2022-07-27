@@ -1,0 +1,6 @@
+﻿foo: bar
+page_content: Hello world
+auto_progress_calculation: true
+progress_calculation_options:
+  - direction: negative
+    target: 0

@@ -1,8 +1,7 @@
 # TODO: Re-write docstrings
-# TODO: create more tests
 # import pandas as pd
-import yaml
-import sys
+# import yaml
+# import sys
 import sdg
 import os
 
@@ -11,10 +10,12 @@ def measure_indicator_progress(indicator):
     """Assigns year values and determines methodology to be run.
 
     Args:
-        indicator: str. Indicator number for which the data is being read.
+        indicator: Indicator for which the progress is being calculated for.
+    Returns:
+        output: str. A string indicating the progress measure for the indicator.
     """
 
-    data = indicator.data    # get indicator data
+    data = indicator.data  # get indicator data
     print(data)
 
     config = indicator.meta  # get configurations
@@ -33,10 +34,10 @@ def measure_indicator_progress(indicator):
                 print(config)
         else:
             print('progress calc is not turned on. exit...')
-            return(None)
+            return None
     else:
         print('progress calc is not turned on. exit...')
-        return(None)
+        return None
 
     config = config_defaults(config)
     print(config)
@@ -46,18 +47,16 @@ def measure_indicator_progress(indicator):
     print(data)
 
     if data is None:
-        return(None)
+        return None
 
-    years = data["Year"]                           # get years from data
+    years = data["Year"]  # get years from data
     print(years)
-    current_year = {'current_year': years.max()}   # set current year to be MAX(Year)
+    current_year = {'current_year': years.max()}  # set current year to be MAX(Year)
     print(current_year)
     config.update(current_year)
     print(config)
 
-
-
-    if config['base_year'] not in years.values:          # check if assigned base year is in data
+    if config['base_year'] not in years.values:  # check if assigned base year is in data
         print('base year is not in year values')
         if config['base_year'] > years.max():
             print('base year is ahead of most recently available data')
@@ -70,7 +69,6 @@ def measure_indicator_progress(indicator):
     if config['current_year'] - config['base_year'] < 1:
         print('not enough data')
         return None
-
 
     # determine which methodology to run
     if config['target'] is None:
@@ -85,22 +83,24 @@ def measure_indicator_progress(indicator):
         print('running methodology 2')
         output = methodology_2(data=data, config=config)
 
-    return(output)
+    return output
+
 
 def check_auto_calc():
     print('temp')
 
+
 def config_defaults(config):
     """Set progress calculation defaults and update them from the configuration.
     Args:
-        indicator: str. Indicator number for which the configuration is from.
+        config: dict. Indicator configurations passed as a dictionary.
     Returns:
         dict: Dictionary of updated configurations.
     """
 
     # set default options for progress measurement
     defaults = default_progress_calc_options()
-    defaults.update(config) # update the defaults with any user configured inputs
+    defaults.update(config)  # update the defaults with any user configured inputs
 
     # if target is 0, set to 0.001
     if defaults['target'] == 0:
@@ -110,7 +110,7 @@ def config_defaults(config):
 
 
 def default_progress_calc_options():
-    return(
+    return (
         {
             'base_year': 2015,
             'target_year': 2030,
@@ -146,7 +146,6 @@ def update_progress_thresholds(config, method):
     else:
         progress_thresholds = {}
 
-
     print(progress_thresholds)
     config.update(progress_thresholds)
     print(config)
@@ -155,7 +154,7 @@ def update_progress_thresholds(config, method):
 
 
 def data_progress_measure(data):
-    """Checks and filters data for indicator for which progress is being calculate.
+    """Checks and filters data for indicator for which progress is being calculated.
 
     If the Year column in data contains more than 4 characters (standard year format), takes the first 4 characters.
     If data contains disaggregation columns, take only the total line data.
@@ -163,7 +162,7 @@ def data_progress_measure(data):
     Checks that there is enough data to calculate progress.
 
     Args:
-        data: DataFrame. Indicator data for which progress is being calculate.
+        data: DataFrame. Indicator data for which progress is being calculated.
     Returns:
         DataFrame: Data in allowable format for calculating progress.
     """
@@ -184,7 +183,7 @@ def data_progress_measure(data):
 
     if data.shape[0] < 1:
         print('no aggregate')
-        return(None)
+        return None
 
     return data
 
@@ -201,7 +200,7 @@ def growth_calculation(val1, val2, t1, t2):
         float: Growth value.
     """
 
-    return ( (val1 / val2) ** (1 / (t1 - t2)) ) - 1
+    return ((val1 / val2) ** (1 / (t1 - t2))) - 1
 
 
 def methodology_1(data, config):
@@ -218,22 +217,21 @@ def methodology_1(data, config):
     """
 
     direction = str(config['direction'])
-    t         = float(config['current_year'])
-    t_0       = float(config['base_year'])
-    x         = float(config['high'])
-    y         = float(config['med'])
-    z         = float(config['low'])
+    t = float(config['current_year'])
+    t_0 = float(config['base_year'])
+    x = float(config['high'])
+    y = float(config['med'])
+    z = float(config['low'])
 
     current_value = data.Value[data.Year == t].values[0]
     base_value = data.Value[data.Year == t_0].values[0]
     cagr_o = growth_calculation(current_value, base_value, t, t_0)
 
-    if direction=="negative":
-        cagr_o = -1*cagr_o
+    if direction == "negative":
+        cagr_o = -1 * cagr_o
     print('cagr_o:' + str(cagr_o))
 
     # TODO: Adopt categories to Open SDG progress categories (or make our categories work with Open SDG)
-    # TODO: Change progress labels: Negative, negligeable, fair/moderate, substantial, target achieved.
 
     if cagr_o > x:
         return "substantial_progress"
@@ -262,35 +260,30 @@ def methodology_2(data, config):
     """
 
     # TODO: how to deal with the instance of target being met then diverged from?
-    # TODO: there's something wrong with the calculation - it is outputting significant progress when should be deterioration
-    # TODO: ?????????????????????
-
 
     direction = str(config['direction'])
-    t         = float(config['current_year'])
-    t_0       = float(config['base_year'])
-    target    = float(config['target'])
-    t_tao     = float(config['target_year'])
-    x         = float(config['high'])
-    y         = float(config['med'])
-    z         = float(config['low'])
-
+    t = float(config['current_year'])
+    t_0 = float(config['base_year'])
+    target = float(config['target'])
+    t_tao = float(config['target_year'])
+    x = float(config['high'])
+    y = float(config['med'])
+    z = float(config['low'])
 
     current_value = data.Value[data.Year == t].values[0]  # get current value from data
     print('current value:' + str(current_value))
-    base_value = data.Value[data.Year == t_0].values[0]   # get base value from data
+    base_value = data.Value[data.Year == t_0].values[0]  # get base value from data
     print('base value:' + str(base_value))
-
 
     # check if the target is achieved
     if (direction == "negative" and current_value <= target) or (direction == "positive" and current_value >= target):
         return "target_achieved"
 
-    cagr_o = growth_calculation(current_value, base_value, t, t_0)   # calculating observed growth
+    cagr_o = growth_calculation(current_value, base_value, t, t_0)  # calculating observed growth
     print('cagr_o:' + str(cagr_o))
-    cagr_r = growth_calculation(target, base_value, t_tao, t_0)      # calculating theoretical growth
+    cagr_r = growth_calculation(target, base_value, t_tao, t_0)  # calculating theoretical growth
     print('cagr_r:' + str(cagr_r))
-    ratio  = cagr_o / cagr_r                                         # calculating growth ratio
+    ratio = cagr_o / cagr_r  # calculating growth ratio
     print('growth ratio:' + str(ratio))
 
     # TODO: Adopt categories to Open SDG progress categories (or make our categories work with Open SDG)
@@ -302,11 +295,9 @@ def methodology_2(data, config):
     elif z <= ratio < y:
         return "negligible_progress"
     elif ratio < z:
-        return "negative_progress"
+        return "deterioration"
     else:
         return None
-
-
 
 
 # measure_indicator_progress('6-1-1') # example with target = 0
@@ -337,5 +328,3 @@ indicator_id = test_indicator.meta['indicator_number']
 
 progress_measure = measure_indicator_progress(test_indicator)
 print(progress_measure)
-# prog_calcs = {indicator_id: progress_measure}
-# print(prog_calcs)

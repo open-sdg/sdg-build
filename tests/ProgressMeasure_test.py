@@ -1,97 +1,88 @@
 # TODO: Re-write docstrings
-# import pandas as pd
-# import yaml
-# import sys
-import sdg
-import os
+import pandas as pd
 
 
 def measure_indicator_progress(indicator):
-    """Assigns year values and determines methodology to be run.
+    """Sets up all needed parameters and data for progress calculation, determines methodology for calculation,
+    and returns progress measure as an output.
 
     Args:
         indicator: Indicator for which the progress is being calculated for.
     Returns:
-        output: str. A string indicating the progress measure for the indicator.
+        output: str. A string indicating the progress measurement for the indicator.
     """
 
     data = indicator.data  # get indicator data
-    print(data)
-
     config = indicator.meta  # get configurations
-    print(config)
 
-    # check if progress calculation is turned on and if inputs have been configured
-    # return None if auto progress calculation is not turned on
-    print('checking if progress calc is turned on...')
+    # checks if progress calculation is turned on
     if 'auto_progress_calculation' in config.keys():
-        print('meta field required exists')
+
+        # checks if any inputs have been configured
         if config['auto_progress_calculation']:
-            print('progress calc is turned on. continuing...')
+
             if 'progress_calculation_options' in config.keys():
-                print('taking user configured inputs')
+                # take manual user inputs
                 config = config['progress_calculation_options'][0]
-                print(config)
+
         else:
-            print('progress calc is not turned on. exit...')
             return None
+
+    # return None if auto progress calculation is not turned on
     else:
-        print('progress calc is not turned on. exit...')
         return None
 
+    # get calculation defaults and update with user inputs (if any)
     config = config_defaults(config)
-    print(config)
 
-    # get relevant data to calculate progress
+    # get relevant data to calculate progress (aggregate/total line only)
     data = data_progress_measure(data)
-    print(data)
 
     if data is None:
         return None
 
-    years = data["Year"]  # get years from data
-    print(years)
-    current_year = {'current_year': years.max()}  # set current year to be MAX(Year)
-    print(current_year)
+    # get years that exist in the data
+    years = data["Year"]
+
+    # set current year to be the most recent year that exists in data
+    current_year = {'current_year': years.max()}
+
+    # update the calculation inputs with the current year
     config.update(current_year)
-    print(config)
 
-    if config['base_year'] not in years.values:  # check if assigned base year is in data
-        print('base year is not in year values')
+    # check if the base year input exists in the data
+    if config['base_year'] not in years.values:
+        # return None if the base year input is in the future of the most recently available data
         if config['base_year'] > years.max():
-            print('base year is ahead of most recently available data')
             return None
-        config['base_year'] = years[years > 2015].min()  # if not, assign MIN(Year > 2015) to be base year
-        print('updating base year to ' + str(config['base_year']))
-    print(config)
 
-    # check if there is enough data to calculate progress
+        # if base year is not in available data and not in the future,
+        # assign it to be the minimum existing year past the base year given
+        config['base_year'] = years[years > config['base_year']].min()
+
+    # return None if there is not enough data to calculate progress (must be at least 2 data points)
     if config['current_year'] - config['base_year'] < 1:
-        print('not enough data')
         return None
 
     # determine which methodology to run
+    # if no target exists, run methodology for qualitative target. else run methodology for quantitative target.
     if config['target'] is None:
-        print('updating progress thresholds')
+        # update progress thresholds for qualitative target
         config = update_progress_thresholds(config, method=1)
-        print('running methodology 1')
+        # do progress calculation according to methodology for qualitative target
         output = methodology_1(data=data, config=config)
 
     else:
-        print('updating progress thresholds')
+        # update progress thresholds for quantitative target
         config = update_progress_thresholds(config, method=2)
-        print('running methodology 2')
+        # do progress calculation according to methodology for quantitative target
         output = methodology_2(data=data, config=config)
 
     return output
 
 
-def check_auto_calc():
-    print('temp')
-
-
 def config_defaults(config):
-    """Set progress calculation defaults and update them from the configuration.
+    """Set progress calculation defaults and update them if any user inputs exist.
     Args:
         config: dict. Indicator configurations passed as a dictionary.
     Returns:
@@ -100,9 +91,10 @@ def config_defaults(config):
 
     # set default options for progress measurement
     defaults = default_progress_calc_options()
-    defaults.update(config)  # update the defaults with any user configured inputs
+    # update the defaults with any user configured inputs
+    defaults.update(config)
 
-    # if target is 0, set to 0.001
+    # if target is 0, set to 0.001 (avoids dividing by 0 in calculation)
     if defaults['target'] == 0:
         defaults['target'] = 0.001
 
@@ -110,6 +102,7 @@ def config_defaults(config):
 
 
 def default_progress_calc_options():
+    """Provide default inputs for calculating progress."""
     return (
         {
             'base_year': 2015,
@@ -122,33 +115,29 @@ def default_progress_calc_options():
 
 
 def update_progress_thresholds(config, method):
-    """Checks for configured progress thresholds and updates based on methodology.
+    """Checks for configured progress thresholds or updates thresholds based on methodology.
     Args:
-        config: dict. Configurations for indicator for which progress is being calculated.
-        method: int. Indicates which methodology is being used. Either 1 or 2.
+        config: dict. Progress calculation inputs for indicator.
+        method: int. Indicates which methodology is being used. Either 1 (for qualitative targets) or 2 (for
+                quantitative targets).
     Returns:
-        dict: Dictionary of updated configurations.
+        dict: Dictionary of updated inputs for calculation.
     """
 
+    # TODO: allow updating of just 1 threshold (rather than all 3)
+    # if progress threshold inputs exist and are not empty, assign user input value as thresholds
+    # otherwise if progress threshold inputs are empty, use defaults
     if ('progress_thresholds' in config.keys()) & (bool(config['progress_thresholds'])):
-        # TODO: Handle potential error inputs
-        print('thresholds are configured')
         progress_thresholds = config['progress_thresholds']
-
     elif method == 1:
-        print('thresholds are not configured, use defaults for method1')
         progress_thresholds = {'high': 0.01, 'med': 0, 'low': -0.01}
-
     elif method == 2:
-        print('thresholds are not configured, use defaults for method2')
         progress_thresholds = {'high': 0.95, 'med': 0.6, 'low': 0}
-
     else:
         progress_thresholds = {}
 
-    print(progress_thresholds)
+    # update inputs with thresholds
     config.update(progress_thresholds)
-    print(config)
 
     return config
 
@@ -164,25 +153,26 @@ def data_progress_measure(data):
     Args:
         data: DataFrame. Indicator data for which progress is being calculated.
     Returns:
-        DataFrame: Data in allowable format for calculating progress.
+        DataFrame: Data in valid format for calculating progress.
     """
 
     # check if the year value contains more than 4 digits (indicating a range of years)
-    print('checking the year column')
     if (data['Year'].astype(str).str.len() > 4).any():
-        data['Year'] = data['Year'].astype(str).str.slice(0, 4).astype(int)  # take the first year in the range
+        # take the first year in the range
+        data['Year'] = data['Year'].astype(str).str.slice(0, 4).astype(int)
 
-    # get just the aggregate values from data
-    print('filtering out aggregates (if any)')
+    # get just the total line values from data
     cols = data.columns.values
     if len(cols) > 2:
         cols = cols[1:-1]
         data = data[data[cols].isna().all('columns')]
         data = data.iloc[:, [0, -1]]
-    data = data[data["Value"].notna()]  # remove any NA values from data
 
+    # remove any NA values from data
+    data = data[data["Value"].notna()]
+
+    # returns None if no rows in data (no total line to calculate progress)
     if data.shape[0] < 1:
-        print('no aggregate')
         return None
 
     return data
@@ -223,16 +213,18 @@ def methodology_1(data, config):
     y = float(config['med'])
     z = float(config['low'])
 
+    # get current value from data
     current_value = data.Value[data.Year == t].values[0]
+    # get value from base year from data
     base_value = data.Value[data.Year == t_0].values[0]
+    # calculate growth
     cagr_o = growth_calculation(current_value, base_value, t, t_0)
 
+    # use negative growth value if desired direction of progress is negative
     if direction == "negative":
         cagr_o = -1 * cagr_o
-    print('cagr_o:' + str(cagr_o))
 
-    # TODO: Adopt categories to Open SDG progress categories (or make our categories work with Open SDG)
-
+    # compare growth rate to progress thresholds to return progress measure
     if cagr_o > x:
         return "substantial_progress"
     elif y < cagr_o <= x:
@@ -259,8 +251,6 @@ def methodology_2(data, config):
         str: Progress measure.
     """
 
-    # TODO: how to deal with the instance of target being met then diverged from?
-
     direction = str(config['direction'])
     t = float(config['current_year'])
     t_0 = float(config['base_year'])
@@ -270,24 +260,23 @@ def methodology_2(data, config):
     y = float(config['med'])
     z = float(config['low'])
 
-    current_value = data.Value[data.Year == t].values[0]  # get current value from data
-    print('current value:' + str(current_value))
-    base_value = data.Value[data.Year == t_0].values[0]  # get base value from data
-    print('base value:' + str(base_value))
+    # get current value from data
+    current_value = data.Value[data.Year == t].values[0]
+    # get base value from data
+    base_value = data.Value[data.Year == t_0].values[0]
 
     # check if the target is achieved
     if (direction == "negative" and current_value <= target) or (direction == "positive" and current_value >= target):
         return "target_achieved"
 
-    cagr_o = growth_calculation(current_value, base_value, t, t_0)  # calculating observed growth
-    print('cagr_o:' + str(cagr_o))
-    cagr_r = growth_calculation(target, base_value, t_tao, t_0)  # calculating theoretical growth
-    print('cagr_r:' + str(cagr_r))
-    ratio = cagr_o / cagr_r  # calculating growth ratio
-    print('growth ratio:' + str(ratio))
+    # calculate observed growth
+    cagr_o = growth_calculation(current_value, base_value, t, t_0)
+    # calculate theoretical growth
+    cagr_r = growth_calculation(target, base_value, t_tao, t_0)
+    # calculating growth ratio
+    ratio = cagr_o / cagr_r
 
-    # TODO: Adopt categories to Open SDG progress categories (or make our categories work with Open SDG)
-    # compare growth ratio to progress thresholds & return output
+    # compare growth ratio to progress thresholds to return progress measure
     if ratio >= x:
         return "substantial_progress"
     elif y <= ratio < x:
@@ -300,31 +289,27 @@ def methodology_2(data, config):
         return None
 
 
-# measure_indicator_progress('6-1-1') # example with target = 0
-# measure_indicator_progress('3-2-1') # example with not enough data/fiscal year input
-# measure_indicator_progress('3-4-1')   # example with no target
-
-data_pattern = os.path.join('assets', 'progress-calculation', 'data', '*-*.csv')
-data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
-
-# Input metadata from YAML files matching this pattern: tests/meta/*-*.md
-meta_pattern = os.path.join('assets', 'progress-calculation', 'indicator-config', '*-*.yml')
-meta_input = sdg.inputs.InputYamlMeta(path_pattern=meta_pattern)
-
-# Combine these inputs into one list
-inputs = [data_input, meta_input]
-
-# Use a Prose.io file for the metadata schema.
-schema_path = os.path.join('assets', 'meta', 'metadata_schema.yml')
-schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
-
-opensdg_output = sdg.outputs.OutputOpenSdg(
-    inputs=inputs,
-    schema=schema,
-    output_folder='_site')
-
-test_indicator = opensdg_output.test_indicator()
-indicator_id = test_indicator.meta['indicator_number']
+# data_pattern = os.path.join('assets', 'progress-calculation', 'data', '*-*.csv')
+# data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
+#
+# # Input metadata from YAML files matching this pattern: tests/meta/*-*.md
+# meta_pattern = os.path.join('assets', 'progress-calculation', 'indicator-config', '*-*.yml')
+# meta_input = sdg.inputs.InputYamlMeta(path_pattern=meta_pattern)
+#
+# # Combine these inputs into one list
+# inputs = [data_input, meta_input]
+#
+# # Use a Prose.io file for the metadata schema.
+# schema_path = os.path.join('assets', 'meta', 'metadata_schema.yml')
+# schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
+#
+# opensdg_output = sdg.outputs.OutputOpenSdg(
+#     inputs=inputs,
+#     schema=schema,
+#     output_folder='_site')
+#
+# test_indicator = opensdg_output.test_indicator()
+# indicator_id = test_indicator.meta['indicator_number']
 
 progress_measure = measure_indicator_progress(test_indicator)
 print(progress_measure)

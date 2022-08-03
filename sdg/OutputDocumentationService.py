@@ -421,6 +421,31 @@ class OutputDocumentationService(Loggable):
                 .table-striped tbody tr:nth-of-type(2n+1) {{
                     background-color: #f3f2f1;
                 }}
+                #skiplink {{
+                    position: absolute;
+                    top: 0;
+                    left: 50%;
+                    z-index: 10000;
+                    width: 250px;
+                    margin-left: -125px;
+                    padding: 10px;
+                    background: white;
+                    text-align: center;
+                    border: 1px solid #0b0c0c;
+                    color: #0b0c0c;
+                    display: block;
+                }}
+                .sr-only-focusable:not(:focus):not(:focus-within) {{
+                    position: absolute !important;
+                    width: 1px !important;
+                    height: 1px !important;
+                    padding: 0 !important;
+                    margin: -1px !important;
+                    overflow: hidden !important;
+                    clip: rect(0, 0, 0, 0) !important;
+                    white-space: nowrap !important;
+                    border: 0 !important;
+                }}
             </style>
         </head>
         <body>

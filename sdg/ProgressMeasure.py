@@ -120,7 +120,6 @@ def update_progress_thresholds(config, method):
         dict: Dictionary of updated inputs for calculation.
     """
 
-    # TODO: allow updating of just 1 threshold (rather than all 3)
     # if progress threshold inputs exist and are not empty, assign user input value as thresholds
     # otherwise if progress threshold inputs are empty, use defaults
     if ('progress_thresholds' in config.keys()) & (bool(config['progress_thresholds'])):

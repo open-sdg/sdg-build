@@ -1,7 +1,3 @@
-# TODO: Re-write docstrings
-import pandas as pd
-
-
 def measure_indicator_progress(indicator):
     """Sets up all needed parameters and data for progress calculation, determines methodology for calculation,
     and returns progress measure as an output.
@@ -288,28 +284,3 @@ def methodology_2(data, config):
     else:
         return None
 
-
-# data_pattern = os.path.join('assets', 'progress-calculation', 'data', '*-*.csv')
-# data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
-#
-# # Input metadata from YAML files matching this pattern: tests/meta/*-*.md
-# meta_pattern = os.path.join('assets', 'progress-calculation', 'indicator-config', '*-*.yml')
-# meta_input = sdg.inputs.InputYamlMeta(path_pattern=meta_pattern)
-#
-# # Combine these inputs into one list
-# inputs = [data_input, meta_input]
-#
-# # Use a Prose.io file for the metadata schema.
-# schema_path = os.path.join('assets', 'meta', 'metadata_schema.yml')
-# schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
-#
-# opensdg_output = sdg.outputs.OutputOpenSdg(
-#     inputs=inputs,
-#     schema=schema,
-#     output_folder='_site')
-#
-# test_indicator = opensdg_output.test_indicator()
-# indicator_id = test_indicator.meta['indicator_number']
-
-progress_measure = measure_indicator_progress(test_indicator)
-print(progress_measure)

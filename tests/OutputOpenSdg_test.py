@@ -7,9 +7,19 @@ import outputs_common
 english_build = os.path.join('_site_open_sdg', 'en')
 
 def test_open_sdg_output():
+    
+    # Use empty alterations functions just to execute that code.
+    def alter_data(data, context):
+        return data
+    def alter_meta(meta, context):
+        return meta
+    def alter_indicator(indicator, context):
+        return indicator
 
     data_pattern = os.path.join('tests', 'assets', 'open-sdg', 'data', '*.csv')
     data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
+    data_input.add_data_alteration(alter_data)
+    data_input.add_meta_alteration(alter_meta)
     schema_path = os.path.join('tests', 'assets', 'open-sdg', 'metadata_schema.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
     translations = sdg.translations.TranslationInputSdgTranslations()
@@ -17,6 +27,7 @@ def test_open_sdg_output():
         translations=[translations],
         output_folder='_site_open_sdg',
     )
+    data_output.add_indicator_alteration(alter_indicator)
     assert data_output.validate()
     assert data_output.execute_per_language(['en'])
 

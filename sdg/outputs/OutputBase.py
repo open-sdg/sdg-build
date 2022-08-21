@@ -37,6 +37,7 @@ class OutputBase(Loggable):
         self.indicator_options = IndicatorOptions() if indicator_options is None else indicator_options
         self.all_languages = []
         self.indicator_alterations = []
+        self.already_altered_indicators = False
 
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
@@ -62,6 +63,11 @@ class OutputBase(Loggable):
         if language is not None:
             debug_message += ' ({language})'
         self.debug(debug_message, language=language)
+
+        # One time only - alter the indicators.
+        if not self.already_altered_indicators:
+            self.alter_indicators()
+
         # Keep a backup of the output folder.
         original_output_folder = self.output_folder
 
@@ -136,8 +142,6 @@ class OutputBase(Loggable):
             # edges.
             merged_indicators[inid].set_headline()
             merged_indicators[inid].set_edges()
-            # Perform any alterations.
-            merged_indicators[inid] = self.alter_indicator(merged_indicators[inid])
 
         inputs[0].set_merged_indicators(merged_indicators, inputs)
         return merged_indicators
@@ -201,6 +205,12 @@ class OutputBase(Loggable):
             return self.indicators[indicator_id]
         else:
             raise KeyError('The indicator "' + indicator_id + '" could not be found in this output.')
+
+
+    def alter_indicators(self):
+        for inid in self.indicators:
+            self.indicators[inid] = self.alter_indicator(self.indicators[inid])
+        self.already_altered_indicators = True
 
 
     def add_indicator_alteration(self, alteration):

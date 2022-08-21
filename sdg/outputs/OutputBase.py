@@ -36,6 +36,7 @@ class OutputBase(Loggable):
             translations = []
         self.indicator_options = IndicatorOptions() if indicator_options is None else indicator_options
         self.all_languages = []
+        self.indicator_alterations = []
 
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
@@ -135,6 +136,8 @@ class OutputBase(Loggable):
             # edges.
             merged_indicators[inid].set_headline()
             merged_indicators[inid].set_edges()
+            # Perform any alterations.
+            merged_indicators[inid] = self.alter_indicator(merged_indicators[inid])
 
         inputs[0].set_merged_indicators(merged_indicators, inputs)
         return merged_indicators
@@ -198,6 +201,34 @@ class OutputBase(Loggable):
             return self.indicators[indicator_id]
         else:
             raise KeyError('The indicator "' + indicator_id + '" could not be found in this output.')
+
+
+    def add_indicator_alteration(self, alteration):
+        """Add an alteration for indicators.
+        Parameters
+        ----------
+        alteration : function
+            The alteration function.
+        """
+        self.indicator_alterations.append(alteration)
+
+
+    def alter_indicator(self, indicator):
+        """Perform any alterations on an Indicator object.
+        Parameters
+        ---------
+        indicator : Indicator
+        """
+        # Perform any alterations on the indicator.
+        for alteration in self.indicator_alterations:
+            indicator = alteration(indicator, {
+                'indicator_id': indicator.get_indicator_id(),
+                'class': type(self).__name__,
+            })
+        if indicator is None:
+            raise Exception('Indicator alteration functions should return the altered Indicator object.')
+
+        return indicator
 
 
     def get_documentation_title(self):

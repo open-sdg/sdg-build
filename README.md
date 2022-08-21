@@ -43,12 +43,16 @@ Sometimes you may need to alter data and/or metadata before importing into this 
 
 In these callback functions, the thing to be altered is passed as the first parameter, followed by an optional "context" dict, containing other information. These "context" dicts currently contain:
 
-* indicator_id : string
+* indicator_id : string - The id of the indicator, if known
+* class : string - The name of the particular input class that is being altered
 
 For example:
 
 ```
 def my_data_alteration(df, context):
+    # Target a particular input class.
+    if context['class'] != 'InputCsvData':
+      return df
     # Drop an unnecessary column in the data.
     df = df.drop('unnecessary_column', axis='columns')
     # Drop an unnecessary column for one particular indicator.
@@ -56,6 +60,9 @@ def my_data_alteration(df, context):
       df = df.drop('another_column', axis='columns')
     return df
 def my_meta_alteration(meta, context):
+    # Target a particular input class.
+    if context['class'] != 'InputYamlMeta':
+      return df
     # Drop an unecessary field in the metadata.
     del meta['unnecessary_field']
     # Set a metadata field for one particular indicator.

@@ -62,7 +62,7 @@ def my_data_alteration(df, context):
 def my_meta_alteration(meta, context):
     # Target a particular input class.
     if context['class'] != 'InputYamlMeta':
-      return df
+      return meta
     # Drop an unecessary field in the metadata.
     del meta['unnecessary_field']
     # Set a metadata field for one particular indicator.

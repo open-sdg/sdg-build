@@ -40,12 +40,23 @@ def test_open_sdg_output():
         translations=[translations], output_folder='_site_open_sdg',
         geojson_file=os.path.join('tests', 'assets', 'open-sdg', 'geojson', 'england-regions.geojson'),
         id_property='rgn17cd', name_property='rgn17nm')
+    sdmx_output = sdg.outputs.OutputSdmxMl([data_input], schema,
+        translations=[translations], output_folder='_site_open_sdg',
+        output_subfolder='sdmx')
+    sdmx_global_output = sdg.outputs.OutputSdmxMl([data_input], schema,
+        translations=[translations], output_folder='_site_open_sdg',
+        output_subfolder='sdmx-global', constrain_meta=True,
+        constrain_data=True, global_content_constraints=True,
+        structure_specific=True)
     csvw_output.execute_per_language(['en'])
     datapackage_output.execute_per_language(['en'])
     geojson_output.execute_per_language(['en'])
+    sdmx_output.execute_per_language(['en'])
+    sdmx_global_output.execute_per_language(['en'])
 
     exp_dirs = set(['comb', 'data', 'edges', 'csvw', 'data-packages', 'geojson', 'headline', 'meta', 'stats', 'zip', 'translations'])
     act_dirs = os.listdir(english_build)
+    print(act_dirs)
     assert all([a in exp_dirs for a in act_dirs])
 
 def test_open_sdg_output_comb():

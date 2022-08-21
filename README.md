@@ -41,7 +41,7 @@ SDG Build can **output** SDG data in the following formats:
 
 Sometimes you may need to alter data and/or metadata before importing into this library. This can be done after instantiating the input objects, with `add_data_alteration` and `add_meta_alteration` to add callback functions.
 
-In these callback functions, the thing to be altered is passed as the first parameter, followed by an optional "context" dict, containing other information. These "context" dicts currently contain:
+In these callback functions, the thing to be altered is passed as the first parameter, followed by a "context" dict, containing other information. These "context" dicts currently contain:
 
 * indicator_id : string - The id of the indicator, if known
 * class : string - The name of the particular input class that is being altered
@@ -71,6 +71,28 @@ def my_meta_alteration(meta, context):
     return meta
 my_data_input.add_data_alteration(my_data_alteration)
 my_meta_input.add_meta_alteration(my_meta_alteration)
+```
+
+## Alterations of full indicator
+
+Sometime you may want to alter the metadata based on the data, or vice versa, to alter the data based on the metadata. The above-mentioned `add_data_alteration` and `add_meta_alteration` are not reliable for this, because they act on each individual input. So to accomplish this, there is an `add_indicator_alteration` method on all output classes, which can be used to set a callback function which runs on each indicator, after it has been fully compiled from all the inputs.
+
+In these callback functions, the indicator to be altered is passed as the first parameter, and it is an Indicator object (see `sdg/Indicator.py`). The second parameter is a "context" dict, containing other information. These "context" dicts currently contain:
+
+* indicator_id : string - The id of the indicator, if known
+* class : string - The name of the particular output class containing the indicator
+
+The callback function must return the Indicator object.
+
+For example:
+
+```
+def my_indicator_alteration(indicator, context):
+    # If the number of years is 2 or less, use a bar chart.
+    if indicator.data.Year.nunique() <= 2:
+      indicator.meta['graph_type'] = 'bar'
+    return indicator
+my_output.add_indicator_alteration(my_indicator_alteration)
 ```
 
 ## Metadata schemas

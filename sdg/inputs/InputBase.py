@@ -229,6 +229,7 @@ class InputBase(Loggable):
             try:
                 data = alteration(data, {
                     'indicator_id': indicator_id,
+                    'class': type(self).__name__,
                 })
             except:
                 # Handle callbacks without the context parameter.
@@ -260,6 +261,7 @@ class InputBase(Loggable):
             try:
                 meta = alteration(meta, {
                     'indicator_id': indicator_id,
+                    'class': type(self).__name__,
                 })
             except:
                 # Handle callbacks without the context parameter.

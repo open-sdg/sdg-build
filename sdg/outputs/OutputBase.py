@@ -36,6 +36,8 @@ class OutputBase(Loggable):
             translations = []
         self.indicator_options = IndicatorOptions() if indicator_options is None else indicator_options
         self.all_languages = []
+        self.indicator_alterations = []
+        self.already_altered_indicators = False
 
         self.indicators = self.merge_inputs(inputs)
         self.schema = schema
@@ -61,6 +63,11 @@ class OutputBase(Loggable):
         if language is not None:
             debug_message += ' ({language})'
         self.debug(debug_message, language=language)
+
+        # One time only - alter the indicators.
+        if not self.already_altered_indicators:
+            self.alter_indicators()
+
         # Keep a backup of the output folder.
         original_output_folder = self.output_folder
 
@@ -198,6 +205,40 @@ class OutputBase(Loggable):
             return self.indicators[indicator_id]
         else:
             raise KeyError('The indicator "' + indicator_id + '" could not be found in this output.')
+
+
+    def alter_indicators(self):
+        for inid in self.indicators:
+            self.indicators[inid] = self.alter_indicator(self.indicators[inid])
+        self.already_altered_indicators = True
+
+
+    def add_indicator_alteration(self, alteration):
+        """Add an alteration for indicators.
+        Parameters
+        ----------
+        alteration : function
+            The alteration function.
+        """
+        self.indicator_alterations.append(alteration)
+
+
+    def alter_indicator(self, indicator):
+        """Perform any alterations on an Indicator object.
+        Parameters
+        ---------
+        indicator : Indicator
+        """
+        # Perform any alterations on the indicator.
+        for alteration in self.indicator_alterations:
+            indicator = alteration(indicator, {
+                'indicator_id': indicator.get_indicator_id(),
+                'class': type(self).__name__,
+            })
+        if indicator is None:
+            raise Exception('Indicator alteration functions should return the altered Indicator object.')
+
+        return indicator
 
 
     def get_documentation_title(self):

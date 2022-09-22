@@ -105,6 +105,7 @@ def check_trailing_whitespace(df, csv):
             has_trailing_ws = df[column].str.endswith(' ', na=False).any()
             if has_trailing_ws:
                 status = False
+                print(df.loc[df[column].str.endswith(' ', na=False)][column].unique())
                 print(csv, ': Trailing whitespace in column: ', column)
     return status
 
@@ -119,6 +120,7 @@ def check_leading_whitespace(df, csv):
             has_leading_ws = df[column].str.startswith(' ', na=False).any()
             if has_leading_ws:
                 status = False
+                print(df.loc[df[column].str.startswith(' ', na=False)][column].unique())
                 print(csv, ': Leading whitespace in column: ', column)
     return status
 

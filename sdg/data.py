@@ -1,65 +1,137 @@
 # -*- coding: utf-8 -*-
 """
-Output the data in a variety of formats
+Created on 2017-10-04
 
-@author: dashton
+@author: dougashton
 """
+
+# %% setup
+
 import pandas as pd
-import os
-from sdg.path import output_path, input_path
+import numpy as np
+from sdg.path import input_path, get_ids
+from sdg.open_sdg import open_sdg_check
+
+# %% Utility
 
 
-def get_inid_data(inid, src_dir=''):
-    pth = input_path(inid, ftype='data', src_dir=src_dir, must_work=True)
-    df = pd.read_csv(pth)
-    return df
+def is_numeric(col):
+    """Guess whether a column is numeric"""
+    dt = col.dtype
+    return dt == np.dtype('float64') or dt == np.dtype('int64')
 
 
-def filter_headline(df, non_disaggregation_columns):
-    """Given a dataframe filter it down to just the headline data.
+def is_string(col):
+    """Guess whether a column is a string"""
+    dt = col.dtype
+    return dt == np.dtype('str') or dt == np.dtype('O')
 
-    In the case of multiple units it will keep all headline for each unit.
-    """
-
-    special_cols = [col for col in non_disaggregation_columns if col in df.columns]
-
-    # Select the non-data rows and filter rows that are all missing (nan)
-    disag = df.drop(special_cols, axis=1)
-    headline_rows = disag.isnull().all(axis=1)
-
-    headline = df.filter(special_cols, axis=1)[headline_rows]
-
-    return headline
+# %% Checking a single item
 
 
-def write_csv(inid, df, ftype='data', site_dir=''):
-    """
-    For a given ID and data set, write out as csv
-
-    Args:
-        inid: str. The indicator identifier
-        df: DataFrame. The pandas data frame of the data
-        ftype: Sets directory path
-        site_dir: str. The site directory to build to.
-
-    Returns:
-        bool: Status
-    """
+def check_csv(csv):
+    """Check an individual csv files and return logical status"""
     status = True
 
-    # If the csv dir isn't there, make it
-    csv_dir = output_path(ftype=ftype, format='csv', site_dir=site_dir)
-    if not os.path.exists(csv_dir):
-        os.makedirs(csv_dir, exist_ok=True)
-
-    # The path within the csv dir
-    out_path = output_path(inid,  ftype=ftype, format='csv', site_dir=site_dir)
-
     try:
-        df.to_csv(out_path, index=False)
+        df = pd.read_csv(csv)
     except Exception as e:
-        print(inid, e)
+        print(csv, e)
+        return False
+
+    # Run through the check functions
+    status = status & check_headers(df, csv)
+    status = status & check_data_types(df, csv)
+    status = status & check_trailing_whitespace(df, csv)
+    status = status & check_leading_whitespace(df, csv)
+    status = status & check_empty_rows(df, csv)
+
+    return status
+
+
+# %% Check correct columns
+
+
+def check_headers(df, csv):
+    status = True
+    cols = df.columns
+
+    if cols[0] != 'Year':
+        status = False
+        print(csv, ': First column not called "Year"')
+    if cols[-1] != 'Value':
+        status = False
+        print(csv, ': Last column not called "Value", instead got ', cols[-1])
+    # Check for whitespace in column names
+    # series conversion seems necessary in pandas 0.13
+    scol = pd.Series(df.columns)
+    ends_white = scol.str.endswith(' ')
+    if ends_white.any():
+        status = False
+        print(csv, ': Column names have trailing whitespace',
+              str(df.columns[ends_white]))
+    starts_white = scol.str.startswith(' ')
+    if starts_white.any():
+        status = False
+        print(csv, ': Column names have leading whitespace',
+              str(df.columns[starts_white]))
+
+    return status
+
+# %% Check data types
+
+
+def check_data_types(df, csv):
+    """Year and Value must be numeric"""
+    status = True
+    try:
+        if not is_numeric(df['Value']):
+            status = False
+            print(csv, ': Value column must be a numeric data type')
+    except Exception as e:
+        print(e)
         return False
 
     return status
 
+# %% Check for trailing whitespace in character columns
+
+
+def check_trailing_whitespace(df, csv):
+    """Loop over string columns and check for any trailing whitespace"""
+    status = True
+    for column in df:
+        if is_string(df[column]):
+            has_trailing_ws = df[column].str.endswith(' ', na=False).any()
+            if has_trailing_ws:
+                status = False
+                print(df.loc[df[column].str.endswith(' ', na=False)][column].unique())
+                print(csv, ': Trailing whitespace in column: ', column)
+    return status
+
+# %% Check for trailing whitespace in character columns
+
+
+def check_leading_whitespace(df, csv):
+    """Loop over string columns and check for any leading whitespace"""
+    status = True
+    for column in df:
+        if is_string(df[column]):
+            has_leading_ws = df[column].str.startswith(' ', na=False).any()
+            if has_leading_ws:
+                status = False
+                print(df.loc[df[column].str.startswith(' ', na=False)][column].unique())
+                print(csv, ': Leading whitespace in column: ', column)
+    return status
+
+# %% Check for empty rows
+
+
+def check_empty_rows(df, csv):
+    """Check for rows that are completely empty"""
+    status = True
+    empty_rows = df.isnull().all(axis=1)
+    if empty_rows.any():
+        status = False
+        print(csv, ': Empty row on rows: ', np.where(empty_rows)[0])
+    return status

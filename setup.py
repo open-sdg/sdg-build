@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 import os
 
 setup(name='sdg',
-      version='2.0.0',
+      version='2.1.0',
       description='Build SDG data and metadata into output formats',
       url='https://github.com/open-sdg/sdg-build',
       author='Doug Ashton',

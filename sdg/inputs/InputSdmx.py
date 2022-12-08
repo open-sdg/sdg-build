@@ -220,7 +220,14 @@ class InputSdmx(InputBase):
                 for i in range(len(indicator_ids) - len(indicator_names)):
                     # If there were more indicator ids than indicator names,
                     # just pad the list of names with the first one.
-                    indicator_names.append(indicator_names[0])
+                    if len(indicator_names) > 0:
+                        indicator_names.append(indicator_names[0])
+                    else:
+                        # Sometimes the DSD is missing the needed annotations.
+                        # Log this so that it can be reported to the DSD's
+                        # maintainer.
+                        self.warn('The SDMX DSD lacks an indicator title for ' + code_id)
+                        indicator_names.append('Indicator name missing')
             elif len(indicator_names) > len(indicator_ids):
                 # If there were more indicator names than indicator ids, we
                 # just have to arbitrarily pick the first ones.
@@ -230,7 +237,10 @@ class InputSdmx(InputBase):
             for index, element in enumerate(indicator_names):
 
                 indicator_id = indicator_ids[index]
-                indicator_name = self.normalize_indicator_name(element.text, indicator_id)
+                if type(element) == str:
+                    indicator_name = self.normalize_indicator_name(element, indicator_id)
+                else:
+                    indicator_name = self.normalize_indicator_name(element.text, indicator_id)
                 code_map[indicator_id] = indicator_name
             series_to_indicators[code_id] = code_map
         # Cache it for later.

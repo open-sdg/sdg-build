@@ -462,6 +462,7 @@ def open_sdg_data_schema_from_dict(params, options):
 
     allowed = [
         'DataSchemaInputTableSchemaYaml',
+        'DataSchemaInputSdmxDsd',
     ]
     if data_schema_class not in allowed:
         raise KeyError("Data schema class '%s' is not one of: %s." % (data_schema_class, ', '.join(allowed)))

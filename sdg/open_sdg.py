@@ -477,6 +477,8 @@ def open_sdg_data_schema_from_dict(params, options):
     data_schema_instance = None
     if data_schema_class == 'DataSchemaInputTableSchemaYaml':
         data_schema_instance = sdg.data_schemas.DataSchemaInputTableSchemaYaml(**params)
+    elif data_schema_class == 'DataSchemaInputSdmxDsd':
+        data_schema_instance = sdg.data_schemas.DataSchemaInputSdmxDsd(**params)
 
     return data_schema_instance
 

@@ -227,7 +227,7 @@ def methodology_1(data, config):
     elif z <= cagr_o <= y:
         return "moderate_deterioration"
     elif cagr_o < z:
-        return "significant_deterioration"
+        return "substantial_deterioration"
     else:
         return None
 

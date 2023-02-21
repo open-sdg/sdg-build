@@ -11,7 +11,7 @@ natsort
 pyjstat
 mammoth
 pyquery
-frictionless
+frictionless==4.40.8
 csvw
 Jinja2
 rfc3986<2

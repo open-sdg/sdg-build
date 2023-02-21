@@ -26,8 +26,6 @@ def test_csv_input_with_duplicates():
     indicator = data_input.indicators['1-1-1']
     indicator.translate('en', translation_helper)
 
-    print(indicator.data)
-
     correct_data = """
         Year,SEX,SEX1,Value
         2020,,,100
@@ -38,3 +36,10 @@ def test_csv_input_with_duplicates():
         2021,F,F,80
     """
     inputs_common.assert_input_has_correct_data(indicator.language('en').data, correct_data)
+
+def test_csv_input_with_problems():
+
+    with_leading_space = os.path.join('tests', 'assets', 'data', 'csv-with-rpoblems', 'indicator_1-1-1.csv')
+    with_trailing_space = os.path.join('tests', 'assets', 'data', 'csv-with-rpoblems', 'indicator_1-3-1.csv')
+    assert False == sdg.check_csv.check_csv(with_leading_space)
+    assert False == sdg.check_csv.check_csv(with_trailing_space)

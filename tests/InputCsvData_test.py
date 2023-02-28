@@ -39,7 +39,7 @@ def test_csv_input_with_duplicates():
 
 def test_csv_input_with_problems():
 
-    with_leading_space = os.path.join('tests', 'assets', 'data', 'csv-with-rpoblems', 'indicator_1-1-1.csv')
-    with_trailing_space = os.path.join('tests', 'assets', 'data', 'csv-with-rpoblems', 'indicator_1-3-1.csv')
+    with_leading_space = os.path.join('tests', 'assets', 'data', 'csv-with-problems', 'indicator_1-1-1.csv')
+    with_trailing_space = os.path.join('tests', 'assets', 'data', 'csv-with-problems', 'indicator_1-3-1.csv')
     assert False == sdg.check_csv.check_csv(with_leading_space)
     assert False == sdg.check_csv.check_csv(with_trailing_space)

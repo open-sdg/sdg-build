@@ -38,8 +38,7 @@ def test_csv_input_with_duplicates():
     inputs_common.assert_input_has_correct_data(indicator.language('en').data, correct_data)
 
 def test_csv_input_with_problems():
-
-    with_leading_space = os.path.join('tests', 'assets', 'data', 'csv-with-problems', 'indicator_1-1-1.csv')
-    with_trailing_space = os.path.join('tests', 'assets', 'data', 'csv-with-problems', 'indicator_1-3-1.csv')
-    assert False == sdg.check_csv.check_csv(with_leading_space)
-    assert False == sdg.check_csv.check_csv(with_trailing_space)
+    folder = os.path.join('tests', 'assets', 'data', 'csv-with-problems')
+    for file in os.listdir(folder):
+        csv_with_problem = os.path.join(folder, file)
+        assert False == sdg.check_csv.check_csv(csv_with_problem)

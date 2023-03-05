@@ -1,5 +1,6 @@
 from sdg.inputs import InputMetaFiles
 import yaml
+import sys
 
 
 class InputYamlMeta(InputMetaFiles):
@@ -9,7 +10,16 @@ class InputYamlMeta(InputMetaFiles):
 
         meta = {}
 
-        with open(filepath, 'r', encoding='utf-8') as stream:
-            meta = yaml.load(stream, Loader=yaml.FullLoader)
+        try:
+            with open(filepath, 'r', encoding='utf-8') as stream:
+                meta = yaml.load(stream, Loader=yaml.FullLoader)
+        except yaml.parser.ParserError as e:
+            print('The file at ' + filepath + ' could not be parsed because of a syntax error.')
+            print('Syntax errors often involve single/double quotes and/or colons (:).')
+            print('Sometimes you can find the problem by looking at the lines/columns mentioned in the following raw error message:')
+            print('------')
+            print(e)
+            print('------')
+            sys.exit(1)
 
         return meta

@@ -23,3 +23,11 @@ def read_file(location, request_params=None):
         data = file.read()
     file.close()
     return data
+
+
+def print_yaml_syntax_help(file):
+    print('-----')
+    print('The file at ' + file + ' could not be parsed because of a syntax error.')
+    print('YAML syntax errors often involve single/double quotes and/or colons (:).')
+    print('Sometimes you can find the problem by looking at the lines/columns mentioned in the following raw error message:')
+    print('------')

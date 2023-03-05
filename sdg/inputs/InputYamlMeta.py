@@ -20,6 +20,5 @@ class InputYamlMeta(InputMetaFiles):
             print('------')
             print(e)
             print('------')
-            sys.exit(1)
-
+            raise
         return meta

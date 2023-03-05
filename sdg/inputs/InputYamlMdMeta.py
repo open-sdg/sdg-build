@@ -13,11 +13,10 @@ class InputYamlMdMeta(InputMetaFiles):
             meta = dict(meta_md[0])
             meta['page_content'] = ''.join(meta_md[1])
         except ParserError as e:
+            print('-----')
             print('The file at ' + filepath + ' could not be parsed because of a syntax error.')
             print('Syntax errors often involve single/double quotes and/or colons (:).')
             print('Sometimes you can find the problem by looking at the lines/columns mentioned in the following raw error message:')
-            print('------')
-            print(e)
             print('------')
             raise
         return meta

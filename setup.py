@@ -36,7 +36,7 @@ setup(name='sdg',
         'pyjstat',
         'Jinja2',
         'natsort',
-        'openpyxl',
+        'openpyxl==3.1.0',
       ],
       dependency_links=[
         "git+https://github.com/dougmet/yamlmd",

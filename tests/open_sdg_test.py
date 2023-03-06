@@ -14,7 +14,7 @@ def test_open_sdg():
         assert isinstance(indicator, sdg.Indicator)
 
     config_path = os.path.join('tests', 'assets', 'open-sdg', 'config_data.yml')
-    assert sdg.open_sdg_check(config=config_path, alter_data=alter_data, alter_meta=alter_meta, alter_indicator=alter_indicator, indicator_callback=my_indicator_callback)
+    assert sdg.open_sdg_check(config=config_path, alter_data=alter_data, alter_meta=alter_meta, alter_indicator=alter_indicator)
     assert sdg.open_sdg_build(config=config_path, alter_data=alter_data, alter_meta=alter_meta, alter_indicator=alter_indicator, indicator_callback=my_indicator_callback)
 
     OutputOpenSdg_test.test_open_sdg_output_comb()

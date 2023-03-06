@@ -14,11 +14,12 @@ class InputSdmxMeta(InputSdmx):
         indicator_map = self.get_indicator_map()
         for metadata_set in self.get_metadata_sets():
             series_id = self.get_series_for_metadata_set(metadata_set)
-            indicator_ids = indicator_map[series_id]
-            metadata = self.get_metadata_set_concepts(metadata_set)
-            for indicator_id in indicator_ids:
-                name = indicator_ids[indicator_id]
-                self.add_indicator(indicator_id, name=name, meta=metadata, options=indicator_options)
+            if series_id in indicator_map:
+                indicator_ids = indicator_map[series_id]
+                metadata = self.get_metadata_set_concepts(metadata_set)
+                for indicator_id in indicator_ids:
+                    name = indicator_ids[indicator_id]
+                    self.add_indicator(indicator_id, name=name, meta=metadata, options=indicator_options)
 
 
     def get_metadata_sets(self):

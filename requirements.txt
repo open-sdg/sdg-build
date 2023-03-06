@@ -11,8 +11,9 @@ natsort
 pyjstat
 mammoth
 pyquery
-frictionless
+frictionless==4.40.8
 csvw
 Jinja2
 rfc3986<2
 git+https://github.com/dougmet/yamlmd
+openpyxl==3.1.0

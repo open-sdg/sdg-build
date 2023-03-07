@@ -459,7 +459,10 @@ class OutputSdmxMl(OutputBase):
                 if row['Dimension'] not in code_dict:
                     code_dict[row['Dimension']] = {}
                 code_dict[row['Dimension']][row['Text']] = row['Value']
-            data.replace(to_replace=code_dict, value=None, inplace=True)
+            try:
+                data.replace(to_replace=code_dict, value=None, inplace=True)
+            except:
+                data.replace(to_replace=code_dict, inplace=True)
 
             # Now put back the pseudo-unique strings mentioned above.
             data.replace(temp_nan_fix, np.nan, inplace=True)

@@ -26,7 +26,8 @@ def read_file(location, request_params=None):
 
 
 def get_yaml_syntax_help(file):
-    return f"""-----
+    return f"""
+    -----
     The file {file} could not be parsed because of a syntax error.
     YAML syntax errors often involve single/double quotes and/or colon (:).
     Sometimes you can find the problem by looking at the lines/columns mentioned above.

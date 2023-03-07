@@ -37,6 +37,12 @@ def test_csv_input_with_duplicates():
     """
     inputs_common.assert_input_has_correct_data(indicator.language('en').data, correct_data)
 
+def test_csv_input_with_problems():
+    folder = os.path.join('tests', 'assets', 'data', 'csv-with-problems')
+    for file in os.listdir(folder):
+        csv_with_problem = os.path.join(folder, file)
+        assert False == sdg.check_csv.check_csv(csv_with_problem)
+
 def test_csv_input_with_code_map():
 
     translation_input = sdg.translations.TranslationInputYaml(

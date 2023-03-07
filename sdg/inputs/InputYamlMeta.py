@@ -13,6 +13,5 @@ class InputYamlMeta(InputMetaFiles):
             with open(filepath, 'r', encoding='utf-8') as stream:
                 meta = yaml.load(stream, Loader=yaml.FullLoader)
         except yaml.parser.ParserError as e:
-            e.add_note(get_yaml_syntax_help(filepath))
-            raise
+            raise Exception(get_yaml_syntax_help(filepath)) from e
         return meta

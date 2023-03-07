@@ -64,8 +64,7 @@ class TranslationInputYaml(TranslationInputBase):
                                 value = yamldata[key]
                                 self.add_translation(language, group, key, value)
                     except yaml.parser.ParserError as exc:
-                        exc.add_note(get_yaml_syntax_help(filepath))
-                        raise
+                        raise Exception(get_yaml_syntax_help(filepath)) from exc
 
 
     def execute(self):

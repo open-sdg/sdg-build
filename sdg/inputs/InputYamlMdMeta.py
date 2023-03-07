@@ -13,6 +13,5 @@ class InputYamlMdMeta(InputMetaFiles):
             meta = dict(meta_md[0])
             meta['page_content'] = ''.join(meta_md[1])
         except ParserError as e:
-            e.add_note(get_yaml_syntax_help(filepath))
-            raise
+            raise Exception(get_yaml_syntax_help(filepath)) from e
         return meta

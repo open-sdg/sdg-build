@@ -1,5 +1,5 @@
 from sdg.inputs import InputMetaFiles
-from sdg.helpers.files import print_yaml_syntax_help
+from sdg.helpers.files import get_yaml_syntax_help
 import yaml
 
 class InputYamlMeta(InputMetaFiles):
@@ -13,6 +13,6 @@ class InputYamlMeta(InputMetaFiles):
             with open(filepath, 'r', encoding='utf-8') as stream:
                 meta = yaml.load(stream, Loader=yaml.FullLoader)
         except yaml.parser.ParserError as e:
-            print_yaml_syntax_help(filepath)
+            e.add_note(get_yaml_syntax_help(filepath))
             raise
         return meta

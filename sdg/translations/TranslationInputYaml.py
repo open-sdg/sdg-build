@@ -4,7 +4,7 @@ import os
 import shutil
 import yaml
 from sdg.translations import TranslationInputBase
-from sdg.helpers.files import print_yaml_syntax_help
+from sdg.helpers.files import get_yaml_syntax_help
 
 class TranslationInputYaml(TranslationInputBase):
     """This class imports translations from local YAML files.
@@ -64,7 +64,7 @@ class TranslationInputYaml(TranslationInputBase):
                                 value = yamldata[key]
                                 self.add_translation(language, group, key, value)
                     except yaml.parser.ParserError as exc:
-                        print_yaml_syntax_help(filepath)
+                        exc.add_note(get_yaml_syntax_help(filepath))
                         raise
 
 

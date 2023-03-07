@@ -25,9 +25,9 @@ def read_file(location, request_params=None):
     return data
 
 
-def print_yaml_syntax_help(file):
-    print('-----')
-    print(f'The file at {file} could not be parsed because of a syntax error.')
-    print('YAML syntax errors often involve single/double quotes and/or colons (:).')
-    print('Sometimes you can find the problem by looking at the lines/columns mentioned in the following raw error message:')
-    print('------')
+def get_yaml_syntax_help(file):
+    return f"""-----
+    The file {file} could not be parsed because of a syntax error.
+    YAML syntax errors often involve single/double quotes and/or colon (:).
+    Sometimes you can find the problem by looking at the lines/columns mentioned above.
+    -----"""

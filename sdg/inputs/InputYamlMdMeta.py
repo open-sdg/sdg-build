@@ -1,5 +1,5 @@
 from sdg.inputs import InputMetaFiles
-from sdg.helpers.files import print_yaml_syntax_help
+from sdg.helpers.files import get_yaml_syntax_help
 from ruamel.yaml.parser import ParserError
 import yamlmd
 
@@ -13,6 +13,6 @@ class InputYamlMdMeta(InputMetaFiles):
             meta = dict(meta_md[0])
             meta['page_content'] = ''.join(meta_md[1])
         except ParserError as e:
-            print_yaml_syntax_help(filepath)
+            e.add_note(get_yaml_syntax_help(filepath))
             raise
         return meta

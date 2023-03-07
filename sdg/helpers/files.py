@@ -30,5 +30,5 @@ def get_yaml_syntax_help(file):
     -----
     The file {file} could not be parsed because of a syntax error.
     YAML syntax errors often involve single/double quotes and/or colon (:).
-    Sometimes you can find the problem by looking at the lines/columns mentioned above.
+    Sometimes you can find the problem by looking at the lines/columns mentioned above by "yaml.parser.ParserError".
     -----"""

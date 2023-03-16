@@ -71,6 +71,8 @@ def test_open_sdg_output():
         metadata_fields=[{'key': 'foo', 'label': 'Foo'}],
     )
     documentation_service.generate_documentation()
+
+def test_open_sdg_output_documentation():
     documentation_files = [
         'disaggregation-value--m.html',
         'disaggregation--sex.html',

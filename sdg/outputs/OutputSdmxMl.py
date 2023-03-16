@@ -574,7 +574,7 @@ class OutputSdmxMl(OutputBase):
             "has one per indicator plus an 'all' file. Translations of "
             "the metadata are included in each file using the 'lang' "
             "attribute. The data for this output uses the following "
-            "data structure definition: " + self.dsd_path
+            "data structure definition: " + str(self.dsd_path)
         )
         return description
 

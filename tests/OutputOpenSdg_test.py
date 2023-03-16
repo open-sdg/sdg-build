@@ -56,8 +56,51 @@ def test_open_sdg_output():
 
     exp_dirs = set(['comb', 'data', 'edges', 'csvw', 'data-packages', 'geojson', 'headline', 'meta', 'stats', 'zip', 'translations'])
     act_dirs = os.listdir(english_build)
-    print(act_dirs)
     assert all([a in exp_dirs for a in act_dirs])
+
+    all_outputs = [
+        data_output,
+        csvw_output,
+        datapackage_output,
+        geojson_output,
+        sdmx_output,
+        sdmx_global_output,
+    ]
+    documentation_service = sdg.OutputDocumentationService(all_outputs,
+        folder='_site_open_sdg',
+        metadata_fields=[{'key': 'foo', 'label': 'Foo'}],
+    )
+    documentation_service.generate_documentation()
+    documentation_files = [
+        'disaggregation-value--m.html',
+        'disaggregation--sex.html',
+        'disaggregations.html',
+        'disaggregation-value--f.csv',
+        'disaggregation--geocode.html',
+        'geojson-output-regions.html',
+        'disaggregation-report.csv',
+        'values--disaggregation--geocode.csv',
+        'data-packages.html',
+        'disaggregation-value--f.html',
+        'open-sdg-output.html',
+        'disaggregation-by-indicator-report.csv',
+        'sdmx-output.html',
+        'indicators--disaggregation--geocode.csv',
+        'indicators--disaggregation--sex.csv',
+        'disaggregation-value--e12000001.csv',
+        'sdmx-output_.html',
+        'values--disaggregation--sex.csv',
+        'disaggregation-value--e12000001.html',
+        'disaggregation-value--m.csv',
+        'metadata_field-report.csv',
+        'metadata_field-by-indicator-report.csv',
+        'metadata.html',
+        'index.html',
+        'csvw.html',
+    ]
+    for documentation_file in documentation_files:
+        file_path = os.path.join('_site_open_sdg', documentation_file)
+        assert os.path.exists(file_path)
 
 def test_open_sdg_output_comb():
 

@@ -39,3 +39,5 @@ sdmx_output_global:
 docs_metadata_fields:
   - key: foo
     label: Foo
+  - key: nonexistent
+    label: Non-existent

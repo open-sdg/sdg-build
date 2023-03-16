@@ -20,10 +20,15 @@ def test_open_sdg_output():
     data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
     data_input.add_data_alteration(alter_data)
     data_input.add_meta_alteration(alter_meta)
+    meta_pattern = os.path.join('tests', 'assets', 'meta', 'yaml', '*.yml')
+    meta_input = sdg.inputs.InputYamlMeta(
+        path_pattern=meta_pattern,
+        git=False,
+    )
     schema_path = os.path.join('tests', 'assets', 'open-sdg', 'metadata_schema.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
     translations = sdg.translations.TranslationInputSdgTranslations()
-    data_output = sdg.outputs.OutputOpenSdg([data_input], schema,
+    data_output = sdg.outputs.OutputOpenSdg([data_input, meta_input], schema,
         translations=[translations],
         output_folder='_site_open_sdg',
     )
@@ -68,7 +73,10 @@ def test_open_sdg_output():
     ]
     documentation_service = sdg.OutputDocumentationService(all_outputs,
         folder='_site_open_sdg',
-        metadata_fields=[{'key': 'foo', 'label': 'Foo'}],
+        metadata_fields=[
+            {'key': 'foo', 'label': 'Foo'},
+            {'key': 'nonexistent', 'label': 'Non-existent'},
+        ],
     )
     documentation_service.generate_documentation()
 

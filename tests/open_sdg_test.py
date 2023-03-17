@@ -32,3 +32,4 @@ def test_open_sdg():
     OutputOpenSdg_test.test_open_sdg_output_stats_reporting()
     OutputOpenSdg_test.test_open_sdg_output_translations()
     OutputOpenSdg_test.test_open_sdg_output_zip()
+    OutputOpenSdg_test.test_open_sdg_output_documentation()

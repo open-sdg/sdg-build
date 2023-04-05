@@ -252,6 +252,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         inputs = open_sdg_input_defaults()
     if indicator_options is None:
         indicator_options = open_sdg_indicator_options_defaults()
+    if logging is None:
+        logging = ['warn']
 
     # Build a dict of options for open_sdg_prep().
     defaults = {

@@ -459,7 +459,10 @@ class OutputSdmxMl(OutputBase):
                 if row['Dimension'] not in code_dict:
                     code_dict[row['Dimension']] = {}
                 code_dict[row['Dimension']][row['Text']] = row['Value']
-            data.replace(to_replace=code_dict, value=None, inplace=True)
+            try:
+                data.replace(to_replace=code_dict, value=None, inplace=True)
+            except:
+                data.replace(to_replace=code_dict, inplace=True)
 
             # Now put back the pseudo-unique strings mentioned above.
             data.replace(temp_nan_fix, np.nan, inplace=True)
@@ -571,7 +574,7 @@ class OutputSdmxMl(OutputBase):
             "has one per indicator plus an 'all' file. Translations of "
             "the metadata are included in each file using the 'lang' "
             "attribute. The data for this output uses the following "
-            "data structure definition: " + self.dsd_path
+            "data structure definition: " + str(self.dsd_path)
         )
         return description
 

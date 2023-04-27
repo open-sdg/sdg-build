@@ -20,10 +20,15 @@ def test_open_sdg_output():
     data_input = sdg.inputs.InputCsvData(path_pattern=data_pattern)
     data_input.add_data_alteration(alter_data)
     data_input.add_meta_alteration(alter_meta)
+    meta_pattern = os.path.join('tests', 'assets', 'meta', 'yaml', '*.yml')
+    meta_input = sdg.inputs.InputYamlMeta(
+        path_pattern=meta_pattern,
+        git=False,
+    )
     schema_path = os.path.join('tests', 'assets', 'open-sdg', 'metadata_schema.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
     translations = sdg.translations.TranslationInputSdgTranslations()
-    data_output = sdg.outputs.OutputOpenSdg([data_input], schema,
+    data_output = sdg.outputs.OutputOpenSdg([data_input, meta_input], schema,
         translations=[translations],
         output_folder='_site_open_sdg',
     )
@@ -56,8 +61,56 @@ def test_open_sdg_output():
 
     exp_dirs = set(['comb', 'data', 'edges', 'csvw', 'data-packages', 'geojson', 'headline', 'meta', 'stats', 'zip', 'translations'])
     act_dirs = os.listdir(english_build)
-    print(act_dirs)
     assert all([a in exp_dirs for a in act_dirs])
+
+    all_outputs = [
+        data_output,
+        csvw_output,
+        datapackage_output,
+        geojson_output,
+        sdmx_output,
+        sdmx_global_output,
+    ]
+    documentation_service = sdg.OutputDocumentationService(all_outputs,
+        folder='_site_open_sdg',
+        metadata_fields=[
+            {'key': 'foo', 'label': 'Foo'},
+            {'key': 'nonexistent', 'label': 'Non-existent'},
+        ],
+    )
+    documentation_service.generate_documentation()
+
+def test_open_sdg_output_documentation():
+    documentation_files = [
+        'disaggregation-value--m.html',
+        'disaggregation--sex.html',
+        'disaggregations.html',
+        'disaggregation-value--f.csv',
+        'disaggregation--geocode.html',
+        'geojson-output-regions.html',
+        'disaggregation-report.csv',
+        'values--disaggregation--geocode.csv',
+        'data-packages.html',
+        'disaggregation-value--f.html',
+        'open-sdg-output.html',
+        'disaggregation-by-indicator-report.csv',
+        'sdmx-output.html',
+        'indicators--disaggregation--geocode.csv',
+        'indicators--disaggregation--sex.csv',
+        'disaggregation-value--e12000001.csv',
+        'sdmx-output_.html',
+        'values--disaggregation--sex.csv',
+        'disaggregation-value--e12000001.html',
+        'disaggregation-value--m.csv',
+        'metadata_field-report.csv',
+        'metadata_field-by-indicator-report.csv',
+        'metadata.html',
+        'index.html',
+        'csvw.html',
+    ]
+    for documentation_file in documentation_files:
+        file_path = os.path.join('_site_open_sdg', documentation_file)
+        assert os.path.exists(file_path)
 
 def test_open_sdg_output_comb():
 

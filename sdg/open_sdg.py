@@ -44,7 +44,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_subfolder=None, indicator_downloads=None, docs_baseurl='',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
                    logging=None, indicator_export_filename='all_indicators',
-                   datapackage=None, csvw=None, data_schema=None, docs_metadata_fields=None):
+                   datapackage=None, csvw=None, data_schema=None, docs_metadata_fields=None,
+                   alter_indicator=None, indicator_callback=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -62,8 +63,11 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
           reporting stats for.
         config: str. Path to a YAML config file that overrides other parameters
         inputs: list. A list of dicts describing instances of InputBase
-        alter_data: function. A callback function that alters a data Dataframe
-        alter_meta: function. A callback function that alters a metadata dictionary
+        alter_data: function. A callback function that alters a data Dataframe (for each input)
+        alter_meta: function. A callback function that alters a metadata dictionary (for each input)
+        alter_indicator: function. A callback function that alters the full Indicator objects (for each output)
+        indicator_callback: function. A callback function that runs for each
+          indicator after the outputs have already been generated.
         indicator_options: Dict. Options to pass into each indicator.
         docs_branding: string. A heading for all documentation pages
         docs_intro: string. An introduction for the documentation homepage
@@ -142,6 +146,9 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     # Pass along our data/meta alterations.
     options['alter_data'] = alter_data
     options['alter_meta'] = alter_meta
+    # And other callbacks.
+    options['indicator_callback'] = indicator_callback
+    options['alter_indicator'] = alter_indicator
 
     # Convert the indicator options.
     options['indicator_options'] = open_sdg_indicator_options_from_dict(options['indicator_options'])
@@ -155,6 +162,14 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             status = status & output.execute('untranslated')
         else:
             sys.exit('The data configuration must have a "languages" setting with at least one language. See the documentation here: https://open-sdg.readthedocs.io/en/latest/data-configuration/#languages')
+
+    # Perform per-indicator callbacks.
+    if callable(options['indicator_callback']):
+        indicator_callback = options['indicator_callback']
+        for output in outputs:
+            if isinstance(output, sdg.outputs.OutputOpenSdg):
+                for indicator in output.indicators.values():
+                    indicator_callback(indicator)
 
     # Output the documentation pages.
     documentation_service = sdg.OutputDocumentationService(outputs,
@@ -211,7 +226,7 @@ def open_sdg_indicator_options_from_dict(options):
 
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
         inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
-        data_schema=None, schema=None, logging=None):
+        data_schema=None, schema=None, logging=None, alter_indicator=None):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -224,8 +239,9 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         schema_file: Location of schema file relative to src_dir (@deprecated)
         schema: list. List of SchemaInputBase descendants.
         config: str. Path to a YAML config file that overrides other parameters
-        alter_data: function. A callback function that alters a data Dataframe
-        alter_meta: function. A callback function that alters a metadata dictionary
+        alter_data: function. A callback function that alters a data Dataframe (for each input)
+        alter_meta: function. A callback function that alters a metadata dictionary (for each input)
+        alter_indicator: function. A callback function that alters the full Indicator objects (for each output)
         data_schema: dict . Dict describing an instance of DataSchemaInputBase
         logging: Noneor list. Type of logs to print, including 'warn' and 'debug'
 
@@ -236,6 +252,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         inputs = open_sdg_input_defaults()
     if indicator_options is None:
         indicator_options = open_sdg_indicator_options_defaults()
+    if logging is None:
+        logging = ['warn']
 
     # Build a dict of options for open_sdg_prep().
     defaults = {
@@ -267,6 +285,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
     # Pass along our data/meta alterations.
     options['alter_data'] = alter_data
     options['alter_meta'] = alter_meta
+    options['alter_indicator'] = alter_indicator
 
     # Convert the indicator options.
     options['indicator_options'] = open_sdg_indicator_options_from_dict(options['indicator_options'])
@@ -326,6 +345,9 @@ def open_sdg_prep(options):
         logging=options['logging'],
         indicator_export_filename=options['indicator_export_filename'])
 
+    if callable(options['alter_indicator']):
+        opensdg_output.add_indicator_alteration(options['alter_indicator'])
+
     outputs = [opensdg_output]
 
     # If there are any map layers, create some OutputGeoJsonOpenSdg objects.
@@ -345,7 +367,10 @@ def open_sdg_prep(options):
             geojson_file = os.path.join(options['src_dir'], geojson_kwargs['geojson_file'])
             geojson_kwargs['geojson_file'] = geojson_file
         # Create the output.
-        outputs.append(sdg.outputs.OutputGeoJsonOpenSdg(**geojson_kwargs))
+        geojson_output = sdg.outputs.OutputGeoJsonOpenSdg(**geojson_kwargs)
+        if callable(options['alter_indicator']):
+            geojson_output.add_indicator_alteration(options['alter_indicator'])
+        outputs.append(geojson_output)
 
     data_schema = None
     if options['data_schema'] is not None:
@@ -353,7 +378,7 @@ def open_sdg_prep(options):
 
     # Output datapackages and possible CSVW.
     datapackage_params = options['datapackage'] if options['datapackage'] is not None else {}
-    outputs.append(sdg.outputs.OutputDataPackage(
+    datapackage_output = sdg.outputs.OutputDataPackage(
         inputs=inputs,
         schema=schema,
         output_folder=options['site_dir'],
@@ -362,12 +387,15 @@ def open_sdg_prep(options):
         data_schema=data_schema,
         logging=options['logging'],
         **datapackage_params,
-    ))
+    )
+    if callable(options['alter_indicator']):
+        datapackage_output.add_indicator_alteration(options['alter_indicator'])
+    outputs.append(datapackage_output)
 
     # Optionally output CSVW.
     if options['csvw'] is not None:
         csvw_params = options['csvw'] if options['csvw'] != True else {}
-        outputs.append(sdg.outputs.OutputCsvw(
+        csvw_output = sdg.outputs.OutputCsvw(
             inputs=inputs,
             schema=schema,
             output_folder=options['site_dir'],
@@ -376,13 +404,16 @@ def open_sdg_prep(options):
             data_schema=data_schema,
             logging=options['logging'],
             **csvw_params,
-        ))
+        )
+        if callable(options['alter_indicator']):
+            csvw_output.add_indicator_alteration(options['alter_indicator'])
+        outputs.append(csvw_output)
 
     # Add SDMX output if configured.
     if 'sdmx_output' in options and 'dsd' in options['sdmx_output']:
         if 'structure_specific' not in options['sdmx_output']:
             options['sdmx_output']['structure_specific'] = True
-        outputs.append(sdg.outputs.OutputSdmxMl(
+        sdmx_output = sdg.outputs.OutputSdmxMl(
             inputs=inputs,
             schema=schema,
             output_folder=options['site_dir'],
@@ -390,7 +421,10 @@ def open_sdg_prep(options):
             indicator_options=options['indicator_options'],
             logging=options['logging'],
             **options['sdmx_output']
-        ))
+        )
+        if callable(options['alter_indicator']):
+            sdmx_output.add_indicator_alteration(options['alter_indicator'])
+        outputs.append(sdmx_output)
 
     # Add Global SDMX output separately, if configured.
     if 'sdmx_output_global' in options:
@@ -411,7 +445,10 @@ def open_sdg_prep(options):
         params['constrain_data'] = True
         params['constrain_meta'] = True
         params['global_content_constraints'] = True
-        outputs.append(sdg.outputs.OutputSdmxMl(**params))
+        global_sdmx_output = sdg.outputs.OutputSdmxMl(**params)
+        if callable(options['alter_indicator']):
+            global_sdmx_output.add_indicator_alteration(options['alter_indicator'])
+        outputs.append(global_sdmx_output)
 
     return outputs
 

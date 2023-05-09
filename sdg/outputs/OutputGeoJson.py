@@ -298,8 +298,7 @@ class OutputGeoJson(OutputBase):
 
         # Make sure at least one indicator has geocodes.
         if not self.geocodes_exist():
-            print('No indicators have data under "' + self.id_column + '".')
-            status = False
+            self.warn('No indicators have data under "' + self.id_column + '".')
 
         return status
 

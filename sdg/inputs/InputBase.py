@@ -229,6 +229,7 @@ class InputBase(Loggable):
             try:
                 data = alteration(data, {
                     'indicator_id': indicator_id,
+                    'class': type(self).__name__,
                 })
             except:
                 # Handle callbacks without the context parameter.
@@ -260,6 +261,7 @@ class InputBase(Loggable):
             try:
                 meta = alteration(meta, {
                     'indicator_id': indicator_id,
+                    'class': type(self).__name__,
                 })
             except:
                 # Handle callbacks without the context parameter.
@@ -361,5 +363,8 @@ class InputBase(Loggable):
                 if row['Dimension'] not in code_dict:
                     code_dict[row['Dimension']] = {}
                 code_dict[row['Dimension']][row['Text']] = row['Value']
-            data.replace(to_replace=code_dict, value=None, inplace=True)
+            try:
+                data.replace(to_replace=code_dict, value=None, inplace=True)
+            except:
+                data.replace(to_replace=code_dict, inplace=True)
         return data

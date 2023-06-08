@@ -112,3 +112,4 @@ venv.bak/
 # IDEs
 .vscode
 .DS_Store
+.idea

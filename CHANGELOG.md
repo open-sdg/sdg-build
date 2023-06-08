@@ -1,5 +1,14 @@
 # Changes
 
+### 2.2.0
+
+* Pandas version - pin to 1.x #339
+* Warn instead of fail when no indicators have geo data #338
+* Avoid key error when report field does not exist in indicator metadata #337
+* Halt build and provide better error messages on YAML syntax problems #336
+* Pin version of openpyxl to 3.1.0 #335
+* Prevent version 5 of frictionless #333
+
 ### 2.1.0
 
 * Catch cases where the DSD is missing the indicator name #332

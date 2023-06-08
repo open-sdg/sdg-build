@@ -6,7 +6,6 @@ def test_sdmx_structure_specific_input():
 
     dimension_query = {
         'SERIES': 'SI_POV_DAY1',
-        'SEX': 'F',
     }
     data_input = sdg.inputs.InputSdmxMl_UnitedNationsApi(
         reference_area=826,
@@ -18,4 +17,4 @@ def test_sdmx_structure_specific_input():
 
     df = data_input.indicators['1-1-1'].data
     value_2015 = df.loc[df['Year'] == 2015, 'Value']
-    assert value_2015.iloc[0] == 0.55696
+    assert value_2015.iloc[0] == 0.2

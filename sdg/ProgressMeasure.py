@@ -125,7 +125,7 @@ def update_progress_thresholds(config, method):
     if ('progress_thresholds' in config.keys()) & (bool(config['progress_thresholds'])):
         progress_thresholds = config['progress_thresholds']
     elif method == 1:
-        progress_thresholds = {'high': 0.01, 'med': 0, 'low': -0.01}
+        progress_thresholds = {'high': 0.015, 'med': 0.005, 'low': 0}
     elif method == 2:
         progress_thresholds = {'high': 0.95, 'med': 0.6, 'low': 0}
     else:
@@ -219,17 +219,7 @@ def methodology_1(data, config):
     if direction == "negative":
         cagr_o = -1 * cagr_o
 
-    # compare growth rate to progress thresholds to return progress measure
-    if cagr_o > x:
-        return "substantial_progress"
-    elif y < cagr_o <= x:
-        return "moderate_progress"
-    elif z <= cagr_o <= y:
-        return "moderate_deterioration"
-    elif cagr_o < z:
-        return "substantial_deterioration"
-    else:
-        return None
+    return get_progress_status(cagr_o, config)
 
 
 def methodology_2(data, config):
@@ -237,13 +227,12 @@ def methodology_2(data, config):
 
     Check if target has already been achieved.
     Use configuration options to get the current and base value from indicator data and use to calculate growth ratio.
-    Compare growth ratio to progress thresholds to return a progress measurement.
 
     Args:
         data: DataFrame. Indicator data for which progress is being calculated.
         config: dict. Configurations for indicator for which progress is being calculated.
     Returns:
-        str: Progress measure.
+        str: Progress status.
     """
 
     direction = str(config['direction'])
@@ -251,9 +240,6 @@ def methodology_2(data, config):
     t_0 = float(config['base_year'])
     target = float(config['target'])
     t_tao = float(config['target_year'])
-    x = float(config['high'])
-    y = float(config['med'])
-    z = float(config['low'])
 
     # get current value from data
     current_value = data.Value[data.Year == t].values[0]
@@ -271,15 +257,35 @@ def methodology_2(data, config):
     # calculating growth ratio
     ratio = cagr_o / cagr_r
 
-    # compare growth ratio to progress thresholds to return progress measure
-    if ratio >= x:
-        return "substantial_progress"
-    elif y <= ratio < x:
-        return "moderate_progress"
-    elif z <= ratio < y:
-        return "negligible_progress"
-    elif ratio < z:
+    return get_progress_status(ratio, config)
+
+
+def get_progress_status(value, config):
+    """Compare growth rate to progress thresholds provided in configs to return progress status.
+
+    Use configuration options to get the high, middle, and low thresholds to compare to the value
+    and return a progress status label.
+
+    Args:
+        value: float. Calculated value of either observed growth or growth ratio for an indicator.
+        config: dict. Configurations for indicator for which progress is being calculated.
+
+    Returns: str. Progress status label.
+
+    """
+
+    x = float(config['high'])
+    y = float(config['med'])
+    z = float(config['low'])
+
+    # compare growth rate to progress thresholds to return progress measure
+    if value >= x:
+        return "on_track"
+    elif y <= value < x:
+        return "progress_needs_acceleration"
+    elif z <= value < y:
+        return "limited_progress"
+    elif value < z:
         return "deterioration"
     else:
         return None
-

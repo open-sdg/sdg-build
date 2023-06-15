@@ -157,6 +157,10 @@ class OutputDocumentationService(Loggable):
         self.write_disaggregation_report()
         self.write_metadata_report()
 
+        # If it exists, copy over the public folder.
+        if os.path.isdir('public'):
+            print('yes')
+
 
     def create_filename(self, title):
         """Convert a title into a unique filename.

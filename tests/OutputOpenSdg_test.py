@@ -107,6 +107,7 @@ def test_open_sdg_output_documentation():
         'metadata.html',
         'index.html',
         'csvw.html',
+        'robots.txt',
     ]
     for documentation_file in documentation_files:
         file_path = os.path.join('_site_open_sdg', documentation_file)

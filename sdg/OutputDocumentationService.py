@@ -1,4 +1,5 @@
 import os
+import shutil
 import sdg
 import pandas as pd
 from slugify import slugify
@@ -159,8 +160,7 @@ class OutputDocumentationService(Loggable):
 
         # If it exists, copy over the public folder.
         if os.path.isdir('public'):
-            print('yes')
-
+            shutil.copytree('public', self.folder, dirs_exist_ok=True)
 
     def create_filename(self, title):
         """Convert a title into a unique filename.

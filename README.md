@@ -7,6 +7,7 @@ SDG Build is a Python package for converting data on the Sustainable Development
 1. Input of SDG data from various machine-readable formats, for human-friendly visualisation and display
 2. Output of SDG data to various machine-readable formats, for interoperability with other systems
 3. Validation of the data and metadata for quality control
+4. Documentation of the produced outputs
 
 ## Dependencies
 
@@ -132,6 +133,16 @@ es:
 ```
 
 When using the InputYamlMdMeta class, this can be accomplished by creating subfolders for each language code, and adding pre-translated versions of the YAML files there.
+
+### Output documentation website
+
+This library can automatically produce human-readable documentation website of all of the outputs that are generated. This documentation includes example links to the generated data and metadata. When used with Open SDG, this is done automatically. Otherwise it can be done manually using the OutputDocumentationService.py class.
+
+#### Public files in output documentation
+
+If you would like to include any arbitrary files in the output documentation, you can have a folder called `public` in your repository. All of the folders and files within the `public` folder will be automatically copied into the output documentation website.
+
+One common use-case for this feature is to include a `robots.txt` file so that search engines will not index your documentation website.
 
 ## Usage
 

@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import sdmx
 import time
+import datetime
 import uuid
 from jinja2 import Template
 from slugify import slugify
@@ -341,7 +342,7 @@ class OutputSdmxMl(OutputBase):
         return {
             'id': header_id,
             'test': True,
-            'prepared': time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(timestamp)),
+            'prepared': datetime.datetime.now(),
             'sender': sender_id,
         }
 

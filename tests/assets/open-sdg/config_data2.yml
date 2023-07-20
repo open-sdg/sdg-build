@@ -1,0 +1,44 @@
+
+languages:
+  - en
+site_dir: _site_open_sdg2
+schema_file: metadata_schema.yml
+src_dir: tests/assets/open-sdg
+inputs:
+  - class: InputCsvData
+    path_pattern: data/*.csv
+  - class: InputYamlMeta
+    path_pattern: indicator-config/*.yml
+    git: false
+  - class: InputYamlMeta
+    path_pattern: meta/*.yml
+    git: false
+translations:
+  - class: TranslationInputSdgTranslations
+    source: https://github.com/open-sdg/sdg-translations.git
+    tag: 1.8.0
+  - class: TranslationInputYaml
+    source: translations
+reporting_status_extra_fields: []
+docs_branding: SDG data build documentation
+docs_intro: This is a list of examples of endpoints and output that are
+  available on this service. Click each of the links below for more information
+  on the available output.
+datapackage:
+  sorting: default
+csvw:
+  sorting: default
+map_layers:
+  - geojson_file: geojson/england-regions.geojson
+    name_property: rgn17nm
+    id_property: rgn17cd
+sdmx_output:
+  output_subfolder: sdmx
+sdmx_output_global:
+  output_subfolder: sdmx-global
+docs_metadata_fields:
+  - key: foo
+    label: Foo
+  - key: nonexistent
+    label: Non-existent
+ignore_out_of_scope_disaggregation_stats: true

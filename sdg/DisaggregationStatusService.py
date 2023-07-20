@@ -8,7 +8,7 @@ class DisaggregationStatusService(Loggable):
     """Service to calculate to what extent the data is disaggregated."""
 
 
-    def __init__(self, site_dir, indicators, extra_fields=None, logging=None):
+    def __init__(self, site_dir, indicators, extra_fields=None, ignore_na=False, logging=None):
         """Constructor for the DisaggregationStatusService class.
 
         Parameters
@@ -17,6 +17,10 @@ class DisaggregationStatusService(Loggable):
             Base folder in which to write files.
         indicators : dict
             Dict of Indicator objects keyed by indicator id.
+        extra_fields : list
+            List of strings for extra fields to generate stats by.
+        ignore_na : boolean
+            Whether to ignore (ie, omit) out-of-scope stats.
         """
         Loggable.__init__(self, logging=logging)
         if extra_fields is None:
@@ -24,6 +28,7 @@ class DisaggregationStatusService(Loggable):
         self.site_dir = site_dir
         self.indicators = indicators
         self.extra_fields = extra_fields
+        self.ignore_na = ignore_na
         self.expected_disaggregations = self.get_expected_disaggregations()
         self.actual_disaggregations = self.get_actual_disaggregations()
         self.goals = self.get_goals()
@@ -147,6 +152,9 @@ class DisaggregationStatusService(Loggable):
             is_complete = self.is_indicator_complete(indicator_id)
             is_inprogress = self.is_indicator_inprogress(indicator_id)
             goal_id = indicator.get_goal_id()
+
+            if self.ignore_na and is_notapplicable:
+                continue
 
             overall_total += 1
             goals[goal_id]['total'] += 1

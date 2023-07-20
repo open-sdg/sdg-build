@@ -45,7 +45,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
                    logging=None, indicator_export_filename='all_indicators',
                    datapackage=None, csvw=None, data_schema=None, docs_metadata_fields=None,
-                   alter_indicator=None, indicator_callback=None):
+                   alter_indicator=None, indicator_callback=None,
+                   ignore_out_of_scope_disaggregation_stats=False):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -87,6 +88,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         indicator_export_filename: string. Filename without extension for zip file
         docs_metadata_fields: list. List of dicts describing metadata fields for
             the MetadataReportService class.
+        ignore_out_of_scope_disaggregation_stats: boolean. Whether to omit the
+            not-applicable disaggregation stats.
 
     Returns:
         Boolean status of file writes
@@ -132,6 +135,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'logging': logging,
         'indicator_export_filename': indicator_export_filename,
         'docs_metadata_fields': docs_metadata_fields,
+        'ignore_out_of_scope_disaggregation_stats': ignore_out_of_scope_disaggregation_stats,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -271,6 +275,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'data_schema': data_schema,
         'logging': logging,
         'indicator_export_filename': None,
+        'ignore_out_of_scope_disaggregation_stats': False,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -343,7 +348,9 @@ def open_sdg_prep(options):
         indicator_options=options['indicator_options'],
         indicator_downloads=options['indicator_downloads'],
         logging=options['logging'],
-        indicator_export_filename=options['indicator_export_filename'])
+        indicator_export_filename=options['indicator_export_filename'],
+        ignore_out_of_scope_disaggregation_stats=options['ignore_out_of_scope_disaggregation_stats'],
+    )
 
     if callable(options['alter_indicator']):
         opensdg_output.add_indicator_alteration(options['alter_indicator'])

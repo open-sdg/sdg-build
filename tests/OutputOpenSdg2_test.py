@@ -28,7 +28,6 @@ def test_open_sdg_output():
         output_folder='_site_open_sdg2',
         ignore_out_of_scope_disaggregation_stats=True,
     )
-    data_output.add_indicator_alteration(alter_indicator)
     assert data_output.validate()
     assert data_output.execute_per_language(['en'])
 

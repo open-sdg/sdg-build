@@ -209,11 +209,12 @@ class DisaggregationStatusService(Loggable):
             'count': overall_notstarted,
             'percentage': self.get_percent(overall_notstarted, overall_total)
         })
-        status['overall']['statuses'].append({
-            'status': 'notapplicable',
-            'count': overall_notapplicable,
-            'percentage': self.get_percent(overall_notapplicable, overall_total)
-        })
+        if not self.ignore_na:
+            status['overall']['statuses'].append({
+                'status': 'notapplicable',
+                'count': overall_notapplicable,
+                'percentage': self.get_percent(overall_notapplicable, overall_total)
+            })
 
         status['goals'] = []
         goal_ids_sorted = natsorted(goals.keys())
@@ -221,32 +222,35 @@ class DisaggregationStatusService(Loggable):
             num_complete = goals[goal_id]['complete']
             num_inprogress = goals[goal_id]['inprogress']
             num_notstarted = goals[goal_id]['notstarted']
-            num_notapplicable = goals[goal_id]['notapplicable']
+            if not self.ignore_na:
+                num_notapplicable = goals[goal_id]['notapplicable']
             num_total = goals[goal_id]['total']
+            goal_statuses = [
+                {
+                    'status': 'complete',
+                    'count': num_complete,
+                    'percentage': self.get_percent(num_complete, num_total),
+                },
+                {
+                    'status': 'inprogress',
+                    'count': num_inprogress,
+                    'percentage': self.get_percent(num_inprogress, num_total)
+                },
+                {
+                    'status': 'notstarted',
+                    'count': num_notstarted,
+                    'percentage': self.get_percent(num_notstarted, num_total),
+                },
+            ]
+            if not self.ignore_na:
+                goal_statuses.append({
+                    'status': 'notapplicable',
+                    'count': num_notapplicable,
+                    'percentage': self.get_percent(num_notapplicable, num_total)
+                })
             status['goals'].append({
                 'goal': goal_id,
-                'statuses': [
-                    {
-                        'status': 'complete',
-                        'count': num_complete,
-                        'percentage': self.get_percent(num_complete, num_total),
-                    },
-                    {
-                        'status': 'inprogress',
-                        'count': num_inprogress,
-                        'percentage': self.get_percent(num_inprogress, num_total)
-                    },
-                    {
-                        'status': 'notstarted',
-                        'count': num_notstarted,
-                        'percentage': self.get_percent(num_notstarted, num_total),
-                    },
-                    {
-                        'status': 'notapplicable',
-                        'count': num_notapplicable,
-                        'percentage': self.get_percent(num_notapplicable, num_total)
-                    },
-                ],
+                'statuses': goal_statuses,
                 'totals': {
                     'total': num_total
                 }
@@ -258,32 +262,35 @@ class DisaggregationStatusService(Loggable):
                 num_complete = extra_fields[extra_field][extra_field_value]['complete']
                 num_inprogress = extra_fields[extra_field][extra_field_value]['inprogress']
                 num_notstarted = extra_fields[extra_field][extra_field_value]['notstarted']
-                num_notapplicable = extra_fields[extra_field][extra_field_value]['notapplicable']
+                if not self.ignore_na:
+                    num_notapplicable = extra_fields[extra_field][extra_field_value]['notapplicable']
                 num_total = extra_fields[extra_field][extra_field_value]['total']
+                field_statuses = [
+                    {
+                        'status': 'complete',
+                        'count': num_complete,
+                        'percentage': self.get_percent(num_complete, num_total),
+                    },
+                    {
+                        'status': 'inprogress',
+                        'count': num_inprogress,
+                        'percentage': self.get_percent(num_inprogress, num_total),
+                    },
+                    {
+                        'status': 'notstarted',
+                        'count': num_notstarted,
+                        'percentage': self.get_percent(num_notstarted, num_total),
+                    }
+                ]
+                if not self.ignore_na:
+                    field_statuses.append({
+                        'status': 'notapplicable',
+                        'count': num_notapplicable,
+                        'percentage': self.get_percent(num_notapplicable, num_total),
+                    })
                 status['extra_fields'][extra_field].append({
                     extra_field: extra_field_value,
-                    'statuses': [
-                        {
-                            'status': 'complete',
-                            'count': num_complete,
-                            'percentage': self.get_percent(num_complete, num_total),
-                        },
-                        {
-                            'status': 'inprogress',
-                            'count': num_inprogress,
-                            'percentage': self.get_percent(num_inprogress, num_total),
-                        },
-                        {
-                            'status': 'notstarted',
-                            'count': num_notstarted,
-                            'percentage': self.get_percent(num_notstarted, num_total),
-                        },
-                        {
-                            'status': 'notapplicable',
-                            'count': num_notapplicable,
-                            'percentage': self.get_percent(num_notapplicable, num_total),
-                        },
-                    ],
+                    'statuses': field_statuses,
                     'totals': {
                         'total': num_total
                     }

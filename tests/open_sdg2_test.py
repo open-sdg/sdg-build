@@ -12,4 +12,4 @@ def test_open_sdg():
     assert sdg.open_sdg_check(config=config_path)
     assert sdg.open_sdg_build(config=config_path)
 
-    OutputOpenSdg_test.test_open_sdg_output_stats_disaggregation()
+    OutputOpenSdg2_test.test_open_sdg_output_stats_disaggregation()

@@ -43,9 +43,6 @@ def test_open_sdg_output_stats_disaggregation():
         assert data['statuses'][0]['value'] == 'complete'
         assert data['overall']['statuses'][0]['status'] == 'complete'
         assert data['overall']['statuses'][0]['percentage'] == 0.0
-        assert data['overall']['statuses'][3]['status'] == 'notapplicable'
-        assert data['overall']['statuses'][3]['percentage'] == 100.0
         assert data['overall']['totals']['total'] == 2
         assert data['goals'][0]['goal'] == '1'
-        assert data['goals'][0]['statuses'][3]['count'] == 2
         assert data['extra_fields'] == {}

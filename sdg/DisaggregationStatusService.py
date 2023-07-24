@@ -300,6 +300,8 @@ class DisaggregationStatusService(Loggable):
 
 
     def get_percent(self, part, whole):
+        if whole == 0:
+            return 0
         return 100 * float(part) / float(whole)
 
 

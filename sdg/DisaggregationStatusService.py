@@ -153,24 +153,23 @@ class DisaggregationStatusService(Loggable):
             is_inprogress = self.is_indicator_inprogress(indicator_id)
             goal_id = indicator.get_goal_id()
 
-            if self.ignore_na and is_notapplicable:
-                continue
+            increment = 0 if self.ignore_na and is_notapplicable else 1
 
-            overall_total += 1
-            goals[goal_id]['total'] += 1
+            overall_total += increment
+            goals[goal_id]['total'] += increment
 
             if is_notapplicable:
-                goals[goal_id]['notapplicable'] += 1
-                overall_notapplicable += 1
+                goals[goal_id]['notapplicable'] += increment
+                overall_notapplicable += increment
             elif is_complete:
-                goals[goal_id]['complete'] += 1
-                overall_complete += 1
+                goals[goal_id]['complete'] += increment
+                overall_complete += increment
             elif is_inprogress:
-                goals[goal_id]['inprogress'] += 1
-                overall_inprogress += 1
+                goals[goal_id]['inprogress'] += increment
+                overall_inprogress += increment
             else:
-                goals[goal_id]['notstarted'] += 1
-                overall_notstarted += 1
+                goals[goal_id]['notstarted'] += increment
+                overall_notstarted += increment
 
             for extra_field in self.extra_fields:
                 extra_field_value = indicator.get_meta_field_value(extra_field)
@@ -183,15 +182,15 @@ class DisaggregationStatusService(Loggable):
                             'notstarted': 0,
                             'notapplicable': 0,
                         }
-                    extra_fields[extra_field][extra_field_value]['total'] += 1
+                    extra_fields[extra_field][extra_field_value]['total'] += increment
                     if is_notapplicable:
-                        extra_fields[extra_field][extra_field_value]['notapplicable'] += 1
+                        extra_fields[extra_field][extra_field_value]['notapplicable'] += increment
                     elif is_complete:
-                        extra_fields[extra_field][extra_field_value]['complete'] += 1
+                        extra_fields[extra_field][extra_field_value]['complete'] += increment
                     elif is_inprogress:
-                        extra_fields[extra_field][extra_field_value]['inprogress'] += 1
+                        extra_fields[extra_field][extra_field_value]['inprogress'] += increment
                     else:
-                        extra_fields[extra_field][extra_field_value]['notstarted'] += 1
+                        extra_fields[extra_field][extra_field_value]['notstarted'] += increment
 
         status['overall']['totals']['total'] = overall_total
         status['overall']['statuses'].append({

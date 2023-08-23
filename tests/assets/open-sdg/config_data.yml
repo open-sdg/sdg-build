@@ -34,8 +34,6 @@ map_layers:
     id_property: rgn17cd
 sdmx_output:
   output_subfolder: sdmx
-sdmx_output_global:
-  output_subfolder: sdmx-global
 docs_metadata_fields:
   - key: foo
     label: Foo

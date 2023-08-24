@@ -5,12 +5,10 @@ import pandas as pd
 def test_sdmx_ml_output():
 
     data_path = os.path.join('tests', 'assets', 'data', 'sdmx', 'structure-specific', '1-1-1--structure-specific.xml')
-    dsd_path = os.path.join('tests', 'assets', 'data', 'sdmx', 'dsd.xml')
     data_input = sdg.inputs.InputSdmxMl_StructureSpecific(
         source=data_path,
         import_codes=True,
         drop_singleton_dimensions=False,
-        dsd=dsd_path,
         import_observation_attributes=False,
     )
     schema_path = os.path.join('tests', 'assets', 'meta', 'metadata_schema.yml')
@@ -20,8 +18,7 @@ def test_sdmx_ml_output():
         structure_specific=True,
         meta_reporting_type='N',
         meta_ref_area=862,
-        output_folder=output_folder,
-        dsd=dsd_path,
+        output_folder=output_folder
     )
     assert data_output.validate()
     assert data_output.execute()
@@ -31,7 +28,6 @@ def test_sdmx_ml_output():
         source=output_path,
         import_codes=True,
         drop_singleton_dimensions=False,
-        dsd=dsd_path,
     )
     indicator_options = sdg.IndicatorOptions()
     output_input.execute(indicator_options=indicator_options)
@@ -45,12 +41,10 @@ def test_sdmx_ml_output_with_code_map():
     code_map = os.path.join('tests', 'assets', 'misc', 'code-map.csv')
 
     data_path = os.path.join('tests', 'assets', 'data', 'sdmx', 'structure-specific', '1-1-1--structure-specific.xml')
-    dsd_path = os.path.join('tests', 'assets', 'data', 'sdmx', 'dsd.xml')
     data_input = sdg.inputs.InputSdmxMl_StructureSpecific(
         source=data_path,
         import_codes=True,
         drop_singleton_dimensions=False,
-        dsd=dsd_path,
         import_observation_attributes=False,
     )
     schema_path = os.path.join('tests', 'assets', 'meta', 'metadata_schema.yml')
@@ -61,8 +55,7 @@ def test_sdmx_ml_output_with_code_map():
         meta_reporting_type='N',
         meta_ref_area=862,
         code_map=code_map,
-        output_folder=output_folder,
-        dsd=dsd_path,
+        output_folder=output_folder
     )
     assert data_output.validate()
     assert data_output.execute()
@@ -72,7 +65,6 @@ def test_sdmx_ml_output_with_code_map():
         source=output_path,
         import_codes=True,
         drop_singleton_dimensions=False,
-        dsd=dsd_path,
     )
     indicator_options = sdg.IndicatorOptions()
     output_input.execute(indicator_options=indicator_options)
@@ -82,9 +74,13 @@ def test_sdmx_ml_output_with_code_map():
         source=data_path,
         import_codes=True,
         drop_singleton_dimensions=False,
+<<<<<<< HEAD
         code_map=code_map,
         dsd=dsd_path,
         import_observation_attributes=False,
+=======
+        code_map=code_map
+>>>>>>> parent of 0b450bf... Version global dsd
     )
     data_mapped_input.execute(indicator_options=indicator_options)
 

@@ -28,6 +28,7 @@ def test_sdmx_ml_output():
         source=output_path,
         import_codes=True,
         drop_singleton_dimensions=False,
+        import_observation_attributes=False,
     )
     indicator_options = sdg.IndicatorOptions()
     output_input.execute(indicator_options=indicator_options)
@@ -65,6 +66,7 @@ def test_sdmx_ml_output_with_code_map():
         source=output_path,
         import_codes=True,
         drop_singleton_dimensions=False,
+        import_observation_attributes=False,
     )
     indicator_options = sdg.IndicatorOptions()
     output_input.execute(indicator_options=indicator_options)

@@ -11,6 +11,7 @@ def test_sdmx_ml_output():
         import_codes=True,
         drop_singleton_dimensions=False,
         dsd=dsd_path,
+        import_observation_attributes=False,
     )
     schema_path = os.path.join('tests', 'assets', 'meta', 'metadata_schema.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
@@ -50,6 +51,7 @@ def test_sdmx_ml_output_with_code_map():
         import_codes=True,
         drop_singleton_dimensions=False,
         dsd=dsd_path,
+        import_observation_attributes=False,
     )
     schema_path = os.path.join('tests', 'assets', 'meta', 'metadata_schema.yml')
     schema = sdg.schemas.SchemaInputOpenSdg(schema_path=schema_path)
@@ -82,6 +84,7 @@ def test_sdmx_ml_output_with_code_map():
         drop_singleton_dimensions=False,
         code_map=code_map,
         dsd=dsd_path,
+        import_observation_attributes=False,
     )
     data_mapped_input.execute(indicator_options=indicator_options)
 

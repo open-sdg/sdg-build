@@ -8,18 +8,32 @@ import datetime
 import uuid
 from jinja2 import Template
 from slugify import slugify
-from sdmx.model import (
-    SeriesKey,
-    Key,
-    AttributeValue,
-    Observation,
-    GenericTimeSeriesDataSet,
-    StructureSpecificTimeSeriesDataSet,
-    DataflowDefinition,
-    Agency,
-    PrimaryMeasureRelationship,
-    DimensionRelationship,
-)
+try:
+    from sdmx.model.v21 import (
+        SeriesKey,
+        Key,
+        AttributeValue,
+        Observation,
+        GenericTimeSeriesDataSet,
+        StructureSpecificTimeSeriesDataSet,
+        DataflowDefinition,
+        Agency,
+        PrimaryMeasureRelationship,
+        DimensionRelationship,
+    )
+except ImportError:
+    from sdmx.model import (
+        SeriesKey,
+        Key,
+        AttributeValue,
+        Observation,
+        GenericTimeSeriesDataSet,
+        StructureSpecificTimeSeriesDataSet,
+        DataflowDefinition,
+        Agency,
+        PrimaryMeasureRelationship,
+        DimensionRelationship,
+    )
 from sdmx.message import (
     DataMessage,
     Header

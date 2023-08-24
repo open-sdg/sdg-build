@@ -1,7 +1,7 @@
 
 languages:
   - en
-site_dir: _site_open_sdg
+site_dir: _site_open_sdg2
 schema_file: metadata_schema.yml
 src_dir: tests/assets/open-sdg
 inputs:
@@ -41,3 +41,4 @@ docs_metadata_fields:
     label: Foo
   - key: nonexistent
     label: Non-existent
+ignore_out_of_scope_disaggregation_stats: true

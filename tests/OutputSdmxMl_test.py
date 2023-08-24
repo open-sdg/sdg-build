@@ -74,13 +74,8 @@ def test_sdmx_ml_output_with_code_map():
         source=data_path,
         import_codes=True,
         drop_singleton_dimensions=False,
-<<<<<<< HEAD
-        code_map=code_map,
-        dsd=dsd_path,
         import_observation_attributes=False,
-=======
-        code_map=code_map
->>>>>>> parent of 0b450bf... Version global dsd
+        code_map=code_map,
     )
     data_mapped_input.execute(indicator_options=indicator_options)
 

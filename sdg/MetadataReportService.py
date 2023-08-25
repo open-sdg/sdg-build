@@ -238,7 +238,10 @@ class MetadataReportService(Loggable):
             for field in self.metadata_fields:
                 key = field['key']
                 label = field['label']
-                row[label] = self.get_metadata_field_value_link(store[key]['values'][store[key]['indicators'][indicator]]) if indicator in store[key]['indicators'] else ''
+                if key in store and indicator in store[key]['indicators']:
+                    row[label] = self.get_metadata_field_value_link(store[key]['values'][store[key]['indicators'][indicator]])
+                else:
+                    row[label] = ''
             rows.append(row)
 
         df = pd.DataFrame(rows, columns=['Indicator'] + columns)

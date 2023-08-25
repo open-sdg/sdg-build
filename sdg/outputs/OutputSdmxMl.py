@@ -399,7 +399,7 @@ class OutputSdmxMl(OutputBase):
             valid_attribute = False
             if relationship_type == 'series' and isinstance(attribute.related_to, DimensionRelationship):
                 valid_attribute = True
-            elif relationship_type == 'observation' and attribute.related_to is PrimaryMeasureRelationship:
+            elif relationship_type == 'observation' and isinstance(attribute.related_to, PrimaryMeasureRelationship):
                 valid_attribute = True
             if valid_attribute:
                 value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)

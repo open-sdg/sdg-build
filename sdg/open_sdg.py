@@ -45,7 +45,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
                    logging=None, indicator_export_filename='all_indicators',
                    datapackage=None, csvw=None, data_schema=None, docs_metadata_fields=None,
-                   alter_indicator=None):
+                   alter_indicator=None, indicator_callback=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -66,6 +66,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         alter_data: function. A callback function that alters a data Dataframe (for each input)
         alter_meta: function. A callback function that alters a metadata dictionary (for each input)
         alter_indicator: function. A callback function that alters the full Indicator objects (for each output)
+        indicator_callback: function. A callback function that runs for each
+          indicator after the outputs have already been generated.
         indicator_options: Dict. Options to pass into each indicator.
         docs_branding: string. A heading for all documentation pages
         docs_intro: string. An introduction for the documentation homepage
@@ -144,6 +146,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
     # Pass along our data/meta alterations.
     options['alter_data'] = alter_data
     options['alter_meta'] = alter_meta
+    # And other callbacks.
+    options['indicator_callback'] = indicator_callback
     options['alter_indicator'] = alter_indicator
 
     # Convert the indicator options.
@@ -158,6 +162,14 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             status = status & output.execute('untranslated')
         else:
             sys.exit('The data configuration must have a "languages" setting with at least one language. See the documentation here: https://open-sdg.readthedocs.io/en/latest/data-configuration/#languages')
+
+    # Perform per-indicator callbacks.
+    if callable(options['indicator_callback']):
+        indicator_callback = options['indicator_callback']
+        for output in outputs:
+            if isinstance(output, sdg.outputs.OutputOpenSdg):
+                for indicator in output.indicators.values():
+                    indicator_callback(indicator)
 
     # Output the documentation pages.
     documentation_service = sdg.OutputDocumentationService(outputs,
@@ -240,6 +252,8 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         inputs = open_sdg_input_defaults()
     if indicator_options is None:
         indicator_options = open_sdg_indicator_options_defaults()
+    if logging is None:
+        logging = ['warn']
 
     # Build a dict of options for open_sdg_prep().
     defaults = {

@@ -4,21 +4,36 @@ import pandas as pd
 import numpy as np
 import sdmx
 import time
+import datetime
 import uuid
 from jinja2 import Template
 from slugify import slugify
-from sdmx.model import (
-    SeriesKey,
-    Key,
-    AttributeValue,
-    Observation,
-    GenericTimeSeriesDataSet,
-    StructureSpecificTimeSeriesDataSet,
-    DataflowDefinition,
-    Agency,
-    PrimaryMeasureRelationship,
-    DimensionRelationship,
-)
+try:
+    from sdmx.model.v21 import (
+        SeriesKey,
+        Key,
+        AttributeValue,
+        Observation,
+        GenericTimeSeriesDataSet,
+        StructureSpecificTimeSeriesDataSet,
+        DataflowDefinition,
+        Agency,
+        PrimaryMeasureRelationship,
+        DimensionRelationship,
+    )
+except ImportError:
+    from sdmx.model import (
+        SeriesKey,
+        Key,
+        AttributeValue,
+        Observation,
+        GenericTimeSeriesDataSet,
+        StructureSpecificTimeSeriesDataSet,
+        DataflowDefinition,
+        Agency,
+        PrimaryMeasureRelationship,
+        DimensionRelationship,
+    )
 from sdmx.message import (
     DataMessage,
     Header
@@ -341,7 +356,7 @@ class OutputSdmxMl(OutputBase):
         return {
             'id': header_id,
             'test': True,
-            'prepared': time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(timestamp)),
+            'prepared': datetime.datetime.now(),
             'sender': sender_id,
         }
 
@@ -382,9 +397,14 @@ class OutputSdmxMl(OutputBase):
         values = {}
         for attribute in self.dsd.attributes:
             valid_attribute = False
+            is_observation_level = False
+            try:
+                is_observation_level = relationship_type == 'observation' and isinstance(attribute.related_to, PrimaryMeasureRelationship)
+            except TypeError:
+                is_observation_level = relationship_type == 'observation' and attribute.related_to is PrimaryMeasureRelationship
             if relationship_type == 'series' and isinstance(attribute.related_to, DimensionRelationship):
                 valid_attribute = True
-            elif relationship_type == 'observation' and attribute.related_to is PrimaryMeasureRelationship:
+            elif is_observation_level:
                 valid_attribute = True
             if valid_attribute:
                 value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)
@@ -459,7 +479,10 @@ class OutputSdmxMl(OutputBase):
                 if row['Dimension'] not in code_dict:
                     code_dict[row['Dimension']] = {}
                 code_dict[row['Dimension']][row['Text']] = row['Value']
-            data.replace(to_replace=code_dict, value=None, inplace=True)
+            try:
+                data.replace(to_replace=code_dict, value=None, inplace=True)
+            except:
+                data.replace(to_replace=code_dict, inplace=True)
 
             # Now put back the pseudo-unique strings mentioned above.
             data.replace(temp_nan_fix, np.nan, inplace=True)
@@ -571,7 +594,7 @@ class OutputSdmxMl(OutputBase):
             "has one per indicator plus an 'all' file. Translations of "
             "the metadata are included in each file using the 'lang' "
             "attribute. The data for this output uses the following "
-            "data structure definition: " + self.dsd_path
+            "data structure definition: " + str(self.dsd_path)
         )
         return description
 

@@ -26,7 +26,7 @@ class IndicatorOptions:
 
 
     def add_observation_attribute(self, column):
-        if column not in self.add_observation_attributes:
+        if column not in self.observation_attributes:
             self.observation_attributes.append(column)
         return self
 

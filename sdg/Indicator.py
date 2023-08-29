@@ -438,6 +438,11 @@ class Indicator(Loggable):
 
         # Assume "disaggregations" are everything except 'Year' and 'Value'.
         aggregating_columns = ['Year', 'Value']
+        observation_attributes = self.options.get_observation_attributes()
+        for col in observation_attributes:
+            if col in self.data.columns:
+                aggregating_columns.append(col)
+
         grouping_columns = [column for column in self.data.columns if column not in aggregating_columns]
 
         if len(grouping_columns) == 0:

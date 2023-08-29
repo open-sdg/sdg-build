@@ -12,6 +12,7 @@ class IndicatorOptions:
         ]
         self.series_column = 'Series'
         self.unit_column = 'Units'
+        self.observation_attributes = []
 
 
     def add_non_disaggregation_columns(self, column):
@@ -22,6 +23,16 @@ class IndicatorOptions:
 
     def get_non_disaggregation_columns(self):
         return self.non_disaggregation_columns
+
+
+    def add_observation_attribute(self, column):
+        if column not in self.add_observation_attributes:
+            self.observation_attributes.append(column)
+        return self
+
+
+    def get_observation_attributes(self):
+        return self.observation_attributes
 
 
     def set_series_column(self, column):

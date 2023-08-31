@@ -38,6 +38,7 @@ class Series(Loggable):
         Loggable.__init__(self, logging=logging)
         self.disaggregations = disaggregations
         self.values = {}
+        self.observation_attributes = {}
         self.indicator_id = indicator_id
 
 
@@ -61,6 +62,16 @@ class Series(Loggable):
         """
         return self.values
 
+    def get_observation_attributes(self):
+        """Get the observation_attributes for this series.
+
+        Returns
+        -------
+        dict
+            A dict of year/attribute pairs describing the attributes per year.
+        """
+        return self.observation_attributes
+
     def add_value(self, year, value):
         """Add a new yearly value.
 
@@ -77,6 +88,22 @@ class Series(Loggable):
                        value2=self.values[year], series=self.get_disaggregations())
         else:
             self.values[year] = value
+
+    def add_observation_attribute(self, year, attribute, value):
+        """Add a new yearly observation attriute.
+
+        Parameters
+        ----------
+        year : numeric
+            The numerical year to add.
+        attribute : string
+            The name of the attribute.
+        value : string
+            The value of the attribute.
+        """
+        if year not in self.observation_attributes:
+            self.observation_attributes[year] = {}
+        self.observation_attributes[year][attribute] = value
 
     def has_disaggregation(self, disaggregation):
         """Check to see if the series has a specific disaggregation.

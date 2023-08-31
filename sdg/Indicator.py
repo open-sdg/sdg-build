@@ -456,6 +456,10 @@ class Indicator(Loggable):
             series = sdg.Series(disaggregations, self.get_indicator_id(), logging=self.logging)
             for year, value in zip(row['Year'], row['Value']):
                 series.add_value(year, value)
+            for attribute in observation_attributes:
+                if attribute in row and row[attribute]:
+                    series.add_observation_attribute(row['Year'], attribute, row[attribute])
+
             return series
 
         # NaN must be replaced with '' so that it can be grouped by.

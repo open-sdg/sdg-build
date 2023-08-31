@@ -458,6 +458,8 @@ class Indicator(Loggable):
                 series.add_value(year, value)
             for attribute in observation_attributes:
                 if attribute in row and row[attribute]:
+                    print(attribute)
+                    print(row[attribute])
                     series.add_observation_attribute(row['Year'], attribute, row[attribute])
 
             return series

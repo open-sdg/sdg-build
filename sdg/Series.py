@@ -41,7 +41,6 @@ class Series(Loggable):
         self.observation_attributes = {}
         self.indicator_id = indicator_id
 
-
     def get_disaggregations(self):
         """Get the disaggregations for this series.
 

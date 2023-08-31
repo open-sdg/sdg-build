@@ -449,6 +449,9 @@ class Indicator(Loggable):
             series = sdg.Series({}, self.get_indicator_id(), logging=self.logging)
             for index, row in self.data.iterrows():
                 series.add_value(row['Year'], row['Value'])
+                for attribute in observation_attributes:
+                    if attribute in row and row[attribute]:
+                        series.add_observation_attribute(row['Year'], attribute, row[attribute])
             return [series]
 
         def row_to_series(row):
@@ -458,9 +461,8 @@ class Indicator(Loggable):
                 series.add_value(year, value)
             for attribute in observation_attributes:
                 if attribute in row and row[attribute]:
-                    print(attribute)
-                    print(row[attribute])
-                    series.add_observation_attribute(row['Year'], attribute, row[attribute])
+                    for year, value in zip(row['Year'], row[attribute]):
+                        series.add_observation_attribute(year, attribute, value)
 
             return series
 

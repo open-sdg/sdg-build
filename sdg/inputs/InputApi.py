@@ -1,9 +1,6 @@
-import sdg
-import pandas as pd
 import requests
 import json
 from sdg.inputs import InputBase
-from sdg.Indicator import Indicator
 import time
 
 class InputApi(InputBase):
@@ -95,6 +92,21 @@ class InputApi(InputBase):
         raise NotImplementedError
 
 
+    def get_series(self, indicator_id, resource_id, json_response):
+        """Decide on a series, based on the indicator/resource ids.
+
+        Parameters
+        ----------
+        indicator_id : string
+            The indicator id.
+        resource_id : string
+            The resource id.
+        json_response : dict
+            The data that was returned from the endpoint.
+        """
+        raise NotImplementedError
+
+
     def get_indicator_id(self, resource_id, json_response):
         if isinstance(self.indicator_id_map, dict):
             return self.indicator_id_map[resource_id]
@@ -131,6 +143,15 @@ class InputApi(InputBase):
             if data is None:
                 continue
 
+            # Set the series if possible.
+            try:
+                series_id = self.get_series(inid, resource_id, json_response)
+                if series_id is not None and series_id != '':
+                    series_column = indicator_options.get_series_column()
+                    data[series_column] = series_id
+            except:
+                pass
+
             columns = data.columns.to_list()
             if self.year_column is not None and self.year_column in columns:
                 data = data.rename(columns={self.year_column: 'Year'})
@@ -138,7 +159,12 @@ class InputApi(InputBase):
                 data = data.rename(columns={self.value_column: 'Value'})
 
             name = self.get_indicator_name(inid, resource_id, json_response)
-            self.add_indicator(inid, data=data, name=name, options=indicator_options)
+
+            if inid not in self.indicators:
+                self.add_indicator(inid, data=data, name=name, options=indicator_options)
+            else:
+                self.indicators[inid].set_name(name)
+                self.indicators[inid].set_data(data)
 
             self.wait_for_next_request()
 

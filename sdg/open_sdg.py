@@ -212,6 +212,9 @@ def open_sdg_indicator_options_defaults():
             'COMMENT_TS',
             'DATA_LAST_UPDATE',
         ],
+        'observation_attributes': [
+            'COMMENT_OBS',
+        ],
         'series_column': 'Series',
         'unit_column': 'Units',
     }
@@ -221,6 +224,8 @@ def open_sdg_indicator_options_from_dict(options):
     options_obj = sdg.IndicatorOptions()
     for column in options['non_disaggregation_columns']:
         options_obj.add_non_disaggregation_columns(column)
+    for column in options['observation_attributes']:
+        options_obj.add_observation_attribute(column)
     if 'series_column' in options:
         options_obj.set_series_column(options['series_column'])
     if 'unit_column' in options:

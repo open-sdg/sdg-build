@@ -144,15 +144,18 @@ class OutputGeoJson(OutputBase):
                     continue
                 disaggregations = [series.get_disaggregations() for series in series_by_geocodes[geocode]]
                 values = [series.get_values() for series in series_by_geocodes[geocode]]
+                observation_attributes = [series.get_observation_attributes() for series in series_by_geocodes[geocode]]
                 # Do some cleanup of the disaggregations.
                 disaggregations = [self.clean_disaggregations(disaggregation, language) for disaggregation in disaggregations]
                 # Figure out a "headline" so we can move it to the front of the list.
                 headline_index = self.get_headline_index(disaggregations)
                 disaggregations.insert(0, disaggregations.pop(headline_index))
                 values.insert(0, values.pop(headline_index))
+                observation_attributes.insert(0, observation_attributes.pop(headline_index))
                 # Set these lists on the GeoJSON data structure.
                 geometry_data['features'][index]['properties']['disaggregations'] = disaggregations
                 geometry_data['features'][index]['properties']['values'] = values
+                geometry_data['features'][index]['properties']['observation_attributes'] = observation_attributes
                 # Translate the name, if necessary using a 'data' group.
                 feature_name = feature['properties'][self.name_property]
                 feature_name = self.translation_helper.translate(feature_name, language, default_group='data')

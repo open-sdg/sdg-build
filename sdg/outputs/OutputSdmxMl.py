@@ -4,21 +4,36 @@ import pandas as pd
 import numpy as np
 import sdmx
 import time
+import datetime
 import uuid
 from jinja2 import Template
 from slugify import slugify
-from sdmx.model import (
-    SeriesKey,
-    Key,
-    AttributeValue,
-    Observation,
-    GenericTimeSeriesDataSet,
-    StructureSpecificTimeSeriesDataSet,
-    DataflowDefinition,
-    Agency,
-    PrimaryMeasureRelationship,
-    DimensionRelationship,
-)
+try:
+    from sdmx.model.v21 import (
+        SeriesKey,
+        Key,
+        AttributeValue,
+        Observation,
+        GenericTimeSeriesDataSet,
+        StructureSpecificTimeSeriesDataSet,
+        DataflowDefinition,
+        Agency,
+        PrimaryMeasureRelationship,
+        DimensionRelationship,
+    )
+except ImportError:
+    from sdmx.model import (
+        SeriesKey,
+        Key,
+        AttributeValue,
+        Observation,
+        GenericTimeSeriesDataSet,
+        StructureSpecificTimeSeriesDataSet,
+        DataflowDefinition,
+        Agency,
+        PrimaryMeasureRelationship,
+        DimensionRelationship,
+    )
 from sdmx.message import (
     DataMessage,
     Header
@@ -341,7 +356,7 @@ class OutputSdmxMl(OutputBase):
         return {
             'id': header_id,
             'test': True,
-            'prepared': time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime(timestamp)),
+            'prepared': datetime.datetime.now(),
             'sender': sender_id,
         }
 
@@ -382,9 +397,14 @@ class OutputSdmxMl(OutputBase):
         values = {}
         for attribute in self.dsd.attributes:
             valid_attribute = False
+            is_observation_level = False
+            try:
+                is_observation_level = relationship_type == 'observation' and isinstance(attribute.related_to, PrimaryMeasureRelationship)
+            except TypeError:
+                is_observation_level = relationship_type == 'observation' and attribute.related_to is PrimaryMeasureRelationship
             if relationship_type == 'series' and isinstance(attribute.related_to, DimensionRelationship):
                 valid_attribute = True
-            elif relationship_type == 'observation' and attribute.related_to is PrimaryMeasureRelationship:
+            elif is_observation_level:
                 valid_attribute = True
             if valid_attribute:
                 value = row[attribute.id] if attribute.id in row else self.get_attribute_default(attribute.id, indicator)

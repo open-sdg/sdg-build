@@ -10,7 +10,8 @@ class OutputOpenSdg(OutputBase):
 
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
         reporting_status_extra_fields=None, indicator_options=None,
-        indicator_downloads=None, logging=None, indicator_export_filename='all_indicators'):
+        indicator_downloads=None, logging=None, indicator_export_filename='all_indicators',
+        ignore_out_of_scope_disaggregation_stats=False):
         """Constructor for OutputOpenSdg.
 
         Parameters
@@ -25,6 +26,8 @@ class OutputOpenSdg(OutputBase):
             IndicatorDownloadService.
         indicator_export_filename : string
             A filename (without the extension) for the zipped indicator export.
+        ignore_out_of_scope_disaggregation_stats : boolean
+            Whether to ignore the "not applicable" disaggregation stats.
         """
         if translations is None:
             translations = []
@@ -34,6 +37,7 @@ class OutputOpenSdg(OutputBase):
         self.reporting_status_grouping_fields = reporting_status_extra_fields
         self.indicator_downloads = indicator_downloads
         self.indicator_export_filename = indicator_export_filename
+        self.ignore_na = ignore_out_of_scope_disaggregation_stats
 
 
     def build(self, language=None):
@@ -90,7 +94,12 @@ class OutputOpenSdg(OutputBase):
         stats_reporting = sdg.stats.reporting_status(all_meta, self.reporting_status_grouping_fields)
         status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
 
-        disaggregation_status_service = sdg.DisaggregationStatusService(site_dir, self.indicators, self.reporting_status_grouping_fields)
+        disaggregation_status_service = sdg.DisaggregationStatusService(
+            site_dir,
+            self.indicators,
+            self.reporting_status_grouping_fields,
+            self.ignore_na,
+        )
         disaggregation_status_service.write_json()
 
         indicator_export_service = sdg.IndicatorExportService(site_dir, self.indicators, filename=self.indicator_export_filename)

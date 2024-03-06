@@ -21,3 +21,10 @@ class InputJsonStat(InputApi):
             return json_response['dataset']['label']
         except:
             return indicator_id
+
+
+    def get_series(self, indicator_id, resource_id, json_response):
+        # For now, for json-stat let's treat the dataset label as the series.
+        # This may need to be adjusted in the future once we have more examples
+        # of actual json-stat APIs.
+        return self.get_indicator_name(indicator_id, resource_id, json_response)

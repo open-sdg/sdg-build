@@ -438,12 +438,20 @@ class Indicator(Loggable):
 
         # Assume "disaggregations" are everything except 'Year' and 'Value'.
         aggregating_columns = ['Year', 'Value']
+        observation_attributes = self.options.get_observation_attributes()
+        for col in observation_attributes:
+            if col in self.data.columns:
+                aggregating_columns.append(col)
+
         grouping_columns = [column for column in self.data.columns if column not in aggregating_columns]
 
         if len(grouping_columns) == 0:
             series = sdg.Series({}, self.get_indicator_id(), logging=self.logging)
             for index, row in self.data.iterrows():
                 series.add_value(row['Year'], row['Value'])
+                for attribute in observation_attributes:
+                    if attribute in row and row[attribute]:
+                        series.add_observation_attribute(row['Year'], attribute, row[attribute])
             return [series]
 
         def row_to_series(row):
@@ -451,6 +459,11 @@ class Indicator(Loggable):
             series = sdg.Series(disaggregations, self.get_indicator_id(), logging=self.logging)
             for year, value in zip(row['Year'], row['Value']):
                 series.add_value(year, value)
+            for attribute in observation_attributes:
+                if attribute in row and row[attribute]:
+                    for year, value in zip(row['Year'], row[attribute]):
+                        series.add_observation_attribute(year, attribute, value)
+
             return series
 
         # NaN must be replaced with '' so that it can be grouped by.

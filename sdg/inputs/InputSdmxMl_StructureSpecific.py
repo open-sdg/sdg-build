@@ -91,4 +91,4 @@ class InputSdmxMl_StructureSpecific(InputSdmxMl_Structure):
             for attribute in observation.attrib:
                 if attribute not in self.omit_observation_attributes():
                     attributes[attribute] = observation.attrib[attribute]
-            return attributes
+        return attributes

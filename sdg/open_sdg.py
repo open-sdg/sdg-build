@@ -45,7 +45,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    docs_extra_disaggregations=None, docs_translate_disaggregations=False,
                    logging=None, indicator_export_filename='all_indicators',
                    datapackage=None, csvw=None, data_schema=None, docs_metadata_fields=None,
-                   alter_indicator=None, indicator_callback=None):
+                   alter_indicator=None, indicator_callback=None,
+                   ignore_out_of_scope_disaggregation_stats=False):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -87,6 +88,8 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         indicator_export_filename: string. Filename without extension for zip file
         docs_metadata_fields: list. List of dicts describing metadata fields for
             the MetadataReportService class.
+        ignore_out_of_scope_disaggregation_stats: boolean. Whether to omit the
+            not-applicable disaggregation stats.
 
     Returns:
         Boolean status of file writes
@@ -132,6 +135,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'logging': logging,
         'indicator_export_filename': indicator_export_filename,
         'docs_metadata_fields': docs_metadata_fields,
+        'ignore_out_of_scope_disaggregation_stats': ignore_out_of_scope_disaggregation_stats,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -208,6 +212,9 @@ def open_sdg_indicator_options_defaults():
             'COMMENT_TS',
             'DATA_LAST_UPDATE',
         ],
+        'observation_attributes': [
+            'COMMENT_OBS',
+        ],
         'series_column': 'Series',
         'unit_column': 'Units',
     }
@@ -217,6 +224,8 @@ def open_sdg_indicator_options_from_dict(options):
     options_obj = sdg.IndicatorOptions()
     for column in options['non_disaggregation_columns']:
         options_obj.add_non_disaggregation_columns(column)
+    for column in options['observation_attributes']:
+        options_obj.add_observation_attribute(column)
     if 'series_column' in options:
         options_obj.set_series_column(options['series_column'])
     if 'unit_column' in options:
@@ -271,6 +280,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'data_schema': data_schema,
         'logging': logging,
         'indicator_export_filename': None,
+        'ignore_out_of_scope_disaggregation_stats': False,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -343,7 +353,9 @@ def open_sdg_prep(options):
         indicator_options=options['indicator_options'],
         indicator_downloads=options['indicator_downloads'],
         logging=options['logging'],
-        indicator_export_filename=options['indicator_export_filename'])
+        indicator_export_filename=options['indicator_export_filename'],
+        ignore_out_of_scope_disaggregation_stats=options['ignore_out_of_scope_disaggregation_stats'],
+    )
 
     if callable(options['alter_indicator']):
         opensdg_output.add_indicator_alteration(options['alter_indicator'])
@@ -476,6 +488,7 @@ def open_sdg_data_schema_from_dict(params, options):
 
     allowed = [
         'DataSchemaInputTableSchemaYaml',
+        'DataSchemaInputSdmxDsd',
     ]
     if data_schema_class not in allowed:
         raise KeyError("Data schema class '%s' is not one of: %s." % (data_schema_class, ', '.join(allowed)))
@@ -490,6 +503,8 @@ def open_sdg_data_schema_from_dict(params, options):
     data_schema_instance = None
     if data_schema_class == 'DataSchemaInputTableSchemaYaml':
         data_schema_instance = sdg.data_schemas.DataSchemaInputTableSchemaYaml(**params)
+    elif data_schema_class == 'DataSchemaInputSdmxDsd':
+        data_schema_instance = sdg.data_schemas.DataSchemaInputSdmxDsd(**params)
 
     return data_schema_instance
 

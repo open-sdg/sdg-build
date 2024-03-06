@@ -1,5 +1,11 @@
 # Changes
 
+### 2.3.0
+
+* Observation attributes #349
+* Try to import new v21 version of sdmx.model classes #348
+* Pydantic version fix #345
+
 ### 2.2.0
 
 * Pandas version - pin to 1.x #339

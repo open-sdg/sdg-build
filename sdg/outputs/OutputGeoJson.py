@@ -201,13 +201,13 @@ class OutputGeoJson(OutputBase):
         return series_by_geocodes
 
 
-    def clean_disaggregations(self, disaggregations, language):
+    def clean_disaggregations(self, disaggregations_orig, language):
         """Apply any modifications to disaggregations before saving them into
         the GeoJSON file.
 
         Parameters
         ----------
-        disaggregations : dict
+        disaggregations_orig : dict
             A dict of disaggregations, with category keyed to subcategory.
         language : String
             The language code to use for translations.
@@ -217,6 +217,8 @@ class OutputGeoJson(OutputBase):
         dict
             A modified version of the disaggregations dict.
         """
+        # Clone the dict so that alterations aren't permanent.
+        disaggregations = disaggregations_orig.copy()
         # We don't need the actual geocode column.
         del disaggregations[self.id_column]
         # Remove any others necessary.

@@ -26,7 +26,7 @@ jobs:
     - name: Test with pytest
       run: |
         python -m pytest --cov=sdg --cov-report=xml
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
-      with:
-        fail_ci_if_error: true
+    #- name: Upload coverage to Codecov
+    #  uses: codecov/codecov-action@v2
+    #  with:
+    #    fail_ci_if_error: true

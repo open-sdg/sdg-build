@@ -214,6 +214,7 @@ def open_sdg_indicator_options_defaults():
         ],
         'observation_attributes': [
             'COMMENT_OBS',
+            'SOURCE_DETAIL',
         ],
         'series_column': 'Series',
         'unit_column': 'Units',

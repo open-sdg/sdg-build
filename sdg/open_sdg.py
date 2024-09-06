@@ -344,7 +344,9 @@ def open_sdg_prep(options):
             input.add_meta_alteration(options['alter_meta'])
 
     # Set the indicators to skip, if any.
-    input.set_skip_indicators(options['skip_indicators'])
+    if 'skip_indicators' in options and type(options['skip_indicators']) is list:
+        for input in inputs:
+            input.set_skip_indicators(options['skip_indicators'])
 
     # Use the specified metadata schema.
     schema = options['schema']

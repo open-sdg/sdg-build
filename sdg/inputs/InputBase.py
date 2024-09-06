@@ -38,6 +38,7 @@ class InputBase(Loggable):
         self.column_map = column_map
         self.code_map = code_map
         self.meta_suffix = meta_suffix
+        self.skip_indicators = []
 
 
     def execute_once(self, indicator_options):
@@ -204,6 +205,8 @@ class InputBase(Loggable):
         options : IndicatorOptions or None
             The indicator options
         """
+        if indicator_id in self.skip_indicators:
+            return
         data = self.alter_data(data, indicator_id=indicator_id)
         meta = self.alter_meta(meta, indicator_id=indicator_id)
         indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options, logging=self.logging)
@@ -368,3 +371,15 @@ class InputBase(Loggable):
             except:
                 data.replace(to_replace=code_dict, inplace=True)
         return data
+
+
+    def set_skip_indicators(self, indicator_ids):
+        """Set this input to skip certain indicators.
+
+        Parameters
+        ----------
+        indicator_ids : list
+            List of indicator IDs.
+        """
+        if type(indicator_ids) is list:
+            self.skip_indicators = indicator_ids

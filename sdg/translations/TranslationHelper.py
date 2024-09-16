@@ -25,9 +25,10 @@ class TranslationHelper(TranslationOutputBase):
         translations = self.input.get_translations()
         for language in translations:
             for group in translations[language]:
-                for str(key) in translations[language][group]:
-                    value = str(translations[language][group][key])
-                    flattened = group + "." + key
+                for key in translations[language][group]:
+                    key_str = str(key)
+                    value = str(translations[language][group][key_str])
+                    flattened = group + "." + key_str
                     if flattened not in keys:
                         keys[flattened] = {}
                     keys[flattened][language] = value

@@ -1,195 +1,331 @@
-def measure_indicator_progress(indicator, indicator_options=None):
-    """Sets up all needed parameters and data for progress calculation, determines methodology for calculation,
-    and returns progress measure as an output.
+from sdg import Loggable
 
-    Args:
-        indicator: Indicator for which the progress is being calculated for.
-    Returns:
-        output: str. A string indicating the progress measurement for the indicator.
-    """
+class ProgressMeasureBase(Loggable):
+    # Base class used to build classes for series-level and indicator-level progress measures.
+    def __init__(self, indicator, logging=None):
 
-    data = indicator.data  # get indicator data
-    config = indicator.meta  # get configurations
+        Loggable.__init__(self, logging=logging)
+        self.indicator = indicator
+        self.inid = indicator.inid
+        self.data = indicator.data
+        self.meta = indicator.meta
+        self.indicator_options = indicator.options
 
-    # checks if progress calculation is turned on
-    if 'auto_progress_calculation' in config.keys():
+        self.auto_progress_calculation = self.meta.get('auto_progress_calculation') is True
+        self.progress_calculation_options = self.get_progress_calculation_options()
 
-        # checks if any inputs have been configured
-        if config['auto_progress_calculation']:
+        # method is 1 for qualitative or 2 for quantitative.
+        # The same method and progress thresholds are applied to all sub-indicators within an indicator.
+        self.method = 1 if self.progress_calculation_options[0]['target'] is None else 2
+        self.progress_thresholds = self.get_progress_thresholds() # may not want to allow user to configure progress thresholds
 
-            if 'progress_calculation_options' in config.keys():
-                # take manual user inputs
-                config = config['progress_calculation_options'][0]
+        self.cols = self.data.columns
+        self.series_column = self.indicator_options.series_column
+        self.unit_column = self.indicator_options.unit_column
+        self.non_disaggregation_columns = self.indicator_options.non_disaggregation_columns
 
-        else:
+    def get_progress_calculation_options(self):
+        """
+        Get progress calculation options from the indicator metadata.
+        If progress calculation options are not specified in the metadata, 
+        return the default progress calculation options instead.
+        """
+        if self.meta is not None:
+            progress_calc_opts = self.meta.get('progress_calculation_options')
+            # progress_calc_opts is a list of dictionaries
+            # each dictionary corresponds to the options for one series/unit/disaggregation
+            if progress_calc_opts:
+                return [self.config_defaults(config) for config in progress_calc_opts]
+            else:
+                return [self.default_progress_calc_options()]
+
+    def config_defaults(self, config):
+        """Set progress calculation defaults and update them if any user inputs exist.
+        Args:
+            config: dict. Indicator configurations passed as a dictionary.
+        Returns:
+            dict: Dictionary of updated configuratyions.
+        """
+    
+        # set default options for progress measurement
+        defaults = self.default_progress_calc_options()
+        # update the defaults with any user configured inputs
+        defaults.update(config)
+    
+        # if target is 0, set to 0.001 (avoids dividing by 0 in calculation)
+        if defaults['target'] == 0:
+            defaults['target'] = 0.001
+    
+        return defaults
+    
+    
+    def default_progress_calc_options(self):
+        """Provide default inputs for calculating progress."""
+        return (
+            {
+                'base_year': 2015,
+                'target_year': 2030,
+                'direction': 'negative',
+                'target': None,
+                # 'progress_thresholds': {}
+            }
+        )
+    
+    def get_progress_thresholds(self, default1={'high': 0.015, 'med': 0.005, 'low': 0}, default2={'high': 0.95, 'med': 0.6, 'low': 0}):
+        """Checks for configured progress thresholds and updates default thresholds based on methodology.
+        Returns:
+            progress_thresholds: dict. Dictionary of progress thresholds: {'high': x, 'med': y, 'low': z}
+        """
+        # Begin with the default progress thresholds for each method and update these with user configured thresholds, if present.
+        if self.method == 1:
+            progress_thresholds = default1
+            input_thresholds = self.meta.get('progress_thresholds')
+            if input_thresholds:
+                progress_thresholds.update(input_thresholds)
+        elif self.method == 2:
+            progress_thresholds = default2
+            input_thresholds = self.meta.get('progress_thresholds')
+            if input_thresholds:
+                progress_thresholds.update(input_thresholds)
+
+        return progress_thresholds
+
+
+class ProgressMeasureSeries(ProgressMeasureBase):
+    def __init__(self, indicator, config={}, logging=None):
+
+        self.config = self.config_defaults(config)
+
+        ProgressMeasureBase.__init__(self, indicator, logging=logging)
+
+        # Filter data and update the config with key values for the progress calculation
+        self.data = self.filter_data()
+        self.config = self.update_config()
+
+        self.base_year = self.config.get('base_year')
+        self.base_value = self.config.get('base_value')
+        self.current_year = self.config.get('current_year')
+        self.current_value = self.config.get('current_value')
+        self.target_year = self.config.get('target_year')
+        self.target = self.config.get('target')
+        self.direction = -1 if self.config.get('direction') == 'negative' else 1
+        self.sign = -1 if self.base_value < 0 else 1 # note: base_value = 0 is invalid, would get zero division error in growth calculation
+
+        self.target_achieved = self.is_target_achieved()
+        self.progress_value = self.calculate_progress_value()
+        self.status = get_progress_status(self.progress_value, self.progress_thresholds, self.target_achieved)
+        self.score = self.get_score()
+
+    def update_config(self):
+        # get years that exist in the data
+        years = self.data["Year"]
+    
+        # set current year to be the most recent year that exists in data
+        self.config['current_year'] = years.max()
+        self.config['current_value'] = self.data.Value[self.data.Year == self.config['current_year']].item()
+    
+        # check if the base year input exists in the data
+        if self.config['base_year'] not in years.values:
+            # if the base year is not in the available data, assign it to be the next available year
+            self.config['base_year'] = years[years > self.config['base_year']].min()
+        # Set the base value
+        self.config['base_value'] = self.data.Value[self.data.Year == self.config['base_year']].item()
+
+        return self.config
+    
+    def filter_data(self):
+        data = self.data
+        # check if the year value contains more than 4 digits (indicating a range of years)
+        if (data['Year'].astype(str).str.len() > 4).any():
+            # take the first year in the range
+            data['Year'] = data['Year'].astype(str).str.slice(0, 4).astype(int)
+
+        if len(self.cols) > 2:
+            # Data has disaggregation columns. Find the appropriate subset of data for progress calculation
+            # If units and/or series columns exist, keep only the user selected unit/series
+            if (self.unit_column in self.cols) and ('unit' in self.config.keys()):
+                data = data.loc[data[self.unit_column] == self.config['unit']]
+            if (self.series_column in self.cols) and ('series' in self.config.keys()):
+                data = data.loc[data[self.series_column] == self.config['series']]
+            # If disaggregation specified by user, reduce the dataframe to only include the selected disaggregation
+            disaggregation = self.config.get('disaggregation')
+            if disaggregation:
+                for k, v in disaggregation.items():
+                    data = data.loc[data[k] == v]
+            # Otherwise, find headline data (rows where values in all disaggregation dimensions are NA)
+            else:
+                data = data[data.loc[:, ~self.cols.isin(self.non_disaggregation_columns)].isna().all('columns')]
+            # Keep only Year and Value columns
+            data = data.iloc[:, [0, -1]]
+
+            # To do: 
+            # Add PROGRESS/Progress to non_disaggregation columns
+            # if progress column in cols: use progress column values instead of Value
+            # What if no unit/series is selected by user but series/units column(s) exist? --> error? alphabetical? first appearing? None? Warning?
+            # What if indicator_options = None or config = None?
+            # Fix: when data not sufficiently reduced by user settings, there can be multiple values for the same year
+            # Apply data translations. Otherwise, the series/unit/disaggration name must appear exactly as it appears in the data file.
+
+        # remove any NA values from data
+        data = data[data["Value"].notna()]
+
+        # returns None if no rows in data (no total line to calculate progress)
+        if data.shape[0] < 1:
             return None
 
-    # return None if auto progress calculation is not turned on
-    else:
-        return None
+        return data
+    
+    def calculate_progress_value(self):
+        """Sets up all needed parameters and data for progress calculation, determines methodology for calculation,
+        and returns progress value as an output.
 
-    # get calculation defaults and update with user inputs (if any)
-    config = config_defaults(config)
-
-    # get relevant data to calculate progress (aggregate/total line only)
-    data = data_progress_measure(data, config=config, indicator_options=indicator_options)
-
-    if data is None:
-        return None
-
-    # get years that exist in the data
-    years = data["Year"]
-
-    # set current year to be the most recent year that exists in data
-    current_year = {'current_year': years.max()}
-
-    # update the calculation inputs with the current year
-    config.update(current_year)
-
-    # check if the base year input exists in the data
-    if config['base_year'] not in years.values:
+        Returns:
+            output: float. A value indicating the progress measurement value for the indicator.
+        """
+        # Run checks on config settings before calculating progress.
+        if self.data is None:
+            self.warn(f'{self.inid}: No data found for progress calculation')
+            return None
+        if not all_rows_unique(self.data):
+            self.warn(f'{self.inid}: Duplicate rows detected in data selected for progress calculation: {self.config}')
+            return None            
+        if self.base_value == 0:
+            self.warn(f'{self.inid}: Base value is zero (invalid)')
+            return None
         # return None if the base year input is in the future of the most recently available data
-        if config['base_year'] > years.max():
+        if self.base_year > self.current_year:
+            self.warn(f'{self.inid}: Base year is greater than the most recent available data: {self.config}')
             return None
+        if self.current_year - self.base_year < 1:
+            self.warn(f'{self.inid}: Not enough data to calculate progress (must have at least 2 data points): {self.config}')
+            return None
+    
+        if self.method == 1:
+            # do progress calculation according to methodology for qualitative target
+            output = self.methodology_1()
+        else:
+            # do progress calculation according to methodology for quantitative target
+            output = self.methodology_2()
+    
+        return output
 
-        # if base year is not in available data and not in the future,
-        # assign it to be the minimum existing year past the base year given
-        config['base_year'] = years[years > config['base_year']].min()
-
-    # return None if there is not enough data to calculate progress (must be at least 2 data points)
-    if config['current_year'] - config['base_year'] < 1:
-        return None
-
-    # determine which methodology to run
-    # if no target exists, run methodology for qualitative target. else run methodology for quantitative target.
-    if config['target'] is None:
-        # update progress thresholds for qualitative target
-        config = update_progress_thresholds(config, method=1)
-        # do progress calculation according to methodology for qualitative target
-        output = methodology_1(data=data, config=config)
-
-    else:
-        # update progress thresholds for quantitative target
-        config = update_progress_thresholds(config, method=2)
-        # do progress calculation according to methodology for quantitative target
-        output = methodology_2(data=data, config=config)
-
-    return output
+    def methodology_1(self):
+        """Calculate growth using progress measurement methodology 1 (no target value).
+    
+        Returns:
+            float: Progress value.
+        """      
+        # calculate growth
+        return self.sign * self.direction * growth_calculation(self.current_value, self.base_value, self.current_year, self.base_year)
 
 
-def config_defaults(config):
-    """Set progress calculation defaults and update them if any user inputs exist.
-    Args:
-        config: dict. Indicator configurations passed as a dictionary.
-    Returns:
-        dict: Dictionary of updated configurations.
+    def methodology_2(self):
+        """Calculate growth using progress measurement methodology 2 (given target value).
+    
+        Check if target has already been achieved.
+        Use configuration options to get the current and base value from indicator data and use to calculate growth ratio.
+
+        Returns:
+            float: Progress value.
+        """
+        # calculate observed growth
+        cagr_o = growth_calculation(self.current_value, self.base_value, self.current_year, self.base_year)
+        # calculate theoretical growth
+        cagr_r = growth_calculation(self.target, self.base_value, self.target_year, self.base_year)
+        
+        return self.sign * self.direction * cagr_o / abs(cagr_r)
+            
+    def is_target_achieved(self):
+        if self.target is not None:
+            if (self.direction == -1 and self.current_value <= self.target) or (self.direction == 1 and self.current_value >= self.target):
+                return True
+        return False
+        
+    def get_score(self):
+
+        if self.progress_value is None:
+            return None
+        
+        if self.target_achieved:
+            return 5
+        
+        if self.method == 1:
+            if self.progress_value > 0:
+                return min(self.progress_value * 250, 5)
+            else:
+                return max(self.progress_value * 250, -5)
+        else: # method == 2
+            if self.progress_value > 0.6:
+                return min((7.1429 * self.progress_value) - 4.2857, 5)
+            else:
+                return max((4.1667 * self.progress_value) - 2.5, -5)
+
+
+class ProgressMeasureIndicator(ProgressMeasureBase):
+    def __init__(self, indicator, logging=None):
+
+        ProgressMeasureBase.__init__(self, indicator, logging=logging)
+
+        self.score, self.status = self.get_indicator_progress()
+
+    def get_indicator_progress(self):
+        """
+        Read the progress calculation configurations from the indicator metadata and return the progress 
+        measure score and status for the indicator. The minimum progress score and associated progress 
+        status are taken as the aggregate score for the indicator when multiple series, units, and/or 
+        disaggregations are specified in the progress calculation configurations.
+        When the progress calculation is turned off, any manually specified progress status found in the 
+        metadata is returned alongside a score of None.
+        If the progress calculation is turned off and no progress status is found, it will return a score 
+        of None and 'not_available' as the progress status.
+
+        Returns:
+            tuple: (score, status)
+        """
+        # Check if progress calculation is turned on
+        if self.auto_progress_calculation:
+            # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
+            progress_outputs = []
+            for config in self.progress_calculation_options:
+                pm = ProgressMeasureSeries(self.indicator, config, logging=self.logging)
+                score = pm.score
+                # discard progress outputs when score is None
+                if score is not None:
+                    # append a tuple of (score, status) for each specified series/unit/disaggregation
+                    progress_outputs.append((score, pm.status))
+
+            if progress_outputs:
+                # Return a tuple of the minimum score and associated progress status
+                return min(progress_outputs, key=lambda x: x[0])
+        else:
+            # Use any progress status available in the metadata as a manual override
+            if 'progress_status' in self.meta.keys():
+                return (None, self.meta['progress_status'])
+                
+        return (None, "not_available")
+
+    
+def all_rows_unique(df, ignore_columns=['Value', 'Progress']):
     """
-
-    # set default options for progress measurement
-    defaults = default_progress_calc_options()
-    # update the defaults with any user configured inputs
-    defaults.update(config)
-
-    # if target is 0, set to 0.001 (avoids dividing by 0 in calculation)
-    if defaults['target'] == 0:
-        defaults['target'] = 0.001
-
-    return defaults
-
-
-def default_progress_calc_options():
-    """Provide default inputs for calculating progress."""
-    return (
-        {
-            'base_year': 2015,
-            'target_year': 2030,
-            'direction': 'negative',
-            'target': None,
-            'progress_thresholds': {}
-        }
-    )
-
-
-def update_progress_thresholds(config, method):
-    """Checks for configured progress thresholds or updates thresholds based on methodology.
-    Args:
-        config: dict. Progress calculation inputs for indicator.
-        method: int. Indicates which methodology is being used. Either 1 (for qualitative targets) or 2 (for
-                quantitative targets).
-    Returns:
-        dict: Dictionary of updated inputs for calculation.
-    """
-
-    # if progress threshold inputs exist and are not empty, assign user input value as thresholds
-    # otherwise if progress threshold inputs are empty, use defaults
-    if ('progress_thresholds' in config.keys()) & (bool(config['progress_thresholds'])):
-        progress_thresholds = config['progress_thresholds']
-    elif method == 1:
-        progress_thresholds = {'high': 0.015, 'med': 0.005, 'low': 0}
-    elif method == 2:
-        progress_thresholds = {'high': 0.95, 'med': 0.6, 'low': 0}
-    else:
-        progress_thresholds = {}
-
-    # update inputs with thresholds
-    config.update(progress_thresholds)
-
-    return config
-
-
-def data_progress_measure(data, config=None, indicator_options=None):
-    """Checks and filters data for indicator for which progress is being calculated.
-
-    If the Year column in data contains more than 4 characters (standard year format), takes the first 4 characters.
-    If data contains disaggregation columns, take only the total line data.
-    Removes any NA values.
-    Checks that there is enough data to calculate progress.
+    Check dataframe for duplicate rows. Ignores data columns (value and progress columns).
+    Returns True if the check succeeded (no duplicate rows found) or False if the check failed (duplicate rows found).
 
     Args:
-        data: DataFrame. Indicator data for which progress is being calculated.
+        df: dataframe
+        ignore_columns: list. List of column names to ignore while checking row uniqueness.
     Returns:
-        DataFrame: Data in valid format for calculating progress.
+        bool: True if uniqueness check is successful, otherwise False
     """
+    cols = [col for col in df.columns if col not in ignore_columns]
+    
+    success = False
+    if not df.duplicated(subset=cols).any():
+        success = True
 
-    # check if the year value contains more than 4 digits (indicating a range of years)
-    if (data['Year'].astype(str).str.len() > 4).any():
-        # take the first year in the range
-        data['Year'] = data['Year'].astype(str).str.slice(0, 4).astype(int)
-
-    series_column = indicator_options.series_column
-    unit_column = indicator_options.unit_column
-    non_disaggregation_columns = indicator_options.non_disaggregation_columns
-    cols = data.columns
-
-    if len(cols) > 2:
-        # Data has disaggregation columns. Find the appropriate subset of data for progress calculation
-        # If units and/or series columns exist, keep only the user selected unit/series
-        if (unit_column in cols) and ('unit' in config.keys()):
-            data = data.loc[data[unit_column] == config['unit']]
-        if (series_column in cols) and ('series' in config.keys()):
-            data = data.loc[data[series_column] == config['series']]
-        # Find headline data (rows where values in all disaggregation dimensions are NA)
-        data = data[data.loc[:, ~cols.isin(non_disaggregation_columns)].isna().all('columns')]
-        # Keep only Year and Value columns
-        data = data.iloc[:, [0, -1]]
-
-        # To do: 
-        # Add PROGRESS/Progress to non_disaggregation columns
-        # if progress column in cols: use progress column values instead of Value
-        # What if no unit/series is selected by user but series/units column(s) exist? --> error? alphabetical? first appearing? None?
-
-    # remove any NA values from data
-    data = data[data["Value"].notna()]
-
-    # returns None if no rows in data (no total line to calculate progress)
-    if data.shape[0] < 1:
-        return None
-
-    return data
-
+    return success
 
 def growth_calculation(val1, val2, t1, t2):
-    """Calculate cumulative annual growth rate with required arguments.
+    """Calculate compound annual growth rate with required arguments.
 
     Args:
         val1: float. Current value.
@@ -197,110 +333,38 @@ def growth_calculation(val1, val2, t1, t2):
         t1: float. Current year.
         t2: float. Base year.
     Returns:
-        float: Growth value.
+        float: Compound annual growth rate value.
     """
 
     return ((val1 / val2) ** (1 / (t1 - t2))) - 1
 
-
-def methodology_1(data, config):
-    """Calculate growth using progress measurement methodology 1 (no target value).
-
-    Use configuration options to get the current and base value from indicator data and use to calculate growth.
-    Compare growth to progress thresholds to return a progress measurement.
-
-    Args:
-        data: DataFrame. Indicator data for which progress is being calculated.
-        config: dict. Configurations for indicator for which progress is being calculated.
-    Returns:
-        str: Progress measure.
-    """
-
-    direction = str(config['direction'])
-    t = float(config['current_year'])
-    t_0 = float(config['base_year'])
-    x = float(config['high'])
-    y = float(config['med'])
-    z = float(config['low'])
-
-    # get current value from data
-    current_value = data.Value[data.Year == t].values[0]
-    # get value from base year from data
-    base_value = data.Value[data.Year == t_0].values[0]
-    # calculate growth
-    cagr_o = growth_calculation(current_value, base_value, t, t_0)
-
-    # use negative growth value if desired direction of progress is negative
-    if direction == "negative":
-        cagr_o = -1 * cagr_o
-
-    return get_progress_status(cagr_o, config)
-
-
-def methodology_2(data, config):
-    """Calculate growth using progress measurement methodology 2 (given target value).
-
-    Check if target has already been achieved.
-    Use configuration options to get the current and base value from indicator data and use to calculate growth ratio.
-
-    Args:
-        data: DataFrame. Indicator data for which progress is being calculated.
-        config: dict. Configurations for indicator for which progress is being calculated.
-    Returns:
-        str: Progress status.
-    """
-
-    direction = str(config['direction'])
-    t = float(config['current_year'])
-    t_0 = float(config['base_year'])
-    target = float(config['target'])
-    t_tao = float(config['target_year'])
-
-    # get current value from data
-    current_value = data.Value[data.Year == t].values[0]
-    # get base value from data
-    base_value = data.Value[data.Year == t_0].values[0]
-
-    # check if the target is achieved
-    if (direction == "negative" and current_value <= target) or (direction == "positive" and current_value >= target):
-        return "target_achieved"
-
-    # calculate observed growth
-    cagr_o = growth_calculation(current_value, base_value, t, t_0)
-    # calculate theoretical growth
-    cagr_r = growth_calculation(target, base_value, t_tao, t_0)
-    # calculating growth ratio
-    ratio = cagr_o / cagr_r
-
-    return get_progress_status(ratio, config)
-
-
-def get_progress_status(value, config):
-    """Compare growth rate to progress thresholds provided in configs to return progress status.
-
-    Use configuration options to get the high, middle, and low thresholds to compare to the value
-    and return a progress status label.
+def get_progress_status(value, thresholds, target_achieved=False):
+    """Compare progress value to progress thresholds and return progress status.
 
     Args:
         value: float. Calculated value of either observed growth or growth ratio for an indicator.
-        config: dict. Configurations for indicator for which progress is being calculated.
-
-    Returns: str. Progress status label.
-
+        thresholds: dict. Thresholds for high, medium, and low progress. format: {'high': x, 'med': y, 'low': z}
+        target_achieved: bool. If target is achieved, skip comparison with thresholds and return "target_achieved".
+    Returns:
+        str: Progress status label.
     """
 
-    x = float(config['high'])
-    y = float(config['med'])
-    z = float(config['low'])
+    x = float(thresholds['high'])
+    y = float(thresholds['med'])
+    z = float(thresholds['low'])
 
     # compare growth rate to progress thresholds to return progress measure
-    if value >= x:
-        return "on_track"
-    elif y <= value < x:
-        return "progress_needs_acceleration"
-    elif z <= value < y:
-        return "limited_progress"
-    elif value < z:
-        return "deterioration"
-    else:
-        return None
+    if target_achieved:
+        return "target_achieved"
+    
+    if value is not None:
+        if value >= x:
+            return "substantial_progress"
+        elif y <= value < x:
+            return "moderate_progress"
+        elif z <= value < y:
+            return "limited_progress"
+        elif value < z:
+            return "deterioration"
+
+    return "not_available"

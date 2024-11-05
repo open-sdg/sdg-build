@@ -65,7 +65,7 @@ class OutputOpenSdg(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             # Use the methodology to calculate a progress status.
-            progress_status = ProgressMeasureIndicator(indicator, logging=self.logging).status
+            progress_status = ProgressMeasureIndicator(indicator, logging=self.logging).get_indicator_status()
             if progress_status:
                 # If the calculations returned something, set it in the indicator's 'meta' property.
                 indicator.meta['progress_status'] = progress_status

@@ -1,7 +1,6 @@
 from sdg import Loggable
 
-class ProgressMeasureBase(Loggable):
-    # Base class used to build classes for series-level and indicator-level progress measures.
+class ProgressMeasureIndicator(Loggable):
     def __init__(self, indicator, logging=None):
 
         Loggable.__init__(self, logging=logging)
@@ -11,13 +10,8 @@ class ProgressMeasureBase(Loggable):
         self.meta = indicator.meta
         self.indicator_options = indicator.options
 
-        self.auto_progress_calculation = self.meta.get('auto_progress_calculation') is True
-        self.progress_calculation_options = self.get_progress_calculation_options()
-
-        # method is 1 for qualitative or 2 for quantitative.
-        # The same method and progress thresholds are applied to all sub-indicators within an indicator.
-        self.method = 1 if self.progress_calculation_options[0]['target'] is None else 2
-        self.progress_thresholds = self.get_progress_thresholds() # may not want to allow user to configure progress thresholds
+        # self.auto_progress_calculation = self.meta.get('auto_progress_calculation') is True
+        # self.progress_calculation_options = self.get_progress_calculation_options()
 
         self.cols = self.data.columns
         self.series_column = self.indicator_options.series_column
@@ -35,68 +29,67 @@ class ProgressMeasureBase(Loggable):
             # progress_calc_opts is a list of dictionaries
             # each dictionary corresponds to the options for one series/unit/disaggregation
             if progress_calc_opts:
-                return [self.config_defaults(config) for config in progress_calc_opts]
+                return [config_defaults(config) for config in progress_calc_opts]
             else:
-                return [self.default_progress_calc_options()]
+                return [default_progress_calc_options()]
 
-    def config_defaults(self, config):
-        """Set progress calculation defaults and update them if any user inputs exist.
-        Args:
-            config: dict. Indicator configurations passed as a dictionary.
-        Returns:
-            dict: Dictionary of updated configuratyions.
+    def get_indicator_progress(self):
         """
-    
-        # set default options for progress measurement
-        defaults = self.default_progress_calc_options()
-        # update the defaults with any user configured inputs
-        defaults.update(config)
-    
-        # if target is 0, set to 0.001 (avoids dividing by 0 in calculation)
-        if defaults['target'] == 0:
-            defaults['target'] = 0.001
-    
-        return defaults
-    
-    
-    def default_progress_calc_options(self):
-        """Provide default inputs for calculating progress."""
-        return (
-            {
-                'base_year': 2015,
-                'target_year': 2030,
-                'direction': 'negative',
-                'target': None,
-                # 'progress_thresholds': {}
-            }
-        )
-    
-    def get_progress_thresholds(self, default1={'high': 0.015, 'med': 0.005, 'low': 0}, default2={'high': 0.95, 'med': 0.6, 'low': 0}):
-        """Checks for configured progress thresholds and updates default thresholds based on methodology.
+        Read the progress calculation configurations from the indicator metadata and return the progress 
+        measure score and status for the indicator. The minimum progress score and associated progress 
+        status are taken as the aggregate score for the indicator when multiple series, units, and/or 
+        disaggregations are specified in the progress calculation configurations.
+        When the progress calculation is turned off, any manually specified progress status found in the 
+        metadata is returned alongside a score of None.
+        If the progress calculation is turned off and no progress status is found, it will return a score 
+        of None and 'not_available' as the progress status.
+
         Returns:
-            progress_thresholds: dict. Dictionary of progress thresholds: {'high': x, 'med': y, 'low': z}
+            tuple: (score, status)
         """
-        # Begin with the default progress thresholds for each method and update these with user configured thresholds, if present.
-        if self.method == 1:
-            progress_thresholds = default1
-            input_thresholds = self.meta.get('progress_thresholds')
-            if input_thresholds:
-                progress_thresholds.update(input_thresholds)
-        elif self.method == 2:
-            progress_thresholds = default2
-            input_thresholds = self.meta.get('progress_thresholds')
-            if input_thresholds:
-                progress_thresholds.update(input_thresholds)
+        # Check if progress calculation is turned on
+        if self.meta.get('auto_progress_calculation') is True:
+            # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
+            progress_outputs = []
+            for config in self.get_progress_calculation_options():
+                pm = ProgressMeasureSeries(self.indicator, config, logging=self.logging)
+                score = pm.score
+                # discard progress outputs when score is None
+                if score is not None:
+                    # append a tuple of (score, status) for each specified series/unit/disaggregation
+                    progress_outputs.append((score, pm.status))
 
-        return progress_thresholds
+            if progress_outputs:
+                # Return a tuple of the minimum score and associated progress status
+                return min(progress_outputs, key=lambda x: x[0])
+        else:
+            # Use any progress status available in the metadata as a manual override
+            if 'progress_status' in self.meta.keys():
+                return (None, self.meta['progress_status'])
+                
+        return (None, "not_available")
+
+    def get_indicator_score(self):
+        """
+        Get the indicator's progress score.
+        """
+        return self.get_indicator_progress()[0]
 
 
-class ProgressMeasureSeries(ProgressMeasureBase):
+    def get_indicator_status(self):
+        """
+        Get the indicator's progress status.
+        """
+        return self.get_indicator_progress()[1]
+
+
+class ProgressMeasureSeries(ProgressMeasureIndicator):
+    # inherit the indicator-level attributes and methods
     def __init__(self, indicator, config={}, logging=None):
 
-        self.config = self.config_defaults(config)
+        self.config = config_defaults(config)
 
-        ProgressMeasureBase.__init__(self, indicator, logging=logging)
+        ProgressMeasureIndicator.__init__(self, indicator, logging=logging)
 
         # Filter data and update the config with key values for the progress calculation
         self.data = self.filter_data()
@@ -110,7 +103,10 @@ class ProgressMeasureSeries(ProgressMeasureBase):
         self.target = self.config.get('target')
         self.direction = -1 if self.config.get('direction') == 'negative' else 1
         self.sign = -1 if self.base_value < 0 else 1 # note: base_value = 0 is invalid, would get zero division error in growth calculation
-
+        
+        self.method = 1 if self.target is None else 2 # method is 1 for qualitative or 2 for quantitative
+        self.progress_thresholds = self.get_progress_thresholds() # may not want to allow user to configure progress thresholds
+        
         self.target_achieved = self.is_target_achieved()
         self.progress_value = self.calculate_progress_value()
         self.status = get_progress_status(self.progress_value, self.progress_thresholds, self.target_achieved)
@@ -250,61 +246,89 @@ class ProgressMeasureSeries(ProgressMeasureBase):
             return 5
         
         if self.method == 1:
+            # Normalize progress values based on progress thresholds
+            coeff = self.progress_thresholds.get('coefficient', 1) # coeff value defaults to 1 if not available
             if self.progress_value > 0:
-                return min(self.progress_value * 250, 5)
+                return min(self.progress_value * 250 / coeff, 5)
             else:
-                return max(self.progress_value * 250, -5)
+                return max(self.progress_value * 250 / coeff, -5)
         else: # method == 2
+            # TO DO: Align score intervals and progress categories for both methods   
             if self.progress_value > 0.6:
                 return min((7.1429 * self.progress_value) - 4.2857, 5)
             else:
                 return max((4.1667 * self.progress_value) - 2.5, -5)
 
-
-class ProgressMeasureIndicator(ProgressMeasureBase):
-    def __init__(self, indicator, logging=None):
-
-        ProgressMeasureBase.__init__(self, indicator, logging=logging)
-
-        self.score, self.status = self.get_indicator_progress()
-
-    def get_indicator_progress(self):
-        """
-        Read the progress calculation configurations from the indicator metadata and return the progress 
-        measure score and status for the indicator. The minimum progress score and associated progress 
-        status are taken as the aggregate score for the indicator when multiple series, units, and/or 
-        disaggregations are specified in the progress calculation configurations.
-        When the progress calculation is turned off, any manually specified progress status found in the 
-        metadata is returned alongside a score of None.
-        If the progress calculation is turned off and no progress status is found, it will return a score 
-        of None and 'not_available' as the progress status.
-
+    def get_progress_thresholds(self):
+        """Checks for configured progress thresholds and updates default thresholds based on methodology.
         Returns:
-            tuple: (score, status)
-        """
-        # Check if progress calculation is turned on
-        if self.auto_progress_calculation:
-            # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
-            progress_outputs = []
-            for config in self.progress_calculation_options:
-                pm = ProgressMeasureSeries(self.indicator, config, logging=self.logging)
-                score = pm.score
-                # discard progress outputs when score is None
-                if score is not None:
-                    # append a tuple of (score, status) for each specified series/unit/disaggregation
-                    progress_outputs.append((score, pm.status))
+            progress_thresholds: dict. Dictionary of progress thresholds: {'high': x, 'med': y, 'low': z}
+        """      
+        # Get the user configured progress thresholds from the metadata.
+        user_thresholds = self.config.get('progress_thresholds')
 
-            if progress_outputs:
-                # Return a tuple of the minimum score and associated progress status
-                return min(progress_outputs, key=lambda x: x[0])
-        else:
-            # Use any progress status available in the metadata as a manual override
-            if 'progress_status' in self.meta.keys():
-                return (None, self.meta['progress_status'])
+        # Begin with the default progress thresholds for each method and update these with user configured thresholds, if present.
+        if self.method == 1:
+            # Qualitative method thresholds
+            progress_thresholds = {'high': 0.015, 'med': 0.005, 'low': 0}
+            progress_thresholds.update(user_thresholds)
+
+            # Reduce thresholds when near limit
+            limit = self.config.get('limit')
+            if limit is not None:
+                base_value = abs(self.base_value)
+                limit = abs(limit)
+                a = 4.44
+                if base_value <= limit:
+                    coeff = 1 - (base_value/limit)**a
+                elif base_value <= 2*limit:
+                    coeff = 1 - ((2*limit - base_value)/limit)**a
+                else:
+                    coeff = 1
+            
+                for key in ['high', 'med', 'low']:
+                    progress_thresholds[key] *= coeff
+                progress_thresholds['coefficient'] = coeff
                 
-        return (None, "not_available")
+        elif self.method == 2:
+            # Quantitative method thresholds
+            progress_thresholds = {'high': 0.95, 'med': 0.6, 'low': 0}
+            progress_thresholds.update(user_thresholds)
 
-    
+        return progress_thresholds
+
+
+def config_defaults(config):
+    """Set progress calculation defaults and update them if any user inputs exist.
+    Args:
+        config: dict. Indicator configurations passed as a dictionary.
+    Returns:
+        dict: Dictionary of updated configurations.
+    """
+
+    # set default options for progress measurement
+    defaults = default_progress_calc_options()
+    # update the defaults with any user configured inputs
+    defaults.update(config)
+
+    # if target is 0, set to 0.001 (avoids dividing by 0 in calculation)
+    if defaults['target'] == 0:
+        defaults['target'] = 0.001
+
+    return defaults
+
+def default_progress_calc_options():
+    """Provide default inputs for calculating progress."""
+    return (
+        {
+            'base_year': 2015,
+            'target_year': 2030,
+            'direction': 'negative',
+            'target': None,
+            'progress_thresholds': {}
+        }
+    )
+
 def all_rows_unique(df, ignore_columns=['Value', 'Progress']):
     """
     Check dataframe for duplicate rows. Ignores data columns (value and progress columns).

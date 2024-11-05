@@ -8,15 +8,16 @@ class ProgressMeasureIndicator(Loggable):
         self.inid = indicator.inid
         self.data = indicator.data
         self.meta = indicator.meta
-        self.indicator_options = indicator.options
+        # self.indicator_options = indicator.options
 
         # self.auto_progress_calculation = self.meta.get('auto_progress_calculation') is True
         # self.progress_calculation_options = self.get_progress_calculation_options()
 
         self.cols = self.data.columns
-        self.series_column = self.indicator_options.series_column
-        self.unit_column = self.indicator_options.unit_column
-        self.non_disaggregation_columns = self.indicator_options.non_disaggregation_columns
+        self.series_column = self.indicator.options.series_column
+        self.unit_column = self.indicator.options.unit_column
+        self.progress_column = self.indicator.options.progress_column
+        self.non_disaggregation_columns = self.indicator.options.non_disaggregation_columns
 
     def get_progress_calculation_options(self):
         """
@@ -151,21 +152,22 @@ class ProgressMeasureSeries(ProgressMeasureIndicator):
             # Otherwise, find headline data (rows where values in all disaggregation dimensions are NA)
             else:
                 data = data[data.loc[:, ~self.cols.isin(self.non_disaggregation_columns)].isna().all('columns')]
+
+            if self.progress_column in self.cols:
+                # Replace values with those from the progress column, then drop progress column
+                data['Value'] = data[self.progress_column]
+                data.drop(self.progress_column, axis=1, inplace=True)
             # Keep only Year and Value columns
-            data = data.iloc[:, [0, -1]]
+            data = data[['Year', 'Value']]           
 
             # To do: 
-            # Add PROGRESS/Progress to non_disaggregation columns
-            # if progress column in cols: use progress column values instead of Value
             # What if no unit/series is selected by user but series/units column(s) exist? --> error? alphabetical? first appearing? None? Warning?
-            # What if indicator_options = None or config = None?
             # Fix: when data not sufficiently reduced by user settings, there can be multiple values for the same year
-            # Apply data translations. Otherwise, the series/unit/disaggration name must appear exactly as it appears in the data file.
 
         # remove any NA values from data
         data = data[data["Value"].notna()]
 
-        # returns None if no rows in data (no total line to calculate progress)
+        # returns None if no rows in data
         if data.shape[0] < 1:
             return None
 

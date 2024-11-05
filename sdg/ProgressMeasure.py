@@ -1,6 +1,6 @@
 from sdg import Loggable
 
-class ProgressMeasureIndicator(Loggable):
+class IndicatorProgress(Loggable):
     def __init__(self, indicator, logging=None):
 
         Loggable.__init__(self, logging=logging)
@@ -53,7 +53,7 @@ class ProgressMeasureIndicator(Loggable):
             # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
             progress_outputs = []
             for config in self.get_progress_calculation_options():
-                pm = ProgressMeasureSeries(self.indicator, config, logging=self.logging)
+                pm = SeriesProgress(self.indicator, config, logging=self.logging)
                 score = pm.score
                 # discard progress outputs when score is None
                 if score is not None:
@@ -84,13 +84,13 @@ class ProgressMeasureIndicator(Loggable):
         return self.get_indicator_progress()[1]
 
 
-class ProgressMeasureSeries(ProgressMeasureIndicator):
+class SeriesProgress(IndicatorProgress):
     # inherit the indicator-level attributes and methods
     def __init__(self, indicator, config={}, logging=None):
 
         self.config = config_defaults(config)
 
-        ProgressMeasureIndicator.__init__(self, indicator, logging=logging)
+        IndicatorProgress.__init__(self, indicator, logging=logging)
 
         # Filter data and update the config with key values for the progress calculation
         self.data = self.filter_data()

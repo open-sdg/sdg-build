@@ -3,7 +3,7 @@ import sdg
 from sdg.outputs import OutputBase
 from sdg.data import write_csv
 from sdg.json import write_json, df_to_list_dict
-from sdg.ProgressMeasure import ProgressMeasureIndicator
+from sdg.ProgressMeasure import IndicatorProgress
 
 class OutputOpenSdg(OutputBase):
     """Output SDG data/metadata in the formats expected by Open SDG."""
@@ -65,7 +65,7 @@ class OutputOpenSdg(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             # Use the methodology to calculate a progress status.
-            progress_status = ProgressMeasureIndicator(indicator, logging=self.logging).get_indicator_status()
+            progress_status = IndicatorProgress(indicator, logging=self.logging).get_indicator_status()
             if progress_status:
                 # If the calculations returned something, set it in the indicator's 'meta' property.
                 indicator.meta['progress_status'] = progress_status

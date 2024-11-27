@@ -145,10 +145,10 @@ class SeriesProgress(IndicatorProgress):
             if (self.series_column in self.cols) and ('series' in self.config.keys()):
                 data = data.loc[data[self.series_column] == self.config['series']]
             # If disaggregation specified by user, reduce the dataframe to only include the selected disaggregation
-            disaggregation = self.config.get('disaggregation')
-            if disaggregation:
-                for k, v in disaggregation.items():
-                    data = data.loc[data[k] == v]
+            disaggregations = self.config.get('disaggregation')
+            if disaggregations:
+                for disagg in disaggregations:
+                    data = data.loc[data[disagg['field']] == disagg['value']]
             # Otherwise, find headline data (rows where values in all disaggregation dimensions are NA)
             else:
                 data = data[data.loc[:, ~self.cols.isin(self.non_disaggregation_columns)].isna().all('columns')]

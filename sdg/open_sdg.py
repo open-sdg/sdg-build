@@ -534,6 +534,7 @@ def open_sdg_input_from_dict(params, options):
         'InputPxWebApi',
         'InputWordMeta',
         'InputSdgMetadata',
+        'InputPxFile',
     ]
     if input_class not in allowed:
         raise KeyError("Input class '%s' is not one of: %s." % (input_class, ', '.join(allowed)))
@@ -580,6 +581,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputWordMeta(**params)
     elif input_class == 'InputSdgMetadata':
         input_instance = sdg.inputs.InputSdgMetadata(**params)
+    elif input_class == 'InputPxFile':
+        input_instance = sdg.inputs.InputPxFile(**params)
 
     return input_instance
 
@@ -614,6 +617,7 @@ def open_sdg_translation_from_dict(params, options):
         'TranslationInputSdmx',
         'TranslationInputSdmxMsd',
         'TranslationInputYaml',
+        'TranslationInputPx',
     ]
     if translation_class not in allowed:
         raise KeyError("Translation class '%s' is not one of: %s." % (translation_class, ', '.join(allowed)))
@@ -639,6 +643,8 @@ def open_sdg_translation_from_dict(params, options):
         translation_instance = sdg.translations.TranslationInputSdmxMsd(**params)
     elif translation_class == 'TranslationInputYaml':
         translation_instance = sdg.translations.TranslationInputYaml(**params)
+    elif translation_class == 'TranslationInputPx':
+        translation_instance = sdg.translations.TranslationInputPx(**params)
 
     return translation_instance
 

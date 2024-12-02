@@ -1,0 +1,91 @@
+CHARSET="ANSI";
+AXIS-VERSION="2010";
+CODEPAGE="utf-8";
+LANGUAGE="en";
+LANGUAGES="en","fo";
+CREATION-DATE="20210211 09:00";
+DECIMALS=1;
+SHOWDECIMALS=1;
+MATRIX="SDG010201";
+AUTOPEN=YES;
+COPYRIGHT=YES;
+SUBJECT-CODE="SDG";
+SUBJECT-AREA="Sustainable Development Goals";
+DESCRIPTION="SDG010201 1.2.1 Proportion of population living below the national poverty line, by sex and age (2009-2021)";
+TITLE="Risk of poverty 50% by measure, sex, age and year";
+CONTENTS="Risk of poverty 50%";
+STUB="measure","sex","age";
+HEADING="year";
+CONTVARIABLE="measure";
+VARIABLECODE("measure")="measure";
+VALUES("measure")="Proportion of population living below the national poverty line";
+VARIABLECODE("sex")="sex";
+VALUES("sex")="Total (sex)","Males","Females";
+VARIABLECODE("age")="age";
+VALUES("age")="Total (age)","00-17 years","18-24 years","25-54 years","55-66 years","67+ years";
+VARIABLECODE("year")="year";
+VALUES("year")="2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021";
+TIMEVAL("year")=TLIST(A1),"2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021";
+CODES("measure")="SI_POV_NAHC";
+CODES("sex")="TOT","M","F";
+CODES("age")="TOTAL","Y0-17","Y18-24","Y25-54","Y55-66","Y_GE67";
+CODES("year")="2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021";
+LAST-UPDATED="20230911 09:00";
+UNITS="pct.";
+CONTACT="Testing";
+SOURCE="Testing";
+NOTE="<b>Goal 1. End poverty in all its forms everywhere</b>## <b><u>Target 1.2</u></b># By 2030, reduce at least by half the proportion of men, women and children of all ages living in poverty in all its dimensions according to national definitions##  <u>Indi"
+"cator 1.2.1</u>#  Proportion of population living below the national poverty line, by sex and age";
+VALUENOTE("measure","Proportion of population living below the national poverty line")="<u>The national poverty line</u> is defined as 50 pct. of the median equivalent income.#This measure does not take wealth and socioeconomic status in to account.";
+NEXT-UPDATE="20210426 09:00";
+TABLEID="SDG010201";
+UPDATE-FREQUENCY="A";
+VARIABLE-TYPE("year")="TLIST(A1)";
+SUBJECT-AREA[fo]="Heimsmálini";
+DESCRIPTION[fo]="SDG010201 1.2.1 Partur av fólkinum, ið livir av minni enn fátækamarkinum í landinum, skift á kyn og aldur (2009-2021)";
+TITLE[fo]="Fátækaváði 50% eftir mát, kyn, aldur og ár";
+CONTENTS[fo]="Fátækaváði 50%";
+STUB[fo]="mát","kyn","aldur";
+HEADING[fo]="ár";
+CONTVARIABLE[fo]="mát";
+VARIABLECODE[fo]("mát")="measure";
+VALUES[fo]("mát")="Patur av fólkinum, ið livir av minni enn fátækamarkinum í landinum";
+VARIABLECODE[fo]("kyn")="sex";
+VALUES[fo]("kyn")="Bæði kyn","Menn","Kvinnur";
+VARIABLECODE[fo]("aldur")="age";
+VALUES[fo]("aldur")="Tils. (aldur)","00-17 ár","18-24 ár","25-54 ár","55-66 ár","67+ ár";
+VARIABLECODE[fo]("ár")="year";
+VALUES[fo]("ár")="2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021";
+TIMEVAL[fo]("ár")=TLIST(A1),"2009","2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020","2021";
+CODES[fo]("mát")="SI_POV_NAHC";
+CODES[fo]("kyn")="TOT","M","F";
+CODES[fo]("aldur")="TOTAL","Y0-17","Y18-24","Y25-54","Y55-66","Y_GE67";
+LAST-UPDATED[fo]="20230911 09:00";
+UNITS[fo]="%";
+CONTACT[fo]="Testing";
+SOURCE[fo]="Hagstova Føroya: www.hagstova.fo";
+NOTE[fo]="<b>Mál 1. Gera enda á fátækadømi í øllum tess líki allastaðni</b>## <b><u>Undirmál 1.2</u></b># Fyri 2030 at minka við einum helmingi tann partin av monnum, kvinnum og børnum í øllum aldri, sum liva í fátækt í øllum líki samsvarandi allýsingunum fyri ein"
+"staka landið##  <u>Ávisi 1.2.1</u>#  Partur av fólkinum, ið livir av minni enn fátækamarkinum í landinum, skift á kyn og aldur";
+VALUENOTE[fo]("mát","Patur av fólkinum, ið livir av minni enn fátækamarkinum í landinum")="<u>Føroyska fátækamarkið</u> er her sett sum eitt fátæka<b>váða</b>mark, ið er 50% av miðvirðinum (medianini) av javnvirðisinntøkuni.#Hetta mátið leggur ikki upp fyri ognum ella sosiobúskaparstøðu.";
+VARIABLE-TYPE[fo]("ár")="TLIST(A1)";
+DESCRIPTIONDEFAULT=YES;
+DATA=
+3.8 3.6 3.9 4.2 4.2 4.0 3.8 3.4 3.3 3.0 2.7 2.4 2.7 
+3.7 3.5 3.7 4.0 3.8 3.7 3.6 3.2 3.1 2.8 2.4 2.2 2.6 
+4.0 3.8 4.2 4.3 4.5 4.3 4.1 3.6 3.5 3.2 3.1 2.7 2.8 
+4.7 4.7 5.2 5.5 5.8 5.3 5.0 4.6 4.2 3.7 3.6 3.4 3.5 
+4.6 4.4 4.9 5.6 5.5 5.0 4.7 4.6 4.1 3.8 3.1 3.1 3.3 
+4.8 5.0 5.5 5.5 6.1 5.6 5.4 4.7 4.3 3.7 4.0 3.6 3.7 
+4.7 4.4 5.5 6.0 5.6 6.0 5.5 4.5 3.7 3.9 3.4 2.9 3.5 
+3.3 3.1 3.8 4.4 4.1 4.7 4.6 3.2 2.4 2.7 2.6 1.9 2.7 
+6.4 5.9 7.5 8.0 7.6 7.4 6.7 6.0 5.1 5.4 4.4 4.1 4.4 
+3.4 3.3 3.6 3.7 3.8 3.6 3.6 3.2 3.1 2.9 2.7 2.3 2.8 
+3.3 3.2 3.4 3.5 3.3 3.1 3.2 2.9 2.9 2.7 2.3 2.0 2.7 
+3.6 3.4 3.7 4.0 4.3 4.1 4.1 3.6 3.4 3.1 3.1 2.7 2.9 
+3.8 3.3 3.2 3.3 3.2 3.2 3.0 2.7 2.6 2.1 2.1 1.9 2.1 
+4.3 3.8 3.6 3.8 3.6 3.7 3.6 3.1 3.0 2.4 2.4 2.1 2.4 
+3.2 2.7 2.7 2.8 2.8 2.8 2.3 2.3 2.3 1.9 1.8 1.7 1.7 
+2.5 2.2 2.1 2.4 2.1 2.3 2.1 1.8 2.5 2.4 1.6 1.4 1.1 
+2.7 2.3 2.0 2.6 2.0 2.2 2.2 1.9 2.2 2.1 1.4 1.2 1.0 
+2.4 2.1 2.1 2.2 2.2 2.3 2.1 1.8 2.7 2.7 1.9 1.6 1.2 
+;

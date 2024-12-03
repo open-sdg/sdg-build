@@ -155,10 +155,11 @@ class SeriesProgress(IndicatorProgress):
 
             if self.progress_column in self.cols:
                 # Replace values with those from the progress column, then drop progress column
-                data['Value'] = data[self.progress_column]
-                data.drop(self.progress_column, axis=1, inplace=True)
+                data = data.assign(Value=data[self.progress_column])
+                # data['Value'] = data[self.progress_column]
+                # data.drop(self.progress_column, axis=1, inplace=True)
             # Keep only Year and Value columns
-            data = data[['Year', 'Value']]           
+            data = data[['Year', 'Value']]
 
             # To do: 
             # What if no unit/series is selected by user but series/units column(s) exist? --> error? alphabetical? first appearing? None? Warning?
@@ -166,6 +167,8 @@ class SeriesProgress(IndicatorProgress):
 
         # remove any NA values from data
         data = data[data["Value"].notna()]
+        # cast values to float
+        data["Value"] = data["Value"].astype('float')
 
         # returns None if no rows in data
         if data.shape[0] < 1:
@@ -300,7 +303,7 @@ class SeriesProgress(IndicatorProgress):
         return progress_thresholds
 
 
-def config_defaults(config):
+def config_defaults(config={}):
     """Set progress calculation defaults and update them if any user inputs exist.
     Args:
         config: dict. Indicator configurations passed as a dictionary.

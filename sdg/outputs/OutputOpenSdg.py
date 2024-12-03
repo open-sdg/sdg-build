@@ -12,7 +12,7 @@ class OutputOpenSdg(OutputBase):
     def __init__(self, inputs, schema, output_folder='_site', translations=None,
         reporting_status_extra_fields=None, indicator_options=None,
         indicator_downloads=None, logging=None, indicator_export_filename='all_indicators',
-        ignore_out_of_scope_disaggregation_stats=False):
+        ignore_out_of_scope_disaggregation_stats=False, cache_store=None):
         """Constructor for OutputOpenSdg.
 
         Parameters
@@ -29,6 +29,9 @@ class OutputOpenSdg(OutputBase):
             A filename (without the extension) for the zipped indicator export.
         ignore_out_of_scope_disaggregation_stats : boolean
             Whether to ignore the "not applicable" disaggregation stats.
+        cache_store : dict
+            A store that is passed in to allow caching during the build, to
+            avoid useless duplication.
         """
         if translations is None:
             translations = []
@@ -39,6 +42,7 @@ class OutputOpenSdg(OutputBase):
         self.indicator_downloads = indicator_downloads
         self.indicator_export_filename = indicator_export_filename
         self.ignore_na = ignore_out_of_scope_disaggregation_stats
+        self.cache_store = cache_store
 
 
     def build(self, language=None):
@@ -65,7 +69,11 @@ class OutputOpenSdg(OutputBase):
         for indicator_id in self.get_indicator_ids():
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             # Use the methodology to calculate a progress status.
-            progress_status = IndicatorProgress(indicator, logging=self.logging).get_indicator_status()
+            progress_status = IndicatorProgress(
+                indicator,
+                logging=self.logging,
+                cache_store=self.cache_store,
+            ).get_indicator_status()
             if progress_status:
                 # If the calculations returned something, set it in the indicator's 'meta' property.
                 indicator.meta['progress_status'] = progress_status

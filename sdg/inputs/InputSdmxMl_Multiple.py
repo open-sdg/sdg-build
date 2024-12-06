@@ -50,6 +50,8 @@ class InputSdmxMl_Multiple(InputFiles):
                 input_instance = InputSdmxMl_StructureSpecific(**kwargs)
             elif file_type == 'GenericData':
                 input_instance = InputSdmxMl_Structure(**kwargs)
+            if input_instance is None:
+                raise Exception('There was a problem loading the SDMX input. Please confirm that the SDMX files are correct.')
 
             # Apply any alterations.
             for alteration in self.data_alterations:

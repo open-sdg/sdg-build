@@ -1,13 +1,14 @@
 from sdg import Loggable
 
 class IndicatorProgress(Loggable):
-    def __init__(self, indicator, logging=None):
+    def __init__(self, indicator, logging=None, cache_store=None):
 
         Loggable.__init__(self, logging=logging)
         self.indicator = indicator
         self.inid = indicator.inid
         self.data = indicator.data
         self.meta = indicator.meta
+        self.cache_store = cache_store
         # self.indicator_options = indicator.options
 
         # self.auto_progress_calculation = self.meta.get('auto_progress_calculation') is True
@@ -50,6 +51,9 @@ class IndicatorProgress(Loggable):
         """
         # Check if progress calculation is turned on
         if self.meta.get('auto_progress_calculation') is True:
+            # First try to use caching.
+            if self.cache_store is not None and self.inid in self.cache_store:
+                return self.cache_store[self.inid]
             # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
             progress_outputs = []
             for config in self.get_progress_calculation_options():
@@ -61,8 +65,10 @@ class IndicatorProgress(Loggable):
                     progress_outputs.append((score, pm.status))
 
             if progress_outputs:
-                # Return a tuple of the minimum score and associated progress status
-                return min(progress_outputs, key=lambda x: x[0])
+                # Cache/return a tuple of the minimum score and associated progress status
+                results = min(progress_outputs, key=lambda x: x[0])
+                self.cache_store[self.inid] = results
+                return results
         else:
             # Use any progress status available in the metadata as a manual override
             if 'progress_status' in self.meta.keys():

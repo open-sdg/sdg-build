@@ -362,6 +362,7 @@ def open_sdg_prep(options):
         logging=options['logging'],
         indicator_export_filename=options['indicator_export_filename'],
         ignore_out_of_scope_disaggregation_stats=options['ignore_out_of_scope_disaggregation_stats'],
+        cache_store = {},
     )
 
     if callable(options['alter_indicator']):

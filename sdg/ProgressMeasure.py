@@ -53,6 +53,7 @@ class IndicatorProgress(Loggable):
         if self.meta.get('auto_progress_calculation') is True:
             # First try to use caching.
             if self.cache_store is not None and self.inid in self.cache_store:
+                # self.debug(f'{self.inid} progress from cache')
                 return self.cache_store[self.inid]
             # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
             progress_outputs = []
@@ -128,7 +129,7 @@ class SeriesProgress(IndicatorProgress):
     
         # set current year to be the most recent year that exists in data
         self.config['current_year'] = years.max()
-        self.config['current_value'] = self.data.Value[self.data.Year == self.config['current_year']].item()
+        self.config['current_value'] = self.data.Value[self.data.Year == self.config['current_year']].item() # GET ERROR HERE IF DISAGGREGATION SELECTION NOT SUFFICIENTLY REDUCED
     
         # check if the base year input exists in the data
         if self.config['base_year'] not in years.values:
@@ -171,8 +172,8 @@ class SeriesProgress(IndicatorProgress):
             data = data[['Year', 'Value']]
 
             # To do: 
-            # What if no unit/series is selected by user but series/units column(s) exist? --> error? alphabetical? first appearing? None? Warning?
-            # Fix: when data not sufficiently reduced by user settings, there can be multiple values for the same year
+            # What if no unit/series is selected by user but series/units column(s) exist? --> Warn user and return not_available progress status
+            # Fix: Warn user when data not sufficiently reduced by settings. There can be multiple values for the same year, so return not_available progress status
 
         # remove any NA values from data
         data = data[data["Value"].notna()]
@@ -271,8 +272,7 @@ class SeriesProgress(IndicatorProgress):
                 return 500*reduced_progress-2.5
             if reduced_progress < 0:
                 return max(125*reduced_progress-2.5, -5)
-        else: # method == 2
-            # TO DO: Align score intervals and progress categories for both methods   
+        else: # method == 2  
             if self.progress_value > 0.6:
                 return min((7.1429 * self.progress_value) - 4.2857, 5)
             else:

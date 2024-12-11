@@ -262,10 +262,15 @@ class SeriesProgress(IndicatorProgress):
         if self.method == 1:
             # Normalize progress values based on progress thresholds
             coeff = self.progress_thresholds.get('coefficient', 1) # coeff value defaults to 1 if not available
-            if self.progress_value > 0:
-                return min(self.progress_value * 250 / coeff, 5)
-            else:
-                return max(self.progress_value * 250 / coeff, -5)
+            reduced_progress = self.progress_value/coeff
+            if reduced_progress >= 0.015:
+                return min(500*reduced_progress-5, 5)
+            if reduced_progress >= 0.005:
+                return 250*reduced_progress-1.25
+            if reduced_progress >= 0:
+                return 500*reduced_progress-2.5
+            if reduced_progress < 0:
+                return max(125*reduced_progress-2.5, -5)
         else: # method == 2
             # TO DO: Align score intervals and progress categories for both methods   
             if self.progress_value > 0.6:

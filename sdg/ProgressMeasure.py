@@ -67,7 +67,10 @@ class IndicatorProgress(Loggable):
             if progress_outputs:
                 # Cache/return a tuple of the minimum score and associated progress status
                 results = min(progress_outputs, key=lambda x: x[0])
-                self.cache_store[self.inid] = results
+                if self.cache_store is None:
+                    self.cache_store = {self.inid: results}
+                else:
+                    self.cache_store[self.inid] = results
                 return results
         else:
             # Use any progress status available in the metadata as a manual override

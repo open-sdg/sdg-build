@@ -9,7 +9,12 @@ from sdg.helpers.px import Px
 class TranslationInputPx(TranslationInputBase):
     """This class imports translations from local or remote PX files."""
 
-    def __init__(self, indicator_id_map=None, logging=None, request_params=None):
+    def __init__(self,
+        indicator_id_map=None,
+        logging=None,
+        request_params=None,
+        indicator_options=None,
+    ):
         """Constructor for the TranslationInputPx class.
 
         Parameters
@@ -17,15 +22,23 @@ class TranslationInputPx(TranslationInputBase):
         indicator_id_map : dict
             A dict of indicator ids (dot-delimited) to PX file locations.
         """
-        TranslationInputBase.__init__(self, logging=logging, request_params=None)
+        TranslationInputBase.__init__(self,
+            logging=logging,
+            request_params=None,
+            indicator_options=indicator_options,
+        )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)
 
 
     def execute(self):
         TranslationInputBase.execute(self)
+
         for source, indicator_ids in self.indicator_id_map.items():
             pc_axis = self.fetch_file(source)
             px = Px(pc_axis)
+            has_series = px.data_has_series()
+            has_units = px.data_has_units()
+            has_indicator_options = self.indicator_options is not None
             default_language = px.get_default_language()
             languages = px.get_languages()
             if languages is None:
@@ -34,16 +47,23 @@ class TranslationInputPx(TranslationInputBase):
             variables = px.variables()
             translatable_variables = [v for v in variables if v != px.get_year_column_name()]
             for translatable_variable in translatable_variables:
+                # We have to treat the unit and series column especially,
+                # because they get renamed during the data input.
+                renamed_variable = translatable_variable
+                if has_indicator_options and has_series and translatable_variable == px.get_series_column_name():
+                    renamed_variable = self.indicator_options.get_series_column()
+                if has_indicator_options and has_units and translatable_variable == px.get_units_column_name():
+                    renamed_variable = self.indicator_options.get_unit_column()
                 for language in languages:
                     suffix = ''
                     if language != default_language:
                         suffix = '[' + language + ']'
                     translated_variable = px.variable_get_translation_from_value(translatable_variable, language)
-                    self.add_translation(language, translatable_variable, translatable_variable, translated_variable)
+                    self.add_translation(language, renamed_variable, renamed_variable, translated_variable)
                     codes = px.codes(translatable_variable)
                     for code in codes:
                         value = px.value(code, translatable_variable, language)
-                        self.add_translation(language, translatable_variable, code, value)
+                        self.add_translation(language, renamed_variable, code, value)
             # Gather the metadata translations.
             if not isinstance(indicator_ids, list):
                 indicator_ids = [indicator_ids]
@@ -52,8 +72,9 @@ class TranslationInputPx(TranslationInputBase):
                 translation_group = indicator_id + '-metadata'
                 for language in languages:
                     try:
-                        metadata_value = px.keyword('UNITS', language)
-                        self.add_translation(language, translation_group, 'computation_units', metadata_value)
+                        if not (px.data_has_units() and 'UNITS' in px.keywords()):
+                            metadata_value = px.keyword('UNITS', language)
+                            self.add_translation(language, translation_group, 'computation_units', metadata_value)
                     except:
                         pass
                     try:

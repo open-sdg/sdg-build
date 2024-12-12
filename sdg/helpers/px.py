@@ -316,8 +316,30 @@ class Px:
 
 
     def get_units_column_name(self):
-        return self.keyword('CONTVARIABLE')
+        return self.keyword('UNITS')
 
 
     def get_value_column_name(self):
         return 'num'
+
+
+    def get_series_column_name(self):
+        return self.keyword('CONTVARIABLE')
+
+
+    def data_has_units(self):
+        try:
+            col = self.get_units_column_name()
+            values = self.values(col)
+            return len(values) > 0
+        except:
+            return False
+
+
+    def data_has_series(self):
+        try:
+            col = self.get_series_column_name()
+            values = self.values(col)
+            return len(values) > 0
+        except:
+            return False

@@ -20,7 +20,8 @@ class InputPxFile(InputBase):
         """Constructor for InputPxFile.
 
         Keyword arguments:
-        source: local or remote location of PX file.
+        indicator_id_map: A dict mapping sources (typically remote URLs) to
+        lists of indicator ids.
         """
         InputBase.__init__(self,
             logging=logging,
@@ -33,6 +34,13 @@ class InputPxFile(InputBase):
 
 
     def execute(self, indicator_options):
+        def replace_value(value):
+            if value == '-':
+                return 0
+            elif value in ['.', '..', '...']:
+                return None
+            else:
+                return value
         for source, indicator_ids in self.indicator_id_map.items():
             pc_axis = self.fetch_file(source)
             px = Px(pc_axis)
@@ -40,13 +48,23 @@ class InputPxFile(InputBase):
             df = pd.DataFrame(px.entries())
             year_column = px.get_year_column_name()
             value_column = px.get_value_column_name()
-            units_column = px.get_units_column_name()
+            
             df.rename(inplace=True, columns = {
                 year_column: 'Year',
                 value_column: 'Value',
-                units_column: indicator_options.get_unit_column(),
             })
+            if px.data_has_series():
+                series_column = px.get_series_column_name()
+                df.rename(inplace=True, columns = {
+                    series_column: indicator_options.get_series_column(),
+                })
+            if px.data_has_units():
+                units_column = px.get_units_column_name()
+                df.rename(inplace=True, columns = {
+                    units_column: indicator_options.get_unit_column(),
+                })
             df = df.convert_dtypes()
+            df['Value'] = df['Value'].apply(replace_value)
             df['Value'] = pd.to_numeric(df['Value'])
             # Prepare the metadata but only with translation keys, since
             # the actual content will be gathered in the translation input.
@@ -57,7 +75,7 @@ class InputPxFile(InputBase):
                 indicator_id = indicator_id.replace('.', '-')
                 translation_group = indicator_id + '-metadata'
                 metadata = {}
-                if 'UNITS' in keywords:
+                if not (px.data_has_units() and 'UNITS' in keywords):
                     metadata['computation_units'] = translation_group + '.computation_units'
                 if 'NOTE' in keywords:
                     metadata['data_footnote'] = translation_group + '.data_footnote'

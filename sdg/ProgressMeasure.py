@@ -260,22 +260,30 @@ class SeriesProgress(IndicatorProgress):
         if self.target_achieved:
             return 5
         
+        high = self.progress_thresholds['high']
+        med = self.progress_thresholds['med']
+        low = self.progress_thresholds['low']
+
         if self.method == 1:
             # Normalize progress values based on progress thresholds
             coeff = self.progress_thresholds.get('coefficient', 1) # coeff value defaults to 1 if not available
             reduced_progress = self.progress_value/coeff
-            if reduced_progress >= 0.015:
+            if reduced_progress >= high:
                 return min(500*reduced_progress-5, 5)
-            if reduced_progress >= 0.005:
+            if reduced_progress >= med:
                 return 250*reduced_progress-1.25
-            if reduced_progress >= 0:
+            if reduced_progress >= low:
                 return 500*reduced_progress-2.5
-            if reduced_progress < 0:
+            if reduced_progress < low:
                 return max(125*reduced_progress-2.5, -5)
-        else: # method == 2  
-            if self.progress_value > 0.6:
+        else: # method == 2
+            if self.progress_value >= high:
                 return min((7.1429 * self.progress_value) - 4.2857, 5)
-            else:
+            if self.progress_value >= med:
+                return min((7.1429 * self.progress_value) - 4.2857, 5)
+            if self.progress_value >= low:
+                return max((4.1667 * self.progress_value) - 2.5, -5)
+            if self.progress_value < low:
                 return max((4.1667 * self.progress_value) - 2.5, -5)
 
     def get_progress_thresholds(self):

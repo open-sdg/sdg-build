@@ -43,12 +43,16 @@ class IndicatorProgress(Loggable):
         disaggregations are specified in the progress calculation configurations.
         When the progress calculation is turned off, any manually specified progress status found in the 
         metadata is returned alongside a score of None.
-        If the progress calculation is turned off and no progress status is found, it will return a score 
+        If the progress calculation is turned off and no progress status is found, it will return a default score 
         of None and 'not_available' as the progress status.
 
         Returns:
             tuple: (score, status)
         """
+        # Initialize the score and progress status with defaults
+        indicator_score = None
+        indicator_status = 'not_available'
+
         # Check if progress calculation is turned on
         if self.meta.get('auto_progress_calculation') is True:
             # First try to use caching.
@@ -56,29 +60,38 @@ class IndicatorProgress(Loggable):
                 # self.debug(f'{self.inid} progress from cache')
                 return self.cache_store[self.inid]
             # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
-            progress_outputs = []
+            scores = []
+            targets = []
             for config in self.get_progress_calculation_options():
-                pm = SeriesProgress(self.indicator, config, logging=self.logging)
-                score = pm.score
-                # discard progress outputs when score is None
+                series = SeriesProgress(self.indicator, config, logging=self.logging)
+                score = series.score
                 if score is not None:
-                    # append a tuple of (score, status) for each specified series/unit/disaggregation
-                    progress_outputs.append((score, pm.status))
+                    scores.append(score)
+                    targets.append(series.target_achieved)
+            # Update the indicator score and progress status
+            if scores:
+                indicator_score = min(scores)
+                target_achieved = all(targets) # True only when targets for all series are achieved
+                if target_achieved is True:
+                    indicator_score = 5
+                indicator_status = get_progress_status_from_score(indicator_score, target_achieved)
 
-            if progress_outputs:
-                # Cache/return a tuple of the minimum score and associated progress status
-                results = min(progress_outputs, key=lambda x: x[0])
-                if self.cache_store is None:
-                    self.cache_store = {self.inid: results}
-                else:
-                    self.cache_store[self.inid] = results
-                return results
         else:
             # Use any progress status available in the metadata as a manual override
             if 'progress_status' in self.meta.keys():
-                return (None, self.meta['progress_status'])
-                
-        return (None, "not_available")
+                indicator_status = self.meta['progress_status']
+                # score is None
+
+        # Result to return is tuple of indicator score and progress status
+        result = (indicator_score, indicator_status)
+        
+        # Cache the result
+        if self.cache_store is None:
+            self.cache_store = {self.inid: result}
+        else:
+            self.cache_store[self.inid] = result
+
+        return result
 
     def get_indicator_score(self):
         """
@@ -419,3 +432,27 @@ def get_progress_status(value, thresholds, target_achieved=False):
             return "deterioration"
 
     return "not_available"
+
+def get_progress_status_from_score(score, target_achieved=False):
+    """Determine the progress status from the score.
+
+    Args:
+        score: float. Progress score between -5 and 5.
+        target_achieved: bool. If target is achieved, skip comparison with thresholds and return "target_achieved".
+    Returns:
+        str: Progress status label.
+    """
+
+    if target_achieved:
+        return "target_achieved"
+
+    if score is None:
+        return "not_available"
+    elif 2.5 <= score <= 5:
+        return "substantial_progress"
+    elif 0 <= score < 2.5:
+        return "moderate_progress"
+    elif -2.5 <= score < 0:
+        return "limited_progress"
+    elif -5 <= score < -2.5:
+        return "deterioration"

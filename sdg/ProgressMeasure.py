@@ -72,15 +72,13 @@ class IndicatorProgress(Loggable):
             if scores:
                 indicator_score = min(scores)
                 target_achieved = all(targets) # True only when targets for all series are achieved
-                if target_achieved is True:
-                    indicator_score = 5
                 indicator_status = get_progress_status_from_score(indicator_score, target_achieved)
 
         else:
             # Use any progress status available in the metadata as a manual override
             if 'progress_status' in self.meta.keys():
                 indicator_status = self.meta['progress_status']
-                # score is None
+                # indicator_score is None
 
         # Result to return is tuple of indicator score and progress status
         result = (indicator_score, indicator_status)
@@ -276,18 +274,19 @@ class SeriesProgress(IndicatorProgress):
         high = self.progress_thresholds['high']
         med = self.progress_thresholds['med']
         low = self.progress_thresholds['low']
+        # Note: progress_thresholds are already reduced by the reduction coefficient
 
         if self.method == 1:
             # Normalize progress values based on progress thresholds
             coeff = self.progress_thresholds.get('coefficient', 1) # coeff value defaults to 1 if not available
             reduced_progress = self.progress_value/coeff
-            if reduced_progress >= high:
+            if self.progress_value >= high:
                 return min(500*reduced_progress-5, 5)
-            if reduced_progress >= med:
+            if self.progress_value >= med:
                 return 250*reduced_progress-1.25
-            if reduced_progress >= low:
+            if self.progress_value >= low:
                 return 500*reduced_progress-2.5
-            if reduced_progress < low:
+            if self.progress_value < low:
                 return max(125*reduced_progress-2.5, -5)
         else: # method == 2
             if self.progress_value >= high:

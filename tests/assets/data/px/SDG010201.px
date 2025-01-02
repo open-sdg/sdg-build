@@ -63,7 +63,7 @@ CODES[fo]("aldur")="TOTAL","Y0-17","Y18-24","Y25-54","Y55-66","Y_GE67";
 LAST-UPDATED[fo]="20230911 09:00";
 UNITS[fo]="%";
 CONTACT[fo]="Testing";
-SOURCE[fo]="Hagstova Føroya: www.hagstova.fo";
+SOURCE[fo]="Testing";
 NOTE[fo]="<b>Mál 1. Gera enda á fátækadømi í øllum tess líki allastaðni</b>## <b><u>Undirmál 1.2</u></b># Fyri 2030 at minka við einum helmingi tann partin av monnum, kvinnum og børnum í øllum aldri, sum liva í fátækt í øllum líki samsvarandi allýsingunum fyri ein"
 "staka landið##  <u>Ávisi 1.2.1</u>#  Partur av fólkinum, ið livir av minni enn fátækamarkinum í landinum, skift á kyn og aldur";
 VALUENOTE[fo]("mát","Patur av fólkinum, ið livir av minni enn fátækamarkinum í landinum")="<u>Føroyska fátækamarkið</u> er her sett sum eitt fátæka<b>váða</b>mark, ið er 50% av miðvirðinum (medianini) av javnvirðisinntøkuni.#Hetta mátið leggur ikki upp fyri ognum ella sosiobúskaparstøðu.";

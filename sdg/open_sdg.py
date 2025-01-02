@@ -626,7 +626,7 @@ def open_sdg_translation_from_dict(params, options):
     del params['class']
 
     params['logging'] = options['logging']
-    params['indicator_options'] = options['indicator_options']
+    params['indicator_options'] = open_sdg_indicator_options_from_dict(options['indicator_options'])
 
     # For "source" in TranslationInputYaml/Csv we need to prepend our src_dir.
     if translation_class == 'TranslationInputCsv' or translation_class == 'TranslationInputYaml':

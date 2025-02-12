@@ -35,9 +35,9 @@ class InputPxFile(InputBase):
 
     def execute(self, indicator_options):
         def replace_value(value):
-            if value == '-':
+            if value == '"-"':
                 return 0
-            elif value in ['.', '..', '...']:
+            elif value in ['"."', '".."', '"..."',]: 
                 return None
             else:
                 return value

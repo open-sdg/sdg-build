@@ -67,6 +67,7 @@ class InputPxFile(InputBase):
             df['Value'] = df['Value'].apply(replace_value)
             df['Value'] = pd.to_numeric(df['Value'])
             df['Year'] = pd.to_numeric(df['Year'])
+            df = df.dropna(subset=['Value'])
             # Prepare the metadata but only with translation keys, since
             # the actual content will be gathered in the translation input.
             keywords = px.keywords()

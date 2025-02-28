@@ -67,6 +67,7 @@ class OutputOpenSdg(OutputBase):
         )
 
         for indicator_id in self.get_indicator_ids():
+            self.debug(f'Building {indicator_id}')
             indicator = self.get_indicator_by_id(indicator_id).language(language)
             # Use the methodology to calculate a progress status.
             progress_status = IndicatorProgress(

@@ -1,3 +1,4 @@
+import numpy as np
 from sdg import Loggable
 
 class IndicatorProgress(Loggable):
@@ -70,7 +71,7 @@ class IndicatorProgress(Loggable):
                     targets.append(series.target_achieved)
             # Update the indicator score and progress status
             if scores:
-                indicator_score = min(scores)
+                indicator_score = np.median(scores)
                 target_achieved = all(targets) # True only when targets for all series are achieved
                 indicator_status = get_progress_status_from_score(indicator_score, target_achieved)
 
@@ -108,48 +109,69 @@ class IndicatorProgress(Loggable):
 class SeriesProgress(IndicatorProgress):
     # inherit the indicator-level attributes and methods
     def __init__(self, indicator, config={}, logging=None):
-
+        # Initialize series attributes
         self.config = config_defaults(config)
+        self.base_year = None
+        self.base_value = None
+        self.current_year = None
+        self.current_value = None
+        self.target_year = None
+        self.target = None
+        self.direction = None
+        self.sign = None
+        self.method = None
+        self.progress_thresholds = {}
+        self.target_achieved = None
+        self.progress_value = None
+        self.status = 'not_available'
+        self.score = None
 
         IndicatorProgress.__init__(self, indicator, logging=logging)
 
         # Filter data and update the config with key values for the progress calculation
         self.data = self.filter_data()
-        self.config = self.update_config()
+        if self.data is None:
+            self.warn(f'{self.inid}: No data found for progress calculation: {self.config}')
+        else:
+            self.config = self.update_config()
 
-        self.base_year = self.config.get('base_year')
-        self.base_value = self.config.get('base_value')
-        self.current_year = self.config.get('current_year')
-        self.current_value = self.config.get('current_value')
-        self.target_year = self.config.get('target_year')
-        self.target = self.config.get('target')
-        self.direction = -1 if self.config.get('direction') == 'negative' else 1
-        self.sign = -1 if self.base_value < 0 else 1 # note: base_value = 0 is invalid, would get zero division error in growth calculation
-        
-        self.method = 1 if self.target is None else 2 # method is 1 for qualitative or 2 for quantitative
-        self.progress_thresholds = self.get_progress_thresholds() # may not want to allow user to configure progress thresholds
-        
-        self.target_achieved = self.is_target_achieved()
-        self.progress_value = self.calculate_progress_value()
-        self.status = get_progress_status(self.progress_value, self.progress_thresholds, self.target_achieved)
-        self.score = self.get_score()
+            self.base_year = self.config.get('base_year')
+            self.base_value = self.config.get('base_value')
+            self.current_year = self.config.get('current_year')
+            self.current_value = self.config.get('current_value')
+            self.target_year = self.config.get('target_year')
+            self.target = self.config.get('target')
+            self.direction = -1 if self.config.get('direction') == 'negative' else 1
+            self.sign = -1 if self.base_value < 0 else 1 # note: base_value = 0 is invalid, would get zero division error in growth calculation
+            
+            self.method = 1 if self.target is None else 2 # method is 1 for qualitative or 2 for quantitative
+            self.progress_thresholds = self.get_progress_thresholds() # may not want to allow user to configure progress thresholds
+            
+            self.target_achieved = self.is_target_achieved()
+            self.progress_value = self.calculate_progress_value()
+            self.status = get_progress_status(self.progress_value, self.progress_thresholds, self.target_achieved)
+            self.score = self.get_score()
 
     def update_config(self):
-        # get years that exist in the data
-        years = self.data["Year"]
-    
-        # set current year to be the most recent year that exists in data
-        self.config['current_year'] = years.max()
-        self.config['current_value'] = self.data.Value[self.data.Year == self.config['current_year']].item() # GET ERROR HERE IF DISAGGREGATION SELECTION NOT SUFFICIENTLY REDUCED
-    
-        # check if the base year input exists in the data
-        if self.config['base_year'] not in years.values:
-            # if the base year is not in the available data, assign it to be the next available year
-            self.config['base_year'] = years[years > self.config['base_year']].min()
-        # Set the base value
-        self.config['base_value'] = self.data.Value[self.data.Year == self.config['base_year']].item()
+        # do nothing if there is no data
+        if self.data is None:
+            return self.config
+        else:
+            # get years that exist in the data
+            years = self.data["Year"]
+        
+            # set current year to be the most recent year that exists in data
+            self.config['current_year'] = years.max()
+            self.config['current_value'] = self.data.Value[self.data.Year == self.config['current_year']].item() # GET ERROR HERE IF DISAGGREGATION SELECTION NOT SUFFICIENTLY REDUCED
+        
+            # check if the base year input exists in the data
+            if self.config['base_year'] not in years.values:
+                # if the base year is not in the available data, assign it to be the next available year
+                self.config['base_year'] = years[years > self.config['base_year']].min()
+            # Set the base value
+            self.config['base_value'] = self.data.Value[self.data.Year == self.config['base_year']].item()
 
-        return self.config
+            return self.config
     
     def filter_data(self):
         data = self.data
@@ -206,7 +228,7 @@ class SeriesProgress(IndicatorProgress):
         """
         # Run checks on config settings before calculating progress.
         if self.data is None:
-            self.warn(f'{self.inid}: No data found for progress calculation')
+            self.warn(f'{self.inid}: No data found for progress calculation: {self.config}')
             return None
         if not all_rows_unique(self.data):
             self.warn(f'{self.inid}: Duplicate rows detected in data selected for progress calculation: {self.config}')

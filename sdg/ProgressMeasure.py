@@ -205,11 +205,12 @@ class SeriesProgress(IndicatorProgress):
         if len(data.columns) > 2:
             # Data has auxiliary and/or disaggregation columns. Find the appropriate subset of data for progress calculation
             
-            # Remove auxiliary information columns (observation attributes and GeoCode), if present
-            aux_columns = [col for col in self.indicator.options.get_observation_attributes() if col in data.columns]
-            if 'GeoCode' in data.columns:
-                aux_columns.append('GeoCode')
-            data = data.drop(columns=aux_columns)
+            # Drop any columns not relevant to filtering or progress calculation, e.g. non-disaggregation columns, observation attribute columns
+            drop_columns = self.non_disaggregation_columns + self.indicator.options.get_observation_attributes()
+            # Remove required non-disaggregation columns (Year, Value, Series, Units, Progress) from drop list
+            drop_columns = [col for col in drop_columns if col not in ['Year', self.series_column, self.unit_column, self.progress_column, 'Value']]
+            # Drop any irrelevant columns present in data
+            data = data.drop(columns=drop_columns, errors='ignore')
 
             # If progress column is present, replace values with those from the progress column and drop progress column
             if self.progress_column in data.columns:

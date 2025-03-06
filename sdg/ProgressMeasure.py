@@ -15,7 +15,6 @@ class IndicatorProgress(Loggable):
         # self.auto_progress_calculation = self.meta.get('auto_progress_calculation') is True
         # self.progress_calculation_options = self.get_progress_calculation_options()
 
-        self.cols = self.data.columns
         self.series_column = self.indicator.options.series_column
         self.unit_column = self.indicator.options.unit_column
         self.progress_column = self.indicator.options.progress_column
@@ -109,8 +108,12 @@ class IndicatorProgress(Loggable):
 class SeriesProgress(IndicatorProgress):
     # inherit the indicator-level attributes and methods
     def __init__(self, indicator, config={}, logging=None):
+
+        IndicatorProgress.__init__(self, indicator, logging=logging)
+        
         # Initialize series attributes
         self.config = config_defaults(config)
+        self.tag = self.get_series_tag()
         self.base_year = None
         self.base_value = None
         self.current_year = None
@@ -126,12 +129,10 @@ class SeriesProgress(IndicatorProgress):
         self.status = 'not_available'
         self.score = None
 
-        IndicatorProgress.__init__(self, indicator, logging=logging)
-
         # Filter data and update the config with key values for the progress calculation
         self.data = self.filter_data()
         if self.data is None:
-            self.warn(f'{self.inid}: No data found for progress calculation: {self.config}')
+            self.warn(f'{self.inid}: No data found for progress calculation of series: {self.tag}')
         else:
             self.config = self.update_config()
 
@@ -152,6 +153,17 @@ class SeriesProgress(IndicatorProgress):
             self.status = get_progress_status(self.progress_value, self.progress_thresholds, self.target_achieved)
             self.score = self.get_score()
 
+    def get_series_tag(self):
+        tag = {}
+        if 'series' in self.config:
+            tag[self.series_column] = self.config['series']
+        if 'unit' in self.config:
+            tag[self.unit_column] = self.config['unit']
+        if 'disaggregation' in self.config:
+            for disagg in self.config['disaggregation']:
+                tag[disagg['field']] = disagg['value']
+        return tag
+        
     def update_config(self):
         # do nothing if there is no data
         if self.data is None:
@@ -173,6 +185,16 @@ class SeriesProgress(IndicatorProgress):
 
             return self.config
     
+    def filter_column(self, data, column, field):
+        if column in data.columns:
+            if any(data[column] == field):
+                data = data.loc[data[column] == field]
+            else:
+                self.warn(f'{self.inid} - Field {field} not found in column {column} for progress calculation of series: {self.tag}')
+        else:
+            self.warn(f'{self.inid} - Column {column} not found in data for progress calculation of series: {self.tag}')
+        return data
+    
     def filter_data(self):
         data = self.data
         # check if the year value contains more than 4 digits (indicating a range of years)
@@ -180,38 +202,59 @@ class SeriesProgress(IndicatorProgress):
             # take the first year in the range
             data['Year'] = data['Year'].astype(str).str.slice(0, 4).astype(int)
 
-        if len(self.cols) > 2:
-            # Data has disaggregation columns. Find the appropriate subset of data for progress calculation
+        if len(data.columns) > 2:
+            # Data has auxiliary and/or disaggregation columns. Find the appropriate subset of data for progress calculation
+            
+            # Remove auxiliary information columns (observation attributes and GeoCode), if present
+            aux_columns = [col for col in self.indicator.options.get_observation_attributes() if col in data.columns]
+            if 'GeoCode' in data.columns:
+                aux_columns.append('GeoCode')
+            data = data.drop(columns=aux_columns)
+
+            # If progress column is present, replace values with those from the progress column and drop progress column
+            if self.progress_column in data.columns:
+                data = data.assign(Value=data[self.progress_column])
+                data = data.drop(columns=self.progress_column)                
+            
             # If units and/or series columns exist, keep only the user selected unit/series
-            if (self.unit_column in self.cols) and ('unit' in self.config.keys()):
-                data = data.loc[data[self.unit_column] == self.config['unit']]
-            if (self.series_column in self.cols) and ('series' in self.config.keys()):
-                data = data.loc[data[self.series_column] == self.config['series']]
+            if self.config.get('unit') is not None:
+                data = self.filter_column(data, self.unit_column, self.config['unit'])
+            if self.config.get('series') is not None:
+                data = self.filter_column(data, self.series_column, self.config['series'])
             # If disaggregation specified by user, reduce the dataframe to only include the selected disaggregation
             disaggregations = self.config.get('disaggregation')
             if disaggregations:
                 for disagg in disaggregations:
-                    data = data.loc[data[disagg['field']] == disagg['value']]
+                    data = self.filter_column(data, disagg['field'], disagg['value'])
             # Otherwise, find headline data (rows where values in all disaggregation dimensions are NA)
             else:
-                data = data[data.loc[:, ~self.cols.isin(self.non_disaggregation_columns)].isna().all('columns')]
+                headline = data[data.loc[:, ~data.columns.isin(self.non_disaggregation_columns)].isna().all('columns')]
+                if (len(headline) == 0) and (len(headline) < len(data)):
+                    raise Exception(f'{self.inid} - No headline found for progress calculation of series: {self.tag}')
+                data = headline
+            
+            # Check if data was sufficiently reduced to a single series/unit/disaggregation
+            grouping_columns = [col for col in data.columns if col not in ['Year', 'Value']]
+            for col in grouping_columns:
+                unique_groups = data[col].unique()
+                if len(unique_groups) > 1:
+                    raise Exception(f'{self.inid} - Detected many sub-series ({col}: {unique_groups}) at filter output for progress calculation of series: {self.tag}.')
 
-            if self.progress_column in self.cols:
-                # Replace values with those from the progress column, then drop progress column
-                data = data.assign(Value=data[self.progress_column])
-                # data['Value'] = data[self.progress_column]
-                # data.drop(self.progress_column, axis=1, inplace=True)
             # Keep only Year and Value columns
             data = data[['Year', 'Value']]
-
-            # To do: 
-            # What if no unit/series is selected by user but series/units column(s) exist? --> Warn user and return not_available progress status
-            # Fix: Warn user when data not sufficiently reduced by settings. There can be multiple values for the same year, so return not_available progress status
 
         # remove any NA values from data
         data = data[data["Value"].notna()]
         # cast values to float
         data["Value"] = data["Value"].astype('float')
+
+        # Raise exception if there are duplicate years in data.
+        duped_years = data.loc[data['Year'].duplicated(False)]
+        if duped_years.empty is False:
+            error_messages = []
+            for year, value in duped_years.values:
+                error_messages.append(f'{self.inid} - Duplicate value for year {int(year)}: {value} for progress calculation of series: {self.tag}')
+            raise Exception('\n'.join(error_messages))
 
         # returns None if no rows in data
         if data.shape[0] < 1:
@@ -228,20 +271,20 @@ class SeriesProgress(IndicatorProgress):
         """
         # Run checks on config settings before calculating progress.
         if self.data is None:
-            self.warn(f'{self.inid}: No data found for progress calculation: {self.config}')
+            self.warn(f'{self.inid}: No data found for progress calculation of series: {self.tag}')
             return None
         if not all_rows_unique(self.data):
-            self.warn(f'{self.inid}: Duplicate rows detected in data selected for progress calculation: {self.config}')
+            self.warn(f'{self.inid}: Duplicate rows detected in data selected for progress calculation of series: {self.tag}')
             return None            
         if self.base_value == 0:
-            self.warn(f'{self.inid}: Base value is zero (invalid)')
+            self.warn(f'{self.inid}: Base value is zero (invalid) for series: {self.tag}')
             return None
         # return None if the base year input is in the future of the most recently available data
         if self.base_year > self.current_year:
-            self.warn(f'{self.inid}: Base year is greater than the most recent available data: {self.config}')
+            self.warn(f'{self.inid}: Base year ({self.base_year}) is greater than the most recent available data ({self.current_year}) for series: {self.tag}')
             return None
         if self.current_year - self.base_year < 1:
-            self.warn(f'{self.inid}: Not enough data to calculate progress (must have at least 2 data points): {self.config}')
+            self.warn(f'{self.inid}: Not enough data to calculate progress (must have at least 2 data points) of series: {self.tag}')
             return None
     
         if self.method == 1:

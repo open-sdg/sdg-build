@@ -155,7 +155,7 @@ class SeriesProgress(IndicatorProgress):
     def get_series_tag(self):
         """Return a dict that identifies the desired series on which progress is intended to be calculated.
         """
-        tag = {}
+        tag = {'indicator': self.inid}
         if 'series' in self.config:
             tag[self.series_column] = self.config['series']
         if 'unit' in self.config:
@@ -177,7 +177,7 @@ class SeriesProgress(IndicatorProgress):
         
             # set current year to be the most recent year that exists in data
             self.config['current_year'] = years.max()
-            self.config['current_value'] = self.data.Value[self.data.Year == self.config['current_year']].item() # GET ERROR HERE IF DISAGGREGATION SELECTION NOT SUFFICIENTLY REDUCED
+            self.config['current_value'] = self.data.Value[self.data.Year == self.config['current_year']].item()
         
             # check if the base year input exists in the data
             if self.config['base_year'] not in years.values:
@@ -280,20 +280,23 @@ class SeriesProgress(IndicatorProgress):
         """
         # Run checks on config settings before calculating progress.
         if self.data is None:
-            self.warn(f'{self.inid}: No data found for progress calculation of series: {self.tag}')
+            self.warn(f'{self.inid} - No data found for progress calculation of series: {self.tag}')
             return None
         if not all_rows_unique(self.data):
-            self.warn(f'{self.inid}: Duplicate rows detected in data selected for progress calculation of series: {self.tag}')
-            return None            
+            self.warn(f'{self.inid} - Duplicate rows detected in data selected for progress calculation of series: {self.tag}')
+            return None
         if self.base_value == 0:
-            self.warn(f'{self.inid}: Base value is zero (invalid) for series: {self.tag}')
+            self.warn(f'{self.inid} - Base value is zero (invalid) for series: {self.tag}')
+            return None
+        if (self.base_value > 0 and self.current_value < 0) or (self.base_value < 0 and self.current_value > 0):
+            self.warn(f'{self.inid} - Base value ({self.base_value}) and current value ({self.current_value}) must both be positive or both negative for progress calculation of series: {self.tag}. Consider converting data values to an all positive or all negative basis in a progress column (see documentation).')
             return None
         # return None if the base year input is in the future of the most recently available data
         if self.base_year > self.current_year:
-            self.warn(f'{self.inid}: Base year ({self.base_year}) is greater than the most recent available data ({self.current_year}) for series: {self.tag}')
+            self.warn(f'{self.inid} - Base year ({self.base_year}) is greater than the most recent available data ({self.current_year}) for series: {self.tag}')
             return None
         if self.current_year - self.base_year < 1:
-            self.warn(f'{self.inid}: Not enough data to calculate progress (must have at least 2 data points) of series: {self.tag}')
+            self.warn(f'{self.inid} - Not enough data to calculate progress (must have at least 2 data points) of series: {self.tag}')
             return None
     
         if self.method == 1:

@@ -2,6 +2,7 @@ import numpy as np
 from sdg import Loggable
 
 class IndicatorProgress(Loggable):
+    """Indicator-level progress class"""
     def __init__(self, indicator, logging=None, cache_store=None):
 
         Loggable.__init__(self, logging=logging)
@@ -54,31 +55,32 @@ class IndicatorProgress(Loggable):
         indicator_status = 'not_available'
 
         # Check if progress calculation is turned on
-        if self.meta.get('auto_progress_calculation') is True:
-            # First try to use caching.
-            if self.cache_store is not None and self.inid in self.cache_store:
-                # self.debug(f'{self.inid} progress from cache')
-                return self.cache_store[self.inid]
-            # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
-            scores = []
-            targets = []
-            for config in self.get_progress_calculation_options():
-                series = SeriesProgress(self.indicator, config, logging=self.logging)
-                score = series.score
-                if score is not None:
-                    scores.append(score)
-                    targets.append(series.target_achieved)
-            # Update the indicator score and progress status
-            if scores:
-                indicator_score = np.median(scores)
-                target_achieved = all(targets) # True only when targets for all series are achieved
-                indicator_status = get_progress_status_from_score(indicator_score, target_achieved)
-
-        else:
-            # Use any progress status available in the metadata as a manual override
-            if 'progress_status' in self.meta.keys():
-                indicator_status = self.meta['progress_status']
-                # indicator_score is None
+        if self.meta is not None:
+            if self.meta.get('auto_progress_calculation') is True:
+                # First try to use caching.
+                if self.cache_store is not None and self.inid in self.cache_store:
+                    # self.debug(f'{self.inid} progress from cache')
+                    return self.cache_store[self.inid]
+                # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
+                scores = []
+                targets = []
+                for config in self.get_progress_calculation_options():
+                    series = SeriesProgress(self.indicator, config, logging=self.logging)
+                    score = series.score
+                    if score is not None:
+                        scores.append(score)
+                        targets.append(series.target_achieved)
+                # Update the indicator score and progress status
+                if scores:
+                    indicator_score = np.median(scores)
+                    target_achieved = all(targets) # True only when targets for all series are achieved
+                    indicator_status = get_progress_status_from_score(indicator_score, target_achieved)
+    
+            else:
+                # Use any progress status available in the metadata as a manual override
+                if 'progress_status' in self.meta.keys():
+                    indicator_status = self.meta['progress_status']
+                    # indicator_score is None
 
         # Result to return is tuple of indicator score and progress status
         result = (indicator_score, indicator_status)
@@ -106,9 +108,11 @@ class IndicatorProgress(Loggable):
 
 
 class SeriesProgress(IndicatorProgress):
-    # inherit the indicator-level attributes and methods
+    """Series-level progress class.
+    A series refers to a single time series in the indicator data."""
     def __init__(self, indicator, config={}, logging=None):
 
+        # inherit the indicator-level attributes and methods
         IndicatorProgress.__init__(self, indicator, logging=logging)
         
         # Initialize series attributes
@@ -118,11 +122,11 @@ class SeriesProgress(IndicatorProgress):
         self.base_value = None
         self.current_year = None
         self.current_value = None
-        self.target_year = None
-        self.target = None
-        self.direction = None
+        self.target_year = self.config.get('target_year')
+        self.target = self.config.get('target')
+        self.direction = -1 if self.config.get('direction') == 'negative' else 1
         self.sign = None
-        self.method = None
+        self.method = 1 if self.target is None else 2 # method is 1 for qualitative or 2 for quantitative
         self.progress_thresholds = {}
         self.target_achieved = None
         self.progress_value = None
@@ -140,12 +144,7 @@ class SeriesProgress(IndicatorProgress):
             self.base_value = self.config.get('base_value')
             self.current_year = self.config.get('current_year')
             self.current_value = self.config.get('current_value')
-            self.target_year = self.config.get('target_year')
-            self.target = self.config.get('target')
-            self.direction = -1 if self.config.get('direction') == 'negative' else 1
             self.sign = -1 if self.base_value < 0 else 1 # note: base_value = 0 is invalid, would get zero division error in growth calculation
-            
-            self.method = 1 if self.target is None else 2 # method is 1 for qualitative or 2 for quantitative
             self.progress_thresholds = self.get_progress_thresholds() # may not want to allow user to configure progress thresholds
             
             self.target_achieved = self.is_target_achieved()
@@ -154,6 +153,8 @@ class SeriesProgress(IndicatorProgress):
             self.score = self.get_score()
 
     def get_series_tag(self):
+        """Return a dict that identifies the desired series on which progress is intended to be calculated.
+        """
         tag = {}
         if 'series' in self.config:
             tag[self.series_column] = self.config['series']
@@ -165,6 +166,8 @@ class SeriesProgress(IndicatorProgress):
         return tag
         
     def update_config(self):
+        """Lookup and update config values for current_year, current_value, base_year, and base_value based on series data.
+        """
         # do nothing if there is no data
         if self.data is None:
             return self.config
@@ -186,6 +189,8 @@ class SeriesProgress(IndicatorProgress):
             return self.config
     
     def filter_column(self, data, column, field):
+        """Filter the input dataframe, keeping only rows where the value in 'column' is equal to 'field'.
+        """
         if column in data.columns:
             if any(data[column] == field):
                 data = data.loc[data[column] == field]
@@ -196,6 +201,9 @@ class SeriesProgress(IndicatorProgress):
         return data
     
     def filter_data(self):
+        """Prepare indicator data and filter it, keeping only the relevant data for calculating the progress of the desired series/unit/disaggregation. 
+        Return the filtered dataframe.      
+        """
         data = self.data
         # check if the year value contains more than 4 digits (indicating a range of years)
         if (data['Year'].astype(str).str.len() > 4).any():
@@ -324,13 +332,17 @@ class SeriesProgress(IndicatorProgress):
         return self.sign * self.direction * cagr_o / abs(cagr_r)
             
     def is_target_achieved(self):
+        """Returns True if the current value achieves the target, False otherwise.
+        """
         if self.target is not None:
             if (self.direction == -1 and self.current_value <= self.target) or (self.direction == 1 and self.current_value >= self.target):
                 return True
         return False
         
     def get_score(self):
-
+        """Returns the progress score [-5, 5] that corresponds to the calculated progress value for the series.
+        If target is achieved, return 5 regardless of calculated progress value.
+        """
         if self.progress_value is None:
             return None
         
@@ -342,7 +354,7 @@ class SeriesProgress(IndicatorProgress):
         low = self.progress_thresholds['low']
         # Note: progress_thresholds are already reduced by the reduction coefficient
 
-        if self.method == 1:
+        if self.method == 1: # qualitative target
             # Normalize progress values based on progress thresholds
             coeff = self.progress_thresholds.get('coefficient', 1) # coeff value defaults to 1 if not available
             reduced_progress = self.progress_value/coeff
@@ -354,7 +366,7 @@ class SeriesProgress(IndicatorProgress):
                 return 500*reduced_progress-2.5
             if self.progress_value < low:
                 return max(125*reduced_progress-2.5, -5)
-        else: # method == 2
+        else: # method == 2, quantitative target
             if self.progress_value >= high:
                 return min((7.1429 * self.progress_value) - 4.2857, 5)
             if self.progress_value >= med:

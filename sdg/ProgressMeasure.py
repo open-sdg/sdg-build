@@ -388,6 +388,7 @@ class SeriesProgress(IndicatorProgress):
         """      
         # Get the user configured progress thresholds from the metadata.
         user_thresholds = self.config.get('progress_thresholds')
+        limit = self.config.get('limit')
 
         # Begin with the default progress thresholds for each method and update these with user configured thresholds, if present.
         if self.method == 1:
@@ -396,7 +397,6 @@ class SeriesProgress(IndicatorProgress):
             progress_thresholds.update(user_thresholds)
 
             # Reduce thresholds when near limit
-            limit = self.config.get('limit')
             if limit is not None:
                 if (self.base_value < limit) and (self.direction == -1):
                     self.warn(f'{self.inid} - Base value ({self.base_value}) is below minimum limit ({limit}). Progress calculation may yield unexpected results for series: {self.tag}')
@@ -420,6 +420,9 @@ class SeriesProgress(IndicatorProgress):
             # Quantitative method thresholds
             progress_thresholds = {'high': 0.95, 'med': 0.6, 'low': 0}
             progress_thresholds.update(user_thresholds)
+
+            if limit is not None:
+                self.warn(f'{self.inid} - Ignoring limit ({limit}) as target ({self.target}) already provided for progress calculation of series: {self.tag}')
 
         return progress_thresholds
 

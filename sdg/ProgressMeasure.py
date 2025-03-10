@@ -32,7 +32,7 @@ class IndicatorProgress(Loggable):
             # progress_calc_opts is a list of dictionaries
             # each dictionary corresponds to the options for one series/unit/disaggregation
             if progress_calc_opts:
-                return [config_defaults(config) for config in progress_calc_opts]
+                return [config for config in progress_calc_opts]
             else:
                 return [default_progress_calc_options()]
 
@@ -116,8 +116,10 @@ class SeriesProgress(IndicatorProgress):
         IndicatorProgress.__init__(self, indicator, logging=logging)
         
         # Initialize series attributes
-        self.config = config_defaults(config)
+        self.config = config
         self.tag = self.get_series_tag()
+        
+        self.config = self.config_defaults() # apply default config settings
         self.base_year = None
         self.base_value = None
         self.current_year = None
@@ -284,10 +286,10 @@ class SeriesProgress(IndicatorProgress):
             return None
         if not all_rows_unique(self.data):
             self.warn(f'{self.inid} - Duplicate rows detected in data selected for progress calculation of series: {self.tag}')
-            return None          
-        if self.base_value == 0:
-            self.warn(f'{self.inid} - Base value is zero (invalid) for series: {self.tag}')
             return None
+        if self.base_value == 0:
+            self.warn(f'{self.inid} - Base value is zero (invalid) for progress calculation of series: {self.tag}. Calculating progress with base value = 0.001 instead.')
+            self.base_value = 0.001
         if (self.base_value > 0 and self.current_value < 0) or (self.base_value < 0 and self.current_value > 0):
             self.warn(f'{self.inid} - Base value ({self.base_value}) and current value ({self.current_value}) must both be positive or both negative for progress calculation of series: {self.tag}. Consider converting data values to an all positive or all negative basis in a progress column (see documentation).')
             return None
@@ -405,12 +407,12 @@ class SeriesProgress(IndicatorProgress):
                 base_value = abs(self.base_value)
                 limit = abs(limit)
                 a = 4.44
-                if base_value <= limit:
-                    coeff = 1 - (base_value/limit)**a
-                elif base_value <= 2*limit:
-                    coeff = 1 - ((2*limit - base_value)/limit)**a
-                else:
+                if base_value >= 2*limit: # check this condition first because want coeff = 1 if base_value and limit are both zero
                     coeff = 1
+                elif base_value <= limit:
+                    coeff = 1 - (base_value/limit)**a
+                else:
+                    coeff = 1 - ((2*limit - base_value)/limit)**a
             
                 for key in ['high', 'med', 'low']:
                     progress_thresholds[key] *= coeff
@@ -426,25 +428,23 @@ class SeriesProgress(IndicatorProgress):
 
         return progress_thresholds
 
+    def config_defaults(self):
+        """Set progress calculation defaults and update them if any user inputs exist.
+        Returns:
+            dict: Dictionary of updated configurations.
+        """
+        # set default options for progress measurement
+        defaults = default_progress_calc_options()
+        # update the defaults with any user configured inputs
+        defaults.update(self.config)
 
-def config_defaults(config={}):
-    """Set progress calculation defaults and update them if any user inputs exist.
-    Args:
-        config: dict. Indicator configurations passed as a dictionary.
-    Returns:
-        dict: Dictionary of updated configurations.
-    """
+        # if target is 0, set to 0.001 (avoids dividing by 0 in calculation)
+        if defaults['target'] == 0:
+            self.warn(f'{self.inid} - Target is zero (invalid) for progress calculation of series: {self.tag}. Calculating progress with target = 0.001 instead.')
+            defaults['target'] = 0.001
 
-    # set default options for progress measurement
-    defaults = default_progress_calc_options()
-    # update the defaults with any user configured inputs
-    defaults.update(config)
+        return defaults
 
-    # if target is 0, set to 0.001 (avoids dividing by 0 in calculation)
-    if defaults['target'] == 0:
-        defaults['target'] = 0.001
-
-    return defaults
 
 def default_progress_calc_options():
     """Provide default inputs for calculating progress."""

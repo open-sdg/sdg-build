@@ -284,7 +284,7 @@ class SeriesProgress(IndicatorProgress):
             return None
         if not all_rows_unique(self.data):
             self.warn(f'{self.inid} - Duplicate rows detected in data selected for progress calculation of series: {self.tag}')
-            return None
+            return None          
         if self.base_value == 0:
             self.warn(f'{self.inid} - Base value is zero (invalid) for series: {self.tag}')
             return None
@@ -357,18 +357,20 @@ class SeriesProgress(IndicatorProgress):
         low = self.progress_thresholds['low']
         # Note: progress_thresholds are already reduced by the reduction coefficient
 
+        # Score functions hardcoded based on default progress thresholds!
         if self.method == 1: # qualitative target
-            # Normalize progress values based on progress thresholds
             coeff = self.progress_thresholds.get('coefficient', 1) # coeff value defaults to 1 if not available
-            reduced_progress = self.progress_value/coeff
-            if self.progress_value >= high:
-                return min(500*reduced_progress-5, 5)
-            if self.progress_value >= med:
-                return 250*reduced_progress-1.25
-            if self.progress_value >= low:
-                return 500*reduced_progress-2.5
             if self.progress_value < low:
-                return max(125*reduced_progress-2.5, -5)
+                return max(125*self.progress_value-2.5, -5)
+            if coeff == 0: # base value is equal to limit and progress value is >= 0, so limit is maintained or exceeded --> substantial progress
+                return 5
+            # When making progress in the desired direction, normalize progress value to same basis as reduced threshold
+            if self.progress_value >= high:
+                return min(500*self.progress_value/coeff-5, 5)
+            if self.progress_value >= med:
+                return 250*self.progress_value/coeff-1.25
+            if self.progress_value >= low:
+                return 500*self.progress_value/coeff-2.5
         else: # method == 2, quantitative target
             if self.progress_value >= high:
                 return min((7.1429 * self.progress_value) - 4.2857, 5)
@@ -396,6 +398,10 @@ class SeriesProgress(IndicatorProgress):
             # Reduce thresholds when near limit
             limit = self.config.get('limit')
             if limit is not None:
+                if (self.base_value < limit) and (self.direction == -1):
+                    self.warn(f'{self.inid} - Base value ({self.base_value}) is below minimum limit ({limit}). Progress calculation may yield unexpected results for series: {self.tag}')
+                if (self.base_value > limit) and (self.direction == 1):
+                    self.warn(f'{self.inid} - Base value ({self.base_value}) is above maximum limit ({limit}). Progress calculation may yield unexpected results for series: {self.tag}')
                 base_value = abs(self.base_value)
                 limit = abs(limit)
                 a = 4.44

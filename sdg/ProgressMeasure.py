@@ -155,7 +155,7 @@ class SeriesProgress(IndicatorProgress):
             self.score = self.get_score()
 
     def get_series_tag(self):
-        """Return a dict that identifies the desired series on which progress is intended to be calculated.
+        """Return a dict that identifies the series for which progress is intended to be calculated.
         """
         tag = {'indicator': self.inid}
         if 'series' in self.config:
@@ -348,11 +348,11 @@ class SeriesProgress(IndicatorProgress):
         """Returns the progress score [-5, 5] that corresponds to the calculated progress value for the series.
         If target is achieved, return 5 regardless of calculated progress value.
         """
-        if self.progress_value is None:
-            return None
-        
         if self.target_achieved:
             return 5
+
+        if self.progress_value is None:
+            return None
         
         high = self.progress_thresholds['high']
         med = self.progress_thresholds['med']

@@ -72,7 +72,7 @@ class IndicatorProgress(Loggable):
                         targets.append(series.target_achieved)
                 # Update the indicator score and progress status
                 if scores:
-                    indicator_score = np.median(scores)
+                    indicator_score = np.mean(scores)
                     target_achieved = all(targets) # True only when targets for all series are achieved
                     indicator_status = get_progress_status_from_score(indicator_score, target_achieved)
     

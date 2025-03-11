@@ -25,16 +25,16 @@ class IndicatorProgress(Loggable):
         """
         Get progress calculation options from the indicator metadata.
         If progress calculation options are not specified in the metadata, 
-        return the default progress calculation options instead.
+        return list with empty dictionary.
         """
         if self.meta is not None:
             progress_calc_opts = self.meta.get('progress_calculation_options')
             # progress_calc_opts is a list of dictionaries
             # each dictionary corresponds to the options for one series/unit/disaggregation
             if progress_calc_opts:
-                return [config for config in progress_calc_opts]
+                return progress_calc_opts
             else:
-                return [default_progress_calc_options()]
+                return [{}]
 
     def get_indicator_progress(self):
         """
@@ -116,39 +116,53 @@ class SeriesProgress(IndicatorProgress):
         IndicatorProgress.__init__(self, indicator, logging=logging)
         
         # Initialize series attributes
-        self.config = config
+        self.series = config.get('series')
+        self.unit = config.get('unit')
+        self.disaggregation = config.get('disaggregation')
         self.tag = self.get_series_tag()
-        
-        self.config = self.config_defaults() # apply default config settings
-        self.base_year = None
+        # attributes from config
+        self.base_year = config.get('base_year', 2015) # defaults to 2015
+        self.target = config.get('target') # defaults to None
+        if self.target == 0:
+            self.warn(f'{self.inid} - Target is zero (invalid) for progress calculation of series: {self.tag}. Calculating progress with target = 0.001 instead.')
+            self.target = 0.001
+        self.target_year = config.get('target_year', 2030) # defaults to 2030
+        self.direction = 1 if config.get('direction') == 'positive' else -1 # defaults to negative (-1)
+        self.limit = config.get('limit') # defaults to None
+        self.method = 1 if self.target is None else 2 # method is 1 for qualitative or 2 for quantitative
+        self.progress_thresholds = config.get('progress_thresholds', {}) # may not want to allow user to configure progress thresholds
+        # other attributes
         self.base_value = None
         self.current_year = None
         self.current_value = None
-        self.target_year = self.config.get('target_year')
-        self.target = self.config.get('target')
-        self.direction = -1 if self.config.get('direction') == 'negative' else 1
         self.sign = None
-        self.method = 1 if self.target is None else 2 # method is 1 for qualitative or 2 for quantitative
-        self.progress_thresholds = {}
-        self.target_achieved = None
-        self.progress_value = None
+        self.target_achieved = False
         self.status = 'not_available'
         self.score = None
 
-        # Filter data and update the config with key values for the progress calculation
+        # Filter data
         self.data = self.filter_data()
+
         if self.data is None:
             self.warn(f'{self.inid}: No data found for progress calculation of series: {self.tag}')
         else:
-            self.config = self.update_config()
+            # Lookup and update values for current_year, current_value, base_year, and base_value based on data
+            years = self.data['Year']
+            # set current year to be the most recent year that exists in data
+            self.current_year = years.max()
+            self.current_value = self.data.Value[self.data.Year == self.current_year].item()
+            # check if the base year input exists in the data
+            if self.base_year not in years.values:
+                # if the base year is not in the available data, assign it to be the next available year
+                self.base_year = years[years > self.base_year].min()
+            # Set the base value
+            self.base_value = self.data.Value[self.data.Year == self.base_year].item()
 
-            self.base_year = self.config.get('base_year')
-            self.base_value = self.config.get('base_value')
-            self.current_year = self.config.get('current_year')
-            self.current_value = self.config.get('current_value')
+            # Update sign and progress_thresholds using updated base_value
             self.sign = -1 if self.base_value < 0 else 1 # note: base_value = 0 is invalid, would get zero division error in growth calculation
-            self.progress_thresholds = self.get_progress_thresholds() # may not want to allow user to configure progress thresholds
+            self.progress_thresholds = self.get_progress_thresholds()
             
+            # Get final results
             self.target_achieved = self.is_target_achieved()
             self.progress_value = self.calculate_progress_value()
             self.status = get_progress_status(self.progress_value, self.progress_thresholds, self.target_achieved)
@@ -158,37 +172,14 @@ class SeriesProgress(IndicatorProgress):
         """Return a dict that identifies the series for which progress is intended to be calculated.
         """
         tag = {'indicator': self.inid}
-        if 'series' in self.config:
-            tag[self.series_column] = self.config['series']
-        if 'unit' in self.config:
-            tag[self.unit_column] = self.config['unit']
-        if 'disaggregation' in self.config:
-            for disagg in self.config['disaggregation']:
+        if self.series is not None:
+            tag[self.series_column] = self.series
+        if self.unit is not None:
+            tag[self.unit_column] = self.unit
+        if self.disaggregation is not None:
+            for disagg in self.disaggregation:
                 tag[disagg['field']] = disagg['value']
         return tag
-        
-    def update_config(self):
-        """Lookup and update config values for current_year, current_value, base_year, and base_value based on series data.
-        """
-        # do nothing if there is no data
-        if self.data is None:
-            return self.config
-        else:
-            # get years that exist in the data
-            years = self.data["Year"]
-        
-            # set current year to be the most recent year that exists in data
-            self.config['current_year'] = years.max()
-            self.config['current_value'] = self.data.Value[self.data.Year == self.config['current_year']].item()
-        
-            # check if the base year input exists in the data
-            if self.config['base_year'] not in years.values:
-                # if the base year is not in the available data, assign it to be the next available year
-                self.config['base_year'] = years[years > self.config['base_year']].min()
-            # Set the base value
-            self.config['base_value'] = self.data.Value[self.data.Year == self.config['base_year']].item()
-
-            return self.config
     
     def filter_column(self, data, column, field):
         """Filter the input dataframe, keeping only rows where the value in 'column' is equal to 'field'.
@@ -228,14 +219,13 @@ class SeriesProgress(IndicatorProgress):
                 data = data.drop(columns=self.progress_column)                
             
             # If units and/or series columns exist, keep only the user selected unit/series
-            if self.config.get('unit') is not None:
-                data = self.filter_column(data, self.unit_column, self.config['unit'])
-            if self.config.get('series') is not None:
-                data = self.filter_column(data, self.series_column, self.config['series'])
+            if self.unit is not None:
+                data = self.filter_column(data, self.unit_column, self.unit)
+            if self.series is not None:
+                data = self.filter_column(data, self.series_column, self.series)
             # If disaggregation specified by user, reduce the dataframe to only include the selected disaggregation
-            disaggregations = self.config.get('disaggregation')
-            if disaggregations:
-                for disagg in disaggregations:
+            if self.disaggregation:
+                for disagg in self.disaggregation:
                     data = self.filter_column(data, disagg['field'], disagg['value'])
             # Otherwise, find headline data (rows where values in all disaggregation dimensions are NA)
             else:
@@ -291,7 +281,7 @@ class SeriesProgress(IndicatorProgress):
             self.warn(f'{self.inid} - Base value is zero (invalid) for progress calculation of series: {self.tag}. Calculating progress with base value = 0.001 instead.')
             self.base_value = 0.001
         if (self.base_value > 0 and self.current_value < 0) or (self.base_value < 0 and self.current_value > 0):
-            self.warn(f'{self.inid} - Base value ({self.base_value}) and current value ({self.current_value}) must both be positive or both negative for progress calculation of series: {self.tag}. Consider converting data values to an all positive or all negative basis in a progress column (see documentation).')
+            self.warn(f'{self.inid} - Base value ({self.base_value}) and current value ({self.current_value}) must both be positive or both negative for progress calculation of series: {self.tag}. Consider transforming data values to a valid form in a progress column (see documentation).')
             return None
         # return None if the base year input is in the future of the most recently available data
         if self.base_year > self.current_year:
@@ -389,8 +379,7 @@ class SeriesProgress(IndicatorProgress):
             progress_thresholds: dict. Dictionary of progress thresholds: {'high': x, 'med': y, 'low': z}
         """      
         # Get the user configured progress thresholds from the metadata.
-        user_thresholds = self.config.get('progress_thresholds')
-        limit = self.config.get('limit')
+        user_thresholds = self.progress_thresholds
 
         # Begin with the default progress thresholds for each method and update these with user configured thresholds, if present.
         if self.method == 1:
@@ -399,13 +388,13 @@ class SeriesProgress(IndicatorProgress):
             progress_thresholds.update(user_thresholds)
 
             # Reduce thresholds when near limit
-            if limit is not None:
-                if (self.base_value < limit) and (self.direction == -1):
-                    self.warn(f'{self.inid} - Base value ({self.base_value}) is below minimum limit ({limit}). Progress calculation may yield unexpected results for series: {self.tag}')
-                if (self.base_value > limit) and (self.direction == 1):
-                    self.warn(f'{self.inid} - Base value ({self.base_value}) is above maximum limit ({limit}). Progress calculation may yield unexpected results for series: {self.tag}')
+            if self.limit is not None:
+                if (self.base_value < self.limit) and (self.direction == -1):
+                    self.warn(f'{self.inid} - Base value ({self.base_value}) is below minimum limit ({self.limit}). Progress calculation may yield unexpected results for series: {self.tag}')
+                if (self.base_value > self.limit) and (self.direction == 1):
+                    self.warn(f'{self.inid} - Base value ({self.base_value}) is above maximum limit ({self.limit}). Progress calculation may yield unexpected results for series: {self.tag}')
                 base_value = abs(self.base_value)
-                limit = abs(limit)
+                limit = abs(self.limit)
                 a = 4.44
                 if base_value >= 2*limit: # check this condition first because want coeff = 1 if base_value and limit are both zero
                     coeff = 1
@@ -423,40 +412,11 @@ class SeriesProgress(IndicatorProgress):
             progress_thresholds = {'high': 0.95, 'med': 0.6, 'low': 0}
             progress_thresholds.update(user_thresholds)
 
-            if limit is not None:
-                self.warn(f'{self.inid} - Ignoring limit ({limit}) as target ({self.target}) already provided for progress calculation of series: {self.tag}')
+            if self.limit is not None:
+                self.warn(f'{self.inid} - Ignoring limit ({self.limit}) as target ({self.target}) already provided for progress calculation of series: {self.tag}')
 
         return progress_thresholds
 
-    def config_defaults(self):
-        """Set progress calculation defaults and update them if any user inputs exist.
-        Returns:
-            dict: Dictionary of updated configurations.
-        """
-        # set default options for progress measurement
-        defaults = default_progress_calc_options()
-        # update the defaults with any user configured inputs
-        defaults.update(self.config)
-
-        # if target is 0, set to 0.001 (avoids dividing by 0 in calculation)
-        if defaults['target'] == 0:
-            self.warn(f'{self.inid} - Target is zero (invalid) for progress calculation of series: {self.tag}. Calculating progress with target = 0.001 instead.')
-            defaults['target'] = 0.001
-
-        return defaults
-
-
-def default_progress_calc_options():
-    """Provide default inputs for calculating progress."""
-    return (
-        {
-            'base_year': 2015,
-            'target_year': 2030,
-            'direction': 'negative',
-            'target': None,
-            'progress_thresholds': {}
-        }
-    )
 
 def all_rows_unique(df, ignore_columns=['Value', 'Progress']):
     """

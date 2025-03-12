@@ -39,7 +39,7 @@ class IndicatorProgress(Loggable):
     def get_indicator_progress(self):
         """
         Read the progress calculation configurations from the indicator metadata and return the progress 
-        measure score and status for the indicator. The minimum progress score and associated progress 
+        measure score and status for the indicator. The mean progress score and associated progress 
         status are taken as the aggregate score for the indicator when multiple series, units, and/or 
         disaggregations are specified in the progress calculation configurations.
         When the progress calculation is turned off, any manually specified progress status found in the 
@@ -53,6 +53,7 @@ class IndicatorProgress(Loggable):
         # Initialize the score and progress status with defaults
         indicator_score = None
         indicator_status = 'not_available'
+        series_calculation_components = {}
 
         # Check if progress calculation is turned on
         if self.meta is not None:
@@ -60,7 +61,7 @@ class IndicatorProgress(Loggable):
                 # First try to use caching.
                 if self.cache_store is not None and self.inid in self.cache_store:
                     # self.debug(f'{self.inid} progress from cache')
-                    return self.cache_store[self.inid]
+                    return (self.cache_store[self.inid]['score'], self.cache_store[self.inid]['progress_status'])
                 # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
                 scores = []
                 targets = []
@@ -70,6 +71,7 @@ class IndicatorProgress(Loggable):
                     if score is not None:
                         scores.append(score)
                         targets.append(series.target_achieved)
+                    series_calculation_components.update(series.get_progress_calculation_components())
                 # Update the indicator score and progress status
                 if scores:
                     indicator_score = np.mean(scores)
@@ -85,11 +87,13 @@ class IndicatorProgress(Loggable):
         # Result to return is tuple of indicator score and progress status
         result = (indicator_score, indicator_status)
         
-        # Cache the result
+        # Cache the progress calculation components
+        indicator_calculation_components = {'progress_status': indicator_status, 'score': floatNone(indicator_score)}
+        indicator_calculation_components.update(series_calculation_components)  
         if self.cache_store is None:
-            self.cache_store = {self.inid: result}
+            self.cache_store = {self.inid: indicator_calculation_components}
         else:
-            self.cache_store[self.inid] = result
+            self.cache_store[self.inid] = indicator_calculation_components
 
         return result
 
@@ -137,6 +141,7 @@ class SeriesProgress(IndicatorProgress):
         self.current_value = None
         self.sign = None
         self.target_achieved = False
+        self.progress_value = None
         self.status = 'not_available'
         self.score = None
 
@@ -169,17 +174,17 @@ class SeriesProgress(IndicatorProgress):
             self.score = self.get_score()
 
     def get_series_tag(self):
-        """Return a dict that identifies the series for which progress is intended to be calculated.
+        """Return a string that identifies the series for which progress is intended to be calculated.
         """
-        tag = {'indicator': self.inid}
+        tag = [self.inid]
         if self.series is not None:
-            tag[self.series_column] = self.series
+            tag.append(self.series)
         if self.unit is not None:
-            tag[self.unit_column] = self.unit
+            tag.append(self.unit)
         if self.disaggregation is not None:
             for disagg in self.disaggregation:
-                tag[disagg['field']] = disagg['value']
-        return tag
+                tag.append(disagg['value'])
+        return ' / '.join(tag)
     
     def filter_column(self, data, column, field):
         """Filter the input dataframe, keeping only rows where the value in 'column' is equal to 'field'.
@@ -417,6 +422,26 @@ class SeriesProgress(IndicatorProgress):
 
         return progress_thresholds
 
+    def get_progress_calculation_components(self):
+        """Return a dict of the components for the progress calculation of this series.
+        """
+        return {
+            self.tag: {
+                'base_value': floatNone(self.base_value),
+                'base_year': floatNone(self.base_year),
+                'current_value': floatNone(self.current_value),
+                'current_year': floatNone(self.current_year),
+                'target': floatNone(self.target),
+                'target_year': floatNone(self.target_year),
+                'direction': self.direction,
+                'sign': self.sign,
+                'limit': self.limit,
+                'progress_value': floatNone(self.progress_value),
+                'status': self.status,
+                'score': floatNone(self.score)
+            }
+        }
+
 
 def all_rows_unique(df, ignore_columns=['Value', 'Progress']):
     """
@@ -505,3 +530,10 @@ def get_progress_status_from_score(score, target_achieved=False):
         return "limited_progress"
     elif -5 <= score < -2.5:
         return "deterioration"
+    
+def floatNone(x):
+    """Cast input value to float. 
+    If input value is None, do not attempt to cast to float and return None instead.
+    """
+    if x is not None:
+        return float(x)

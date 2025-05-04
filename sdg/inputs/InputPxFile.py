@@ -42,7 +42,7 @@ class InputPxFile(InputBase):
             else:
                 return value
         for source, indicator_ids in self.indicator_id_map.items():
-            pc_axis = self.fetch_file(source)
+            pc_axis = self.fetch_file(self.clean_remote_urls(source))
             px = Px(pc_axis)
             # Prepare the data.
             df = pd.DataFrame(px.entries())
@@ -97,3 +97,12 @@ class InputPxFile(InputBase):
         else:
             raise Exception("The indicator_id_map parameter is not configured correctly.")
         return {}
+
+
+    def clean_remote_urls(self, location):
+        if location.startswith('http'):
+            # Because the PXWeb interface is known to add
+            # ":443" to exported URLs, we automatically remove
+            # it here, as a onvenience.
+            location = location.replace(':443', '')
+        return location

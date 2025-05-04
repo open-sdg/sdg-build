@@ -84,6 +84,11 @@ class InputPxFile(InputBase):
                 if 'TITLE' in keywords:
                     metadata['graph_title'] = translation_group + '.graph_title'
                     metadata['indicator_name'] = translation_group + '.indicator_name'
+                # As a benefit to the Open SGD integration, if the data
+                # is empty, automatically flag it as a non-statistical
+                # indicator.
+                if df.empty:
+                    metadata['data_non_statistical'] = True
                 # Add the indicator.
                 self.add_indicator(indicator_id, data=df, meta=metadata, options=indicator_options)
 

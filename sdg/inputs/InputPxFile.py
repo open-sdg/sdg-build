@@ -81,6 +81,7 @@ class InputPxFile(InputBase):
                     metadata['computation_units'] = translation_group + '.computation_units'
                 if 'NOTE' in keywords:
                     metadata['data_footnote'] = translation_group + '.data_footnote'
+                    metadata['page_content'] = translation_group + '.page_content'
                 if 'TITLE' in keywords:
                     metadata['graph_title'] = translation_group + '.graph_title'
                     metadata['indicator_name'] = translation_group + '.indicator_name'

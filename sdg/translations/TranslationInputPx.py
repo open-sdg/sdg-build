@@ -80,6 +80,7 @@ class TranslationInputPx(TranslationInputBase):
                     try:
                         metadata_value = px.keyword('NOTE', language)
                         self.add_translation(language, translation_group, 'data_footnote', metadata_value)
+                        self.add_translation(language, translation_group, 'page_content', metadata_value)
                     except:
                         pass
                     try:

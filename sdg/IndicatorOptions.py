@@ -12,6 +12,7 @@ class IndicatorOptions:
         ]
         self.series_column = 'Series'
         self.unit_column = 'Units'
+        self.progress_column = 'Progress'
         self.observation_attributes = []
 
 
@@ -51,3 +52,11 @@ class IndicatorOptions:
 
     def get_unit_column(self):
         return self.unit_column
+    
+    def set_progress_column(self, column):
+        self.progress_column = column
+        return self
+
+
+    def get_progress_column(self):
+        return self.progress_column

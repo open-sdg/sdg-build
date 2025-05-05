@@ -203,6 +203,7 @@ def open_sdg_indicator_options_defaults():
             'Series',
             'Value',
             'GeoCode',
+            'Progress',
             'Observation status',
             'Unit multiplier',
             'Unit measure',
@@ -218,6 +219,7 @@ def open_sdg_indicator_options_defaults():
         ],
         'series_column': 'Series',
         'unit_column': 'Units',
+        'progress_column': 'Progress',
     }
 
 
@@ -233,6 +235,8 @@ def open_sdg_indicator_options_from_dict(options):
         options_obj.set_series_column(options['series_column'])
     if 'unit_column' in options:
         options_obj.set_unit_column(options['unit_column'])
+    if 'progress_column' in options:
+        options_obj.set_progress_column(options['progress_column'])
     return options_obj
 
 
@@ -358,6 +362,7 @@ def open_sdg_prep(options):
         logging=options['logging'],
         indicator_export_filename=options['indicator_export_filename'],
         ignore_out_of_scope_disaggregation_stats=options['ignore_out_of_scope_disaggregation_stats'],
+        cache_store = {},
     )
 
     if callable(options['alter_indicator']):

@@ -22,8 +22,13 @@ class TranslationInputSdmx(TranslationInputBase):
     you will need to use the same "dimension_map" here.
     """
 
-    def __init__(self, source='', dimension_map=None, logging=None,
-        request_params=None):
+    def __init__(self,
+        source='',
+        dimension_map=None,
+        logging=None,
+        request_params=None,
+        indicator_options=None,
+    ):
         """Constructor for the TranslationInputSdmx class.
 
         Parameters
@@ -36,8 +41,12 @@ class TranslationInputSdmx(TranslationInputBase):
         if dimension_map is None:
             dimension_map = {}
         self.dimension_map = dimension_map
-        TranslationInputBase.__init__(self, source=source, logging=logging,
-            request_params=request_params)
+        TranslationInputBase.__init__(self,
+            source=source,
+            logging=logging,
+            request_params=request_params,
+            indicator_options=indicator_options,
+        )
 
 
     def parse_xml(self, location, strip_namespaces=True):

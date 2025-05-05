@@ -1,0 +1,4 @@
+# This map can point PX files to one or more indicator ids.
+'tests/assets/data/px/SDG010201.px':
+  - 1.2.1
+  - 1.3.1

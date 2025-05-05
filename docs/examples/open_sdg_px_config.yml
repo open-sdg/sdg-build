@@ -1,0 +1,35 @@
+# This config file is for use with implementations of Open SDG. This file allows easy use
+# of this library without altering Python code.
+
+languages:
+  - en
+  - fo
+
+src_dir: ''
+
+inputs:
+  # This is the input of a PX file which pulls in both data and some metadata.
+  # It points to a separate file that maps PX files to indicators.
+  - class: InputPxFile
+    indicator_id_map: docs/examples/open_sdg_px_indicator_id_map.yml
+
+translations:
+  - class: TranslationInputSdgTranslations
+    source: https://github.com/open-sdg/sdg-translations.git
+    tag: master
+  # This is the input of the translations from the very same PX files. It
+  # should point to the same mapping file as the input.
+  - class: TranslationInputPx
+    indicator_id_map: docs/examples/open_sdg_px_indicator_id_map.yml
+
+site_dir: _site
+schema_file: docs/examples/_prose.yml
+reporting_status_extra_fields: []
+docs_branding: My build documentation
+docs_intro: This is a list of examples of endpoints and output that are
+  available on this service. Click each of the links below for more information
+  on the available output.
+docs_indicator_url: https://my-github-org/my-site-repository/[id]
+docs_extra_disaggregations:
+  - Units
+docs_translate_disaggregations: true

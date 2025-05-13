@@ -202,7 +202,7 @@ class SeriesProgress(IndicatorProgress):
         """Prepare indicator data and filter it, keeping only the relevant data for calculating the progress of the desired series/unit/disaggregation. 
         Return the filtered dataframe.      
         """
-        data = self.data
+        data = self.data.copy()
         # check if the year value contains more than 4 digits (indicating a range of years)
         if (data['Year'].astype(str).str.len() > 4).any():
             # take the first year in the range

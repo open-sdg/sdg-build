@@ -52,7 +52,7 @@ class IndicatorProgress(Loggable):
         """
         # Initialize the score and progress status with defaults
         indicator_score = None
-        indicator_status = 'not_available'
+        indicator_status = ''
         series_calculation_components = {}
 
         # Check if progress calculation is turned on

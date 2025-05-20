@@ -52,7 +52,7 @@ class IndicatorProgress(Loggable):
         """
         # Initialize the score and progress status with defaults
         indicator_score = None
-        indicator_status = 'not_available'
+        indicator_status = ''
         series_calculation_components = {}
 
         # Check if progress calculation is turned on
@@ -77,12 +77,15 @@ class IndicatorProgress(Loggable):
                     indicator_score = np.mean(scores)
                     target_achieved = all(targets) # True only when targets for all series are achieved
                     indicator_status = get_progress_status_from_score(indicator_score, target_achieved)
+                else:
+                    indicator_status = 'not_available'
+                    # indicator_score = None
     
             else:
                 # Use any progress status available in the metadata as a manual override
                 if 'progress_status' in self.meta.keys():
                     indicator_status = self.meta['progress_status']
-                    # indicator_score is None
+                    # indicator_score = None
 
         # Result to return is tuple of indicator score and progress status
         result = (indicator_score, indicator_status)

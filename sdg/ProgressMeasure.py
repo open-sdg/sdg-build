@@ -38,14 +38,10 @@ class IndicatorProgress(Loggable):
 
     def get_indicator_progress(self):
         """
-        Read the progress calculation configurations from the indicator metadata and return the progress 
-        measure score and status for the indicator. The mean progress score and associated progress 
-        status are taken as the aggregate score for the indicator when multiple series, units, and/or 
-        disaggregations are specified in the progress calculation configurations.
-        When the progress calculation is turned off, any manually specified progress status found in the 
-        metadata is returned alongside a score of None.
-        If the progress calculation is turned off and no progress status is found, it will return a default score 
-        of None and 'not_available' as the progress status.
+        Read the progress calculation configurations from the indicator metadata and return the progress measure score and status for the indicator.     
+        The mean progress score and associated progress status are taken as the aggregate score for the indicator when multiple series, units, and/or disaggregations are specified in the progress calculation configurations.
+        If the progress calculation fails due to missing or invalid data, the score is set to None and the status is set to 'not_available'.
+        When the progress calculation is turned off, any manually specified progress status found in the metadata is returned alongside a score of None. By default, if no progress status was specified, it will return a score of None and an empty string as the status.
 
         Returns:
             tuple: (score, status)

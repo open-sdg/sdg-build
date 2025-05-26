@@ -42,8 +42,14 @@ class Px:
             raise ValueError(f"'{lang}' is not a valid LANGUAGE")
         if lang is not None and lang != self.get_default_language():
             suffix = '[' + lang + ']'
-        stub = self.keyword('STUB' + suffix)
-        heading = self.keyword('HEADING' + suffix)
+        try:
+            stub = self.keyword('STUB' + suffix)
+        except:
+            stub = []
+        try:
+            heading = self.keyword('HEADING' + suffix)
+        except:
+            heading = []
         if not stub:
             stub = []
         if not heading:

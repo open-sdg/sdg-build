@@ -1,2 +1,4 @@
 git+https://github.com/dougmet/yamlmd
 git+https://github.com/open-sdg/sdg-build
+frictionless==4.40.8
+pydantic==1.*

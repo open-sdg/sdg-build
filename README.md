@@ -21,6 +21,7 @@ SDG Build can **input** SDG data in the following formats:
 * Data from a CKAN instance
 * Data in JSON-Stat format from an API
 * Data from a PxWeb API instance
+* Data/metadata/translations from a PX file
 * Metadata in YAML files
 * Metadata in CSV files
 * Metadata in Excel files
@@ -116,6 +117,7 @@ SDG Build can also import translations and use them to produce fully-translated 
 * SDMX DSD
 * YAML local files
 * YAML Git repository
+* PX file
 
 The export formats include:
 
@@ -187,6 +189,14 @@ An example conversion from CSV data to GeoJSON suitable for mapping:
 
 ```
 python docs/examples/geojson.py
+```
+
+### Example #7: PX file to Open SDG
+
+An example conversion from PX files to JSON suitable for the Open SDG platform:
+
+```
+python docs/examples/open_sdg_px.py
 ```
 
 ## Additional documentation

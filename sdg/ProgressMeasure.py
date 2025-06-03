@@ -58,41 +58,26 @@ class IndicatorProgress(Loggable):
                 if self.cache_store is not None and self.inid in self.cache_store:
                     # self.debug(f'{self.inid} progress from cache')
                     return (self.cache_store[self.inid]['score'], self.cache_store[self.inid]['progress_status'])
-                # Get the progress measure score and status for each series/unit/disaggregation specified in the progress calculation options.
-                scores = []
-                targets = []
-                for config in self.get_progress_calculation_options():
-                    series = SeriesProgress(self.indicator, config, logging=self.logging)
-                    score = series.score
-                    if score is not None:
-                        scores.append(score)
-                        targets.append(series.target_achieved)
-                    series_calculation_components.update(series.get_progress_calculation_components())
-                # Update the indicator score and progress status
-                if scores:
-                    indicator_score = np.mean(scores)
-                    target_achieved = all(targets) # True only when targets for all series are achieved
-                    indicator_status = get_progress_status_from_score(indicator_score, target_achieved)
-                else:
-                    indicator_status = 'not_available'
-                    # indicator_score = None
-    
-            else:
-                # Use any progress status available in the metadata as a manual override
-                if 'progress_status' in self.meta.keys():
-                    indicator_status = self.meta['progress_status']
-                    # indicator_score = None
+                # Get the mean progress score for the indicator based on the groups/series/units/disaggregations specified in the progress calculation options.
+                indicator_score, targets_achieved, series_calculation_components = grouped_score(self.indicator, self.get_progress_calculation_options(), logging=self.logging)
+                # Check if all targets for this indicator are achieved
+                target_achieved = all(targets_achieved) if targets_achieved else False # True only when targets for all series are achieved
+                # Update the progress status for the indicator based on the score
+                indicator_status = get_progress_status_from_score(indicator_score, target_achieved)
+            elif 'progress_status' in self.meta.keys():
+                # Use any progress status specified in the metadata as a manual override
+                indicator_status = self.meta['progress_status']
+                # indicator_score = None
 
         # Result to return is tuple of indicator score and progress status
         result = (indicator_score, indicator_status)
         
         # Cache the progress calculation components
         indicator_calculation_components = {'progress_status': indicator_status, 'score': floatNone(indicator_score)}
-        indicator_calculation_components.update(series_calculation_components)  
+        indicator_calculation_components.update(series_calculation_components)
         if self.cache_store is None:
-            self.cache_store = {self.inid: indicator_calculation_components}
-        else:
-            self.cache_store[self.inid] = indicator_calculation_components
+            self.cache_store = {}
+        self.cache_store[self.inid] = indicator_calculation_components
 
         return result
 
@@ -539,3 +524,47 @@ def floatNone(x):
     """
     if x is not None:
         return float(x)
+
+def grouped_score(indicator, progress_calc_opts, series_calculation_components=None, logging=None):
+    """
+    Calculate the mean score for the provided indicator and progress calculation options.
+    The series/units/disaggregations specified in the progress calculation options may be grouped. Groups may be nested.
+    The score for a group is the equi-weighted mean of the scores for each series/unit/disaggregation in the group.
+    The final score for the indicator is the mean of the scores of the top-level series and group(s).
+
+    Args:
+        indicator: indicator object (required).
+        progress_calc_opts: list. The progress calculation options for the indicator (required).
+        series_calculation_components: None or dict. Initial state for the dictionary containing the progress calculation components of each series/unit/disaggregation for this indicator (used for recursion).
+        logging: list, ex: ['debug', 'warn']. Specify logging levels for progress calculation of individual series/units/disaggregations.
+    Returns:
+        mean_score: float. The mean progress score for the indicator (between -5 and +5).
+        targets: list of bools. Indicates whether each individual series/unit/disaggregation achieved its target or not.
+        series_calculation_components: dict. Final output containing the progress calculation components of each series/unit/disaggregation for this indicator.
+    """
+    if series_calculation_components is None:
+        series_calculation_components = {}
+    
+    scores = [] # list to hold individual scores and means of nested groups
+    targets = [] # list to hold target achievement status for each series/unit/disaggregation
+    for config in progress_calc_opts:
+        group = config.get('group')
+        if group:
+            group_score, group_targets, _ = grouped_score(indicator, group, series_calculation_components, logging)
+            if group_score is not None:
+                scores.append(group_score)
+                targets.extend(group_targets)
+            # print(group_score, group_targets, _)
+        else:
+            series = SeriesProgress(indicator, config, logging=logging)
+            score = series.score
+            if score is not None:
+                scores.append(score)
+                targets.append(series.target_achieved)
+            series_calculation_components.update(series.get_progress_calculation_components())
+            # print(score, series.target_achieved, series.get_progress_calculation_components())
+
+    # If there are scores in the list, compute the mean. Otherwise, the score is None.
+    mean_score = np.mean(scores) if scores else None
+    
+    return mean_score, targets, series_calculation_components

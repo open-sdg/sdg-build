@@ -328,6 +328,9 @@ class SeriesProgress(IndicatorProgress):
         # calculate theoretical growth
         cagr_r = growth_calculation(self.target, self.base_value, self.target_year, self.base_year)
         
+        if cagr_r == 0:
+            return None # avoid division by zero
+
         return self.sign * self.direction * cagr_o / abs(cagr_r)
             
     def is_target_achieved(self):

@@ -24,7 +24,7 @@ class TranslationInputPx(TranslationInputBase):
         """
         TranslationInputBase.__init__(self,
             logging=logging,
-            request_params=None,
+            request_params=request_params,
             indicator_options=indicator_options,
         )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)

@@ -34,10 +34,11 @@ class InputPxFile(InputBase):
 
 
     def execute(self, indicator_options):
+        empty_data_values = ['"."', '".."', '"..."']
         def replace_value(value):
             if value == '"-"':
                 return 0
-            elif value in ['"."', '".."', '"..."',]: 
+            elif value in empty_data_values:
                 return None
             else:
                 return value
@@ -46,28 +47,31 @@ class InputPxFile(InputBase):
             px = Px(pc_axis)
             # Prepare the data.
             df = pd.DataFrame(px.entries())
-            year_column = px.get_year_column_name()
             value_column = px.get_value_column_name()
-            
-            df.rename(inplace=True, columns = {
-                year_column: 'Year',
-                value_column: 'Value',
-            })
-            if px.data_has_series():
-                series_column = px.get_series_column_name()
+            if value_column in df.columns:
+                df = df[~df[value_column].isin(empty_data_values)]
+            non_statistical = df.empty
+            if not non_statistical:
+                year_column = px.get_year_column_name()
                 df.rename(inplace=True, columns = {
-                    series_column: indicator_options.get_series_column(),
+                    year_column: 'Year',
+                    value_column: 'Value',
                 })
-            if px.data_has_units():
-                units_column = px.get_units_column_name()
-                df.rename(inplace=True, columns = {
-                    units_column: indicator_options.get_unit_column(),
-                })
-            df = df.convert_dtypes()
-            df['Value'] = df['Value'].apply(replace_value)
-            df['Value'] = pd.to_numeric(df['Value'])
-            df['Year'] = pd.to_numeric(df['Year'])
-            df = df.dropna(subset=['Value'])
+                if px.data_has_series():
+                    series_column = px.get_series_column_name()
+                    df.rename(inplace=True, columns = {
+                        series_column: indicator_options.get_series_column(),
+                    })
+                if px.data_has_units():
+                    units_column = px.get_units_column_name()
+                    df.rename(inplace=True, columns = {
+                        units_column: indicator_options.get_unit_column(),
+                    })
+                df = df.convert_dtypes()
+                df['Value'] = df['Value'].apply(replace_value)
+                df['Value'] = pd.to_numeric(df['Value'])
+                df['Year'] = pd.to_numeric(df['Year'])
+                df = df.dropna(subset=['Value'])
             # Prepare the metadata but only with translation keys, since
             # the actual content will be gathered in the translation input.
             keywords = px.keywords()
@@ -88,10 +92,13 @@ class InputPxFile(InputBase):
                 # As a benefit to the Open SGD integration, if the data
                 # is empty, automatically flag it as a non-statistical
                 # indicator.
-                if df.empty:
+                if non_statistical:
                     metadata['data_non_statistical'] = True
                 # Add the indicator.
-                self.add_indicator(indicator_id, data=df, meta=metadata, options=indicator_options)
+                if non_statistical:
+                    self.add_indicator(indicator_id, meta=metadata, options=indicator_options)
+                else:
+                    self.add_indicator(indicator_id, data=df, meta=metadata, options=indicator_options)
 
 
     def get_indicator_id_map(self, source):

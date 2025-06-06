@@ -317,8 +317,11 @@ class Px:
 
 
     def get_year_column_name(self):
-        year = self.keyword('TIMEVAL')
-        return list(year.keys())[0]
+        try:
+            year = self.keyword('TIMEVAL')
+            return list(year.keys())[0]
+        except:
+            return None
 
 
     def get_units_column_name(self):

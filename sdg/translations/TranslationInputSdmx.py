@@ -70,6 +70,9 @@ class TranslationInputSdmx(TranslationInputBase):
                 # Not sure why this happens - possibly the "TimeDimension"?
                 continue
             tag_id = tag.attrib['id']
+            # We don't need translations of observation-level attributes.
+            if self.indicator_options is not None and tag_id in self.indicator_options.get_observation_attributes():
+                continue
             if tag_id in self.dimension_map:
                 tag_id = self.dimension_map[tag_id]
                 if tag_id == '':

@@ -84,7 +84,7 @@ class TranslationInputPx(TranslationInputBase):
                     except:
                         pass
                     try:
-                        metadata_value = px.keyword('TITLE', language)
+                        metadata_value = px.keyword('INFO', language)
                         self.add_translation(language, translation_group, 'graph_title', metadata_value)
                         self.add_translation(language, translation_group, 'indicator_name', metadata_value)
                     except:

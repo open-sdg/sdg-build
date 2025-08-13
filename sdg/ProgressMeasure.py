@@ -157,7 +157,7 @@ class SeriesProgress(IndicatorProgress):
             self.status = get_progress_status(self.progress_value, self.progress_thresholds, self.target_achieved)
             self.score = self.get_score()
 
-    def get_series_tag(self):
+    def get_series_tag(self, sep=' / '):
         """Return a string that identifies the series for which progress is intended to be calculated.
         """
         tag = [self.inid]
@@ -168,7 +168,20 @@ class SeriesProgress(IndicatorProgress):
         if self.disaggregation is not None:
             for disagg in self.disaggregation:
                 tag.append(str(disagg['value']))
-        return ' / '.join(tag)
+        
+        # Limit the tag to <= 122 characters (pyYAML key length limit)
+        # Count the number of characters in the tag (including separators)
+        nchars = [len(chars) for chars in tag]
+        nchars_total = sum(nchars) + len(sep)*(len(tag) - 1)
+        while nchars_total > 122:
+            # Find and truncate the element with the most characters
+            most_chars = max(nchars)
+            i = nchars.index(most_chars)
+            tag[i] = tag[i][:-4] + '...'
+            nchars = [len(chars) for chars in tag]
+            nchars_total = sum(nchars) + len(sep)*(len(tag) - 1)
+
+        return sep.join(tag)
     
     def filter_column(self, data, column, value):
         """Filter the input dataframe, keeping only rows where the value in 'column' is equal to 'value'.

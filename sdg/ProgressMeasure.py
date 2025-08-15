@@ -157,7 +157,7 @@ class SeriesProgress(IndicatorProgress):
             self.status = get_progress_status(self.progress_value, self.progress_thresholds, self.target_achieved)
             self.score = self.get_score()
 
-    def get_series_tag(self):
+    def get_series_tag(self, sep=' / '):
         """Return a string that identifies the series for which progress is intended to be calculated.
         """
         tag = [self.inid]
@@ -167,19 +167,40 @@ class SeriesProgress(IndicatorProgress):
             tag.append(self.unit)
         if self.disaggregation is not None:
             for disagg in self.disaggregation:
-                tag.append(disagg['value'])
-        return ' / '.join(tag)
+                tag.append(str(disagg['value']))
+        
+        # Limit the tag to <= 122 characters (pyYAML key length limit)
+        # Count the number of characters in the tag (including separators)
+        nchars = [len(chars) for chars in tag]
+        nchars_total = sum(nchars) + len(sep)*(len(tag) - 1)
+        while nchars_total > 122:
+            # Find and truncate the element with the most characters
+            most_chars = max(nchars)
+            i = nchars.index(most_chars)
+            tag[i] = tag[i][:-4] + '...'
+            nchars = [len(chars) for chars in tag]
+            nchars_total = sum(nchars) + len(sep)*(len(tag) - 1)
+
+        return sep.join(tag)
     
-    def filter_column(self, data, column, field):
-        """Filter the input dataframe, keeping only rows where the value in 'column' is equal to 'field'.
+    def filter_column(self, data, column, value):
+        """Filter the input dataframe, keeping only rows where the value in 'column' is equal to 'value'.
+        If the column is not found in the data, raise an exception.
+        If the value is not found in the data, return the filtered (empty) dataframe and output a warning message.
         """
-        if column in data.columns:
-            if any(data[column] == field):
-                data = data.loc[data[column] == field]
-            else:
-                self.warn(f'{self.inid} - Field {field} not found in column {column} for progress calculation of series: {self.tag}')
+
+        if column not in data.columns:
+            raise Exception(f'{self.inid} - Column {column} not found in data for progress calculation of series: {self.tag}')
+
+        if value is None:
+            if not any(data[column].isna()):
+                self.warn(f'{self.inid} - Value {value} not found column {column} for progress calculation of series: {self.tag}')
+            data = data[data[column].isna()]
         else:
-            self.warn(f'{self.inid} - Column {column} not found in data for progress calculation of series: {self.tag}')
+            if not any(data[column] == value):
+                self.warn(f'{self.inid} - Value {value} not found column {column} for progress calculation of series: {self.tag}')
+            data = data.loc[data[column] == value]
+        
         return data
     
     def filter_data(self):
@@ -216,12 +237,12 @@ class SeriesProgress(IndicatorProgress):
             if self.disaggregation:
                 for disagg in self.disaggregation:
                     data = self.filter_column(data, disagg['field'], disagg['value'])
-            # Otherwise, find headline data (rows where values in all disaggregation dimensions are NA)
-            else:
-                headline = data[data.loc[:, ~data.columns.isin(self.non_disaggregation_columns)].isna().all('columns')]
-                if (len(headline) == 0) and (len(headline) < len(data)):
-                    raise Exception(f'{self.inid} - No headline found for progress calculation of series: {self.tag}')
-                data = headline
+                
+            # Find headline data if multiple disaggregations remain
+            # Get list of columns that have already been filtered + non-disaggregation columns
+            used_columns = self.non_disaggregation_columns + [disagg['field'] for disagg in (self.disaggregation or [])]
+            # Keep only the headline (where the values in all remaining "unused" columns are NA)
+            data = data[data.loc[:, ~data.columns.isin(used_columns)].isna().all('columns')]
             
             # Check if data was sufficiently reduced to a single series/unit/disaggregation
             grouping_columns = [col for col in data.columns if col not in ['Year', 'Value']]

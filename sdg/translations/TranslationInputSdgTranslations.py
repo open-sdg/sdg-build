@@ -18,8 +18,13 @@ class TranslationInputSdgTranslations(TranslationInputYaml):
     When importing, this class treats the YAML filename as the "group".
     """
 
-    def __init__(self, tag=None, branch=None, source='https://github.com/open-sdg/sdg-translations.git',
-                 logging=None):
+    def __init__(self,
+        tag=None,
+        branch=None,
+        source='https://github.com/open-sdg/sdg-translations.git',
+        logging=None,
+        indicator_options=None,
+    ):
         """Constructor for the TranslationInputBase class.
 
         Parameters
@@ -27,7 +32,11 @@ class TranslationInputSdgTranslations(TranslationInputYaml):
         source : string
             The source of the translations (see subclass for details)
         """
-        TranslationInputYaml.__init__(self, source=source, logging=logging)
+        TranslationInputYaml.__init__(self,
+            source=source,
+            logging=logging,
+            indicator_options=indicator_options,
+        )
         self.tag = tag
         self.branch = branch
 

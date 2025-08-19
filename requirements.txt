@@ -17,3 +17,5 @@ Jinja2
 rfc3986<2
 git+https://github.com/dougmet/yamlmd
 openpyxl==3.1.0
+typer==0.11.0
+numpy<2

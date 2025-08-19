@@ -10,16 +10,28 @@ class TranslationInputBase(Loggable):
     """A base class for importing translations."""
 
 
-    def __init__(self, source='', logging=None, request_params=None):
+    def __init__(self,
+        source='',
+        logging=None,
+        request_params=None,
+        indicator_options=None,
+    ):
         """Constructor for the TranslationInputBase class.
 
         Parameters
         ----------
         source : string
             The source of the translations (see subclass for details)
+        logging : string
+            Details the logging level during execution
+        request_params : dict
+            Dict of options to be passed to any remote URL requests
+        indicator_options : IndicatorOptions
+            Instance of IndicatorOptions for use if needed
         """
         Loggable.__init__(self, logging=logging)
         self.request_params = request_params
+        self.indicator_options = indicator_options
         self.source = source
         self.translations = {}
         self.executed = False

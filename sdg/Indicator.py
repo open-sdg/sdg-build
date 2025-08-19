@@ -442,6 +442,8 @@ class Indicator(Loggable):
         for col in observation_attributes:
             if col in self.data.columns:
                 aggregating_columns.append(col)
+        if self.options.progress_column in self.data.columns:
+            aggregating_columns.append(self.options.progress_column)
 
         grouping_columns = [column for column in self.data.columns if column not in aggregating_columns]
 

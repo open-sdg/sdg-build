@@ -1,5 +1,10 @@
 # Changes
 
+### 2.4.0
+
+* PxWeb integration (multiple PRs)
+* Auto progress calculation (multiple PRs)
+
 ### 2.3.0
 
 * Observation attributes #349

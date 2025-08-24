@@ -103,6 +103,25 @@ class InputBase(Loggable):
         cols = ['Year'] + cols + ['Value']
         return df[cols]
 
+
+    def remove_non_numeric_values(self, df):
+        """Ensure that all values are numeric.
+
+        Parameters
+        ----------
+        df : Dataframe
+            The Pandas dataframe to fix
+
+        Returns
+        -------
+        Dataframe
+            The same dataframe without non-numeric values.
+        """
+        df['Value'] = pd.to_numeric(df['Value'], errors='coerce')
+        df.dropna(subset=['Value'], inplace=True)
+        return df
+
+
     def fix_empty_values(self, df):
         """Ensure that empty values are np.NaN rather than None or "".
 
@@ -240,6 +259,7 @@ class InputBase(Loggable):
         # Always do these hardcoded steps.
         data = self.fix_dataframe_columns(data)
         data = self.fix_empty_values(data)
+        data = self.remove_non_numeric_values(data)
 
         return data
 

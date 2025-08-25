@@ -84,8 +84,10 @@ class InputPxFile(InputBase):
                 if not (px.data_has_units() and 'UNITS' in keywords):
                     metadata['computation_units'] = translation_group + '.computation_units'
                 if 'NOTE' in keywords:
-                    metadata['data_footnote'] = translation_group + '.data_footnote'
-                    metadata['page_content'] = translation_group + '.page_content'
+                    note_value = px.keyword('NOTE')
+                    if isinstance(note_value, str):
+                        metadata['data_footnote'] = translation_group + '.data_footnote'
+                        metadata['page_content'] = translation_group + '.page_content'
                 if 'INFO' in keywords:
                     metadata['graph_title'] = translation_group + '.graph_title'
                     metadata['indicator_name'] = translation_group + '.indicator_name'

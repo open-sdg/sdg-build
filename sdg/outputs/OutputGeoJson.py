@@ -133,6 +133,10 @@ class OutputGeoJson(OutputBase):
             if not self.indicator_has_geocodes(indicator):
                 continue
 
+            # Drop non-numeric value rows.
+            indicator.data['Value'] = pd.to_numeric(indicator.data['Value'], errors='coerce')
+            indicator.data.dropna(subset=['Value'], inplace=True)
+
             series_by_geocodes = self.get_series_by_geocodes(indicator, language=language)
             geometry_data = copy.deepcopy(self.geometry_data)
 

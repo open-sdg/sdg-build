@@ -67,6 +67,10 @@ class InputPxFile(InputBase):
                     df.rename(inplace=True, columns = {
                         units_column: indicator_options.get_unit_column(),
                     })
+                if px.data_has_geocodes():
+                    geocode_column = px.get_geocode_column_name()
+                    df['GeoCode'] = df[geocode_column]
+
                 df = df.convert_dtypes()
                 df['Value'] = df['Value'].apply(replace_value)
                 df['Value'] = pd.to_numeric(df['Value'])

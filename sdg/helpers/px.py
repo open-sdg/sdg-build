@@ -336,6 +336,14 @@ class Px:
         return self.keyword('CONTVARIABLE')
 
 
+    def get_geocode_column_name(self):
+        try:
+            col = self.keyword('MAP')
+            return list(col.keys())[0]
+        except:
+            return None
+
+
     def data_has_units(self):
         try:
             col = self.get_units_column_name()
@@ -348,6 +356,15 @@ class Px:
     def data_has_series(self):
         try:
             col = self.get_series_column_name()
+            values = self.values(col)
+            return len(values) > 0
+        except:
+            return False
+
+
+    def data_has_geocodes(self):
+        try:
+            col = self.get_geocode_column_name()
             values = self.values(col)
             return len(values) > 0
         except:

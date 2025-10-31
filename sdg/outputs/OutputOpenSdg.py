@@ -111,6 +111,10 @@ class OutputOpenSdg(OutputBase):
         stats_reporting = sdg.stats.reporting_status(all_meta, self.reporting_status_grouping_fields)
         status = status & sdg.json.write_json('reporting', stats_reporting, ftype='stats', site_dir=site_dir)
 
+        # Progress status
+        stats_progress = sdg.stats.progress_status(all_meta)
+        status = status & sdg.json.write_json('progress', stats_progress, ftype='stats', site_dir=site_dir)
+
         disaggregation_status_service = sdg.DisaggregationStatusService(
             site_dir,
             self.indicators,

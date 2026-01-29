@@ -3,6 +3,7 @@
 tests/_site/
 _site/
 _site_*
+temp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

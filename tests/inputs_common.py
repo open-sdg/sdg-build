@@ -16,9 +16,10 @@ def assert_input_has_correct_data(df, correct_data=None):
     correct_df = pd.read_csv(StringIO(inspect.cleandoc(correct_data)))
     pd.testing.assert_frame_equal(df, correct_df)
 
-def assert_input_has_correct_meta(meta):
-    correct_meta = {
-        'foo': 'bar',
-        'page_content': 'Hello world',
-    }
+def assert_input_has_correct_meta(meta, correct_meta=None):
+    if correct_meta is None:
+        correct_meta = {
+            'foo': 'bar',
+            'page_content': 'Hello world',
+        }
     assert meta == correct_meta

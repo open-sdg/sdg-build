@@ -8,7 +8,15 @@ def test_px_input():
     indicator_id_map = {
         data_file: ['1.2.1'],
     }
-    data_input = sdg.inputs.InputPxFile(indicator_id_map=indicator_id_map)
+    meta_map = {
+        'CONTACT': 'CONTACT',
+        'LAST-UPDATED': 'META_LAST_UPDATE',
+        'SOURCE': 'DATA_SOURCE',
+    }
+    data_input = sdg.inputs.InputPxFile(
+        indicator_id_map=indicator_id_map,
+        meta_map=meta_map
+    )
     indicator_options = sdg.IndicatorOptions()
     indicator_options.add_non_disaggregation_columns('Series')
     indicator_options.add_non_disaggregation_columns('Units')
@@ -17,6 +25,7 @@ def test_px_input():
     translation_input = sdg.translations.TranslationInputPx(
         indicator_id_map=indicator_id_map,
         indicator_options=indicator_options,
+        meta_map=meta_map,
     )
     translation_helper = sdg.translations.TranslationHelper([translation_input])
 
@@ -500,5 +509,29 @@ def test_px_input():
         2021,"Patur av fólkinum, ið livir av minni enn fátækamarkinum í landinum",Kvinnur,67+ ár,1.2
     """
 
+    correct_meta_english = {
+        'computation_units': 'Testing units',
+        'data_footnote': 'Testing note',
+        'page_content': 'Testing note',
+        'graph_title': 'Testing info',
+        'indicator_name': 'Testing info',
+        'CONTACT': 'Testing contact',
+        'META_LAST_UPDATE': '20230911 09:00',
+        'DATA_SOURCE': 'Testing source',
+    }
+    correct_meta_faroese = {
+        'computation_units': 'Testing units FO',
+        'data_footnote': 'Testing note FO',
+        'page_content': 'Testing note FO',
+        'graph_title': 'Testing info FO',
+        'indicator_name': 'Testing info FO',
+        'CONTACT': 'Testing contact FO',
+        'META_LAST_UPDATE': '20230911 09:00',
+        'DATA_SOURCE': 'Testing source FO',
+    }
+    print(indicator.language('fo').meta)
     inputs_common.assert_input_has_correct_data(indicator.language('en').data, correct_data_english)
     inputs_common.assert_input_has_correct_data(indicator.language('fo').data, correct_data_faroese)
+    inputs_common.assert_input_has_correct_meta(indicator.language('en').meta, correct_meta_english)
+    inputs_common.assert_input_has_correct_meta(indicator.language('fo').meta, correct_meta_faroese)
+

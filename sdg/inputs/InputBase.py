@@ -382,4 +382,10 @@ class InputBase(Loggable):
             List of indicator IDs.
         """
         if type(indicator_ids) is list:
-            self.skip_indicators = indicator_ids
+            for indicator_id in indicator_ids:
+                # Save both 1.1.1 and 1-1-1 versions to support both.
+                if '-' in indicator_id:
+                    self.skip_indicators.append(indicator_id.replace('-', '.'))
+                if '.' in indicator_id:
+                    self.skip_indicators.append(indicator_id.replace('.', '-'))
+                self.skip_indicators.append(indicator_id)

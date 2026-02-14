@@ -205,6 +205,7 @@ def open_sdg_indicator_options_defaults():
             'Series',
             'Value',
             'GeoCode',
+            'Progress',
             'Observation status',
             'Unit multiplier',
             'Unit measure',
@@ -220,6 +221,7 @@ def open_sdg_indicator_options_defaults():
         ],
         'series_column': 'Series',
         'unit_column': 'Units',
+        'progress_column': 'Progress',
     }
 
 
@@ -235,6 +237,8 @@ def open_sdg_indicator_options_from_dict(options):
         options_obj.set_series_column(options['series_column'])
     if 'unit_column' in options:
         options_obj.set_unit_column(options['unit_column'])
+    if 'progress_column' in options:
+        options_obj.set_progress_column(options['progress_column'])
     return options_obj
 
 
@@ -368,6 +372,7 @@ def open_sdg_prep(options):
         logging=options['logging'],
         indicator_export_filename=options['indicator_export_filename'],
         ignore_out_of_scope_disaggregation_stats=options['ignore_out_of_scope_disaggregation_stats'],
+        cache_store = {},
     )
 
     if callable(options['alter_indicator']):
@@ -544,6 +549,7 @@ def open_sdg_input_from_dict(params, options):
         'InputPxWebApi',
         'InputWordMeta',
         'InputSdgMetadata',
+        'InputPxFile',
     ]
     if input_class not in allowed:
         raise KeyError("Input class '%s' is not one of: %s." % (input_class, ', '.join(allowed)))
@@ -590,6 +596,8 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputWordMeta(**params)
     elif input_class == 'InputSdgMetadata':
         input_instance = sdg.inputs.InputSdgMetadata(**params)
+    elif input_class == 'InputPxFile':
+        input_instance = sdg.inputs.InputPxFile(**params)
 
     return input_instance
 
@@ -624,6 +632,7 @@ def open_sdg_translation_from_dict(params, options):
         'TranslationInputSdmx',
         'TranslationInputSdmxMsd',
         'TranslationInputYaml',
+        'TranslationInputPx',
     ]
     if translation_class not in allowed:
         raise KeyError("Translation class '%s' is not one of: %s." % (translation_class, ', '.join(allowed)))
@@ -632,6 +641,7 @@ def open_sdg_translation_from_dict(params, options):
     del params['class']
 
     params['logging'] = options['logging']
+    params['indicator_options'] = open_sdg_indicator_options_from_dict(options['indicator_options'])
 
     # For "source" in TranslationInputYaml/Csv we need to prepend our src_dir.
     if translation_class == 'TranslationInputCsv' or translation_class == 'TranslationInputYaml':
@@ -649,6 +659,8 @@ def open_sdg_translation_from_dict(params, options):
         translation_instance = sdg.translations.TranslationInputSdmxMsd(**params)
     elif translation_class == 'TranslationInputYaml':
         translation_instance = sdg.translations.TranslationInputYaml(**params)
+    elif translation_class == 'TranslationInputPx':
+        translation_instance = sdg.translations.TranslationInputPx(**params)
 
     return translation_instance
 

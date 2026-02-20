@@ -14,6 +14,7 @@ class TranslationInputPx(TranslationInputBase):
         logging=None,
         request_params=None,
         indicator_options=None,
+        meta_map=None,
     ):
         """Constructor for the TranslationInputPx class.
 
@@ -28,6 +29,7 @@ class TranslationInputPx(TranslationInputBase):
             indicator_options=indicator_options,
         )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)
+        self.meta_map = self.get_meta_map(meta_map)
 
 
     def execute(self):
@@ -90,7 +92,24 @@ class TranslationInputPx(TranslationInputBase):
                         self.add_translation(language, translation_group, 'indicator_name', metadata_value)
                     except:
                         pass
+                    for mapped_key in self.meta_map:
+                        try:
+                            metadata_value = px.keyword(mapped_key, language)
+                            self.add_translation(language, translation_group, mapped_key, metadata_value)
+                        except:
+                            pass
 
+    def get_meta_map(self, source):
+        if source is None:
+            return {}
+        elif isinstance(source, dict):
+            return source
+        elif isinstance(source, str):
+            with open(source) as file:
+                return yaml.load(file, Loader=yaml.FullLoader)
+        else:
+            raise Exception("The meta_map parameter is not configured correctly.")
+        return {}
 
     def get_indicator_id_map(self, source):
         if isinstance(source, dict):

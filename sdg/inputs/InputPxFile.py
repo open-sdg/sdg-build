@@ -89,17 +89,27 @@ class InputPxFile(InputBase):
                 metadata = {}
                 if not (px.data_has_units() and 'UNITS' in keywords):
                     metadata['computation_units'] = translation_group + '.computation_units'
-                if 'NOTE' in keywords:
-                    note_value = px.keyword('NOTE')
-                    if isinstance(note_value, str):
-                        metadata['data_footnote'] = translation_group + '.data_footnote'
+                if 'NOTEX' in keywords:
+                    notex_value = px.keyword('NOTEX')
+                    if isinstance(notex_value, str):
+                        #metadata['data_footnote'] = translation_group + '.data_footnote'
                         metadata['page_content'] = translation_group + '.page_content'
                 if 'INFO' in keywords:
                     metadata['graph_title'] = translation_group + '.graph_title'
                     metadata['indicator_name'] = translation_group + '.indicator_name'
                 for mapped_key in self.meta_map:
                     if mapped_key in keywords:
-                        metadata[self.meta_map[mapped_key]] = translation_group + '.' + mapped_key
+                        mapped_value = px.keyword(mapped_key)
+                        converted_key = self.meta_map[mapped_key]
+                        if isinstance(mapped_value, str):
+                            metadata[converted_key] = translation_group + '.' + mapped_key
+                        elif isinstance(mapped_value, dict):
+                            value_keys = mapped_value.keys()
+                            for value_key in value_keys:
+                                if value_key == 'TABLE':
+                                    metadata[converted_key] = translation_group + '.' + mapped_key
+                                else:
+                                    metadata[converted_key + '-' + value_key] = translation_group + '.' + mapped_key + '-' + value_key
                 # As a benefit to the Open SGD integration, if the data
                 # is empty, automatically flag it as a non-statistical
                 # indicator.

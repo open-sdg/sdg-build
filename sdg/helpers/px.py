@@ -22,10 +22,13 @@ class Px:
         if k not in self.keywords():
             raise ValueError(f"'{k}' is not a valid KEYWORD")
  
-        if 'TABLE' in self.metadata[k]:
-            return self.metadata[k]['TABLE']
-        else:
+        metadata_keys = self.metadata[k].keys()
+        if 'TABLE' not in metadata_keys:
             return self.metadata[k]
+        elif 'TABLE' in metadata_keys and len(metadata_keys) > 1:
+            return self.metadata[k]
+        else:
+            return self.metadata[k]['TABLE']
 
 
     def title(self):

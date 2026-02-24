@@ -80,9 +80,9 @@ class TranslationInputPx(TranslationInputBase):
                     except:
                         pass
                     try:
-                        metadata_value = px.keyword('NOTE', language)
+                        metadata_value = px.keyword('NOTEX', language)
                         if isinstance(metadata_value, str):
-                            self.add_translation(language, translation_group, 'data_footnote', metadata_value)
+                            #self.add_translation(language, translation_group, 'data_footnote', metadata_value)
                             self.add_translation(language, translation_group, 'page_content', metadata_value)
                     except:
                         pass
@@ -95,8 +95,21 @@ class TranslationInputPx(TranslationInputBase):
                     for mapped_key in self.meta_map:
                         try:
                             metadata_value = px.keyword(mapped_key, language)
-                            self.add_translation(language, translation_group, mapped_key, metadata_value)
-                        except:
+                            if isinstance(metadata_value, str):
+                                self.add_translation(language, translation_group, mapped_key, metadata_value)
+                            elif isinstance(metadata_value, dict):
+                                untranslated_value = px.keyword(mapped_key)
+                                value_keys = untranslated_value.keys()
+                                for value_key in value_keys:
+                                    if value_key == 'TABLE':
+                                        self.add_translation(language, translation_group, mapped_key, metadata_value['TABLE'])
+                                    else:
+                                        # We assume this is a variable.
+                                        untranslated_variable = value_key
+                                        translated_variable = px.variable_get_translation_from_value(untranslated_variable, language)
+                                        self.add_translation(language, translation_group, mapped_key + '-' + value_key, metadata_value[translated_variable])
+                        except Exception as e:
+                            print(e)
                             pass
 
     def get_meta_map(self, source):

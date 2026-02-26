@@ -80,10 +80,28 @@ class TranslationInputPx(TranslationInputBase):
                     except:
                         pass
                     try:
-                        metadata_value = px.keyword('NOTEX', language)
-                        if isinstance(metadata_value, str):
-                            #self.add_translation(language, translation_group, 'data_footnote', metadata_value)
-                            self.add_translation(language, translation_group, 'page_content', metadata_value)
+                        if 'NOTEX' in px.keywords():
+                            metadata_value = px.keyword('NOTEX', language)
+                            notex_header = ''
+                            notex_footer = []
+                            if isinstance(metadata_value, str):
+                                notex_header = metadata_value
+                            elif isinstance(metadata_value, dict):
+                                untranslated_value = px.keyword('NOTEX')
+                                value_keys = untranslated_value.keys()
+                                for value_key in value_keys:
+                                    if value_key == 'TABLE':
+                                        notex_header = metadata_value['TABLE']
+                                    else:
+                                        notex_footer.append(value_key)
+                            if notex_header: 
+                                self.add_translation(language, translation_group, 'page_content', notex_header)
+                            if notex_footer:
+                                for notex_field in notex_footer:
+                                    untranslated_variable = notex_field
+                                    translated_variable = px.variable_get_translation_from_value(untranslated_variable, language)
+                                    self.add_translation(language, translation_group, 'footer_field_label-' + untranslated_variable, translated_variable)
+                                    self.add_translation(language, translation_group, 'footer_field_value-' + untranslated_variable, metadata_value[translated_variable])
                     except:
                         pass
                     try:

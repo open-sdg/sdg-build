@@ -91,9 +91,28 @@ class InputPxFile(InputBase):
                     metadata['computation_units'] = translation_group + '.computation_units'
                 if 'NOTEX' in keywords:
                     notex_value = px.keyword('NOTEX')
+                    notex_header = ''
+                    notex_footer = []
                     if isinstance(notex_value, str):
-                        #metadata['data_footnote'] = translation_group + '.data_footnote'
-                        metadata['page_content'] = translation_group + '.page_content'
+                        notex_header = translation_group + '.page_content'
+                    elif isinstance(notex_value, dict):
+                        value_keys = notex_value.keys()
+                        for value_key in value_keys:
+                            if value_key == 'TABLE':
+                                notex_header = translation_group + '.page_content'
+                            else:
+                                notex_footer.append(value_key)
+                    if notex_header: 
+                        metadata['page_content'] = notex_header
+                    if notex_footer:
+                        if 'footer_fields' not in metadata:
+                            metadata['footer_fields'] = []
+                        for notex_field in notex_footer:
+                            footer_field = {
+                                "label": translation_group + '.footer_field_label-' + notex_field,
+                                "value": translation_group + '.footer_field_value-' + notex_field
+                            }
+                            metadata['footer_fields'].append(footer_field)
                 if 'INFO' in keywords:
                     metadata['graph_title'] = translation_group + '.graph_title'
                     metadata['indicator_name'] = translation_group + '.indicator_name'

@@ -57,9 +57,6 @@ class TranslationInputPx(TranslationInputBase):
                 if has_indicator_options and has_units and translatable_variable == px.get_units_column_name():
                     renamed_variable = self.indicator_options.get_unit_column()
                 for language in languages:
-                    suffix = ''
-                    if language != default_language:
-                        suffix = '[' + language + ']'
                     translated_variable = px.variable_get_translation_from_value(translatable_variable, language)
                     self.add_translation(language, renamed_variable, renamed_variable, translated_variable)
                     codes = px.codes(translatable_variable)
@@ -131,16 +128,17 @@ class TranslationInputPx(TranslationInputBase):
                             pass
 
     def get_meta_map(self, source):
-        if source is None:
-            return {}
-        elif isinstance(source, dict):
-            return source
-        elif isinstance(source, str):
+        map = {}
+        if isinstance(source, str):
             with open(source) as file:
-                return yaml.load(file, Loader=yaml.FullLoader)
+                map = yaml.load(file, Loader=yaml.FullLoader)
+        if isinstance(map, dict):
+            # Always include NOTE mappeed to itself.
+            map['NOTE'] = 'NOTE'
+            return map
         else:
             raise Exception("The meta_map parameter is not configured correctly.")
-        return {}
+
 
     def get_indicator_id_map(self, source):
         if isinstance(source, dict):

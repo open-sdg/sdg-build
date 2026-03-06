@@ -142,16 +142,16 @@ class InputPxFile(InputBase):
 
 
     def get_meta_map(self, source):
-        if source is None:
-            return {}
-        elif isinstance(source, dict):
-            return source
-        elif isinstance(source, str):
+        map = {}
+        if isinstance(source, str):
             with open(source) as file:
-                return yaml.load(file, Loader=yaml.FullLoader)
+                map = yaml.load(file, Loader=yaml.FullLoader)
+        if isinstance(map, dict):
+            # Always include NOTE mappeed to itself.
+            map['NOTE'] = 'NOTE'
+            return map
         else:
             raise Exception("The meta_map parameter is not configured correctly.")
-        return {}
 
 
     def get_indicator_id_map(self, source):

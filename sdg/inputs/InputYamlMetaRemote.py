@@ -29,7 +29,8 @@ class InputYamlMetaRemote(InputBase):
 
     def execute(self, indicator_options):
         for source, indicator_ids in self.indicator_id_map.items():
-            meta = self.fetch_file(source)
+            file_contents = self.fetch_file(source)
+            meta = yaml.safe_load(file_contents)
             if not isinstance(indicator_ids, list):
                 indicator_ids = [indicator_ids]
             for inid in indicator_ids:

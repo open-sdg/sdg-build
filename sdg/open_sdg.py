@@ -540,6 +540,8 @@ def open_sdg_input_from_dict(params, options):
         'InputWordMeta',
         'InputSdgMetadata',
         'InputPxFile',
+        'InputCsvDataRemote',
+        'InputYamlMetaRemote',
     ]
     if input_class not in allowed:
         raise KeyError("Input class '%s' is not one of: %s." % (input_class, ', '.join(allowed)))
@@ -588,6 +590,10 @@ def open_sdg_input_from_dict(params, options):
         input_instance = sdg.inputs.InputSdgMetadata(**params)
     elif input_class == 'InputPxFile':
         input_instance = sdg.inputs.InputPxFile(**params)
+    elif input_class == 'InputCsvDataRemote':
+        input_instance = sdg.inputs.InputCsvDataRemote(**params)
+    elif input_class == 'InputYamlMetaRemote':
+        input_instance =  sdg.inputs.InputYamlMetaRemote(**params)
 
     return input_instance
 

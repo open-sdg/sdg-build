@@ -73,7 +73,10 @@ class TranslationInputPx(TranslationInputBase):
                     try:
                         if not (px.data_has_units() and 'UNITS' in px.keywords()):
                             metadata_value = px.keyword('UNITS', language)
-                            self.add_translation(language, translation_group, 'computation_units', metadata_value)
+                            if isinstance(metadata_value, dict) and 'TABLE' in metadata_value:
+                                metadata_value = metadata_value['TABLE']
+                            if isinstance(metadata_value, str):
+                                self.add_translation(language, translation_group, 'computation_units', metadata_value)
                     except:
                         pass
                     try:

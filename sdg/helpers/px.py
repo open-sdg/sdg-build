@@ -328,7 +328,10 @@ class Px:
 
 
     def get_units_column_name(self):
-        return self.keyword('UNITS')
+        col = self.keyword('UNITS')
+        if isinstance(col, dict) and 'TABLE' in col:
+            return col['TABLE']
+        return col
 
 
     def get_value_column_name(self):

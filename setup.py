@@ -39,6 +39,7 @@ setup(name='sdg',
         'openpyxl==3.1.0',
         'pydantic>=1,<2',
         'typer==0.11.0',
+        'setuptools<82',
       ],
       dependency_links=[
         "git+https://github.com/dougmet/yamlmd",

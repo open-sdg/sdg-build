@@ -19,7 +19,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install "setuptools<70"
-        python -c "import pkg_resources; print(pkg_resources.__version__)"
+        python -c "import pkg_resources; print('ok')"
         python -m pip install --upgrade pip
         python -m pip install pytest
         python -m pip install pytest-cov

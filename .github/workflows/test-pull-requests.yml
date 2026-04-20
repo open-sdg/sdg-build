@@ -18,7 +18,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install "setuptools<82"
+        python -m pip install "setuptools<70"
         python -m pip install --upgrade pip
         python -m pip install pytest
         python -m pip install pytest-cov

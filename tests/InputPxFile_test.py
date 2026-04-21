@@ -510,26 +510,17 @@ def test_px_input():
     """
 
     correct_meta_english = {
+        'NOTE': 'Testing note',
         'computation_units': 'Testing units',
-        'data_footnote': 'Testing note',
-        'page_content': 'Testing note',
         'graph_title': 'Testing info',
         'indicator_name': 'Testing info',
-        'CONTACT': 'Testing contact',
-        'META_LAST_UPDATE': '20230911 09:00',
-        'DATA_SOURCE': 'Testing source',
     }
     correct_meta_faroese = {
+        'NOTE': 'Testing note FO',
         'computation_units': 'Testing units FO',
-        'data_footnote': 'Testing note FO',
-        'page_content': 'Testing note FO',
         'graph_title': 'Testing info FO',
         'indicator_name': 'Testing info FO',
-        'CONTACT': 'Testing contact FO',
-        'META_LAST_UPDATE': '20230911 09:00',
-        'DATA_SOURCE': 'Testing source FO',
     }
-    print(indicator.language('fo').meta)
     inputs_common.assert_input_has_correct_data(indicator.language('en').data, correct_data_english)
     inputs_common.assert_input_has_correct_data(indicator.language('fo').data, correct_data_faroese)
     inputs_common.assert_input_has_correct_meta(indicator.language('en').meta, correct_meta_english)

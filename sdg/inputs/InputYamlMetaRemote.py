@@ -34,7 +34,7 @@ class InputYamlMetaRemote(InputBase):
             if not isinstance(indicator_ids, list):
                 indicator_ids = [indicator_ids]
             for inid in indicator_ids:
-                self.add_indicator(inid, meta=meta, options=indicator_options)
+                self.add_indicator(self.normalize_indicator_id(inid), meta=meta, options=indicator_options)
 
 
     def get_indicator_id_map(self, source):

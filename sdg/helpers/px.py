@@ -280,7 +280,7 @@ class Px:
         px_metadata = re.sub(r';\s*(\r\n?|\n)', ';;', px_metadata)
         px_metadata = re.sub(r';;$', ';', px_metadata)
         px_metadata = re.sub(r'(\r\n?|\n)', '', px_metadata)
-        px_metadata = re.sub(r'""', ' ', px_metadata)
+        px_metadata = re.sub(r'""', '', px_metadata)
         px_metadata = px_metadata.split(';;')
 
         px_data = px_split[1]

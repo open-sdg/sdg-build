@@ -22,10 +22,13 @@ class Px:
         if k not in self.keywords():
             raise ValueError(f"'{k}' is not a valid KEYWORD")
  
-        if 'TABLE' in self.metadata[k]:
-            return self.metadata[k]['TABLE']
-        else:
+        metadata_keys = self.metadata[k].keys()
+        if 'TABLE' not in metadata_keys:
             return self.metadata[k]
+        elif 'TABLE' in metadata_keys and len(metadata_keys) > 1:
+            return self.metadata[k]
+        else:
+            return self.metadata[k]['TABLE']
 
 
     def title(self):
@@ -277,7 +280,7 @@ class Px:
         px_metadata = re.sub(r';\s*(\r\n?|\n)', ';;', px_metadata)
         px_metadata = re.sub(r';;$', ';', px_metadata)
         px_metadata = re.sub(r'(\r\n?|\n)', '', px_metadata)
-        px_metadata = re.sub(r'""', ' ', px_metadata)
+        px_metadata = re.sub(r'""', '', px_metadata)
         px_metadata = px_metadata.split(';;')
 
         px_data = px_split[1]
@@ -325,7 +328,10 @@ class Px:
 
 
     def get_units_column_name(self):
-        return self.keyword('UNITS')
+        col = self.keyword('UNITS')
+        if isinstance(col, dict) and 'TABLE' in col:
+            return col['TABLE']
+        return col
 
 
     def get_value_column_name(self):

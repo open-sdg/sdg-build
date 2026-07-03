@@ -89,17 +89,46 @@ class InputPxFile(InputBase):
                 metadata = {}
                 if not (px.data_has_units() and 'UNITS' in keywords):
                     metadata['computation_units'] = translation_group + '.computation_units'
-                if 'NOTE' in keywords:
-                    note_value = px.keyword('NOTE')
-                    if isinstance(note_value, str):
-                        metadata['data_footnote'] = translation_group + '.data_footnote'
-                        metadata['page_content'] = translation_group + '.page_content'
+                if 'NOTEX' in keywords:
+                    notex_value = px.keyword('NOTEX')
+                    notex_header = ''
+                    notex_footer = []
+                    if isinstance(notex_value, str):
+                        notex_header = translation_group + '.page_content'
+                    elif isinstance(notex_value, dict):
+                        value_keys = notex_value.keys()
+                        for value_key in value_keys:
+                            if value_key == 'TABLE':
+                                notex_header = translation_group + '.page_content'
+                            else:
+                                notex_footer.append(value_key)
+                    if notex_header: 
+                        metadata['page_content'] = notex_header
+                    if notex_footer:
+                        if 'footer_fields' not in metadata:
+                            metadata['footer_fields'] = []
+                        for notex_field in notex_footer:
+                            footer_field = {
+                                "label": translation_group + '.footer_field_label-' + notex_field,
+                                "value": translation_group + '.footer_field_value-' + notex_field
+                            }
+                            metadata['footer_fields'].append(footer_field)
                 if 'INFO' in keywords:
                     metadata['graph_title'] = translation_group + '.graph_title'
                     metadata['indicator_name'] = translation_group + '.indicator_name'
                 for mapped_key in self.meta_map:
                     if mapped_key in keywords:
-                        metadata[self.meta_map[mapped_key]] = translation_group + '.' + mapped_key
+                        mapped_value = px.keyword(mapped_key)
+                        converted_key = self.meta_map[mapped_key]
+                        if isinstance(mapped_value, str):
+                            metadata[converted_key] = translation_group + '.' + mapped_key
+                        elif isinstance(mapped_value, dict):
+                            value_keys = mapped_value.keys()
+                            for value_key in value_keys:
+                                if value_key == 'TABLE':
+                                    metadata[converted_key] = translation_group + '.' + mapped_key
+                                else:
+                                    metadata[converted_key + '-' + value_key] = translation_group + '.' + mapped_key + '-' + value_key
                 # As a benefit to the Open SGD integration, if the data
                 # is empty, automatically flag it as a non-statistical
                 # indicator.
@@ -113,16 +142,16 @@ class InputPxFile(InputBase):
 
 
     def get_meta_map(self, source):
-        if source is None:
-            return {}
-        elif isinstance(source, dict):
-            return source
-        elif isinstance(source, str):
+        map = {}
+        if isinstance(source, str):
             with open(source) as file:
-                return yaml.load(file, Loader=yaml.FullLoader)
+                map = yaml.load(file, Loader=yaml.FullLoader)
+        if isinstance(map, dict):
+            # Always include NOTE mappeed to itself.
+            map['NOTE'] = 'NOTE'
+            return map
         else:
             raise Exception("The meta_map parameter is not configured correctly.")
-        return {}
 
 
     def get_indicator_id_map(self, source):

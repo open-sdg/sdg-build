@@ -57,9 +57,6 @@ class TranslationInputPx(TranslationInputBase):
                 if has_indicator_options and has_units and translatable_variable == px.get_units_column_name():
                     renamed_variable = self.indicator_options.get_unit_column()
                 for language in languages:
-                    suffix = ''
-                    if language != default_language:
-                        suffix = '[' + language + ']'
                     translated_variable = px.variable_get_translation_from_value(translatable_variable, language)
                     self.add_translation(language, renamed_variable, renamed_variable, translated_variable)
                     codes = px.codes(translatable_variable)
@@ -76,14 +73,35 @@ class TranslationInputPx(TranslationInputBase):
                     try:
                         if not (px.data_has_units() and 'UNITS' in px.keywords()):
                             metadata_value = px.keyword('UNITS', language)
-                            self.add_translation(language, translation_group, 'computation_units', metadata_value)
+                            if isinstance(metadata_value, dict) and 'TABLE' in metadata_value:
+                                metadata_value = metadata_value['TABLE']
+                            if isinstance(metadata_value, str):
+                                self.add_translation(language, translation_group, 'computation_units', metadata_value)
                     except:
                         pass
                     try:
-                        metadata_value = px.keyword('NOTE', language)
-                        if isinstance(metadata_value, str):
-                            self.add_translation(language, translation_group, 'data_footnote', metadata_value)
-                            self.add_translation(language, translation_group, 'page_content', metadata_value)
+                        if 'NOTEX' in px.keywords():
+                            metadata_value = px.keyword('NOTEX', language)
+                            notex_header = ''
+                            notex_footer = []
+                            if isinstance(metadata_value, str):
+                                notex_header = metadata_value
+                            elif isinstance(metadata_value, dict):
+                                untranslated_value = px.keyword('NOTEX')
+                                value_keys = untranslated_value.keys()
+                                for value_key in value_keys:
+                                    if value_key == 'TABLE':
+                                        notex_header = metadata_value['TABLE']
+                                    else:
+                                        notex_footer.append(value_key)
+                            if notex_header: 
+                                self.add_translation(language, translation_group, 'page_content', notex_header)
+                            if notex_footer:
+                                for notex_field in notex_footer:
+                                    untranslated_variable = notex_field
+                                    translated_variable = px.variable_get_translation_from_value(untranslated_variable, language)
+                                    self.add_translation(language, translation_group, 'footer_field_label-' + untranslated_variable, translated_variable)
+                                    self.add_translation(language, translation_group, 'footer_field_value-' + untranslated_variable, metadata_value[translated_variable])
                     except:
                         pass
                     try:
@@ -95,21 +113,35 @@ class TranslationInputPx(TranslationInputBase):
                     for mapped_key in self.meta_map:
                         try:
                             metadata_value = px.keyword(mapped_key, language)
-                            self.add_translation(language, translation_group, mapped_key, metadata_value)
-                        except:
+                            if isinstance(metadata_value, str):
+                                self.add_translation(language, translation_group, mapped_key, metadata_value)
+                            elif isinstance(metadata_value, dict):
+                                untranslated_value = px.keyword(mapped_key)
+                                value_keys = untranslated_value.keys()
+                                for value_key in value_keys:
+                                    if value_key == 'TABLE':
+                                        self.add_translation(language, translation_group, mapped_key, metadata_value['TABLE'])
+                                    else:
+                                        # We assume this is a variable.
+                                        untranslated_variable = value_key
+                                        translated_variable = px.variable_get_translation_from_value(untranslated_variable, language)
+                                        self.add_translation(language, translation_group, mapped_key + '-' + value_key, metadata_value[translated_variable])
+                        except Exception as e:
+                            print(e)
                             pass
 
     def get_meta_map(self, source):
-        if source is None:
-            return {}
-        elif isinstance(source, dict):
-            return source
-        elif isinstance(source, str):
+        map = {}
+        if isinstance(source, str):
             with open(source) as file:
-                return yaml.load(file, Loader=yaml.FullLoader)
+                map = yaml.load(file, Loader=yaml.FullLoader)
+        if isinstance(map, dict):
+            # Always include NOTE mappeed to itself.
+            map['NOTE'] = 'NOTE'
+            return map
         else:
             raise Exception("The meta_map parameter is not configured correctly.")
-        return {}
+
 
     def get_indicator_id_map(self, source):
         if isinstance(source, dict):

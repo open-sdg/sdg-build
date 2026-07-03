@@ -111,8 +111,16 @@ class TranslationInputPx(TranslationInputBase):
                     except:
                         pass
                     for mapped_key in self.meta_map:
+                        metadata_value = ''
                         try:
                             metadata_value = px.keyword(mapped_key, language)
+                        except Exception as e:
+                            # Fallback to untranslated value.
+                            try:
+                                metadata_value = px.keyword(mapped_key)
+                            except Exception as e2:
+                                print(e2)
+                        if metadata_value != '':
                             if isinstance(metadata_value, str):
                                 self.add_translation(language, translation_group, mapped_key, metadata_value)
                             elif isinstance(metadata_value, dict):
@@ -126,9 +134,7 @@ class TranslationInputPx(TranslationInputBase):
                                         untranslated_variable = value_key
                                         translated_variable = px.variable_get_translation_from_value(untranslated_variable, language)
                                         self.add_translation(language, translation_group, mapped_key + '-' + value_key, metadata_value[translated_variable])
-                        except Exception as e:
-                            print(e)
-                            pass
+
 
     def get_meta_map(self, source):
         map = {}

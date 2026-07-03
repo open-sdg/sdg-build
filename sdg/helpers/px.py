@@ -21,7 +21,7 @@ class Px:
             k = k + '[' + lang + ']'
         if k not in self.keywords():
             raise ValueError(f"'{k}' is not a valid KEYWORD")
- 
+
         metadata_keys = self.metadata[k].keys()
         if 'TABLE' not in metadata_keys:
             return self.metadata[k]

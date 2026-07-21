@@ -64,6 +64,11 @@ class Px:
         return stub + heading
 
 
+    def is_variable(self, v, lang=None):
+        vars = self.variables(lang)
+        return v in vars
+
+
     def variable(self, v, lang=None):
         vars = self.variables(lang)
         if isinstance(v, int):

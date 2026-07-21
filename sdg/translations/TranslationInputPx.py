@@ -121,7 +121,7 @@ class TranslationInputPx(TranslationInputBase):
                                 for value_key in value_keys:
                                     if value_key == 'TABLE':
                                         self.add_translation(language, translation_group, mapped_key, metadata_value['TABLE'])
-                                    else:
+                                    elif px.is_variable(value_key):
                                         # We assume this is a variable.
                                         untranslated_variable = value_key
                                         translated_variable = px.variable_get_translation_from_value(untranslated_variable, language)

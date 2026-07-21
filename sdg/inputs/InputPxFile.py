@@ -127,7 +127,7 @@ class InputPxFile(InputBase):
                             for value_key in value_keys:
                                 if value_key == 'TABLE':
                                     metadata[converted_key] = translation_group + '.' + mapped_key
-                                else:
+                                elif px.is_variable(value_key):
                                     metadata[converted_key + '-' + value_key] = translation_group + '.' + mapped_key + '-' + value_key
                 # As a benefit to the Open SGD integration, if the data
                 # is empty, automatically flag it as a non-statistical

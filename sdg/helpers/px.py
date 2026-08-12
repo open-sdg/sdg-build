@@ -18,9 +18,13 @@ class Px:
 
     def keyword(self, k, lang=None):
         if lang is not None and lang != self.get_default_language():
+            k_without_lang = k
             k = k + '[' + lang + ']'
         if k not in self.keywords():
-            raise ValueError(f"'{k}' is not a valid KEYWORD")
+            if k_without_lang in self.keywords():
+                k = k_without_lang
+            else:
+                raise ValueError(f"'{k}' is not a valid KEYWORD")
  
         metadata_keys = self.metadata[k].keys()
         if 'TABLE' not in metadata_keys:

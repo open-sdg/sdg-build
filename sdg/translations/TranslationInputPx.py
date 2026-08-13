@@ -118,7 +118,8 @@ class TranslationInputPx(TranslationInputBase):
                             elif isinstance(metadata_value, dict):
                                 untranslated_value = px.keyword(mapped_key)
                                 value_keys = untranslated_value.keys()
-                                for value_key in value_keys:
+                                translated_value_keys = list(metadata_value.keys())
+                                for value_key_index, value_key in enumerate(value_keys):
                                     if value_key == 'TABLE':
                                         self.add_translation(language, translation_group, mapped_key, metadata_value['TABLE'])
                                     elif px.is_variable(value_key):
@@ -126,6 +127,12 @@ class TranslationInputPx(TranslationInputBase):
                                         untranslated_variable = value_key
                                         translated_variable = px.variable_get_translation_from_value(untranslated_variable, language)
                                         self.add_translation(language, translation_group, mapped_key + '-' + value_key, metadata_value[translated_variable])
+                                    else:
+                                        # If still here, we assume that it is a value. For now, we are
+                                        # using the first-encountered value and then stopping, replacing
+                                        # whatever was in the "TABLE" key and then stopping.
+                                        self.add_translation(language, translation_group, mapped_key, metadata_value[translated_value_keys[value_key_index]])
+                                        break
                         except Exception as e:
                             print(e)
                             pass

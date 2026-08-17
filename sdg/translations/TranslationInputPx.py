@@ -5,6 +5,7 @@ import shutil
 import yaml
 from sdg.translations import TranslationInputBase
 from sdg.helpers.px import Px
+from slugify import slugify
 
 class TranslationInputPx(TranslationInputBase):
     """This class imports translations from local or remote PX files."""
@@ -102,6 +103,21 @@ class TranslationInputPx(TranslationInputBase):
                                     translated_variable = px.variable_get_translation_from_value(untranslated_variable, language)
                                     self.add_translation(language, translation_group, 'footer_field_label-' + untranslated_variable, translated_variable)
                                     self.add_translation(language, translation_group, 'footer_field_value-' + untranslated_variable, metadata_value[translated_variable])
+                    except:
+                        pass
+                    try:
+                        if 'VALUENOTEX' in px.keywords():
+                            valuenotex_value = px.keyword('VALUENOTEX', language)
+                            untranslated_valuenotex = px.keyword('VALUENOTEX')
+                            if isinstance(valuenotex_value, dict):
+                                value_keys = list(valuenotex_value.keys())
+                                untranslated_value_keys = list(untranslated_valuenotex.keys())
+                                for index, value_key in enumerate(value_keys):
+                                    slug = slugify(untranslated_value_keys[index])
+                                    if ',' in value_key:
+                                        variable, category = value_key.split(',')
+                                        self.add_translation(language, translation_group, 'footer_field_label-' + slug, variable + ' - ' + category)
+                                        self.add_translation(language, translation_group, 'footer_field_value-' + slug, valuenotex_value[value_key])
                     except:
                         pass
                     try:

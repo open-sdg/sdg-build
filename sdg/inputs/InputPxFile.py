@@ -5,6 +5,7 @@ from sdg.Indicator import Indicator
 from sdg.helpers.px import Px
 import re
 import yaml
+from slugify import slugify
 
 class InputPxFile(InputBase):
     """Sources of SDG data that are local PX files."""
@@ -116,6 +117,22 @@ class InputPxFile(InputBase):
                 if 'INFO' in keywords:
                     metadata['graph_title'] = translation_group + '.graph_title'
                     metadata['indicator_name'] = translation_group + '.indicator_name'
+                if 'VALUENOTEX' in keywords:
+                    valuenotex_value = px.keyword('VALUENOTEX')
+                    if isinstance(valuenotex_value, dict):
+                        value_keys = valuenotex_value.keys()
+                        valuenotex_footer = []
+                        for value_key in value_keys:
+                            valuenotex_footer.append(value_key)
+                        if 'footer_fields' not in metadata:
+                            metadata['footer_fields'] = []
+                        for valuenotex_field in valuenotex_footer:
+                            slug = slugify(valuenotex_field)
+                            footer_field = {
+                                "label": translation_group + '.footer_field_label-' + slug,
+                                "value": translation_group + '.footer_field_value-' + slug
+                            }
+                            metadata['footer_fields'].append(footer_field)
                 for mapped_key in self.meta_map:
                     if mapped_key in keywords:
                         mapped_value = px.keyword(mapped_key)

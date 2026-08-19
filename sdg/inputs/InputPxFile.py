@@ -171,8 +171,6 @@ class InputPxFile(InputBase):
             with open(source) as file:
                 map = yaml.load(file, Loader=yaml.FullLoader)
         if isinstance(map, dict):
-            # Always include NOTE mappeed to itself.
-            map['NOTE'] = 'NOTE'
             return map
         else:
             raise Exception("The meta_map parameter is not configured correctly.")

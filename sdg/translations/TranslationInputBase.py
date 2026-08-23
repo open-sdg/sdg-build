@@ -87,6 +87,15 @@ class TranslationInputBase(Loggable):
         self.translations[language][group][key] = value
 
 
+    def append_translation(self, language, group, key, value):
+        self.add_group(language, group)
+        if key not in self.translations[language][group]:
+            self.translations[language][group][key] = ''
+        else:
+            self.translations[language][group][key] += ' '
+        self.translations[language][group][key] += value;
+
+
     def fetch_file(self, location):
         return helpers.files.read_file(location, request_params=self.request_params)
 

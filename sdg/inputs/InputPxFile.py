@@ -138,19 +138,19 @@ class InputPxFile(InputBase):
                         mapped_value = px.keyword(mapped_key)
                         converted_key = self.meta_map[mapped_key]
                         if isinstance(mapped_value, str):
-                            metadata[converted_key] = translation_group + '.' + mapped_key
+                            metadata[converted_key] = translation_group + '.' + converted_key
                         elif isinstance(mapped_value, dict):
                             value_keys = mapped_value.keys()
                             for value_key in value_keys:
                                 if value_key == 'TABLE':
-                                    metadata[converted_key] = translation_group + '.' + mapped_key
+                                    metadata[converted_key] = translation_group + '.' + converted_key
                                 elif px.is_variable(value_key):
-                                    metadata[converted_key + '-' + value_key] = translation_group + '.' + mapped_key + '-' + value_key
+                                    metadata[converted_key + '-' + value_key] = translation_group + '.' + converted_key + '-' + value_key
                                 else:
                                     # If still here, we assume that it is a value. For now, we are
                                     # using the first-encountered value and then stopping, replacing
                                     # whatever was in the "TABLE" key and then stopping.
-                                    metadata[converted_key] = translation_group + '.' + mapped_key
+                                    metadata[converted_key] = translation_group + '.' + converted_key
                                     break
 
                 # As a benefit to the Open SGD integration, if the data

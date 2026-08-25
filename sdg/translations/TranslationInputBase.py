@@ -92,7 +92,7 @@ class TranslationInputBase(Loggable):
         if key not in self.translations[language][group]:
             self.translations[language][group][key] = ''
         else:
-            self.translations[language][group][key] += '<br>'
+            self.translations[language][group][key] += '<br><br>'
         self.translations[language][group][key] += value;
 
 

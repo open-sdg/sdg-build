@@ -127,27 +127,28 @@ class TranslationInputPx(TranslationInputBase):
                     except:
                         pass
                     for mapped_key in self.meta_map:
+                        converted_key = self.meta_map[mapped_key]
                         try:
                             metadata_value = px.keyword(mapped_key, language)
                             if isinstance(metadata_value, str):
-                                self.add_translation(language, translation_group, mapped_key, metadata_value)
+                                self.add_translation(language, translation_group, converted_key, metadata_value)
                             elif isinstance(metadata_value, dict):
                                 untranslated_value = px.keyword(mapped_key)
                                 value_keys = untranslated_value.keys()
                                 translated_value_keys = list(metadata_value.keys())
                                 for value_key_index, value_key in enumerate(value_keys):
                                     if value_key == 'TABLE':
-                                        self.append_translation(language, translation_group, mapped_key, metadata_value['TABLE'])
+                                        self.append_translation(language, translation_group, converted_key, metadata_value['TABLE'])
                                     elif px.is_variable(value_key):
                                         # We assume this is a variable.
                                         untranslated_variable = value_key
                                         translated_variable = px.variable_get_translation_from_value(untranslated_variable, language)
-                                        self.append_translation(language, translation_group, mapped_key + '-' + value_key, metadata_value[translated_variable])
+                                        self.append_translation(language, translation_group, converted_key + '-' + value_key, metadata_value[translated_variable])
                                     else:
                                         # If still here, we assume that it is a value. For now, we are
                                         # using the first-encountered value and then stopping, replacing
                                         # whatever was in the "TABLE" key and then stopping.
-                                        self.append_translation(language, translation_group, mapped_key, metadata_value[translated_value_keys[value_key_index]])
+                                        self.append_translation(language, translation_group, converted_key, metadata_value[translated_value_keys[value_key_index]])
                                         break
                         except Exception as e:
                             print(e)

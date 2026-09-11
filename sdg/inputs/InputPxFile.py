@@ -15,7 +15,8 @@ class InputPxFile(InputBase):
         column_map=None,
         code_map=None,
         request_params=None,
-        meta_suffix=None
+        meta_suffix=None,
+        meta_map=None
     ):
         """Constructor for InputPxFile.
 
@@ -31,6 +32,7 @@ class InputPxFile(InputBase):
             meta_suffix=meta_suffix
         )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)
+        self.meta_map = self.get_meta_map(meta_map)
 
 
     def execute(self, indicator_options):
@@ -95,6 +97,9 @@ class InputPxFile(InputBase):
                 if 'INFO' in keywords:
                     metadata['graph_title'] = translation_group + '.graph_title'
                     metadata['indicator_name'] = translation_group + '.indicator_name'
+                for mapped_key in self.meta_map:
+                    if mapped_key in keywords:
+                        metadata[self.meta_map[mapped_key]] = translation_group + '.' + mapped_key
                 # As a benefit to the Open SGD integration, if the data
                 # is empty, automatically flag it as a non-statistical
                 # indicator.
@@ -105,6 +110,19 @@ class InputPxFile(InputBase):
                     self.add_indicator(indicator_id, meta=metadata, options=indicator_options)
                 else:
                     self.add_indicator(indicator_id, data=df, meta=metadata, options=indicator_options)
+
+
+    def get_meta_map(self, source):
+        if source is None:
+            return {}
+        elif isinstance(source, dict):
+            return source
+        elif isinstance(source, str):
+            with open(source) as file:
+                return yaml.load(file, Loader=yaml.FullLoader)
+        else:
+            raise Exception("The meta_map parameter is not configured correctly.")
+        return {}
 
 
     def get_indicator_id_map(self, source):

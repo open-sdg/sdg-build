@@ -17,8 +17,8 @@ class Px:
 
 
     def keyword(self, k, lang=None):
+        k_without_lang = k
         if lang is not None and lang != self.get_default_language():
-            k_without_lang = k
             k = k + '[' + lang + ']'
         if k not in self.keywords():
             if k_without_lang in self.keywords():
@@ -305,7 +305,7 @@ class Px:
 
             key = group1
             vals = re.sub(r'^"|"$', '', group3).split('","')
-            opt = re.sub(r'"', '', group2)
+            opt = re.sub(r'"', '', group2.replace('","', ',,,'))
             key_without_language = re.sub(r'\[.*\]$', '', key)
 
             if key not in metadata:

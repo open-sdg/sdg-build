@@ -115,7 +115,7 @@ class TranslationInputPx(TranslationInputBase):
                                 for index, value_key in enumerate(value_keys):
                                     slug = slugify(untranslated_value_keys[index])
                                     if ',' in value_key:
-                                        variable, category = value_key.split(',')
+                                        variable, category = value_key.split(',,,')
                                         self.add_translation(language, translation_group, 'footer_field_label-' + slug, variable + ' - ' + category)
                                         self.add_translation(language, translation_group, 'footer_field_value-' + slug, valuenotex_value[value_key])
                     except:

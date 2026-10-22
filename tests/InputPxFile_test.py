@@ -510,13 +510,11 @@ def test_px_input():
     """
 
     correct_meta_english = {
-        'NOTE': 'Testing note',
         'computation_units': 'Testing units',
         'graph_title': 'Testing info',
         'indicator_name': 'Testing info',
     }
     correct_meta_faroese = {
-        'NOTE': 'Testing note FO',
         'computation_units': 'Testing units FO',
         'graph_title': 'Testing info FO',
         'indicator_name': 'Testing info FO',

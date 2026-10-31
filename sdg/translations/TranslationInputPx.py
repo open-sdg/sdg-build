@@ -16,6 +16,7 @@ class TranslationInputPx(TranslationInputBase):
         request_params=None,
         indicator_options=None,
         meta_map=None,
+        units_meta_field=None,
     ):
         """Constructor for the TranslationInputPx class.
 
@@ -23,6 +24,10 @@ class TranslationInputPx(TranslationInputBase):
         ----------
         indicator_id_map : dict
             A dict of indicator ids (dot-delimited) to PX file locations.
+        meta_map : dict
+            A dict mapping PX tags to metadata fields.
+        units_meta_field : string
+            An optional metadata field to populate with all of the units.
         """
         TranslationInputBase.__init__(self,
             logging=logging,
@@ -31,6 +36,7 @@ class TranslationInputPx(TranslationInputBase):
         )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)
         self.meta_map = self.get_meta_map(meta_map)
+        self.units_meta_field = units_meta_field
 
 
     def execute(self):
@@ -41,8 +47,8 @@ class TranslationInputPx(TranslationInputBase):
             px = Px(pc_axis)
             has_series = px.data_has_series()
             has_units = px.data_has_units()
+            all_units = {}
             has_indicator_options = self.indicator_options is not None
-            default_language = px.get_default_language()
             languages = px.get_languages()
             if languages is None:
                 continue
@@ -53,16 +59,22 @@ class TranslationInputPx(TranslationInputBase):
                 # We have to treat the unit and series column especially,
                 # because they get renamed during the data input.
                 renamed_variable = translatable_variable
+                is_units = False
                 if has_indicator_options and has_series and translatable_variable == px.get_series_column_name():
                     renamed_variable = self.indicator_options.get_series_column()
                 if has_indicator_options and has_units and translatable_variable == px.get_units_column_name():
+                    is_units = True
                     renamed_variable = self.indicator_options.get_unit_column()
                 for language in languages:
                     translated_variable = px.variable_get_translation_from_value(translatable_variable, language)
                     self.add_translation(language, renamed_variable, renamed_variable, translated_variable)
                     codes = px.codes(translatable_variable)
+                    if is_units:
+                        all_units[language] = []
                     for code in codes:
                         value = px.value(code, translatable_variable, language)
+                        if is_units:
+                            all_units[language].append(value)
                         self.add_translation(language, renamed_variable, code, value)
             # Gather the metadata translations.
             if not isinstance(indicator_ids, list):
@@ -72,7 +84,7 @@ class TranslationInputPx(TranslationInputBase):
                 translation_group = indicator_id + '-metadata'
                 for language in languages:
                     try:
-                        if not (px.data_has_units() and 'UNITS' in px.keywords()):
+                        if not (has_units and 'UNITS' in px.keywords()):
                             metadata_value = px.keyword('UNITS', language)
                             if isinstance(metadata_value, dict) and 'TABLE' in metadata_value:
                                 metadata_value = metadata_value['TABLE']
@@ -80,6 +92,9 @@ class TranslationInputPx(TranslationInputBase):
                                 self.add_translation(language, translation_group, 'computation_units', metadata_value)
                     except:
                         pass
+                    if has_units and self.units_meta_field is not None and language in all_units:
+                        units_combined = ', '.join(all_units[language])
+                        self.add_translation(language, translation_group, self.units_meta_field, units_combined)
                     try:
                         if 'NOTEX' in px.keywords():
                             metadata_value = px.keyword('NOTEX', language)

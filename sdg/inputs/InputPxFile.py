@@ -17,13 +17,16 @@ class InputPxFile(InputBase):
         code_map=None,
         request_params=None,
         meta_suffix=None,
-        meta_map=None
+        meta_map=None,
+        units_meta_field=None,
     ):
         """Constructor for InputPxFile.
 
         Keyword arguments:
         indicator_id_map: A dict mapping sources (typically remote URLs) to
         lists of indicator ids.
+        meta_map: A dict mapping PX tags to metadata fields.
+        units_meta_field: An optional metadata field to populate with all of the units.
         """
         InputBase.__init__(self,
             logging=logging,
@@ -34,6 +37,7 @@ class InputPxFile(InputBase):
         )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)
         self.meta_map = self.get_meta_map(meta_map)
+        self.units_meta_field = units_meta_field
 
 
     def execute(self, indicator_options):
@@ -90,6 +94,8 @@ class InputPxFile(InputBase):
                 metadata = {}
                 if not (px.data_has_units() and 'UNITS' in keywords):
                     metadata['computation_units'] = translation_group + '.computation_units'
+                if px.data_has_units() and self.units_meta_field is not None:
+                    metadata[self.units_meta_field] = translation_group + '.' + self.units_meta_field
                 if 'NOTEX' in keywords:
                     notex_value = px.keyword('NOTEX')
                     notex_header = ''

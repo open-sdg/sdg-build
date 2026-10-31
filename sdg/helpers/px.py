@@ -17,15 +17,22 @@ class Px:
 
 
     def keyword(self, k, lang=None):
+        k_without_lang = k
         if lang is not None and lang != self.get_default_language():
             k = k + '[' + lang + ']'
         if k not in self.keywords():
-            raise ValueError(f"'{k}' is not a valid KEYWORD")
+            if k_without_lang in self.keywords():
+                k = k_without_lang
+            else:
+                raise ValueError(f"'{k}' is not a valid KEYWORD")
  
-        if 'TABLE' in self.metadata[k]:
-            return self.metadata[k]['TABLE']
-        else:
+        metadata_keys = self.metadata[k].keys()
+        if 'TABLE' not in metadata_keys:
             return self.metadata[k]
+        elif 'TABLE' in metadata_keys and len(metadata_keys) > 1:
+            return self.metadata[k]
+        else:
+            return self.metadata[k]['TABLE']
 
 
     def title(self):
@@ -59,6 +66,11 @@ class Px:
         if not isinstance(heading, list):
             heading = [heading]
         return stub + heading
+
+
+    def is_variable(self, v, lang=None):
+        vars = self.variables(lang)
+        return v in vars
 
 
     def variable(self, v, lang=None):
@@ -277,7 +289,7 @@ class Px:
         px_metadata = re.sub(r';\s*(\r\n?|\n)', ';;', px_metadata)
         px_metadata = re.sub(r';;$', ';', px_metadata)
         px_metadata = re.sub(r'(\r\n?|\n)', '', px_metadata)
-        px_metadata = re.sub(r'""', ' ', px_metadata)
+        px_metadata = re.sub(r'""', '', px_metadata)
         px_metadata = px_metadata.split(';;')
 
         px_data = px_split[1]
@@ -293,7 +305,7 @@ class Px:
 
             key = group1
             vals = re.sub(r'^"|"$', '', group3).split('","')
-            opt = re.sub(r'"', '', group2)
+            opt = re.sub(r'"', '', group2.replace('","', ',,,'))
             key_without_language = re.sub(r'\[.*\]$', '', key)
 
             if key not in metadata:
@@ -325,7 +337,10 @@ class Px:
 
 
     def get_units_column_name(self):
-        return self.keyword('UNITS')
+        col = self.keyword('UNITS')
+        if isinstance(col, dict) and 'TABLE' in col:
+            return col['TABLE']
+        return col
 
 
     def get_value_column_name(self):

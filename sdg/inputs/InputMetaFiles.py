@@ -67,6 +67,7 @@ class InputMetaFiles(InputFiles):
                 translated_meta = self.read_meta_at_path(translated_filepath)
                 self.apply_metadata_mapping(translated_meta)
                 self.fix_booleans(translated_meta)
+                self.remove_empty_values(translated_meta)
                 meta[language] = translated_meta
 
 
@@ -139,3 +140,9 @@ class InputMetaFiles(InputFiles):
             if human_key in metadata and human_key != machine_key:
                 metadata[machine_key] = metadata[human_key]
                 del metadata[human_key]
+
+
+    def remove_empty_values(self, meta):
+        empty_keys = [k for k,v in meta.items() if not v]
+        for k in empty_keys:
+            del meta[k]

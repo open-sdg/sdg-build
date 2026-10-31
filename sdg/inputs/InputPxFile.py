@@ -5,6 +5,7 @@ from sdg.Indicator import Indicator
 from sdg.helpers.px import Px
 import re
 import yaml
+from slugify import slugify
 
 class InputPxFile(InputBase):
     """Sources of SDG data that are local PX files."""
@@ -16,13 +17,16 @@ class InputPxFile(InputBase):
         code_map=None,
         request_params=None,
         meta_suffix=None,
-        meta_map=None
+        meta_map=None,
+        units_meta_field=None,
     ):
         """Constructor for InputPxFile.
 
         Keyword arguments:
         indicator_id_map: A dict mapping sources (typically remote URLs) to
         lists of indicator ids.
+        meta_map: A dict mapping PX tags to metadata fields.
+        units_meta_field: An optional metadata field to populate with all of the units.
         """
         InputBase.__init__(self,
             logging=logging,
@@ -33,6 +37,7 @@ class InputPxFile(InputBase):
         )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)
         self.meta_map = self.get_meta_map(meta_map)
+        self.units_meta_field = units_meta_field
 
 
     def execute(self, indicator_options):
@@ -89,17 +94,71 @@ class InputPxFile(InputBase):
                 metadata = {}
                 if not (px.data_has_units() and 'UNITS' in keywords):
                     metadata['computation_units'] = translation_group + '.computation_units'
-                if 'NOTE' in keywords:
-                    note_value = px.keyword('NOTE')
-                    if isinstance(note_value, str):
-                        metadata['data_footnote'] = translation_group + '.data_footnote'
-                        metadata['page_content'] = translation_group + '.page_content'
+                if px.data_has_units() and self.units_meta_field is not None:
+                    metadata[self.units_meta_field] = translation_group + '.' + self.units_meta_field
+                if 'NOTEX' in keywords:
+                    notex_value = px.keyword('NOTEX')
+                    notex_header = ''
+                    notex_footer = []
+                    if isinstance(notex_value, str):
+                        notex_header = translation_group + '.page_content'
+                    elif isinstance(notex_value, dict):
+                        value_keys = notex_value.keys()
+                        for value_key in value_keys:
+                            if value_key == 'TABLE':
+                                notex_header = translation_group + '.page_content'
+                            else:
+                                notex_footer.append(value_key)
+                    if notex_header: 
+                        metadata['page_content'] = notex_header
+                    if notex_footer:
+                        if 'footer_fields' not in metadata:
+                            metadata['footer_fields'] = []
+                        for notex_field in notex_footer:
+                            footer_field = {
+                                "label": translation_group + '.footer_field_label-' + notex_field,
+                                "value": translation_group + '.footer_field_value-' + notex_field
+                            }
+                            metadata['footer_fields'].append(footer_field)
                 if 'INFO' in keywords:
                     metadata['graph_title'] = translation_group + '.graph_title'
                     metadata['indicator_name'] = translation_group + '.indicator_name'
+                if 'VALUENOTEX' in keywords:
+                    valuenotex_value = px.keyword('VALUENOTEX')
+                    if isinstance(valuenotex_value, dict):
+                        value_keys = valuenotex_value.keys()
+                        valuenotex_footer = []
+                        for value_key in value_keys:
+                            valuenotex_footer.append(value_key)
+                        if 'footer_fields' not in metadata:
+                            metadata['footer_fields'] = []
+                        for valuenotex_field in valuenotex_footer:
+                            slug = slugify(valuenotex_field)
+                            footer_field = {
+                                "label": translation_group + '.footer_field_label-' + slug,
+                                "value": translation_group + '.footer_field_value-' + slug
+                            }
+                            metadata['footer_fields'].append(footer_field)
                 for mapped_key in self.meta_map:
                     if mapped_key in keywords:
-                        metadata[self.meta_map[mapped_key]] = translation_group + '.' + mapped_key
+                        mapped_value = px.keyword(mapped_key)
+                        converted_key = self.meta_map[mapped_key]
+                        if isinstance(mapped_value, str):
+                            metadata[converted_key] = translation_group + '.' + converted_key
+                        elif isinstance(mapped_value, dict):
+                            value_keys = mapped_value.keys()
+                            for value_key in value_keys:
+                                if value_key == 'TABLE':
+                                    metadata[converted_key] = translation_group + '.' + converted_key
+                                elif px.is_variable(value_key):
+                                    metadata[converted_key + '-' + value_key] = translation_group + '.' + converted_key + '-' + value_key
+                                else:
+                                    # If still here, we assume that it is a value. For now, we are
+                                    # using the first-encountered value and then stopping, replacing
+                                    # whatever was in the "TABLE" key and then stopping.
+                                    metadata[converted_key] = translation_group + '.' + converted_key
+                                    break
+
                 # As a benefit to the Open SGD integration, if the data
                 # is empty, automatically flag it as a non-statistical
                 # indicator.
@@ -113,16 +172,14 @@ class InputPxFile(InputBase):
 
 
     def get_meta_map(self, source):
-        if source is None:
-            return {}
-        elif isinstance(source, dict):
-            return source
-        elif isinstance(source, str):
+        map = {}
+        if isinstance(source, str):
             with open(source) as file:
-                return yaml.load(file, Loader=yaml.FullLoader)
+                map = yaml.load(file, Loader=yaml.FullLoader)
+        if isinstance(map, dict):
+            return map
         else:
             raise Exception("The meta_map parameter is not configured correctly.")
-        return {}
 
 
     def get_indicator_id_map(self, source):

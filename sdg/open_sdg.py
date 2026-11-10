@@ -46,7 +46,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
                    logging=None, indicator_export_filename='all_indicators',
                    datapackage=None, csvw=None, data_schema=None, docs_metadata_fields=None,
                    alter_indicator=None, indicator_callback=None,
-                   ignore_out_of_scope_disaggregation_stats=False):
+                   ignore_out_of_scope_disaggregation_stats=False, skip_indicators=None):
     """Read each input file and edge file and write out json.
 
     Args:
@@ -90,6 +90,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
             the MetadataReportService class.
         ignore_out_of_scope_disaggregation_stats: boolean. Whether to omit the
             not-applicable disaggregation stats.
+        skip_indicators: list. A list of indicator IDs to skip/ignore.
 
     Returns:
         Boolean status of file writes
@@ -136,6 +137,7 @@ def open_sdg_build(src_dir='', site_dir='_site', schema_file='_prose.yml',
         'indicator_export_filename': indicator_export_filename,
         'docs_metadata_fields': docs_metadata_fields,
         'ignore_out_of_scope_disaggregation_stats': ignore_out_of_scope_disaggregation_stats,
+        'skip_indicators': skip_indicators
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -242,7 +244,8 @@ def open_sdg_indicator_options_from_dict(options):
 
 def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config.yml',
         inputs=None, alter_data=None, alter_meta=None, indicator_options=None,
-        data_schema=None, schema=None, logging=None, alter_indicator=None):
+        data_schema=None, schema=None, logging=None, alter_indicator=None,
+        skip_indicators=None):
     """Run validation checks for all indicators.
 
     This checks both *.csv (data) and *.md (metadata) files.
@@ -260,6 +263,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         alter_indicator: function. A callback function that alters the full Indicator objects (for each output)
         data_schema: dict . Dict describing an instance of DataSchemaInputBase
         logging: Noneor list. Type of logs to print, including 'warn' and 'debug'
+        skip_indicators: list. A list of indicator IDs to skip/ignore.
 
     Returns:
         boolean: True if the check was successful, False if not.
@@ -288,6 +292,7 @@ def open_sdg_check(src_dir='', schema_file='_prose.yml', config='open_sdg_config
         'logging': logging,
         'indicator_export_filename': None,
         'ignore_out_of_scope_disaggregation_stats': False,
+        'skip_indicators': skip_indicators,
     }
     # Allow for a config file to update these.
     options = open_sdg_config(config, defaults)
@@ -341,6 +346,11 @@ def open_sdg_prep(options):
     if callable(options['alter_meta']):
         for input in inputs:
             input.add_meta_alteration(options['alter_meta'])
+
+    # Set the indicators to skip, if any.
+    if 'skip_indicators' in options and type(options['skip_indicators']) is list:
+        for input in inputs:
+            input.set_skip_indicators(options['skip_indicators'])
 
     # Use the specified metadata schema.
     schema = options['schema']

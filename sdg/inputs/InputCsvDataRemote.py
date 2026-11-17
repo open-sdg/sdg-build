@@ -12,6 +12,7 @@ class InputCsvDataRemote(InputBase):
         code_map=None,
         dtype=None,
         request_params=None,
+        indicator_id_conversions=None
     ):
         """Constructor for InputCsvDataRemote.
 
@@ -24,6 +25,7 @@ class InputCsvDataRemote(InputBase):
             column_map=column_map,
             code_map=code_map,
             request_params=request_params,
+            indicator_id_conversions=indicator_id_conversions,
         )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)
         self.dtype = {} if dtype is None else dtype

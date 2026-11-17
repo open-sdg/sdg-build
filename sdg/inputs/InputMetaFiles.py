@@ -9,7 +9,8 @@ class InputMetaFiles(InputFiles):
 
     def __init__(self, path_pattern='', git=True, git_data_dir='data',
                  git_data_filemask='indicator_*.csv', metadata_mapping=None,
-                 logging=None, column_map=None, code_map=None):
+                 logging=None, column_map=None, code_map=None,
+                 indicator_id_conversions=None):
         """Constructor for InputMetaFiles.
 
         Keyword arguments:
@@ -24,7 +25,8 @@ class InputMetaFiles(InputFiles):
           or a path to a CSV file
         """
         InputFiles.__init__(self, path_pattern, logging=logging,
-            column_map=column_map, code_map=code_map)
+            column_map=column_map, code_map=code_map,
+            indicator_id_conversions=indicator_id_conversions)
         self.git = git
         self.git_data_dir = git_data_dir
         self.git_data_filemask = git_data_filemask
@@ -41,7 +43,7 @@ class InputMetaFiles(InputFiles):
             self.apply_metadata_mapping(meta)
             self.fix_booleans(meta)
             name = meta['indicator_name'] if 'indicator_name' in meta else None
-            self.add_indicator(inid, name=name, meta=meta, options=indicator_options)
+            self.add_indicator(self.normalize_indicator_id(inid), name=name, meta=meta, options=indicator_options)
 
 
     def read_meta(self, filepath):

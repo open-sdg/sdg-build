@@ -26,7 +26,8 @@ class InputSdmx(InputBase):
                  logging=None,
                  column_map=None, code_map=None,
                  meta_suffix=None,
-                 request_params=None):
+                 request_params=None,
+                 indicator_id_conversions=None):
         """Constructor for InputSdmx.
 
         Parameters
@@ -68,7 +69,8 @@ class InputSdmx(InputBase):
             An xpath query to find the indicator name within each Series code
         """
         InputBase.__init__(self, logging=logging, column_map=column_map,
-            code_map=code_map, request_params=request_params, meta_suffix=meta_suffix)
+            code_map=code_map, request_params=request_params, meta_suffix=meta_suffix,
+            indicator_id_conversions=indicator_id_conversions)
         if drop_dimensions is None:
             drop_dimensions = []
         if dimension_map is None:
@@ -428,4 +430,4 @@ class InputSdmx(InputBase):
             data = self.ensure_numeric_values(data, indicator_id)
             data = self.attempt_numeric_time_period(data, indicator_id)
             name = indicator_names[indicator_id] if self.import_names else None
-            self.add_indicator(indicator_id, data=data, name=name, options=indicator_options)
+            self.add_indicator(self.normalize_indicator_id(indicator_id), data=data, name=name, options=indicator_options)

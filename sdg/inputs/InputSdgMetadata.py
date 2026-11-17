@@ -23,7 +23,8 @@ class InputSdgMetadata(InputBase):
     """
 
     def __init__(self, tag=None, branch=None, source='https://github.com/worldbank/sdg-metadata.git',
-                 repo_subfolder='translations', default_language='en', logging=None):
+                 repo_subfolder='translations', default_language='en', logging=None,
+                 indicator_id_conversions=None):
         """Constructor for the InputSdgMetadata class.
 
         Parameters
@@ -39,7 +40,10 @@ class InputSdgMetadata(InputBase):
         default_language : string
             The language which should be considered the default.
         """
-        InputBase.__init__(self, logging=logging)
+        InputBase.__init__(self,
+            logging=logging,
+            indicator_id_conversions=indicator_id_conversions,
+        )
         self.tag = tag
         self.branch = branch
         self.source = source
@@ -58,7 +62,7 @@ class InputSdgMetadata(InputBase):
             metadata_folder = self.source
         indicators = self.parse_yaml(metadata_folder)
         for inid in indicators:
-            self.add_indicator(inid, meta=indicators[inid], options=indicator_options)
+            self.add_indicator(self.normalize_indicator_id(inid), meta=indicators[inid], options=indicator_options)
         # Clean up afterwards.
         if use_git_repo:
             self.clean_up()

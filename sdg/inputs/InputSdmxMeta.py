@@ -19,7 +19,7 @@ class InputSdmxMeta(InputSdmx):
                 metadata = self.get_metadata_set_concepts(metadata_set)
                 for indicator_id in indicator_ids:
                     name = indicator_ids[indicator_id]
-                    self.add_indicator(indicator_id, name=name, meta=metadata, options=indicator_options)
+                    self.add_indicator(self.normalize_indicator_id(indicator_id), name=name, meta=metadata, options=indicator_options)
 
 
     def get_metadata_sets(self):

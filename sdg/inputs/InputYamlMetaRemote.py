@@ -10,6 +10,7 @@ class InputYamlMetaRemote(InputBase):
         logging=None,
         metadata_mapping=None,
         request_params=None,
+        indicator_id_conversions=None,
     ):
         """Constructor for InputCsvDataRemote.
 
@@ -22,6 +23,7 @@ class InputYamlMetaRemote(InputBase):
         InputBase.__init__(self,
             logging=logging,
             request_params=request_params,
+            indicator_id_conversions=indicator_id_conversions,
         )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)
         self.metadata_mapping = metadata_mapping

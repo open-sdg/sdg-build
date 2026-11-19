@@ -39,6 +39,7 @@ class InputWordMeta(InputMetaFiles):
                         concept_value += self.wrap_footnotes(footnotes)
                     concept_key = self.get_concept_key(concept_name)
                     meta[concept_key] = concept_value
+        return meta
 
 
     def clean_html(self, d):

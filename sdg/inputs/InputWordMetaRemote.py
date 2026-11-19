@@ -25,6 +25,7 @@ class InputWordMetaRemote(InputWordMeta):
             metadata_mapping=metadata_mapping,
         )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)
+        self.request_params = request_params
 
 
     def get_indicator_id_map(self, source):

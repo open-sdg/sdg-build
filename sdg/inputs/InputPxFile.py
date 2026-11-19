@@ -150,8 +150,6 @@ class InputPxFile(InputBase):
                             for value_key in value_keys:
                                 if value_key == 'TABLE':
                                     metadata[converted_key] = translation_group + '.' + converted_key
-                                elif px.is_variable(value_key):
-                                    metadata[converted_key + '-' + value_key] = translation_group + '.' + converted_key + '-' + value_key
                                 else:
                                     # If still here, we assume that it is a value. For now, we are
                                     # using the first-encountered value and then stopping, replacing

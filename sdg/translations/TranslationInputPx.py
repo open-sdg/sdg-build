@@ -158,16 +158,24 @@ class TranslationInputPx(TranslationInputBase):
                                         # We assume this is a variable.
                                         untranslated_variable = value_key
                                         translated_variable = px.variable_get_translation_from_value(untranslated_variable, language)
-                                        self.append_translation(language, translation_group, converted_key + '-' + value_key, metadata_value[translated_variable])
+                                        translated_value = self.get_variable_header(translated_variable) + metadata_value[translated_variable]
+                                        self.append_translation(language, translation_group, converted_key, translated_value)
                                     else:
                                         # If still here, we assume that it is a value. For now, we are
                                         # using the first-encountered value and then stopping, replacing
                                         # whatever was in the "TABLE" key and then stopping.
-                                        self.append_translation(language, translation_group, converted_key, metadata_value[translated_value_keys[value_key_index]])
+                                        translated_value = self.get_variable_header(translated_value_keys[value_key_index]) + metadata_value[translated_value_keys[value_key_index]]
+                                        self.append_translation(language, translation_group, converted_key, translated_value)
                                         break
                         except Exception as e:
                             print(e)
                             pass
+
+
+    def get_variable_header(self, variable_string):
+        decoded = self.decode_variable_values(variable_string)
+        return '<span class="var-header">' + decoded + '</span> - '
+
 
     def get_meta_map(self, source):
         map = {}
@@ -197,3 +205,6 @@ class TranslationInputPx(TranslationInputBase):
             # it here, as a onvenience.
             location = location.replace(':443', '')
         return location
+
+    def decode_variable_values(self, variable_value):
+        return variable_value.replace(',,,', ' - ')

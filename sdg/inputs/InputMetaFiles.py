@@ -136,8 +136,9 @@ class InputMetaFiles(InputFiles):
 
 
     def apply_metadata_mapping(self, metadata):
-        for human_key in self.metadata_mapping:
-            machine_key = self.metadata_mapping[human_key]
-            if human_key in metadata and human_key != machine_key:
-                metadata[machine_key] = metadata[human_key]
-                del metadata[human_key]
+        if self.metadata_mapping is not None:
+            for human_key in self.metadata_mapping:
+                machine_key = self.metadata_mapping[human_key]
+                if human_key in metadata and human_key != machine_key:
+                    metadata[machine_key] = metadata[human_key]
+                    del metadata[human_key]

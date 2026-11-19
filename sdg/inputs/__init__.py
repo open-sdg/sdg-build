@@ -22,3 +22,4 @@ from .InputSdgMetadata import InputSdgMetadata
 from .InputPxFile import InputPxFile
 from .InputCsvDataRemote import InputCsvDataRemote
 from .InputYamlMetaRemote import InputYamlMetaRemote
+from .InputWordMetaRemote import InputWordMetaRemote

@@ -21,7 +21,6 @@ class InputWordMetaRemote(InputWordMeta):
         """Constructor for InputWordMetaRemote."""
         InputWordMeta.__init__(self,
             logging=logging,
-            request_params=request_params,
             indicator_id_conversions=indicator_id_conversions,
             metadata_mapping=metadata_mapping,
         )

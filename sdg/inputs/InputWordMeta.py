@@ -13,28 +13,32 @@ class InputWordMeta(InputMetaFiles):
         meta = {}
         with open(filepath, "rb") as docx_file:
             result = mammoth.convert_to_html(docx_file, **self.get_mammoth_options())
-            html = result.value
+            meta = self.get_meta_from_word(result, filepath)
+        return meta
 
-            if len(result.messages) > 0:
-                self.debug('Messages while reading ' + filepath)
-                for message in result.messages:
-                    self.debug(str(message))
-            d = pq('<body>' + html + '</body>')
-            self.clean_html(d)
 
-            concept_columns = d.find('table > tr > td:first-child > p')
-            for concept_column_left in concept_columns:
-                concept_name = self.parse_concept_name(concept_column_left, d)
-                if self.is_concept_name_valid(concept_name):
-                    concept_column_right = d(concept_column_left).parent().siblings('td')
-                    footnotes = self.parse_footnotes(concept_column_right, d)
-                    if self.is_concept_value_valid(concept_column_right, d):
-                        concept_value = self.parse_concept_value(concept_column_right, d)
-                        if len(footnotes) > 0:
-                            concept_value += self.wrap_footnotes(footnotes)
-                        concept_key = self.get_concept_key(concept_name)
-                        meta[concept_key] = concept_value
+    def get_meta_from_word(self, result, source):
+        meta = {}
+        html = result.value
+        if len(result.messages) > 0:
+            self.debug('Messages while reading ' + source)
+            for message in result.messages:
+                self.debug(str(message))
+        d = pq('<body>' + html + '</body>')
+        self.clean_html(d)
 
+        concept_columns = d.find('table > tr > td:first-child > p')
+        for concept_column_left in concept_columns:
+            concept_name = self.parse_concept_name(concept_column_left, d)
+            if self.is_concept_name_valid(concept_name):
+                concept_column_right = d(concept_column_left).parent().siblings('td')
+                footnotes = self.parse_footnotes(concept_column_right, d)
+                if self.is_concept_value_valid(concept_column_right, d):
+                    concept_value = self.parse_concept_value(concept_column_right, d)
+                    if len(footnotes) > 0:
+                        concept_value += self.wrap_footnotes(footnotes)
+                    concept_key = self.get_concept_key(concept_name)
+                    meta[concept_key] = concept_value
         return meta
 
 

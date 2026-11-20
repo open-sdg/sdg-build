@@ -8,7 +8,7 @@ class InputCsvData(InputFiles):
 
     def __init__(self, path_pattern='', logging=None,
                  column_map=None, code_map=None,
-                 dtype=None):
+                 dtype=None, indicator_id_conversions=None):
         """Constructor for InputCsvData.
 
         Keyword arguments:
@@ -16,7 +16,7 @@ class InputCsvData(InputFiles):
         """
         InputFiles.__init__(self, path_pattern=path_pattern,
                             logging=logging, column_map=column_map,
-                            code_map=code_map)
+                            code_map=code_map, indicator_id_conversions=indicator_id_conversions)
         self.dtype = {} if dtype is None else dtype
 
     def convert_filename_to_indicator_id(self, filename):
@@ -30,4 +30,4 @@ class InputCsvData(InputFiles):
         indicator_map = self.get_indicator_map()
         for inid in indicator_map:
             data = pd.read_csv(indicator_map[inid], dtype=self.dtype)
-            self.add_indicator(inid, data=data, options=indicator_options)
+            self.add_indicator(self.normalize_indicator_id(inid), data=data, options=indicator_options)

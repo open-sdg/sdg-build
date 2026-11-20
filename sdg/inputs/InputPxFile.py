@@ -19,6 +19,7 @@ class InputPxFile(InputBase):
         meta_suffix=None,
         meta_map=None,
         units_meta_field=None,
+        indicator_id_conversions=None,
     ):
         """Constructor for InputPxFile.
 
@@ -33,7 +34,8 @@ class InputPxFile(InputBase):
             column_map=column_map,
             code_map=code_map,
             request_params=request_params,
-            meta_suffix=meta_suffix
+            meta_suffix=meta_suffix,
+            indicator_id_conversions=indicator_id_conversions,
         )
         self.indicator_id_map = self.get_indicator_id_map(indicator_id_map)
         self.meta_map = self.get_meta_map(meta_map)
@@ -89,7 +91,7 @@ class InputPxFile(InputBase):
             if not isinstance(indicator_ids, list):
                 indicator_ids = [indicator_ids]
             for indicator_id in indicator_ids:
-                indicator_id = indicator_id.replace('.', '-')
+                indicator_id = self.normalize_indicator_id(indicator_id)
                 translation_group = indicator_id + '-metadata'
                 metadata = {}
                 if not (px.data_has_units() and 'UNITS' in keywords):

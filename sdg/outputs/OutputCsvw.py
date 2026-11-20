@@ -3,6 +3,7 @@
 from sdg.outputs import OutputDataPackage
 from frictionless import describe_package
 from csvw.frictionless import DataPackage
+from csvw.metadata import TableGroup
 from csvw.metadata import URITemplate
 
 class OutputCsvw(OutputDataPackage):
@@ -70,7 +71,7 @@ class OutputCsvw(OutputDataPackage):
     def write_csvw_package(self, package, path, indicator, language=None):
         package_dict = dict(package)
         csvw_package = DataPackage(package_dict)
-        table_group = csvw_package.to_tablegroup()
+        table_group = csvw_package.to_tablegroup(TableGroup)
         if language is not None:
             table_group.at_props['context'] = [
                 "http://www.w3.org/ns/csvw",

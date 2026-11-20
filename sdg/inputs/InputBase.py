@@ -21,10 +21,12 @@ class InputBase(Loggable):
     meta_suffix: string
         String to add to each metadata key. Intended usage is to allow identical
         sets of metadata - one for global and one for national.
+    indicator_id_conversions: dict or None
+        Optional dict of indicator ids to convert to other indicator ids.
     """
 
     def __init__(self, logging=None, column_map=None, code_map=None, request_params=None,
-                 meta_suffix=None):
+                 meta_suffix=None, indicator_id_conversions=None):
         """Constructor for InputBase."""
         Loggable.__init__(self, logging=logging)
         self.request_params = request_params
@@ -38,6 +40,8 @@ class InputBase(Loggable):
         self.column_map = column_map
         self.code_map = code_map
         self.meta_suffix = meta_suffix
+        self.skip_indicators = []
+        self.indicator_id_conversions = indicator_id_conversions
 
 
     def execute_once(self, indicator_options):
@@ -129,6 +133,20 @@ class InputBase(Loggable):
         return helpers.files.read_file(location, request_params=self.request_params)
 
 
+    def apply_indicator_id_conversions(self, indicator_id):
+        """Apply any conversions for an indicator id.
+
+        Parameters
+        ----------
+        indicator_id : string
+            The un-converted indicator ID
+        """
+        if self.indicator_id_conversions is not None:
+            if indicator_id in self.indicator_id_conversions:
+                return self.indicator_id_conversions[indicator_id]
+        return indicator_id
+
+
     def normalize_indicator_id(self, indicator_id):
         """Normalize an indicator id (1-1-1, 1-2-1, etc).
 
@@ -140,6 +158,8 @@ class InputBase(Loggable):
         # If there are multiple words, assume the first word is the id.
         words = indicator_id.split(" ")
         indicator_id = words[0]
+        # Before any other clean-up, apply any conversions.
+        indicator_id = self.apply_indicator_id_conversions(indicator_id)
         # Convert dots to dashes (ie, prefer 1-1-1 to 1.1.1).
         indicator_id = indicator_id.replace('.', '-')
         # Make sure there are no preceding/trailing dashes.
@@ -204,6 +224,8 @@ class InputBase(Loggable):
         options : IndicatorOptions or None
             The indicator options
         """
+        if indicator_id in self.skip_indicators:
+            return
         data = self.alter_data(data, indicator_id=indicator_id)
         meta = self.alter_meta(meta, indicator_id=indicator_id)
         indicator = Indicator(indicator_id, name=name, data=data, meta=meta, options=options, logging=self.logging)
@@ -368,3 +390,21 @@ class InputBase(Loggable):
             except:
                 data.replace(to_replace=code_dict, inplace=True)
         return data
+
+
+    def set_skip_indicators(self, indicator_ids):
+        """Set this input to skip certain indicators.
+
+        Parameters
+        ----------
+        indicator_ids : list
+            List of indicator IDs.
+        """
+        if type(indicator_ids) is list:
+            for indicator_id in indicator_ids:
+                # Save both 1.1.1 and 1-1-1 versions to support both.
+                if '-' in indicator_id:
+                    self.skip_indicators.append(indicator_id.replace('-', '.'))
+                if '.' in indicator_id:
+                    self.skip_indicators.append(indicator_id.replace('.', '-'))
+                self.skip_indicators.append(indicator_id)

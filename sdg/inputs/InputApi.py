@@ -15,7 +15,8 @@ class InputApi(InputBase):
 
     def __init__(self, endpoint, indicator_id_map=None, logging=None,
                  column_map=None, code_map=None, post_data=None,
-                 year_column=None, value_column=None, sleep=None):
+                 year_column=None, value_column=None, sleep=None,
+                 indicator_id_conversions=None):
         """Constructor for InputApi input.
 
         Parameters
@@ -44,7 +45,7 @@ class InputApi(InputBase):
         self.value_column = value_column
         self.sleep = sleep
         InputBase.__init__(self, logging=logging, column_map=column_map,
-            code_map=code_map)
+            code_map=code_map, indicator_id_conversions=indicator_id_conversions)
 
 
     def indicator_data_from_json(self, json_response):
@@ -160,11 +161,12 @@ class InputApi(InputBase):
 
             name = self.get_indicator_name(inid, resource_id, json_response)
 
+            inid_normalized = self.normalize_indicator_id(inid)
             if inid not in self.indicators:
-                self.add_indicator(inid, data=data, name=name, options=indicator_options)
+                self.add_indicator(inid_normalized, data=data, name=name, options=indicator_options)
             else:
-                self.indicators[inid].set_name(name)
-                self.indicators[inid].set_data(data)
+                self.indicators[inid_normalized].set_name(name)
+                self.indicators[inid_normalized].set_data(data)
 
             self.wait_for_next_request()
 

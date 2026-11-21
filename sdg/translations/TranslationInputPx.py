@@ -161,12 +161,9 @@ class TranslationInputPx(TranslationInputBase):
                                         translated_value = self.get_variable_header(translated_variable) + metadata_value[translated_variable]
                                         self.append_translation(language, translation_group, converted_key, translated_value)
                                     else:
-                                        # If still here, we assume that it is a value. For now, we are
-                                        # using the first-encountered value and then stopping, replacing
-                                        # whatever was in the "TABLE" key and then stopping.
+                                        # If still here, we assume that it is a value.
                                         translated_value = self.get_variable_header(translated_value_keys[value_key_index]) + metadata_value[translated_value_keys[value_key_index]]
                                         self.append_translation(language, translation_group, converted_key, translated_value)
-                                        break
                         except Exception as e:
                             print(e)
                             pass
